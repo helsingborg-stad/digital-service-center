@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { Container, Row, Column } from './components/Grid';
 
 class App extends Component {
   render() {
@@ -10,9 +11,19 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
         </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <Container>
+          <Row>
+            <Column cols={4} colsNarrow={2}>
+              asdfaasda
+            </Column>
+            <Column cols={4} colsNarrow={2} colsWide={4}>
+              asdfaasda
+            </Column>
+            <Column cols={4} colsWide={2}>
+              asdfaasda
+            </Column>
+          </Row>
+        </Container>
       </div>
     );
   }
