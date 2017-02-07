@@ -1,0 +1,72 @@
+.SectionCard {
+  padding: 1rem 1rem 0;
+  border-bottom: 2.5rem solid #dedddd;
+}
+
+.SectionCard-heading {
+  font-size: 3rem;
+  margin: 0 0 1rem;
+  color: #fff;
+  text-align: center;
+}
+
+.SectionCard-tagWrapper {
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+.SectionCard-tag {
+  display: inline-block;
+  position: relative;
+  padding: 0.33rem 1rem;
+  margin: 0.2rem;
+  font-size: 1.05rem;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 16px;
+  line-height: 1.05rem;
+  white-space: nowrap;
+}
+
+.SectionCard-postWrapper {
+  padding: 1rem;
+  margin: 0 -1rem;
+  background: #fff;
+}
+
+.SectionCard-post {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: #545454;
+}
+
+.SectionCard-post::before,
+.SectionCard-post::after {
+    content: '';
+    display: table;
+}
+
+.SectionCard-post::after {
+    clear: both;
+}
+
+.SectionCard-postImage {
+  float: left;
+  width: 38%;
+  padding-right: 2%
+}
+
+.SectionCard-postHeading {
+  float: left;
+  width: 60%;
+  margin: 0.25rem 0;
+  font-size: 1.4rem;
+  color: #2f2f2f;
+}
+
+.SectionCard-postPreamble {
+  float: left;
+  width: 60%;
+  margin: 0;
+}

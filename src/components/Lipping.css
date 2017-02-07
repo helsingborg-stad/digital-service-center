@@ -1,5 +1,5 @@
 .Lipping {
-  width: 10px;
+  width: 0.85rem;
   height: 100vh;
   position: fixed; /* TODO: figure out whether fixed positioning is a good idea or not */
   top: 0;
