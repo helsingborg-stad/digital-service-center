@@ -1,0 +1,29 @@
+.SearchField {
+    position: relative;
+    width: 28%;
+    margin: 3rem auto 0;
+}
+
+.SearchField-input {
+    width: 100%;
+    height: 3.5rem;
+    border: 0;
+    border-radius: 28px;
+    background: rgba(0,0,0,0.7);
+    font-size: 1.33rem;
+    padding: 0 2rem 0 6rem;
+    color: #fff;
+    font-style: italic;
+    font-weight: 300;
+}
+
+.SearchField-input:focus {
+    outline: 0; /* TODO: Make sure we add a visual focus indicator */
+}
+
+.SearchField-button {
+    position: absolute;
+    top: 14px;
+    left: 19px;
+    width: 30px;
+}
