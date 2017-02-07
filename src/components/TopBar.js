@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './TopBar.css';
+import PaperRipple from 'react-paper-ripple';
 
 export default class TopBar extends Component {
   render() {
@@ -20,7 +21,11 @@ TopBar.propTypes = {
 
 export class TopBarLink extends Component {
   render() {
-    return <a className='TopBarLink' href={this.props.href}>{this.props.linkName}</a>;
+    return (
+      <PaperRipple tag='a' className='TopBarLink' href={this.props.href}>
+        {this.props.linkName}
+      </PaperRipple>
+    );
   }
 }
 
