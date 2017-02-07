@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import './SectionCard.css';
 import PaperRipple from 'react-paper-ripple';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 export default class SectionCard extends Component {
   render() {
@@ -14,16 +15,20 @@ export default class SectionCard extends Component {
           </PaperRipple>);
         })}
         </div>
-        <div className='SectionCard-postWrapper'>
-        {this.props.posts.map(post => {
-          return (
-            <PaperRipple tag='a' className='SectionCard-post' href={post.href}>
-              <img className='SectionCard-postImage' src={post.imgUrl} />
-              <h3 className='SectionCard-postHeading'>{post.heading}</h3>
-              <p className='SectionCard-postPreamble'>{post.preamble}</p>
-            </PaperRipple>
-          );
-        })}
+        <div className='SectionCard-scrollWrapper'>
+          <Scrollbars style={{ width: '100%', height: '35vh' }}>
+            <div className='SectionCard-postWrapper'>
+            {this.props.posts.map(post => {
+              return (
+                <PaperRipple tag='a' className='SectionCard-post' href={post.href}>
+                  <img className='SectionCard-postImage' src={post.imgUrl} />
+                  <h3 className='SectionCard-postHeading'>{post.heading}</h3>
+                  <p className='SectionCard-postPreamble'>{post.preamble}</p>
+                </PaperRipple>
+              );
+            })}
+            </div>
+          </Scrollbars>
         </div>
       </div>
     );
