@@ -1,0 +1,25 @@
+.SiteSubHeader {
+  height: 3.25rem;
+  background: #fff;
+}
+
+.SiteSubHeaderLink {
+    position: relative;
+    display: inline-block;
+    font-size: 0.875rem;
+    padding: 0 2em;
+    margin-right: 2.5em;
+    line-height: 3.25rem;
+    color: #858585;
+    font-weight: bold;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.SiteSubHeader:last-of-type {
+    margin-right: 0;
+}
+
+.SiteSubHeader-logo {
+  width: 32.75rem;
+}

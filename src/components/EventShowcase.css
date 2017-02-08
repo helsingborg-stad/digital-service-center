@@ -1,0 +1,38 @@
+.EventShowcase {
+  height: 20vh;
+  background: #fff;
+  padding-right: 1.25rem;
+  position: fixed;
+  bottom: 0;
+  left: 0.85rem;
+}
+
+.Event {
+  position: relative;
+  display: inline-block;
+  height: calc(100% - 2.5rem);
+  margin: 1.25rem;
+  margin-right: 0;
+  background: rgba(0,0,0,0.5);
+  width: 210px; /* TODO: fix width not being dynamic */
+}
+
+.Event-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.Event-title {
+  position: absolute;
+  width: calc(100% - 2rem);
+  display: inline-block;
+  bottom: 0;
+  left: 0;
+  color: #fff;
+  background: rgba(0,0,0,0.5);
+  font-weight: bold;
+  padding: 0.5rem 1rem 0.75rem;
+}

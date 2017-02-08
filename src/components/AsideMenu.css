@@ -1,0 +1,8 @@
+.AsideMenu {
+  background: #f4a428;
+  height: calc( 100vh - 4.6875rem - 3.25rem);
+  position: fixed;
+  top: calc( 4.6875rem + 3.25rem );
+  right: 0;
+  width: calc(100vw - (210px * 5) - 22.7rem); /* TODO: Fix width not being dynamic */
+}
