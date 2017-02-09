@@ -40,7 +40,7 @@ export default class GoogleMaps extends PureComponent {
     return (
       <div style={{
         height: 'calc( 80vh - 4.6875rem - 3.25rem)',
-        width: '1400px',
+        width: '1340px',
         marginLeft: '0.85rem'}}
       >
         <GoogleMap

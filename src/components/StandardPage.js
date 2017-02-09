@@ -80,6 +80,14 @@ export default class StandardPage extends Component {
               name='Avslappnad miljö hos Frida'
               href='#asdf'
               imgSrc='http://lorempixel.com/240/175?random=6' />
+            <Event
+              name='Avslappnad miljö hos Bengt'
+              href='#asdf'
+              imgSrc='http://lorempixel.com/240/175?random=7' />
+            <Event
+              name='Avslappnad miljö hos Lotta'
+              href='#asdf'
+              imgSrc='http://lorempixel.com/240/175?random=8' />
           </EventShowcase>
         </main>
         <aside>

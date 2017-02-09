@@ -1,20 +1,28 @@
 .EventShowcase {
   height: 20vh;
   background: #fff;
-  padding-right: 1.25rem;
   position: fixed;
   bottom: 0;
   left: 0.85rem;
+  white-space: nowrap;
+  width: 1340px;
 }
 
 .Event {
   position: relative;
   display: inline-block;
-  height: calc(100% - 2.5rem);
-  margin: 1.25rem;
-  margin-right: 0;
+  height: calc(100% - 3rem);
+  margin: 1.25rem 0.625rem;
   background: rgba(0,0,0,0.5);
   width: 210px; /* TODO: fix width not being dynamic */
+}
+
+.Event:first-child {
+  margin-left: 1.25rem;
+}
+
+.Event:last-child {
+  margin-right: 1.25rem;
 }
 
 .Event-img {
@@ -35,4 +43,5 @@
   background: rgba(0,0,0,0.5);
   font-weight: bold;
   padding: 0.5rem 1rem 0.75rem;
+  white-space: normal;
 }

@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import PaperRipple from 'react-paper-ripple';
+import { Scrollbars } from 'react-custom-scrollbars';
 import './EventShowcase.css';
 
 export class EventShowcase extends Component {
   render() {
     return (
       <div className='EventShowcase'>
+        <Scrollbars style={{ width: '1340px', height: '100%' }}>
         {this.props.children}
+        </Scrollbars>
       </div>
     );
   }
