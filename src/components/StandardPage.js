@@ -11,6 +11,22 @@ import WeatherWidget from './WeatherWidget';
 
 export default class StandardPage extends Component {
   render() {
+    const mapProps = {
+      markers: [{
+        id: 'mitt id',
+        lat: 56.0456282,
+        lng: 12.7045333
+      }, {
+        id: 'mitt id2',
+        lat: 56.0451487,
+        lng: 12.6956927
+      }, {
+        id: 'mitt id3',
+        lat: 56.0478332,
+        lng: 12.6940619
+      }
+      ]
+    };
     return (
       <div>
         <Lipping />
@@ -38,7 +54,7 @@ export default class StandardPage extends Component {
           <SideNavigationLink name='Infopoints' href='#asdf' />
         </SideNavigation>
         <main>
-          <GoogleMaps />
+          <GoogleMaps {...mapProps} />
           <EventShowcase>
             <Event
               name='Brooklyn i Helsingborg'
