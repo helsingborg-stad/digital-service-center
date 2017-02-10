@@ -6,7 +6,9 @@ import SearchField from './SearchField';
 /* TODO: Make sure component re-renders when the time changes */
 function getCurrentTime() {
   const date = new Date();
-  return `${date.getHours()}:${date.getMinutes()}`;
+  const minutes = date.getMinutes() <= 9
+    ? '0' + date.getMinutes() : date.getMinutes();
+  return `${date.getHours()}:${minutes}`;
 }
 
 export class SiteHeader extends Component {

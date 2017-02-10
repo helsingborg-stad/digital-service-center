@@ -8,7 +8,7 @@ export default class Calendar extends Component {
     const getDay = () => {
       const date = new Date();
       return date.getDay();
-    }
+    };
     const getWorkDay = () => {
       const date = new Date();
       const weekdays = new Array(7);
@@ -22,7 +22,7 @@ export default class Calendar extends Component {
       weekdays[6] = 'Sat';
 
       return weekdays[date.getDay()];
-    }
+    };
 
     return (
       <div>
