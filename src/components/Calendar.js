@@ -5,9 +5,8 @@ import './Calendar.css';
 
 export default class Calendar extends Component {
   render() {
-    const getDay = () => {
-      const date = new Date();
-      return date.getDay();
+    const getDayOfMonth = () => {
+      return new Date().getDate();
     };
     const getWorkDay = () => {
       const date = new Date();
@@ -28,7 +27,7 @@ export default class Calendar extends Component {
       <div>
         <div className='Calendar-header'>
           <span className='Calendar-header-workday'>{getWorkDay()}</span>
-          <span className='Calendar-header-day'>{getDay()}</span>
+          <span className='Calendar-header-day'>{getDayOfMonth()}</span>
         </div>
         <TransitionView>
           <MonthView
