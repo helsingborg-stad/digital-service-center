@@ -34,4 +34,4 @@ export default class Routes extends React.Component {
       </Router>
     );
   }
-};
+}

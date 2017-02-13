@@ -15,7 +15,7 @@ export default class Startpage extends Component {
     const firstPostVisitor = { href: '#asdf', imgUrl: 'http://lorempixel.com/166/102',
       heading: 'Lorem ipsum', preamble: 'Lorem ipsum dolor sit amet, consectetur' +
       ' adipisicing elit, sed do eiusmod tempor incididunt ut.'};
-    const postsVisitor = Array.apply(null, Array(10)).map(() => firstPostVisitor)
+    const postsVisitor = Array.apply(null, Array(10)).map(() => firstPostVisitor);
     return (
         <div className='Startpage'>
           <Lipping />

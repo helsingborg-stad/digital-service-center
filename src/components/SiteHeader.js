@@ -3,7 +3,6 @@ import './SiteHeader.css';
 import PaperRipple from 'react-paper-ripple';
 import SearchField from './SearchField';
 
-/* TODO: Make sure component re-renders when the time changes */
 function getCurrentTime() {
   const date = new Date();
   const minutes = date.getMinutes() <= 9
@@ -12,6 +11,15 @@ function getCurrentTime() {
 }
 
 export class SiteHeader extends Component {
+  constructor(props) {
+    super(props);
+    this.initTimeSync.bind(this);
+    const handle = this.initTimeSync();
+    this.state = {
+      currentTime: getCurrentTime(),
+      timeSyncHandle: handle
+    };
+  }
   render() {
     return (
       <div className='SiteHeader' style={{backgroundColor: this.props.bgColor}}>
@@ -25,11 +33,22 @@ export class SiteHeader extends Component {
             <button className='SiteHeader-wifi'>Helsingborg Free Wifi</button>
           </div>
           <div style={{float: 'left'}}>
-            <span className='SiteHeader-clock'>{ getCurrentTime() }</span>
+            <span className='SiteHeader-clock'>{ this.state.currentTime }</span>
           </div>
         </div>
       </div>
     );
+  }
+  initTimeSync() {
+    return setInterval(() => {
+      const time = getCurrentTime();
+      if (this.state.currentTime !== time) {
+        this.setState({currentTime: time});
+      }
+    }, 5000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.state.timeSyncHandle);
   }
 }
 
