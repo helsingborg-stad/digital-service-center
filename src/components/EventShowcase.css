@@ -5,7 +5,7 @@
   bottom: 0;
   left: 0.85rem;
   white-space: nowrap;
-  width: 1340px;
+  width: calc(100% - 325px);
 }
 
 .Event {
@@ -14,7 +14,7 @@
   height: calc(100% - 3rem);
   margin: 1.25rem 0.625rem;
   background: rgba(0,0,0,0.5);
-  width: 210px; /* TODO: fix width not being dynamic */
+  width: 210px;
 }
 
 .Event:first-child {

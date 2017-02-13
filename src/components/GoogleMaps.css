@@ -1,3 +1,9 @@
+.GoogleMaps-wrapper {
+  height: calc( 80vh - 4.6875rem - 3.25rem);
+  width: calc(100% - 325px);
+  padding-left: 0.85rem;
+}
+
 .GoogleMaps-marker {
   width: 16px;
   height: 16px;

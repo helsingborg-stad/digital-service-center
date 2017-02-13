@@ -7,7 +7,7 @@ export class EventShowcase extends Component {
   render() {
     return (
       <div className='EventShowcase'>
-        <Scrollbars style={{ width: '1340px', height: '100%' }}>
+        <Scrollbars style={{ width: '100%', height: '100%' }}>
         {this.props.children}
         </Scrollbars>
       </div>

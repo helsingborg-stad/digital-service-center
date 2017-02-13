@@ -4,5 +4,5 @@
   position: fixed;
   top: calc( 4.6875rem + 3.25rem );
   right: 0;
-  width: calc(100vw - (210px * 5) - 19rem); /* TODO: Fix width not being dynamic */
+  width: 325px;
 }
