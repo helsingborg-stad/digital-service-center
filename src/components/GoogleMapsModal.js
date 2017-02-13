@@ -4,12 +4,13 @@ import classnames from 'classnames';
 
 import './GoogleMapsModal.css';
 
-const Modal = ({showMoreInfo, handleShowMoreClick}) => {
+const Modal = ({showMoreInfo, handleShowMoreClick, visible}) => {
   return (
     <div
       className={classnames(
         'GoogleMapsModal',
-        showMoreInfo && 'GoogleMapsModal--expanded')
+        showMoreInfo && 'GoogleMapsModal--expanded',
+        visible && 'GoogleMapsModal--visible')
       }
     >
       <div className='GoogleMapsModal-triangle' />
@@ -47,7 +48,8 @@ const Modal = ({showMoreInfo, handleShowMoreClick}) => {
 
 Modal.propTypes = {
   showMoreInfo: PropTypes.bool,
-  handleShowMoreClick: PropTypes.func
+  handleShowMoreClick: PropTypes.func,
+  visible: PropTypes.bool
 };
 
 export default class GoogleMapsModal extends Component {
@@ -58,13 +60,14 @@ export default class GoogleMapsModal extends Component {
     };
   }
   render() {
-    return this.props.visible
-      ? <Modal
-          key={this.props.id}
-          handleShowMoreClick={this.handleShowMoreInfoClick.bind(this)}
-          showMoreInfo={this.state.showMoreInfo}
-        />
-      : null;
+    return (
+      <Modal
+        key={this.props.id}
+        handleShowMoreClick={this.handleShowMoreInfoClick.bind(this)}
+        showMoreInfo={this.state.showMoreInfo}
+        visible={this.props.visible}
+      />
+    );
   }
   handleShowMoreInfoClick() {
     this.setState({showMoreInfo: !this.state.showMoreInfo});

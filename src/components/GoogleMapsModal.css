@@ -3,11 +3,22 @@
   display: inline-block;
   width: 330px;
   background: #fff;
-  transform: transLateX(-157px) translateY(35px);
   box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.15);
   border-radius: 3px;
   padding: 1.5rem 1.5rem 4rem;
-  transition: width 0.1s ease-in-out; /* TODO: Fix layout during transition */
+}
+
+.GoogleMapsModal {
+  transform: scale(0.7) transLateX(-210px) translateY(-30px);
+  opacity: 0;
+  transition: transform 0.3s, opacity 0.3s;
+  visibility: hidden;
+}
+
+.GoogleMapsModal--visible {
+  transform: scale(1) transLateX(-157px) translateY(35px);
+  opacity: 1;
+  visibility: visible;
 }
 
 .GoogleMapsModal--expanded {
