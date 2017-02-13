@@ -408,3 +408,6 @@ __pycache__/
 # !tools/packages.config
 
 # End of https://www.gitignore.io/api/node,wordpress,windows,macos,visualstudio,visualstudiocode
+
+# User-profile folder for Chrome when debugging in VS Code
+.chrome/
