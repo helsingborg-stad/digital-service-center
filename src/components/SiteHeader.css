@@ -40,7 +40,9 @@
     font-weight: 300;
     border: 0;
     color: #fff;
-    background: none;
+    background: url('../media/wifi.svg') no-repeat;
+    background-size: 24px;
+    background-position: center 10px;
     text-align: center;
 }
 
