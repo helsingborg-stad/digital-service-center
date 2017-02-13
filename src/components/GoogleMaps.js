@@ -31,6 +31,7 @@ export default class GoogleMaps extends PureComponent {
         <GoogleMapsModal
           lat={marker.lat}
           lng={marker.lng}
+          id={marker.id + '-modal'}
           key={marker.id + '-modal'}
           visible={this.state.visibleModals.includes(marker.id)}
         />

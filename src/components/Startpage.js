@@ -17,7 +17,7 @@ export default class Startpage extends Component {
       ' adipisicing elit, sed do eiusmod tempor incididunt ut.'};
     const postsVisitor = Array.apply(null, Array(10)).map(() => firstPostVisitor)
     return (
-        <div>
+        <div className='Startpage'>
           <Lipping />
           <MultimediaBackground>
             <TopBar>

@@ -1,11 +1,11 @@
 .EventShowcase {
   height: 20vh;
   background: #fff;
-  position: fixed;
+  position: absolute;
   bottom: 0;
   left: 0.85rem;
   white-space: nowrap;
-  width: calc(100% - 325px);
+  width: calc(100% - 325px - 0.85rem);
 }
 
 .Event {

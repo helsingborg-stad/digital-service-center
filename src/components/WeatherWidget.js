@@ -7,7 +7,7 @@ export default class WeatherWidget extends Component {
       <div className='WeatherWidget'>
         <br />
         <br />
-        <img src='https://image.flaticon.com/icons/svg/17/17785.svg' style={{width: '90px', marginLeft: '80px'}} />
+        <img src='https://image.flaticon.com/icons/svg/17/17785.svg' role='presentation' style={{width: '90px', marginLeft: '80px'}} />
         <br />
         <br />
         <br />

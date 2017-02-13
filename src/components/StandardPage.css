@@ -1,0 +1,37 @@
+.StandardPage {
+  min-height: 100vh;
+  background: #e5e3df;
+}
+
+/*
+ ** Animations
+ *
+ * Also contains animations for sub-components
+ */
+
+/* Hide component during leaving animation due to bug with react-router@4
+   https://github.com/ReactTraining/react-router/issues/4351
+   TODO: Add leaving animation when the bug is fixed
+ */
+ .pageChange-leave.StandardPage,
+ .pageChange-leave-active.StandardPage {
+   display: none;
+ }
+
+.pageChange-enter.StandardPage .AsideMenu {
+  transform: translateX(325px);
+}
+.pageChange-enter-active.StandardPage .AsideMenu {
+  transform: translateX(0);
+  transition: 0.3s all ease-in;
+}
+
+.pageChange-enter.StandardPage .EventShowcase {
+  width: 100%;
+  transform: translateY(20vh);
+}
+.pageChange-enter-active.StandardPage .EventShowcase {
+  width: calc(100% - 325px - 0.85rem);
+  transform: translateY(0);
+  transition: 0.25s all ease-in;
+}

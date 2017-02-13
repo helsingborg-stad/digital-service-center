@@ -9,6 +9,8 @@ import AsideMenu from './AsideMenu';
 import Calendar from './Calendar';
 import WeatherWidget from './WeatherWidget';
 
+import './StandardPage.css';
+
 export default class StandardPage extends Component {
   render() {
     const mapProps = {
@@ -28,7 +30,7 @@ export default class StandardPage extends Component {
       ]
     };
     return (
-      <div>
+      <div className='StandardPage'>
         <Lipping />
         <SiteHeader heading='Explore Helsingborg' bgColor='#c70d53'>
           <SiteHeaderLink name='Guided Tours' href='#asdf' />
