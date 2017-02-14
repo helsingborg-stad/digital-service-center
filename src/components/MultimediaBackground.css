@@ -1,0 +1,5 @@
+
+/* TODO: think about whether we should use `body` or `.MultimediaBackground` as target here... */
+body {
+    background: #333 url(http://lorempixel.com/1920/1080/city);
+}
