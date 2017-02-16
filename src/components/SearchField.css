@@ -4,6 +4,11 @@
     margin: 3rem auto 0;
 }
 
+.SearchField--inline {
+    width: 18rem;
+    margin: 0;
+}
+
 .SearchField-input {
     width: 100%;
     height: 3.5rem;
@@ -21,9 +26,22 @@
     outline: 0; /* TODO: Make sure we add a visual focus indicator */
 }
 
+.SearchField-input--inline {
+    height: 2.625rem;
+    font-size: 1.0625rem;
+    padding-left: 4rem;
+    background: rgba(0,0,0,0.2);
+}
+
 .SearchField-button {
     position: absolute;
     top: 14px;
     left: 19px;
     width: 30px;
+}
+
+.SearchField-button--inline {
+    top: 10px;
+    left: 12px;
+    width: 22px;
 }

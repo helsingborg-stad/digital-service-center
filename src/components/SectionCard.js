@@ -10,7 +10,7 @@ export default class SectionCard extends Component {
         <h2 className='SectionCard-heading'>{this.props.section}</h2>
         <div className='SectionCard-tagWrapper'>
         {this.props.tags.map(tag => {
-          return (<PaperRipple tag='a' className='SectionCard-tag' href={tag.href}>
+          return (<PaperRipple key={Math.random()} tag='a' className='SectionCard-tag' href={tag.href}>
             {tag.name}
           </PaperRipple>);
         })}
@@ -20,8 +20,8 @@ export default class SectionCard extends Component {
             <div className='SectionCard-postWrapper'>
             {this.props.posts.map(post => {
               return (
-                <PaperRipple tag='a' className='SectionCard-post' href={post.href}>
-                  <img className='SectionCard-postImage' src={post.imgUrl} />
+                <PaperRipple key={Math.random()} tag='a' className='SectionCard-post' href={post.href}>
+                  <img className='SectionCard-postImage' src={post.imgUrl} role='presentation' />
                   <h3 className='SectionCard-postHeading'>{post.heading}</h3>
                   <p className='SectionCard-postPreamble'>{post.preamble}</p>
                 </PaperRipple>

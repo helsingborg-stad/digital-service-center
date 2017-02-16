@@ -1,0 +1,8 @@
+.AsideMenu {
+  background: #f4a428;
+  height: calc( 100vh - 4.6875rem - 3.25rem);
+  position: absolute;
+  top: calc( 4.6875rem + 3.25rem );
+  right: 0;
+  width: 325px;
+}

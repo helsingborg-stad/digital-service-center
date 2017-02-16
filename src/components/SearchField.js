@@ -1,14 +1,29 @@
 import React, { Component } from 'react';
 import './SearchField.css';
 import searchIcon from '../media/search.svg';
+import classnames from 'classnames';
 
 export default class SearchField extends Component {
   render() {
     return (
-      <div className='SearchField'>
+      <div className={classnames('SearchField', this.props.inline && 'SearchField--inline')}>
       <form method='get' id='search' action='#' onSubmit={this.handleSearchSubmit}>
-      <input type='search' className='SearchField-input' placeholder='Search' />
-      <input className='SearchField-button' name="searchsubmit" type="image" src={searchIcon} value="Sök" />
+      <input
+        type='search'
+        className={classnames(
+          'SearchField-input',
+          this.props.inline && 'SearchField-input--inline'
+          )
+        }
+        placeholder='Search'
+      />
+      <input
+        className={classnames(
+          'SearchField-button',
+          this.props.inline && 'SearchField-button--inline'
+          )
+        }
+        name="searchsubmit" type="image" src={searchIcon} value="Sök" />
       </form>
       </div>
     );
@@ -17,3 +32,11 @@ export default class SearchField extends Component {
     return false;
   }
 }
+
+SearchField.propTypes = {
+  inline: React.PropTypes.bool
+};
+
+SearchField.defaultProps = {
+  inline: false
+};

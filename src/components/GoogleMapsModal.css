@@ -1,0 +1,99 @@
+.GoogleMapsModal {
+  position: relative;
+  display: inline-block;
+  width: 330px;
+  background: #fff;
+  box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.15);
+  border-radius: 3px;
+  padding: 1.5rem 1.5rem 4rem;
+}
+
+.GoogleMapsModal {
+  transform: scale(0.7) transLateX(-210px) translateY(-30px);
+  opacity: 0;
+  transition: transform 0.3s, opacity 0.3s;
+  visibility: hidden;
+}
+
+.GoogleMapsModal--visible {
+  transform: scale(1) transLateX(-157px) translateY(35px);
+  opacity: 1;
+  visibility: visible;
+}
+
+.GoogleMapsModal--expanded {
+  width: 685px;
+}
+
+.GoogleMapsModal-triangle {
+   width: 40px;
+   height: 40px;
+   position: absolute;
+   top: -40px;
+   left: 151px;
+   overflow: hidden;
+   box-shadow: 0 9px 10px -17px rgba(0,0,0,0.5);
+   pointer-events: none;
+}
+.GoogleMapsModal-triangle::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  transform: rotate(45deg);
+  top: 30px;
+  left: 4px;
+  box-shadow: -1px -1px 10px -2px rgba(0,0,0,0.5);
+}
+
+.GoogleMapsModal-img {
+  margin: -1.5rem 0 0 -1.5rem;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
+.GoogleMapsModal--expanded .GoogleMapsModal-img {
+  border-top-right-radius: 0;
+}
+
+.GoogleMapsModal-heading {
+  font-size: 1.25rem;
+  margin: 1rem 0 0.75rem;
+}
+
+.GoogleMapsModal-preamble,
+.GoogleMapsModal-moreInfo {
+  font-size: 14px;
+  line-height: 18px;
+  color: #535353;
+}
+
+.GoogleMapsModal-buttonWrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 1.5rem;
+}
+
+.GoogleMapsModal-button {
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  color: #ea004b;
+  background: #fff;
+  border: 1px solid #ddd;
+  font-weight: bold;
+  line-height: 14px;
+}
+
+.GoogleMapsModal-button--emphasized {
+  background: #ea004b;
+  color: #fff;
+  border-color: #ea004b;
+}
+
+.GoogleMapsModal-button--alignRight {
+  float: right;
+}

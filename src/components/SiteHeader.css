@@ -1,0 +1,53 @@
+.SiteHeader {
+  height: 4.6875rem;
+}
+
+.SiteHeader::before,
+.SiteHeader::after {
+  display: table;
+  content: '';
+}
+
+.SiteHeader::after {
+  clear: both;
+}
+
+.SiteHeader-heading {
+  float: left;
+  padding-left: 3.35rem;
+  margin: 0;
+  font-size: 1.875rem;
+  line-height: 4.2875rem;
+  color: #fff;
+  width: 30rem;
+}
+
+.SiteHeaderLink {
+  position: relative;
+  display: inline-block;
+  padding: 0 1.5rem;
+  font-size: 1.0625rem;
+  font-weight: bold;
+  line-height: 4.6875rem;
+  color: #fff;
+}
+
+.SiteHeader-wifi {
+    width: 6rem;
+    padding: 1.8rem 0 0;
+    margin: 0 1rem;
+    font-size: 0.8rem;
+    font-weight: 300;
+    border: 0;
+    color: #fff;
+    background: url('../media/wifi.svg') no-repeat;
+    background-size: 24px;
+    background-position: center 10px;
+    text-align: center;
+}
+
+.SiteHeader-clock {
+  font-size: 2.1875rem;
+  color: #fff;
+  line-height: 4.6875rem;
+}
