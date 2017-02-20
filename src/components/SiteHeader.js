@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './SiteHeader.css';
 import PaperRipple from 'react-paper-ripple';
 import SearchField from './SearchField';
+import ReactInterval from 'react-interval';
 
 function getCurrentTime() {
   const date = new Date();
@@ -11,13 +12,10 @@ function getCurrentTime() {
 }
 
 export class SiteHeader extends Component {
-  constructor(props) {
-    super(props);
-    this.initTimeSync.bind(this);
-    const handle = this.initTimeSync();
+  constructor() {
+    super();
     this.state = {
-      currentTime: getCurrentTime(),
-      timeSyncHandle: handle
+      currentTime: getCurrentTime()
     };
   }
   render() {
@@ -33,22 +31,21 @@ export class SiteHeader extends Component {
             <button className='SiteHeader-wifi'>Helsingborg Free Wifi</button>
           </div>
           <div style={{float: 'left'}}>
-            <span className='SiteHeader-clock'>{ this.state.currentTime }</span>
+            <span className='SiteHeader-clock'>
+              <ReactInterval timeout={5000} enabled={true}
+                callback={() => {
+                  const time = getCurrentTime();
+                  if (this.state.currentTime !== time) {
+                    this.setState({currentTime: time});
+                  }
+                }}
+              />
+              { this.state.currentTime }
+            </span>
           </div>
         </div>
       </div>
     );
-  }
-  initTimeSync() {
-    return setInterval(() => {
-      const time = getCurrentTime();
-      if (this.state.currentTime !== time) {
-        this.setState({currentTime: time});
-      }
-    }, 5000);
-  }
-  componentWillUnmount() {
-    clearInterval(this.state.timeSyncHandle);
   }
 }
 

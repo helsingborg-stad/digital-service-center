@@ -411,3 +411,6 @@ __pycache__/
 
 # User-profile folder for Chrome when debugging in VS Code
 .chrome/
+
+# Build folder for front-end
+build/
