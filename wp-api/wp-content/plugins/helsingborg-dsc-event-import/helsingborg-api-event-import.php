@@ -20,6 +20,7 @@ function helsingborg_api_event_import_init() {
 }
 
 include('includes/import-event-post-type.php');
+include('includes/api-meta-callbacks.php');
 include('includes/register-meta-api.php');
 include('includes/import-event.php');
 include('includes/import-event-admin.php');

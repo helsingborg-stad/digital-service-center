@@ -24,32 +24,40 @@ function insert_event_post_type($event) {
 }
 
 function insert_event_featured_image($post_id, $event) {
+  $image_url        = $event->featured_media->source_url;
+  $image_name       = basename($image_url);
+  $upload_dir       = wp_upload_dir(); 
+  $image_data       = file_get_contents($image_url);
+  $unique_file_name = wp_unique_filename( $upload_dir['path'], $image_name );
+  $filename         = basename( $unique_file_name );
 
-  $url = $event->featured_media->source_url;
-  $filename = basename($url);
-  $uploaddir = wp_upload_dir();
-  $uploadfile = $uploaddir['path'] . '/' . $filename;
-  $contents= file_get_contents($url);
-  $savefile = fopen($uploadfile, 'w');
-  fwrite($savefile, $contents);
-  fclose($savefile);
+  if( wp_mkdir_p( $upload_dir['path'] ) ) {
+      $file = $upload_dir['path'] . '/' . $filename;
+  } else {
+      $file = $upload_dir['basedir'] . '/' . $filename;
+  }
 
-  $filetype = wp_check_filetype(basename($filename), null );
+  file_put_contents( $file, $image_data );
+
+  $wp_filetype = wp_check_filetype( $filename, null );
 
   $attachment = array(
-    'post_mime_type' => $filetype['type'],
-    'post_title' => preg_replace( '/\.[^.]+$/', '', basename( $filename ) ),
-    'post_content'=> '',
-    'post_status' => 'inherit'
+      'post_mime_type' => $wp_filetype['type'],
+      'post_title'     => sanitize_file_name( $filename ),
+      'post_content'   => '',
+      'post_status'    => 'inherit'
   );
 
-  $attach_id = wp_insert_attachment( $attachment, $filename, $post_id );
-  $attach_data = wp_generate_attachment_metadata( $attach_id, $filename );
-  wp_update_attachment_metadata( $attach_id,  $attach_data );
+  $attach_id = wp_insert_attachment( $attachment, $file, $post_id );
+  require_once(ABSPATH . 'wp-admin/includes/image.php');
+  $attach_data = wp_generate_attachment_metadata( $attach_id, $file );
+  wp_update_attachment_metadata( $attach_id, $attach_data );
   set_post_thumbnail( $post_id, $attach_id );
 }
 
-function insert_event_meta($post_id, $event){  
+function insert_event_meta($post_id, $event){
+  add_post_meta($post_id, 'event_id', $event->id);
+  add_post_meta($post_id, 'featured_media_src', $event->featured_media);  
   add_post_meta($post_id, 'event_categories', $event->event_categories);
   add_post_meta($post_id, 'user_groups', $event->user_groups);
   add_post_meta($post_id, 'event_tags', $event->event_tags);
@@ -96,6 +104,6 @@ function create_events() {
     if($post_id) {
       insert_event_meta($post_id, $event);
     }
-    break;
+    break; //only in test purpose, remove when plugin is finished
   }
 }
