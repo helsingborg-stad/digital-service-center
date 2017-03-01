@@ -7,6 +7,14 @@ add_action( 'rest_api_init', 'register_imported_event_meta_fields' );
 
 function register_imported_event_meta_fields() {
     register_rest_field( 'imported_event',
+    'imported_event',
+    array(
+        'get_callback'    => 'get_imported_event',
+        'update_callback' => null,
+        'schema'          => null,
+         )
+    );
+    register_rest_field( 'imported_event',
     'event_id',
     array(
         'get_callback'    => 'get_imported_event_id',
@@ -14,7 +22,7 @@ function register_imported_event_meta_fields() {
         'schema'          => null,
          )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
     'featured_media_url',
     array(
         'get_callback'    => 'get_imported_event_featured_media',
@@ -78,7 +86,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'occasions',
         array(
           'get_callback'    => 'get_imported_event_occasions',
@@ -86,7 +94,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field(array('imported_event', 'editable_event'),
         'location',
         array(
           'get_callback'    => 'get_imported_event_location',
@@ -102,7 +110,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'organizers',
         array(
           'get_callback'    => 'get_imported_event_organizers',
@@ -118,7 +126,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'booking_link',
         array(
           'get_callback'    => 'get_imported_event_booking_link',
@@ -126,7 +134,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'booking_phone',
         array(
           'get_callback'    => 'get_imported_event_booking_phone',
@@ -134,7 +142,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'age_restriction',
         array(
           'get_callback'    => 'get_imported_event_age_restriction',
@@ -142,7 +150,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'membership_cards',
         array(
           'get_callback'    => 'get_imported_event_membership_cards',
@@ -150,7 +158,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'price_information',
         array(
           'get_callback'    => 'get_imported_event_price_information',
@@ -158,7 +166,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'ticket_includes',
         array(
           'get_callback'    => 'get_imported_event_ticket_includes',
@@ -166,7 +174,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'price_adult',
         array(
           'get_callback'    => 'get_imported_event_price_adult',
@@ -174,7 +182,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'price_children',
         array(
           'get_callback'    => 'get_imported_event_price_children',
@@ -182,7 +190,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'children_age',
         array(
           'get_callback'    => 'get_imported_event_children_age',
@@ -190,7 +198,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'price_student',
         array(
           'get_callback'    => 'get_imported_event_price_student',
@@ -198,7 +206,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'price_senior',
         array(
           'get_callback'    => 'get_imported_event_price_senior',
@@ -206,7 +214,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'senior_age',
         array(
           'get_callback'    => 'get_imported_event_senior_age',
@@ -214,7 +222,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'booking_group',
         array(
           'get_callback'    => 'get_imported_event_booking_group',
@@ -222,7 +230,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'gallery',
         array(
           'get_callback'    => 'get_imported_event_gallery',
@@ -230,7 +238,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'facebook',
         array(
           'get_callback'    => 'get_imported_event_facebook',
@@ -238,7 +246,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'twitter',
         array(
           'get_callback'    => 'get_imported_event_twitter',
@@ -246,7 +254,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'instagram',
         array(
           'get_callback'    => 'get_imported_event_instagram',
@@ -254,7 +262,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'google_music',
         array(
           'get_callback'    => 'get_imported_event_google_music',
@@ -262,7 +270,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     ); 
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'apple_music',
         array(
           'get_callback'    => 'get_imported_event_apple_music',
@@ -270,7 +278,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     ); 
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'spotify',
         array(
           'get_callback'    => 'get_imported_event_spotify',
@@ -278,7 +286,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'soundcloud',
         array(
           'get_callback'    => 'get_imported_event_soundcloud',
@@ -286,7 +294,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'deezer',
         array(
           'get_callback'    => 'get_imported_event_deezer',
@@ -294,7 +302,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'youtube',
         array(
           'get_callback'    => 'get_imported_event_youtube',
@@ -302,7 +310,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('imported_event', 'editable_event'),
         'vimeo',
         array(
           'get_callback'    => 'get_imported_event_vimeo',

@@ -12,4 +12,5 @@ function helsingborg_dsc_event_import_admin_menu(){
 function helsingborg_dsc_event_import_admin_init(){
     import_and_update_events_form();
 }
+
 ?>

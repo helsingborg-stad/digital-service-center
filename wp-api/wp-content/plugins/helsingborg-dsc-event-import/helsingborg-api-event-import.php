@@ -19,11 +19,14 @@ function helsingborg_api_event_import_init() {
   load_plugin_textdomain( 'Helsingborg-API-event-import', false, 'helsingborg-api-event-import-plugin' );
 }
 
-include('includes/import-event-post-type.php');
-include('includes/api-meta-callbacks.php');
-include('includes/register-meta-api.php');
-include('includes/import-event.php');
-include('includes/display-functions.php');
-include('includes/import-event-admin.php');
+include('includes/post-types/import-event-post-type.php');
+include('includes/post-types/editable-event-post-type.php');
+
+include('includes/api-register/api-meta-callbacks.php');
+include('includes/api-register/register-meta-api.php');
+
+include('includes/admin-panel/import-event.php');
+include('includes/admin-panel/display-functions.php');
+include('includes/admin-panel/import-event-admin.php');
 
 ?>

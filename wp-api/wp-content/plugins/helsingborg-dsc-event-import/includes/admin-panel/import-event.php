@@ -5,6 +5,7 @@
 
 function get_event_json($number_of_events) {
   $json;
+
   if(intval($number_of_events) > 0){
     $json = file_get_contents('https://api.helsingborg.se/event/json/wp/v2/event/?per_page=' . $number_of_events );
   }
@@ -63,6 +64,7 @@ function insert_event_featured_image($post_id, $event) {
 }
 
 function insert_event_meta($post_id, $event){
+  add_post_meta($post_id, 'imported_event', $event);
   add_post_meta($post_id, 'event_id', $event->id);
   add_post_meta($post_id, 'featured_media_src', $event->featured_media);  
   add_post_meta($post_id, 'event_categories', $event->event_categories);
