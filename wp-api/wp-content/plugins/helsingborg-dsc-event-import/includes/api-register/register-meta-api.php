@@ -7,14 +7,6 @@ add_action( 'rest_api_init', 'register_imported_event_meta_fields' );
 
 function register_imported_event_meta_fields() {
     register_rest_field( 'imported_event',
-    'imported_event',
-    array(
-        'get_callback'    => 'get_imported_event',
-        'update_callback' => null,
-        'schema'          => null,
-         )
-    );
-    register_rest_field( 'imported_event',
     'event_id',
     array(
         'get_callback'    => 'get_imported_event_id',
