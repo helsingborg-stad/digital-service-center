@@ -15,6 +15,14 @@ function register_imported_event_meta_fields() {
          )
     );
     register_rest_field( 'imported_event',
+    'featured_media_url',
+    array(
+        'get_callback'    => 'get_imported_event_featured_media',
+        'update_callback' => null,
+        'schema'          => null,
+         )
+    );
+    register_rest_field( 'imported_event',
     'featured_media_src',
     array(
         'get_callback'    => 'get_imported_featured_media',

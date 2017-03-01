@@ -13,6 +13,12 @@ function get_imported_featured_media($post, $field_name, $request)
     return get_post_meta($post['id'], 'featured_media_src', true);
 }
 
+function get_imported_event_featured_media($post, $field_name, $request)
+{
+    $feat_image_url = wp_get_attachment_url( get_post_thumbnail_id($post->ID) );
+    return $feat_image_url;
+}
+
 function get_imported_event_categories($post, $field_name, $request)
 {
     return get_post_meta($post['id'], 'event_categories', true);

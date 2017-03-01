@@ -35,7 +35,7 @@ function imported_event_post_type() {
     add_action( 'init', 'imported_event_post_type' );
     add_theme_support('post-thumbnails');
 
-    add_action('admin_init','hide_meta_boxes');
+    //add_action('admin_init','hide_meta_boxes');
 
     function hide_meta_boxes() {
         remove_meta_box('postcustom','imported_event','normal');
