@@ -3,9 +3,9 @@
 * callbacks for register rest api fields
 *****************************************/
 
-function get_imported_event($post, $field_name, $request)
+function get_imported_event_data($post, $field_name, $request)
 {
-    return get_post_meta($post['id'], 'imported_event', true);
+    return get_post_meta($post['id'], 'imported_event_data', true);
 }
 
 function get_imported_event_id($post, $field_name, $request)
