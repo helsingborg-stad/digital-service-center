@@ -63,6 +63,11 @@ function insert_event_featured_image($post_id, $event) {
   set_post_thumbnail( $post_id, $attach_id );
 }
 
+function update_event_featured_image($post_id, $event) {
+  wp_delete_attachment($post_id);
+  insert_event_featured_image($post_id, $event);
+}
+
 function insert_event_meta($post_id, $event){
   add_post_meta($post_id, 'event_id', $event->id);
   add_post_meta($post_id, 'featured_media_src', $event->featured_media);  
@@ -114,9 +119,10 @@ function update_event($event, $stored_event, $post_id) {
       wp_update_post($updated_post);
   }
 
-  $featured_media_url = get_post_meta($post_id, 'featured_media_url');
+  $featured_media_url = wp_get_attachment_url( get_post_thumbnail_id($post_id) );
+
   if(basename($event->featured_media->source_url) != basename($featured_media_url)) {
-    insert_event_featured_image($post_id, $event);
+    update_event_featured_image($post_id, $event);
   }
     
   $featured_media_src = get_post_meta($post_id, 'featured_media_src');
