@@ -10,5 +10,11 @@
     "sourceMapPathOverrides": {
       "webpack:///src/*": "${webRoot}/*"
     }
+  },
+  {
+    "type": "node",
+    "request": "launch",
+    "name": "Launch server",
+    "program": "${workspaceRoot}/server/index.js"
   }]
 }

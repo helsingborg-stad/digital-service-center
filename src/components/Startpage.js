@@ -1,57 +1,119 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Lipping from './Lipping';
 import MultimediaBackground from './MultimediaBackground';
 import TopBar, { TopBarLink } from './TopBar';
 import SectionCard from './SectionCard';
 import SearchField from './SearchField';
+import { connect } from 'react-redux';
+import { startpageFetchData } from '../actions/startpage';
 
 import './Startpage.css';
 
-export default class Startpage extends Component {
+export class Startpage extends Component {
+  componentDidMount() {
+    this.props.fetchData('/wp-json/wp/v2/startpage');
+  }
+
   render() {
-    const tagsVisitor = [{ name: 'See & Do', href: '#asdf'}, { name: 'Attractions', href: '#asdf'},
-      { name: 'Lorem', href: '#asdf'}, { name: 'Recommendations', href: '#asdf'},
-      { name: 'Lorem', href: '#asdf'}, { name: 'Lorem', href: '#asdf'}];
-    const firstPostVisitor = { href: '#asdf', imgUrl: 'http://lorempixel.com/166/102',
-      heading: 'Lorem ipsum', preamble: 'Lorem ipsum dolor sit amet, consectetur' +
-      ' adipisicing elit, sed do eiusmod tempor incididunt ut.'};
-    const postsVisitor = Array.apply(null, Array(10)).map(() => firstPostVisitor);
+    if (this.props.hasErrored) {
+      return (
+        <div>
+          <p>Sorry! There was an error loading the items</p>
+          <button
+            onClick={() => this.props.fetchData('/wp-json/wp/v2/startpage')}>
+            Ladda om sidan
+          </button>
+        </div>
+      );
+    }
+
+    const dataIsEmpty = !Object.keys(this.props.data).length;
+    if (this.props.isLoading || dataIsEmpty) {
+      return <p>Loading…</p>;
+    }
+
+    const Row = ({children}) => (
+      <div style={{display: 'flex', margin: '0 5%'}}>{children}</div>
+    );
+    const Column = ({children}) => (
+      <div style={{flex: '1', margin: '0 1%', maxWidth: '33%'}}>{children}</div>
+    );
+
     return (
         <div className='Startpage'>
           <Lipping />
-          <MultimediaBackground>
+          <MultimediaBackground backgroundUrl={this.props.data.backgroundUrl}>
             <TopBar>
-              <TopBarLink href="#asdf" linkName="Vägbeskrivning på Knutpunkten" />
-              <TopBarLink href="#asdf" linkName="Ett bättre Helsingborg" />
-              <TopBarLink href="#asdf" linkName="Chatta med oss" />
+              { this.props.data.topLinks.map(topLink => (
+                <TopBarLink
+                  key={topLink.href + topLink.name}
+                  href={topLink.href}
+                  linkName={topLink.name} />
+              ))}
             </TopBar>
-            <h1 className='Startpage-heading'>Digital Service Center</h1>
-            <div style={{display: 'flex', margin: '0 5%'}}>
-              <div style={{flex: '1', margin: '0 1%', maxWidth: '33%'}}>
+            <h1 className='Startpage-heading'>{this.props.data.heading}</h1>
+            <Row>
+              <Column>
                 <SectionCard
-                  section="Visitor"
+                  section={this.props.data.visitorHeading}
                   bgColor='#f4a428'
-                  tags={tagsVisitor}
-                  posts={postsVisitor} />
-              </div>
-              <div style={{flex: '1', margin: '0 1%', maxWidth: '33%'}}>
+                  tags={this.props.data.visitorTags}
+                  posts={this.props.data.visitorPosts} />
+              </Column>
+              <Column>
                 <SectionCard
-                  section="Local"
+                  section={this.props.data.localHeading}
                   bgColor='#eb6421'
-                  tags={tagsVisitor}
-                  posts={postsVisitor} />
-              </div>
-              <div style={{flex: '1', margin: '0 1%', maxWidth: '33%'}}>
+                  tags={this.props.data.localTags}
+                  posts={this.props.data.localPosts} />
+              </Column>
+              <Column>
                 <SectionCard
-                  section="Today"
+                  section={this.props.data.todayHeading}
                   bgColor='#c90e52'
-                  tags={tagsVisitor}
-                  posts={postsVisitor} />
-              </div>
-            </div>
+                  tags={this.props.data.todayTags}
+                  posts={this.props.data.todayPosts} />
+              </Column>
+            </Row>
             <SearchField />
           </MultimediaBackground>
         </div>
     );
   }
 }
+
+Startpage.propTypes = {
+  fetchData: PropTypes.func.isRequired,
+  data: PropTypes.shape({
+    backgroundUrl: PropTypes.string,
+    heading: PropTypes.string,
+    topLinks: PropTypes.array,
+    visitorHeading: PropTypes.string,
+    visitorTags: PropTypes.array,
+    visitorPosts: PropTypes.array,
+    localHeading: PropTypes.string,
+    localTags: PropTypes.array,
+    localPosts: PropTypes.array,
+    todayHeading: PropTypes.string,
+    todayTags: PropTypes.array,
+    todayPosts: PropTypes.array
+  }).isRequired,
+  hasErrored: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired
+};
+
+const mapStateToProps = (state) => {
+  return {
+    data: state.startpage,
+    hasErrored: state.startpageHasErrored,
+    isLoading: state.startpageIsLoading
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchData: (url) => dispatch(startpageFetchData(url))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Startpage);
