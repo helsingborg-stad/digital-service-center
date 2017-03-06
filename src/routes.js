@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { Router, Route, browserHistory, IndexRedirect, IndexRoute } from 'react-router';
+import { syncHistoryWithStore } from 'react-router-redux';
 
 import Startpage from './components/Startpage.js';
 import StandardPage from './components/StandardPage.js';
@@ -28,9 +29,15 @@ App.propTypes = {
   location: React.PropTypes.object
 };
 
-const Routes = () => {
+const Routes = (props = {}) => {
+  let history = browserHistory;
+
+  if (props.store) {
+    history = syncHistoryWithStore(browserHistory, props.store);
+  }
+
   return (
-    <Router history={browserHistory}>
+    <Router history={history}>
       <Route path="/" component={App}>
         <IndexRoute component={Startpage} />
         <Route path="standard" component={StandardPage} />
@@ -40,6 +47,10 @@ const Routes = () => {
       </Route>
     </Router>
   );
+};
+
+Routes.propTypes = {
+  store: React.PropTypes.object
 };
 
 export default Routes;

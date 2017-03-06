@@ -1,6 +1,21 @@
 require('import-export');
 require('babel-core/register')({ presets: ['es2015', 'react'] });
 require('ignore-styles');
+require('es6-promise').polyfill();
+require('isomorphic-fetch');
+
+const fetchIntercept = require('fetch-intercept');
+
+// Replace all calls to /api/ to the WordPress back-end
+fetchIntercept.register({
+  request: (url, config) => {
+    let newUrl = url;
+    if (url.startsWith('/api/')) {
+      newUrl = 'http://helsingborg-dsc.local/wp-json/wp/v2/' + newUrl.slice('/api/'.length);
+    }
+    return [newUrl, config];
+  }
+});
 
 const http = require('http');
 const path = require('path');
@@ -9,10 +24,20 @@ const express = require('express');
 const react = require('react');
 const reactDomServer = require('react-dom/server');
 const reactRouter = require('react-router');
+const reactRedux = require('react-redux');
 
 const renderToString = reactDomServer.renderToString;
+const createElement = react.createElement;
 const match = reactRouter.match;
 const RouterContext = reactRouter.RouterContext;
+const Provider = reactRedux.Provider;
+
+const store = require('../src/store/configureStore').default();
+const routes = require('../src/routes').default();
+
+const app = express();
+app.server = http.createServer(app);
+app.use(express.static('../build'));
 
 const staticFiles = [
   '/static/*',
@@ -21,12 +46,6 @@ const staticFiles = [
   '/favicon.ico'
 ];
 
-const routes = require('../src/routes').default();
-
-const app = express();
-app.server = http.createServer(app);
-app.use(express.static('../build'));
-
 staticFiles.forEach(file => {
   app.get(file, (req, res) => {
     const filePath = path.join(__dirname, '../build', req.url);
@@ -34,23 +53,55 @@ staticFiles.forEach(file => {
   });
 });
 
+app.get('/api/*', (req, res) => {
+  const url = `http://helsingborg-dsc.local/wp-json/wp/v2/${req.url.slice('/api/'.length)}`;
+  fetch(url).then(response => response.json()).then(x => res.status(200).send(x));
+});
+
 app.get('*', (req, res) => {
   const error = () => res.status(404).send('404');
   const htmlFilePath = path.join(__dirname, '../build', 'index.html');
+
+  // If images are `import`:ed and used as `src`, they get serialized
+  // to '[object Object]', which get redirected to '/', so we manually give the request a 404.
+  // TODO: find out if there's a way to actually bundle the assets themself
+  if (req.url === '/[object%20Object]') {
+    error();
+    return;
+  }
 
   fs.readFile(htmlFilePath, 'utf8', (err, htmlData) => {
     if (err) {
       error();
     } else {
-      match({ routes, location: req.url }, (matchErr, redirect, ssrData) => {
+      match({ routes, location: req.url }, (matchErr, redirect, renderProps) => {
         if (matchErr) {
           error();
         } else if (redirect) {
           res.redirect(302, redirect.pathname + redirect.search);
-        } else if (ssrData) {
-          const ReactApp = renderToString(react.createElement(RouterContext, ssrData));
-          const RenderedApp = htmlData.replace('<div style="display:none">{{SSR}}</div>', ReactApp);
-          res.status(200).send(RenderedApp);
+        } else if (renderProps) {
+          const components = renderProps.components;
+
+          const Comp = components[components.length - 1].WrappedComponent;
+          const fetchData = (Comp && Comp.fetchData) || (() => Promise.resolve());
+
+          const { location, params, history } = renderProps;
+
+          fetchData({ store, location, params, history })
+            .then(() => {
+              const state = store.getState();
+
+              const renderedApp = renderToString(
+                createElement(Provider, {store},
+                  createElement(RouterContext, renderProps)
+                )
+              ) + `<script>window.__REDUX_STATE__ = ${JSON.stringify(state)}</script>`;
+
+              const RenderedApp = htmlData
+                .replace('<div style="display:none">{{SSR}}</div>', renderedApp);
+              res.status(200).send(RenderedApp);
+            })
+            .catch(() => error());
         } else {
           error();
         }

@@ -10,8 +10,17 @@ import { startpageFetchData } from '../actions/startpage';
 import './Startpage.css';
 
 export class Startpage extends Component {
+  static fetchData({ store }) {
+    return store.dispatch(
+      startpageFetchData('/api/startpage')
+    );
+  }
+
   componentDidMount() {
-    this.props.fetchData('/wp-json/wp/v2/startpage');
+    const dataIsEmpty = !Object.keys(this.props.data).length;
+    if (dataIsEmpty) {
+      this.props.fetchData('/api/startpage');
+    }
   }
 
   render() {

@@ -24,7 +24,7 @@ export function startpageFetchData(url) {
     dispatch(startpageIsLoading(true));
     dispatch(startpageHasErrored(false));
 
-    fetch(url)
+    return fetch(url)
       .then((response) => {
         if (!response.ok) {
           throw Error(response.statusText);
