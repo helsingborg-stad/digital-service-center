@@ -115,7 +115,7 @@ function check_event_outdated($post_id) {
   $stored_imported_event_data = get_post_meta($post_id, 'imported_event_data', true);
   $last_end_date;
   $compare_date;
-  $date_now = date('2018-m-d H:i');
+  $date_now = date('Y-m-d H:i');
   if($stored_imported_event_data->occasions != null) {
     foreach($stored_imported_event_data->occasions as $occasion) {
       if($compare_date < $occasion->end_date) {
