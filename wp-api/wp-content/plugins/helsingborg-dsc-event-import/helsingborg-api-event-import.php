@@ -30,4 +30,6 @@ include('includes/admin-panel/executable-events.php');
 include('includes/admin-panel/display-functions.php');
 include('includes/admin-panel/import-event-admin.php');
 
+include('includes/admin-panel/test.php');
+
 ?>

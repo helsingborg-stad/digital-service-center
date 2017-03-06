@@ -116,15 +116,17 @@ function check_event_outdated($post_id) {
   $last_end_date;
   $compare_date;
   $date_now = date('2018-m-d H:i');
-  foreach($stored_imported_event_data->occasions as $occasion) {
-    if($compare_date < $occasion->end_date) {
-      $last_end_date = $occasion->end_date;
+  if($stored_imported_event_data->occasions != null) {
+    foreach($stored_imported_event_data->occasions as $occasion) {
+      if($compare_date < $occasion->end_date) {
+        $last_end_date = $occasion->end_date;
+      }
+      $compare_date = $occasion->end_date;
     }
-    $compare_date = $occasion->end_date;
-  }
 
-  if($last_end_date < $date_now) {
-    return true;
+    if($last_end_date < $date_now) {
+      return true;
+    }
   }
   return false;
 }
