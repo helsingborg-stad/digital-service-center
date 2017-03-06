@@ -51,7 +51,7 @@ function delete_outdated_events() {
   wp_redirect(admin_url('admin.php?page=helsingborg-dsc-event-import'));
 }
 
-add_action( 'admin_post_schedule_create_update_and_delete_outdated_events', 'schedule_create_update_and_delete_outdated_events' );
+//add_action( 'admin_post_schedule_create_update_and_delete_outdated_events', 'schedule_create_update_and_delete_outdated_events' );
 
 function register_scheduled_event_properties() {
   register_setting( 'scheduled-event-import-settings-group', 'scheduled_number_of_events', 'intval');
@@ -60,14 +60,19 @@ function register_scheduled_event_properties() {
   register_setting( 'scheduled-event-import-settings-group', 'schedule_activated');
 }
 
-register_activation_hook(__FILE__, 'activate_scheduled_event_import');
+//register_activation_hook(__FILE__, 'activate_scheduled_event_import');
 
 function activate_scheduled_event_import() {
-  $run_import = get_option('schedule_activated'); 
+  $run_import = get_option('scheduled_event_import');
     if ($run_import) {
       $scheduled_recurrence = get_option('scheduled_recurrence');
       $scheduled_timestamp = get_option('scheduled_timestamp');
-	    wp_schedule_event($scheduled_timestamp, $scheduled_recurrence, 'scheduled_event_import');
+	    wp_schedule_event(strtotime($scheduled_timestamp), $scheduled_recurrence, 'scheduled_event_import');
+      wp_schedule_event(time(), 'hourly', 'scheduled_event_import');
+    } 
+    else {
+      $next_timestamp = wp_next_scheduled( 'scheduled_event_import' );
+      wp_unschedule_event( $next_timestamp, $scheduled_event_import);
     }
 }
 
@@ -79,7 +84,7 @@ function create_update_and_delete_outdated_events() {
   create_and_update_events($scheduled_number_of_events);
 }
 
-register_deactivation_hook(__FILE__, 'deactivate_scheduled_event_import');
+//register_deactivation_hook(__FILE__, 'deactivate_scheduled_event_import');
 
 function deactivate_scheduled_event_import() {
 	wp_clear_scheduled_hook('scheduled_event_import');

@@ -32,4 +32,9 @@ include('includes/admin-panel/import-event-admin.php');
 
 include('includes/admin-panel/test.php');
 
+/*register and unregister scheduled events*/
+register_activation_hook(__FILE__, 'activate_scheduled_event_import');
+register_deactivation_hook(__FILE__, 'deactivate_scheduled_event_import');
+
+
 ?>

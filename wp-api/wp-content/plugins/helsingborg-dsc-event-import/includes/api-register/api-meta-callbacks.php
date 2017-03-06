@@ -8,6 +8,11 @@ function get_imported_event_data($post, $field_name, $request)
     return get_post_meta($post['id'], 'imported_event_data', true);
 }
 
+function get_event_categories($post, $field_name, $request)
+{
+    return get_the_category($post['id']);
+}
+
 function get_imported_event_id($post, $field_name, $request)
 {
     return intval(get_post_meta($post['id'], 'event_id', true));
