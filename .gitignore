@@ -412,5 +412,8 @@ __pycache__/
 # User-profile folder for Chrome when debugging in VS Code
 .chrome/
 
+# WordPress upload folder
+wp-api/wp-content/uploads/
+
 # Build folder for front-end
 build/
