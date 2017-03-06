@@ -2,8 +2,8 @@
 
 function helsingborg_dsc_startpage_response() {
     return rest_ensure_response([
-      backgroundUrl => 'http://lorempixel.com/1920/1080/city',
-      heading => 'Digital Service Center',
+      backgroundUrl => get_option('hdsc-startpage-setting-background-url'),
+      heading => get_option('hdsc-startpage-setting-heading', 'Digital Service Center'),
       topLinks => [
         [
           href => '#asdf',
@@ -18,7 +18,7 @@ function helsingborg_dsc_startpage_response() {
           name => 'Chatta med oss'
         ]
       ],
-      visitorHeading => 'Visitor',
+      visitorHeading => get_option('hdsc-startpage-setting-visitor-heading', 'Visitor'),
       visitorTags => [
         [name => 'See & Do'],
         [name => 'Attractions'],
@@ -27,20 +27,15 @@ function helsingborg_dsc_startpage_response() {
         [name => 'Lorem'],
         [name => 'Lorem'],
       ],
-      visitorPosts => [
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-      ],
-      localHeading => 'Visitor',
+      visitorPosts => array_map(function($post) {
+        return [
+          heading  => $post->post_title,
+          preamble => substr(strip_tags($post->post_content), 0, 100),
+          href     => '/visitor/' . $post->post_name,
+          imgUrl   => get_the_post_thumbnail_url($post->ID)
+        ];
+      }, get_posts([ post_type => 'imported_event', posts_per_page => 10])),
+      localHeading => get_option('hdsc-startpage-setting-local-heading', 'Local'),
       localTags => [
         [name => 'See & Do'],
         [name => 'Attractions'],
@@ -49,20 +44,15 @@ function helsingborg_dsc_startpage_response() {
         [name => 'Lorem'],
         [name => 'Lorem'],
       ],
-      localPosts => [
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-      ],
-      todayHeading => 'Visitor',
+      localPosts => array_map(function($post) {
+        return [
+          heading  => $post->post_title,
+          preamble => substr(strip_tags($post->post_content), 0, 100),
+          href     => '/local/' . $post->post_name,
+          imgUrl   => get_the_post_thumbnail_url($post->ID)
+        ];
+      }, get_posts([ post_type => 'imported_event', posts_per_page => 10])),
+      todayHeading => get_option('hdsc-startpage-setting-today-heading', 'Today'),
       todayTags => [
         [name => 'See & Do'],
         [name => 'Attractions'],
@@ -71,19 +61,14 @@ function helsingborg_dsc_startpage_response() {
         [name => 'Lorem'],
         [name => 'Lorem'],
       ],
-      todayPosts => [
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-        [heading => 'Lorem ipsum', preamble => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.', imgUrl => 'http://lorempixel.com/166/102', href => '#asdf'],
-      ]
+      todayPosts => array_map(function($post) {
+        return [
+          heading  => $post->post_title,
+          preamble => substr(strip_tags($post->post_content), 0, 100),
+          href     => '/today/' . $post->post_name,
+          imgUrl   => get_the_post_thumbnail_url($post->ID)
+        ];
+      }, get_posts([ post_type => 'imported_event', posts_per_page => 10])),
     ]);
 }
 
