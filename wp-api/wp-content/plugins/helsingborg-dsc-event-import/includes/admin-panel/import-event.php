@@ -71,7 +71,7 @@ function update_event_featured_image($post_id, $event) {
 
 function insert_event_meta($post_id, $event){
   add_post_meta($post_id, 'imported_event_data', $event);
-  add_post_meta($post_id, 'event_id', $event->id);
+  add_post_meta($post_id, 'event_id', "1234");
 }
 
 function update_event($event, $stored_event, $post_id) {
@@ -111,22 +111,24 @@ function compare_event($event) {
   return $event_query;
 }
 
-function check_event_outdated($post_id) {
-  $stored_imported_event_data = get_post_meta($post_id, 'imported_event_data', true);
-  $last_end_date;
-  $compare_date;
-  $date_now = date('Y-m-d H:i');
-  if($stored_imported_event_data->occasions != null) {
-    foreach($stored_imported_event_data->occasions as $occasion) {
-      if($compare_date < $occasion->end_date) {
-        $last_end_date = $occasion->end_date;
-      }
-      $compare_date = $occasion->end_date;
-    }
+function check_and_delete_outdated_events($stored_events, $events) {
+  $imported_event_id_array = array();
 
-    if($last_end_date < $date_now) {
-      return true;
+  foreach($events as $event_im) {
+    $event_id = $event_im->id;
+    $imported_event_id_array[] = (string)$event_id;
+  }
+
+  $event_keys = array_keys($events);
+  foreach($stored_events as $event) {
+      if (!empty($imported_event_id_array)) {
+        $event_id = get_post_meta($event->ID, 'event_id', true);
+        if (!in_array((string)$event_id, $imported_event_id_array)) {         
+          $attach_id = get_post_thumbnail_id($event->ID);
+          wp_delete_attachment($attach_id, true);
+          wp_delete_post($event->ID, true);
+        }
     }
   }
-  return false;
 }
+
