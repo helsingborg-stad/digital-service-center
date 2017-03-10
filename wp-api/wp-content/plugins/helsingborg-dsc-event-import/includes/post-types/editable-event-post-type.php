@@ -28,7 +28,7 @@ function editable_event_post_type() {
 
 	  );
 	  register_post_type( 'editable_event', $args );
-	  register_taxonomy_for_object_type( 'category', 'event' ); 
+	  register_taxonomy_for_object_type( 'category', 'editable_event' ); 
 	}
 	add_action( 'init', 'editable_event_post_type' );
 	add_theme_support('post-thumbnails');
@@ -214,8 +214,7 @@ function editable_event_post_type() {
 
         save_event($post_id, $post, $event_meta, 'event_occasions_meta_noncename');            
 	}
-
-   
+  
     add_action('save_post', 'save_event_location_meta', 1, 2);
 
     function save_event_location_meta($post_id, $post) {

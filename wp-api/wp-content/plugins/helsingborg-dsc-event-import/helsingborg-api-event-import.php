@@ -21,12 +21,14 @@ function helsingborg_api_event_import_init() {
 
 include('includes/post-types/import-event-post-type.php');
 include('includes/post-types/editable-event-post-type.php');
+include('includes/post-types/imported-taxonomy.php');
 
 include('includes/api-register/api-meta-callbacks.php');
 include('includes/api-register/register-meta-api.php');
 
-include('includes/admin-panel/import-event.php');
-include('includes/admin-panel/executable-events.php');
+include('includes/admin-panel/delete-events.php');
+include('includes/admin-panel/import-events.php');
+include('includes/admin-panel/scheduled-import.php');
 include('includes/admin-panel/display-functions.php');
 include('includes/admin-panel/import-event-admin.php');
 

@@ -1,50 +1,7 @@
 <?php
 /*******************************
-* executable events
+* scheduled import
 *******************************/
-
-add_action( 'admin_post_manually_create_and_update_events', 'manually_create_and_update_events' );
-
-function manually_create_and_update_events() {
-  $number_of_events = $_POST['manual_number_of_events'];
-  create_and_update_events($number_of_events);
-}
-
-function create_and_update_events($number_of_events) {
-  $events = get_event_json($number_of_events);
-
-  foreach($events as $event) {
-    $stored_events = compare_event($event);
-    if($stored_events != null){
-      foreach($stored_events as $stored_event) {
-        update_event($event, $stored_event, $stored_event->ID);
-      }
-    } 
-    else {
-      $post_id = insert_event_post_type($event);
-      insert_event_featured_image($post_id, $event);
-      if($post_id) {
-        insert_event_meta($post_id, $event);
-      }
-    }
-  }
-  wp_redirect(admin_url('admin.php?page=helsingborg-dsc-event-import'));
-}
-
-add_action( 'admin_post_delete_outdated_events', 'delete_outdated_events' );
-
-function delete_outdated_events() {
-  $args = array(
-      'post_type' => 'imported_event'
-    );
-
-  $stored_events = get_posts($args);
-  $number_of_stored_events = wp_count_posts('imported_event')->publish;
-  $events = get_event_json($number_of_stored_events);
-  check_and_delete_outdated_events($stored_events, $events);
-
-  wp_redirect(admin_url('admin.php?page=helsingborg-dsc-event-import'));
-}
 
 function register_scheduled_event_options() {
   register_setting( 'scheduled-event-import-settings-group', 'scheduled_number_of_events', 'intval');

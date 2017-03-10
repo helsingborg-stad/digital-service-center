@@ -30,7 +30,7 @@ function imported_event_post_type() {
         'show_in_rest'  => true,
       );
       register_post_type( 'imported_event', $args );
-      register_taxonomy_for_object_type( 'category', 'event' ); 
+      register_taxonomy_for_object_type( 'category', 'imported_event' ); 
     }
     add_action( 'init', 'imported_event_post_type' );
     add_theme_support('post-thumbnails');

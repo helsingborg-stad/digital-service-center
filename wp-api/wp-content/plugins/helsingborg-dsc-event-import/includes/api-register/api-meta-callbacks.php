@@ -8,9 +8,31 @@ function get_imported_event_data($post, $field_name, $request)
     return get_post_meta($post['id'], 'imported_event_data', true);
 }
 
-function get_event_categories($post, $field_name, $request)
+function get_all_categories($post, $field_name, $request)
 {
-    return get_the_category($post['id']);
+    $imported_category = wp_get_post_terms($post['id'], 'imported_category');
+    $categories = wp_get_post_terms($post['id'], 'category');
+    $all_categories = array();
+    
+    foreach($imported_category as $imported_category) {
+        array_push($all_categories, array(
+            'term_id' => $imported_category->term_id,
+            'name' => $imported_category->name,
+            'term_taxonomy_id' => $imported_category->term_taxonomy_id,
+            'taxonomy' => $imported_category->taxonomy
+        ));
+    }
+
+    foreach($categories as $category) {
+        array_push($all_categories, array(
+            'term_id' => $category->term_id,
+            'name' => $category->name,
+            'term_taxonomy_id' => $category->term_taxonomy_id,
+            'taxonomy' => $category->taxonomy
+        ));
+    }
+
+    return $all_categories;
 }
 
 function get_imported_event_id($post, $field_name, $request)
