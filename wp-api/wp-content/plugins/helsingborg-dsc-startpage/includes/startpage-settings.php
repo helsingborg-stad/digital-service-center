@@ -16,8 +16,25 @@ add_action('admin_init', function() {
   register_setting( 'hdsc-startpage-settings', 'hdsc-startpage-setting-visitor-heading');
   register_setting( 'hdsc-startpage-settings', 'hdsc-startpage-setting-local-heading');
   register_setting( 'hdsc-startpage-settings', 'hdsc-startpage-setting-today-heading');
+  register_setting( 'hdsc-startpage-settings', 'hdsc-startpage-setting-top-links');
 });
 
+function hdsc_startpage_get_selectable_top_links() {
+  $selectedPageIds = get_option('hdsc-startpage-setting-top-links', []);
+  $ret = [];
+  $pages = get_pages('sort_column=menu_order');
+  if ($pages == null) {
+    return $ret;
+  }
+  foreach ($pages as $page) {
+    $ret[$page->ID] = [
+      title => $page->post_title,
+      depth => count(get_ancestors($page->ID, 'page')),
+      selected => in_array($page->ID, $selectedPageIds)
+    ];
+  }
+  return $ret;
+}
 
 function hdsc_startpage_menu_callback() {
 ?>
@@ -39,7 +56,17 @@ function hdsc_startpage_menu_callback() {
   }
 ?>
       <p><strong>Länk till bakgrundsbild</strong><br />
-        <img class="background-img" src="<?php echo get_option('hdsc-startpage-setting-background-url'); ?>" height="135" width="240"/>
+        <div class="background-img-wrapper">
+          <?php
+            $bgUrl = get_option('hdsc-startpage-setting-background-url');
+            $isVideo = preg_match('/.webm$/', $bgUrl) || preg_match('/.mp4$/', $bgUrl);
+            $markup = ($isVideo)
+              ? '<video loop muted autoplay height="135" width="240"><source src="' . $bgUrl . '" /></video>'
+              : '<img src="' . $bgUrl . '" height="135" width="240" />';
+
+            echo $markup;
+            ?>
+        </div>
         <input class="background-img-url" type="text" name="hdsc-startpage-setting-background-url" size="60" value="<?php echo get_option('hdsc-startpage-setting-background-url'); ?>">
         <a href="#" class="background-img-upload">Select</a>
       </p>
@@ -58,8 +85,18 @@ function hdsc_startpage_menu_callback() {
                   })
                   .on('select', function() {
                       var attachment = custom_uploader.state().get('selection').first().toJSON();
-                      $('.background-img').attr('src', attachment.url);
                       $('.background-img-url').val(attachment.url);
+                      var isVideo = attachment.url.match(/.webm$/) || attachment.url.match(/.mp4$/);
+                      if (isVideo) {
+                        $('.background-img-wrapper').html(
+                          '<video loop muted autoplay height="135" width="240">' +
+                            '<source src="' + attachment.url + '" />' +
+                          '</video>');
+                        $('.background-img-wrapper').load();
+                        $('.background-img-wrapper').play();
+                      } else {
+                        $('.background-img-wrapper').html('<img src="' + attachment.url + '" height="135" width="240" />');
+                      }
                   })
                   .open();
               });
@@ -83,6 +120,14 @@ function hdsc_startpage_menu_callback() {
 
       <p><label>Today Heading
         <input type="text" name="hdsc-startpage-setting-today-heading" value="<?php echo get_option('hdsc-startpage-setting-today-heading'); ?>" />
+      </label></p>
+
+      <p><label>Top links
+        <select multiple name="hdsc-startpage-setting-top-links[]">
+        <?php foreach(hdsc_startpage_get_selectable_top_links() as $id=>$page) {
+          echo '<option value="' . $id . '"' . ($page['selected'] ? "selected" : "") . '>' . $page['title'] . '</option>';
+        } ?>
+        </select>
       </label></p>
 
       <?php submit_button(); ?>

@@ -1,15 +1,28 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './MultimediaBackground.css';
 
-export default class MultimediaBackground extends Component {
-  render() {
+const MultimediaBackground = ({ backgroundUrl, children }) => {
+  const isVideo = backgroundUrl.endsWith('.mp4') || backgroundUrl.endsWith('.webm');
+  if (isVideo) {
     return (
-      <div className='MultimediaBackground' style={{ backgroundImage: `url(${this.props.backgroundUrl})` }}>
-        { this.props.children }
+      <div>
+        <div className='MultimediaBackground--video'>
+          <video className='MultimediaBackground--video__video' autoPlay loop muted>
+            <source src={backgroundUrl} />
+          </video>
+        </div>
+        { children }
       </div>
     );
   }
-}
+  return (
+    <div className='MultimediaBackground' style={{ backgroundImage: `url(${backgroundUrl})` }}>
+    { children }
+  </div>
+  );
+};
+
+export default MultimediaBackground;
 
 MultimediaBackground.propTypes = {
   children: React.PropTypes.oneOfType([

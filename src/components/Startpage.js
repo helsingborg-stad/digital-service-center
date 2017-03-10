@@ -6,6 +6,8 @@ import SectionCard from './SectionCard';
 import SearchField from './SearchField';
 import { connect } from 'react-redux';
 import { startpageFetchData } from '../actions/startpage';
+import StartpageLoading from './StartpageLoading.js';
+import StartpageError from './StartpageError.js';
 
 import './Startpage.css';
 
@@ -26,19 +28,13 @@ export class Startpage extends Component {
   render() {
     if (this.props.hasErrored) {
       return (
-        <div>
-          <p>Sorry! There was an error loading the items</p>
-          <button
-            onClick={() => this.props.fetchData('/wp-json/wp/v2/startpage')}>
-            Ladda om sidan
-          </button>
-        </div>
+       <StartpageError reloadPage={() => this.props.fetchData('/api/startpage')} />
       );
     }
 
     const dataIsEmpty = !Object.keys(this.props.data).length;
     if (this.props.isLoading || dataIsEmpty) {
-      return <p>Loading…</p>;
+      return <StartpageLoading />;
     }
 
     const Row = ({children}) => (

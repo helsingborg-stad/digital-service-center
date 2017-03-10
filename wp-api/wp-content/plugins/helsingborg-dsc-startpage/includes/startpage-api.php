@@ -4,20 +4,10 @@ function helsingborg_dsc_startpage_response() {
     return rest_ensure_response([
       backgroundUrl => get_option('hdsc-startpage-setting-background-url'),
       heading => get_option('hdsc-startpage-setting-heading', 'Digital Service Center'),
-      topLinks => [
-        [
-          href => '#asdf',
-          name => 'Vägbeskrivning på Knutpunkten'
-        ],
-        [
-          href => '#asdf',
-          name => 'Ett bättre Helsingborg'
-        ],
-        [
-          href => '#asdf',
-          name => 'Chatta med oss'
-        ]
-      ],
+      topLinks => array_map(function($pageId) {
+        $page = get_post($pageId);
+        return [name => $page->post_title, href => $page->post_name];
+      }, get_option('hdsc-startpage-setting-top-links', [])),
       visitorHeading => get_option('hdsc-startpage-setting-visitor-heading', 'Visitor'),
       visitorTags => [
         [name => 'See & Do'],
