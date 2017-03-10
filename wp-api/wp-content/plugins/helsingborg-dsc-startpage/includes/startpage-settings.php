@@ -16,8 +16,25 @@ add_action('admin_init', function() {
   register_setting( 'hdsc-startpage-settings', 'hdsc-startpage-setting-visitor-heading');
   register_setting( 'hdsc-startpage-settings', 'hdsc-startpage-setting-local-heading');
   register_setting( 'hdsc-startpage-settings', 'hdsc-startpage-setting-today-heading');
+  register_setting( 'hdsc-startpage-settings', 'hdsc-startpage-setting-top-links');
 });
 
+function hdsc_startpage_get_selectable_top_links() {
+  $selectedPageIds = get_option('hdsc-startpage-setting-top-links', []);
+  $ret = [];
+  $pages = get_pages('sort_column=menu_order');
+  if ($pages == null) {
+    return $ret;
+  }
+  foreach ($pages as $page) {
+    $ret[$page->ID] = [
+      title => $page->post_title,
+      depth => count(get_ancestors($page->ID, 'page')),
+      selected => in_array($page->ID, $selectedPageIds)
+    ];
+  }
+  return $ret;
+}
 
 function hdsc_startpage_menu_callback() {
 ?>
@@ -103,6 +120,14 @@ function hdsc_startpage_menu_callback() {
 
       <p><label>Today Heading
         <input type="text" name="hdsc-startpage-setting-today-heading" value="<?php echo get_option('hdsc-startpage-setting-today-heading'); ?>" />
+      </label></p>
+
+      <p><label>Top links
+        <select multiple name="hdsc-startpage-setting-top-links[]">
+        <?php foreach(hdsc_startpage_get_selectable_top_links() as $id=>$page) {
+          echo '<option value="' . $id . '"' . ($page['selected'] ? "selected" : "") . '>' . $page['title'] . '</option>';
+        } ?>
+        </select>
       </label></p>
 
       <?php submit_button(); ?>
