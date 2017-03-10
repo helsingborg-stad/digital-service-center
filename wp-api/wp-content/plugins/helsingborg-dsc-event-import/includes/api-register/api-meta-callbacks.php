@@ -19,7 +19,8 @@ function get_all_categories($post, $field_name, $request)
             'term_id' => $imported_category->term_id,
             'name' => $imported_category->name,
             'term_taxonomy_id' => $imported_category->term_taxonomy_id,
-            'taxonomy' => $imported_category->taxonomy
+            'taxonomy' => $imported_category->taxonomy,
+            'slug' => $imported_category->slug
         ));
     }
 
@@ -28,7 +29,8 @@ function get_all_categories($post, $field_name, $request)
             'term_id' => $category->term_id,
             'name' => $category->name,
             'term_taxonomy_id' => $category->term_taxonomy_id,
-            'taxonomy' => $category->taxonomy
+            'taxonomy' => $category->taxonomy,
+            'slug' => $category->slug
         ));
     }
 

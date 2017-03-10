@@ -14,7 +14,7 @@ function register_imported_event_meta_fields() {
         'schema'          => null,
          )
     );
-    register_rest_field( 'imported_event',
+    register_rest_field( array('editable_event', 'imported_event'),
     'all_categories',
     array(
         'get_callback'    => 'get_all_categories',

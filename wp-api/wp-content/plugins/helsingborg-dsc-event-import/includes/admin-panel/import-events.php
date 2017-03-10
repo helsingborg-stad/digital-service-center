@@ -92,7 +92,7 @@ function insert_event_category($post_id, $event){
   $event_categories = $event->event_categories;
   if($event_categories != null) {
       foreach($event_categories as $event_category) {
-      wp_set_object_terms($post_id, $event_category, 'imported_category');
+        wp_set_object_terms($post_id, $event_category, 'imported_category');
     } 
   }
 }
