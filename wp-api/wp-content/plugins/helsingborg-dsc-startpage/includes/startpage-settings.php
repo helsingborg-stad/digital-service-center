@@ -39,7 +39,17 @@ function hdsc_startpage_menu_callback() {
   }
 ?>
       <p><strong>Länk till bakgrundsbild</strong><br />
-        <img class="background-img" src="<?php echo get_option('hdsc-startpage-setting-background-url'); ?>" height="135" width="240"/>
+        <div class="background-img-wrapper">
+          <?php
+            $bgUrl = get_option('hdsc-startpage-setting-background-url');
+            $isVideo = preg_match('/.webm$/', $bgUrl) || preg_match('/.mp4$/', $bgUrl);
+            $markup = ($isVideo)
+              ? '<video loop muted autoplay height="135" width="240"><source src="' . $bgUrl . '" /></video>'
+              : '<img src="' . $bgUrl . '" height="135" width="240" />';
+
+            echo $markup;
+            ?>
+        </div>
         <input class="background-img-url" type="text" name="hdsc-startpage-setting-background-url" size="60" value="<?php echo get_option('hdsc-startpage-setting-background-url'); ?>">
         <a href="#" class="background-img-upload">Select</a>
       </p>
@@ -58,8 +68,18 @@ function hdsc_startpage_menu_callback() {
                   })
                   .on('select', function() {
                       var attachment = custom_uploader.state().get('selection').first().toJSON();
-                      $('.background-img').attr('src', attachment.url);
                       $('.background-img-url').val(attachment.url);
+                      var isVideo = attachment.url.match(/.webm$/) || attachment.url.match(/.mp4$/);
+                      if (isVideo) {
+                        $('.background-img-wrapper').html(
+                          '<video loop muted autoplay height="135" width="240">' +
+                            '<source src="' + attachment.url + '" />' +
+                          '</video>');
+                        $('.background-img-wrapper').load();
+                        $('.background-img-wrapper').play();
+                      } else {
+                        $('.background-img-wrapper').html('<img src="' + attachment.url + '" height="135" width="240" />');
+                      }
                   })
                   .open();
               });
