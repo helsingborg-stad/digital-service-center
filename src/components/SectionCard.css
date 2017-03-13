@@ -1,6 +1,9 @@
 .SectionCard {
   padding: 1rem 1rem 0;
   border-bottom: 2.5rem solid #dedddd;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .SectionCard-heading {
@@ -32,6 +35,9 @@
   padding: 0 0.25rem 0;
   margin: 0 -1rem;
   background: #fff;
+  align-self: flex-start;
+  width: calc(100% + 2rem);
+  margin-top: auto; /* push to bottom, due to display: flex on `.SectionCard` */
 }
 
 .SectionCard-postWrapper {

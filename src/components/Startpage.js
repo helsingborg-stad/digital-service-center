@@ -41,7 +41,7 @@ export class Startpage extends Component {
       <div style={{display: 'flex', margin: '0 5%'}}>{children}</div>
     );
     const Column = ({children}) => (
-      <div style={{flex: '1', margin: '0 1%', maxWidth: '33%'}}>{children}</div>
+      <div style={{flex: '1', margin: '0 1%', maxWidth: '33%', display: 'flex'}}>{children}</div>
     );
 
     return (
