@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PaperRipple from 'react-paper-ripple';
+import Link from './Link';
 import { Scrollbars } from 'react-custom-scrollbars';
 import './EventShowcase.css';
 
@@ -25,10 +25,10 @@ EventShowcase.propTypes = {
 export class Event extends Component {
   render() {
     return (
-      <PaperRipple tag='a' className='Event' href={this.props.href}>
+      <Link className='Event' href={this.props.href}>
         <img className='Event-img' src={this.props.imgSrc} alt='' />
         <span className='Event-title'>{this.props.name}</span>
-      </PaperRipple>
+      </Link>
     );
   }
 }

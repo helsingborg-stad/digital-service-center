@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './SiteHeader.css';
-import PaperRipple from 'react-paper-ripple';
+import Link from './Link';
 import SearchField from './SearchField';
 import ReactInterval from 'react-interval';
 
@@ -66,9 +66,9 @@ SiteHeader.defaultProps = {
 export class SiteHeaderLink extends Component {
   render() {
     return (
-      <PaperRipple tag='a' className='SiteHeaderLink' href={this.props.href}>
+      <Link className='SiteHeaderLink' href={this.props.href}>
         {this.props.name}
-      </PaperRipple>
+      </Link>
     );
   }
 }

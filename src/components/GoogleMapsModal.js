@@ -1,4 +1,5 @@
 import React, {PropTypes, Component} from 'react';
+import Link from './Link';
 import PaperRipple from 'react-paper-ripple';
 import classnames from 'classnames';
 
@@ -35,9 +36,9 @@ const Modal = ({showMoreInfo, handleShowMoreClick, visible}) => {
       </div>
       }
       <div className='GoogleMapsModal-buttonWrapper'>
-        <PaperRipple tag='a' href='#asdf' className='GoogleMapsModal-button GoogleMapsModal-button--emphasized'>
+        <Link href='#asdf' className='GoogleMapsModal-button GoogleMapsModal-button--emphasized'>
           Navigate
-        </PaperRipple>
+        </Link>
         <PaperRipple tag='button' onClick={handleShowMoreClick} className='GoogleMapsModal-button GoogleMapsModal-button--alignRight'>
           More info
         </PaperRipple>

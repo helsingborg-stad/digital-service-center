@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PaperRipple from 'react-paper-ripple';
+import Link from './Link';
 import './SiteSubHeader.css';
 
 export class SiteSubHeader extends Component {
@@ -23,9 +23,9 @@ SiteSubHeader.propTypes = {
 export class SiteSubHeaderLink extends Component {
   render() {
     return (
-      <PaperRipple tag='a' className='SiteSubHeaderLink' href={this.props.href}>
+      <Link className='SiteSubHeaderLink' href={this.props.href}>
         {this.props.name}
-      </PaperRipple>
+      </Link>
     );
   }
 }

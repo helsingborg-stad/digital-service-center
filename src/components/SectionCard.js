@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import './SectionCard.css';
-import PaperRipple from 'react-paper-ripple';
+import Link from './Link';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 export default class SectionCard extends Component {
@@ -10,9 +10,9 @@ export default class SectionCard extends Component {
         <h2 className='SectionCard-heading'>{this.props.section}</h2>
         <div className='SectionCard-tagWrapper'>
         {this.props.tags.map(tag => {
-          return (<PaperRipple key={Math.random()} tag='a' className='SectionCard-tag' href={tag.href}>
+          return (<Link key={Math.random()} className='SectionCard-tag' href={tag.href}>
             {tag.name}
-          </PaperRipple>);
+          </Link>);
         })}
         </div>
         <div className='SectionCard-scrollWrapper'>
@@ -20,11 +20,11 @@ export default class SectionCard extends Component {
             <div className='SectionCard-postWrapper'>
             {this.props.posts.map(post => {
               return (
-                <PaperRipple key={Math.random()} tag='a' className='SectionCard-post' href={post.href}>
+                <Link key={Math.random()} className='SectionCard-post' href={post.href}>
                   <img className='SectionCard-postImage' src={post.imgUrl} role='presentation' />
                   <h3 className='SectionCard-postHeading'>{post.heading}</h3>
                   <p className='SectionCard-postPreamble'>{post.preamble}</p>
-                </PaperRipple>
+                </Link>
               );
             })}
             </div>
