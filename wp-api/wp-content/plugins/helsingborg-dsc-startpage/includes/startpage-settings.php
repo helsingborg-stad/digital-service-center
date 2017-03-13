@@ -70,7 +70,7 @@ function hdsc_startpage_menu_callback() {
       <table class="form-table"><tbody>
       <tr>
         <th>
-          Länk till bakgrundsbild
+          Background image/video
         </th>
         <td>
         <div class="background-img-wrapper">
@@ -124,29 +124,29 @@ function hdsc_startpage_menu_callback() {
       </script>
 
       <tr>
-        <th><label>Heading</label></th>
-        <td><input type="text" class="regular-text" name="hdsc-startpage-setting-heading" value="<?php echo get_option('hdsc-startpage-setting-heading'); ?>" /></td>
+        <th><label for="startpageform-heading">Heading</label></th>
+        <td><input id="startpageform-heading" type="text" class="regular-text" name="hdsc-startpage-setting-heading" value="<?php echo get_option('hdsc-startpage-setting-heading'); ?>" /></td>
       </tr>
 
       <tr>
-        <th><label>Visitor Heading</label></th>
-        <td><input type="text" class="regular-text" name="hdsc-startpage-setting-visitor-heading" value="<?php echo get_option('hdsc-startpage-setting-visitor-heading'); ?>" /></td>
+        <th><label for="startpageform-visitor-heading">Visitor Heading</label></th>
+        <td><input id="startpageform-visitor-heading" type="text" class="regular-text" name="hdsc-startpage-setting-visitor-heading" value="<?php echo get_option('hdsc-startpage-setting-visitor-heading'); ?>" /></td>
       </tr>
 
       <tr>
-        <th><label>Local Heading</label></th>
-        <td><input type="text" class="regular-text" name="hdsc-startpage-setting-local-heading" value="<?php echo get_option('hdsc-startpage-setting-local-heading'); ?>" /></td>
+        <th><label for="startpageform-local-heading">Local Heading</label></th>
+        <td><input id="startpageform-local-heading" type="text" class="regular-text" name="hdsc-startpage-setting-local-heading" value="<?php echo get_option('hdsc-startpage-setting-local-heading'); ?>" /></td>
       </tr>
 
       <tr>
-        <th><label>Today Heading</label></th>
-        <td><input type="text" class="regular-text" name="hdsc-startpage-setting-today-heading" value="<?php echo get_option('hdsc-startpage-setting-today-heading'); ?>" /></td>
+        <th><label for="startpageform-today-heading">Today Heading</label></th>
+        <td><input id="startpageform-today-heading" type="text" class="regular-text" name="hdsc-startpage-setting-today-heading" value="<?php echo get_option('hdsc-startpage-setting-today-heading'); ?>" /></td>
       </tr>
 
       <tr>
-        <th><label>Top links</label></th>
+        <th><label for="startpageform-top-links">Top links</label></th>
         <td>
-          <select multiple name="hdsc-startpage-setting-top-links[]">
+          <select id="startpageform-top-links" multiple name="hdsc-startpage-setting-top-links[]">
           <?php foreach(hdsc_startpage_get_selectable_top_links() as $id=>$page) {
             echo '<option value="' . $id . '"' . ($page['selected'] ? "selected" : "") . '>' . $page['title'] . '</option>';
           } ?>
@@ -155,13 +155,13 @@ function hdsc_startpage_menu_callback() {
       </tr>
 
       <tr>
-        <th><label>Visitor category</label></th>
-        <td><?php wp_dropdown_categories([name => 'hdsc-startpage-setting-visitor-category', selected => get_option('hdsc-startpage-setting-visitor-category', 0)]); ?></td>
+        <th><label for="startpageform-visitor-category">Visitor category</label></th>
+        <td><?php wp_dropdown_categories([id => 'startpageform-visitor-category', name => 'hdsc-startpage-setting-visitor-category', selected => get_option('hdsc-startpage-setting-visitor-category', 0)]); ?></td>
       </tr>
 
       <tr>
-        <th><label>Local category</label></th>
-        <td><?php wp_dropdown_categories([name => 'hdsc-startpage-setting-local-category', selected => get_option('hdsc-startpage-setting-local-category', 0)]); ?></td>
+        <th><label for="startpageform-local-category">Local category</label></th>
+        <td><?php wp_dropdown_categories([id => 'startpageform-local-category', name => 'hdsc-startpage-setting-local-category', selected => get_option('hdsc-startpage-setting-local-category', 0)]); ?></td>
       </tr>
       </tbody></table>
       <?php submit_button(); ?>
