@@ -21,7 +21,9 @@ export default class SectionCard extends Component {
             {this.props.posts.map(post => {
               return (
                 <Link key={Math.random()} className='SectionCard-post' href={post.href}>
-                  <img className='SectionCard-postImage' src={post.imgUrl} role='presentation' />
+                  { post.imgUrl &&
+                    <img className='SectionCard-postImage' src={post.imgUrl} role='presentation' />
+                  }
                   <h3 className='SectionCard-postHeading'>{post.heading}</h3>
                   <p className='SectionCard-postPreamble'>{post.preamble}</p>
                 </Link>
