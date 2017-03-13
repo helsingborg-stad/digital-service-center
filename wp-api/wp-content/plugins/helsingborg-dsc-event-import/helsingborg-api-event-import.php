@@ -25,6 +25,7 @@ include('includes/post-types/imported-taxonomy.php');
 
 include('includes/api-register/api-meta-callbacks.php');
 include('includes/api-register/register-meta-api.php');
+include('includes/api-register/events-api.php');
 
 include('includes/admin-panel/delete-events.php');
 include('includes/admin-panel/import-events.php');
