@@ -28,6 +28,14 @@ function get_categories_for_posts($posts) {
   return $categories_excluding_vistor_and_local;
 }
 
+function get_preamble($post_content) {
+  $contains_more_html_comment = preg_match('/<!--more-->/', $post_content);
+  if ($contains_more_html_comment) {
+    $post_content = substr($post_content, 0, strpos($post_content, "<!--more-->"));
+  }
+  return substr(html_entity_decode($post_content), 0, 100);
+}
+
 function helsingborg_dsc_startpage_response() {
     return rest_ensure_response([
       backgroundUrl => get_option('hdsc-startpage-setting-background-url'),
@@ -40,14 +48,14 @@ function helsingborg_dsc_startpage_response() {
       visitorTags => array_map(function($category_id) {
         $category = get_category($category_id);
         return [
-          name => $category->name,
+          name => html_entity_decode($category->name),
           href => '/visitor/' . $category->slug
         ];
       }, get_categories_for_posts(get_posts([ post_type => 'imported_event', numberposts => -1, category => get_option('hdsc-startpage-setting-visitor-category', '')]))),
       visitorPosts => array_map(function($post) {
         return [
-          heading  => $post->post_title,
-          preamble => substr(strip_tags($post->post_content), 0, 100),
+          heading  => html_entity_decode($post->post_title),
+          preamble => get_preamble($post->post_content),
           href     => '/visitor/' . $post->post_name,
           imgUrl   => get_the_post_thumbnail_url($post->ID)
         ];
@@ -56,14 +64,14 @@ function helsingborg_dsc_startpage_response() {
       localTags => array_map(function($category_id) {
         $category = get_category($category_id);
         return [
-          name => $category->name,
+          name => html_entity_decode($category->name),
           href => '/local/' . $category->slug
         ];
       }, get_categories_for_posts(get_posts([ post_type => 'imported_event', numberposts => -1, category => get_option('hdsc-startpage-setting-local-category', '')]))),
       localPosts => array_map(function($post) {
         return [
-          heading  => $post->post_title,
-          preamble => substr(strip_tags($post->post_content), 0, 100),
+          heading  => html_entity_decode($post->post_title),
+          preamble => get_preamble($post->post_content),
           href     => '/local/' . $post->post_name,
           imgUrl   => get_the_post_thumbnail_url($post->ID)
         ];
@@ -72,14 +80,14 @@ function helsingborg_dsc_startpage_response() {
       todayTags => array_map(function($category_id) {
         $category = get_category($category_id);
         return [
-          name => $category->name,
+          name => html_entity_decode($category->name),
           href => '/today/' . $category->slug
         ];
       }, get_categories_for_posts(helsingborg_dsc_startpage_get_today_events())),
       todayPosts => array_map(function($post) {
         return [
-          heading  => $post->post_title,
-          preamble => substr(strip_tags($post->post_content), 0, 100),
+          heading  => html_entity_decode($post->post_title),
+          preamble => get_preamble($post->post_content),
           href     => '/today/' . $post->post_name,
           imgUrl   => get_the_post_thumbnail_url($post->ID)
         ];
