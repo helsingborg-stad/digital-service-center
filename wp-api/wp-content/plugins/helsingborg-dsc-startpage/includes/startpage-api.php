@@ -24,7 +24,7 @@ function helsingborg_dsc_startpage_response() {
           href     => '/visitor/' . $post->post_name,
           imgUrl   => get_the_post_thumbnail_url($post->ID)
         ];
-      }, get_posts([ post_type => 'imported_event', posts_per_page => 10])),
+      }, get_posts([ post_type => 'imported_event', posts_per_page => 10, category => get_option('hdsc-startpage-setting-visitor-category', '')])),
       localHeading => get_option('hdsc-startpage-setting-local-heading', 'Local'),
       localTags => [
         [name => 'See & Do'],
@@ -41,7 +41,7 @@ function helsingborg_dsc_startpage_response() {
           href     => '/local/' . $post->post_name,
           imgUrl   => get_the_post_thumbnail_url($post->ID)
         ];
-      }, get_posts([ post_type => 'imported_event', posts_per_page => 10])),
+      }, get_posts([ post_type => 'imported_event', posts_per_page => 10, category => get_option('hdsc-startpage-setting-local-category', '')])),
       todayHeading => get_option('hdsc-startpage-setting-today-heading', 'Today'),
       todayTags => [
         [name => 'See & Do'],

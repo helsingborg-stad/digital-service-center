@@ -2,10 +2,6 @@
 
 function hdsc_startpage_settings_init() {
   add_menu_page('Startpage', 'Startpage', 'manage_options', 'startpage', hdsc_startpage_menu_callback, 'dashicons-store', 5);
-
-  add_submenu_page('startpage', 'Visitor', 'Visitor', 'manage_options', 'startpage-visitor', hdsc_startpage_submenu_visitor_callback);
-
-  add_submenu_page('startpage', 'Local', 'Local', 'manage_options', 'startpage-local', hdsc_startpage_submenu_local_callback);
 }
 
 add_action('admin_menu', hdsc_startpage_settings_init);
@@ -17,6 +13,8 @@ add_action('admin_init', function() {
   register_setting( 'hdsc-startpage-settings', 'hdsc-startpage-setting-local-heading');
   register_setting( 'hdsc-startpage-settings', 'hdsc-startpage-setting-today-heading');
   register_setting( 'hdsc-startpage-settings', 'hdsc-startpage-setting-top-links');
+  register_setting( 'hdsc-startpage-settings', 'hdsc-startpage-setting-visitor-category');
+  register_setting( 'hdsc-startpage-settings', 'hdsc-startpage-setting-local-category');
 });
 
 function hdsc_startpage_get_selectable_top_links() {
@@ -130,18 +128,16 @@ function hdsc_startpage_menu_callback() {
         </select>
       </label></p>
 
+      <p><label>Visitor category
+        <?php wp_dropdown_categories([name => 'hdsc-startpage-setting-visitor-category', selected => get_option('hdsc-startpage-setting-visitor-category', 0)]); ?>
+      </label></p>
+
+      <p><label>Local category
+        <?php wp_dropdown_categories([name => 'hdsc-startpage-setting-local-category', selected => get_option('hdsc-startpage-setting-local-category', 0)]); ?>
+      </label></p>
+
       <?php submit_button(); ?>
     </form>
   </div>
 <?php
-}
-
-function hdsc_startpage_submenu_visitor_callback() {
-
-}
-
-function hdsc_startpage_submenu_local_callback() {
-  echo '<div class="wrap">
-          <h2>Local</h2>
-        </div>';
 }
