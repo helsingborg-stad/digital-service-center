@@ -1,5 +1,20 @@
 <?php
 
+function helsingborg_dsc_startpage_get_today_events() {
+  $posts = get_posts([ post_type => 'imported_event', numberposts => -1]);
+  $today_posts = array_filter($posts, function($post) {
+    $post_meta = get_post_meta($post->ID, 'imported_event_data', true);
+    $door_times = array_map(function($occasion) {
+      return $occasion->door_time;
+    }, $post_meta->occasions);
+    $is_any_door_time_today = !empty(array_filter($door_times, function($door_time) {
+      return date('Y-m-d') == date('Y-m-d', strtotime($door_time));
+    }));
+    return $is_any_door_time_today;
+  });
+  return array_values(array_slice($today_posts, 0, 10));
+}
+
 function helsingborg_dsc_startpage_response() {
     return rest_ensure_response([
       backgroundUrl => get_option('hdsc-startpage-setting-background-url'),
@@ -58,7 +73,7 @@ function helsingborg_dsc_startpage_response() {
           href     => '/today/' . $post->post_name,
           imgUrl   => get_the_post_thumbnail_url($post->ID)
         ];
-      }, get_posts([ post_type => 'imported_event', posts_per_page => 10])),
+      }, helsingborg_dsc_startpage_get_today_events())
     ]);
 }
 
