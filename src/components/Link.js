@@ -1,12 +1,36 @@
 import React, { PropTypes } from 'react';
-import PaperRipple from 'react-paper-ripple';
+import { Ripple } from './react-ripple-effect';
 
-const Link = ({className, children, href}) => {
-  return (
-    <PaperRipple tag="a" className={className} href={href}>
-      {children}
-    </PaperRipple>
-  );
+class Link extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      cursorPos: {}
+    };
+  }
+
+  render() {
+    return (
+      <a
+        className={this.props.className}
+        style={{position: 'relative', overflow: 'hidden'}}
+        href={this.props.href}
+        onMouseUp={ this.handleClick.bind(this) }
+      >
+        {this.props.children}
+        <Ripple cursorPos={ this.state.cursorPos } />
+      </a>
+    );
+  }
+
+  handleClick(e) {
+    const cursorPos = {
+      top: e.clientY,
+      left: e.clientX,
+      time: Date.now()
+    };
+    this.setState({ cursorPos: cursorPos });
+  }
 }
 
 Link.propTypes = {

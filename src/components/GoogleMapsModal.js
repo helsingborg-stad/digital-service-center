@@ -1,6 +1,6 @@
 import React, {PropTypes, Component} from 'react';
 import Link from './Link';
-import PaperRipple from 'react-paper-ripple';
+import { RippleButton } from './react-ripple-effect';
 import classnames from 'classnames';
 
 import './GoogleMapsModal.css';
@@ -39,9 +39,9 @@ const Modal = ({showMoreInfo, handleShowMoreClick, visible}) => {
         <Link href='#asdf' className='GoogleMapsModal-button GoogleMapsModal-button--emphasized'>
           Navigate
         </Link>
-        <PaperRipple tag='button' onClick={handleShowMoreClick} className='GoogleMapsModal-button GoogleMapsModal-button--alignRight'>
+        <RippleButton onClick={handleShowMoreClick} className='GoogleMapsModal-button GoogleMapsModal-button--alignRight'>
           More info
-        </PaperRipple>
+        </RippleButton>
       </div>
     </div>
   );

@@ -1,0 +1,30 @@
+/*! Copyright (c) 2016 Naufal Rabbani (http://github.com/BosNaufal)
+  * Licensed Under MIT (http://opensource.org/licenses/MIT)
+  *
+  * React Ripple - Version 1.0.0
+  *
+  * Adopted from : https://github.com/nelsoncash/angular-ripple
+  *
+  */
+
+.Ripple {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  opacity: 1;
+  transform: scale(0);
+}
+.Ripple.is-reppling {
+  animation: ripple 0.5s linear;
+}
+.Ripple-parent {
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes ripple {
+  100% {
+    opacity: 0;
+    transform: scale(3);
+  }
+}
