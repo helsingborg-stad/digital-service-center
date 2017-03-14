@@ -11,15 +11,15 @@ class Link extends React.Component {
 
   render() {
     return (
-      <a
+      <span
         className={this.props.className}
-        style={{position: 'relative', overflow: 'hidden'}}
+        style={{position: 'relative', overflow: 'hidden', cursor: 'pointer'}}
         href={this.props.href}
         onMouseUp={ this.handleClick.bind(this) }
       >
         {this.props.children}
         <Ripple cursorPos={ this.state.cursorPos } />
-      </a>
+      </span>
     );
   }
 
