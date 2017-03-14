@@ -42,13 +42,13 @@
 }
 
 .SectionCard-postWrapper {
-  padding: 1rem 0.75rem 1rem;
+  padding: 0.5rem 0.75rem;
 }
 
 .SectionCard-post {
   position: relative;
   display: inline-block;
-  margin-bottom: 1rem;
+  padding: 0.5rem 0;
   color: #545454;
 }
 
