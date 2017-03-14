@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Lipping from './Lipping';
 import { SiteHeader, SiteHeaderLink } from './SiteHeader';
 import { SiteSubHeader, SiteSubHeaderLink } from './SiteSubHeader';
@@ -8,10 +8,25 @@ import { EventShowcase, Event } from './EventShowcase';
 import AsideMenu from './AsideMenu';
 import Calendar from './Calendar';
 import WeatherWidget from './WeatherWidget';
+import { connect } from 'react-redux';
+import { eventsFetchData } from '../actions/events';
 
 import './StandardPage.css';
 
-export default class StandardPage extends Component {
+export class StandardPage extends Component {
+  static fetchData({ store }) {
+    return store.dispatch(
+      eventsFetchData('/api/events')
+    );
+  }
+
+  componentDidMount() {
+    const dataIsEmpty = !Object.keys(this.props.data).length;
+    if (dataIsEmpty) {
+      this.props.fetchData('/api/events');
+    }
+  }
+
   render() {
     const mapProps = {
       markers: [{
@@ -29,6 +44,16 @@ export default class StandardPage extends Component {
       }
       ]
     };
+    if (this.props.hasErrored) {
+      return (
+       <p>Error!</p>
+      );
+    }
+
+    const dataIsEmpty = !Object.keys(this.props.data).length;
+    if (this.props.isLoading || dataIsEmpty) {
+      return <p>Loading!</p>
+    }
     return (
       <div className='StandardPage'>
         <Lipping />
@@ -58,38 +83,12 @@ export default class StandardPage extends Component {
         <main>
           <GoogleMaps {...mapProps} />
           <EventShowcase>
+            {this.props.data.map(event => (
             <Event
-              name='Brooklyn i Helsingborg'
+              name={event.name}
               href='#asdf'
-              imgSrc='http://lorempixel.com/240/175?random=1' />
-            <Event
-              name='Alla går till Ebbas fik'
-              href='#asdf'
-              imgSrc='http://lorempixel.com/240/175?random=2' />
-            <Event
-              name='Se alla matcher på Pitchers'
-              href='#asdf'
-              imgSrc='http://lorempixel.com/240/175?random=3' />
-            <Event
-              name='Världens första apprestaurang'
-              href='#asdf'
-              imgSrc='http://lorempixel.com/240/175?random=4' />
-            <Event
-              name='Viskan för vinkännaren'
-              href='#asdf'
-              imgSrc='http://lorempixel.com/240/175?random=5' />
-            <Event
-              name='Avslappnad miljö hos Frida'
-              href='#asdf'
-              imgSrc='http://lorempixel.com/240/175?random=6' />
-            <Event
-              name='Avslappnad miljö hos Bengt'
-              href='#asdf'
-              imgSrc='http://lorempixel.com/240/175?random=7' />
-            <Event
-              name='Avslappnad miljö hos Lotta'
-              href='#asdf'
-              imgSrc='http://lorempixel.com/240/175?random=8' />
+              imgSrc={event.imgUrl} />
+            ))}
           </EventShowcase>
         </main>
         <aside>
@@ -102,3 +101,29 @@ export default class StandardPage extends Component {
     );
   }
 }
+
+StandardPage.propTypes = {
+  fetchData: PropTypes.func.isRequired,
+  data: PropTypes.oneOf(
+    PropTypes.array,
+    PropTypes.object
+  ),
+  hasErrored: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired
+};
+
+const mapStateToProps = (state) => {
+  return {
+    data: state.events,
+    hasErrored: state.eventsHasErrored,
+    isLoading: state.eventsAreLoading
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchData: (url) => dispatch(eventsFetchData(url))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(StandardPage);
