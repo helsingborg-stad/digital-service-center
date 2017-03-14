@@ -43,8 +43,12 @@ function get_preamble($post_content) {
   $contains_more_html_comment = preg_match('/<!--more-->/', $post_content);
   if ($contains_more_html_comment) {
     $post_content = substr($post_content, 0, strpos($post_content, "<!--more-->"));
+    $post_content = preg_replace('/<p>/', '', $post_content);
   }
-  return substr(html_entity_decode($post_content), 0, 100);
+  $decoded = html_entity_decode($post_content);
+  return strlen($decoded) > 100
+    ? substr(html_entity_decode($post_content), 0, 100) . '...'
+    : $decoded;
 }
 
 // Helper function to map the posts to the correct format for the API response
