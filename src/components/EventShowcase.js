@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Link from './Link';
 import { Scrollbars } from 'react-custom-scrollbars';
+import { Ripple } from './react-ripple-effect';
 import './EventShowcase.css';
 
 export class EventShowcase extends Component {
@@ -23,18 +23,42 @@ EventShowcase.propTypes = {
 };
 
 export class Event extends Component {
+  constructor() {
+    super();
+    this.state = {
+      cursorPos: {}
+    };
+  }
+
   render() {
     return (
-      <Link className='Event' href={this.props.href}>
+      <span
+        role='button'
+        className='Event'
+        style={{position: 'relative', overflow: 'hidden', cursor: 'pointer'}}
+        onClick={() => this.props.onClick(this.props.id)}
+        onMouseUp={ this.handleClick.bind(this) }
+      >
         <img className='Event-img' src={this.props.imgSrc} alt='' />
         <span className='Event-title'>{this.props.name}</span>
-      </Link>
+        <Ripple cursorPos={ this.state.cursorPos } />
+      </span>
     );
+  }
+
+  handleClick(e) {
+    const cursorPos = {
+      top: e.clientY,
+      left: e.clientX,
+      time: Date.now()
+    };
+    this.setState({ cursorPos: cursorPos });
   }
 }
 
 Event.propTypes = {
-  href: React.PropTypes.string.isRequired,
+  onClick: React.PropTypes.func.isRequired,
+  id: React.PropTypes.any,
   name: React.PropTypes.string.isRequired,
   imgSrc: React.PropTypes.string
 };

@@ -41,6 +41,8 @@ const Routes = (props = {}) => {
       <Route path="/" component={App}>
         <IndexRoute component={Startpage} />
         <Route path="standard" component={StandardPage} />
+        <Route path="visitor(/:event)" component={StandardPage} />
+        <Route path="local(/:event)" component={StandardPage} />
       </Route>
       <Route path="*">
         <IndexRedirect to="/" />

@@ -1,70 +1,57 @@
-import React, {PropTypes, PureComponent } from 'react';
+import React, {PropTypes } from 'react';
 import GoogleMap from 'google-map-react';
 import GoogleMapsModal from './GoogleMapsModal';
 
 import './GoogleMaps.css';
 
-export default class GoogleMaps extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      visibleModals: []
-    };
-  }
+const Marker = ({onClick}) => <div className='GoogleMaps-marker' onClick={onClick} />;
 
-  render() {
-    const Marker = ({onClick}) => <div className='GoogleMaps-marker' onClick={onClick} />;
+Marker.propTypes = { onClick: PropTypes.func.isRequired };
 
-    const Markers = this.props.markers && this.props.markers.map((marker) => {
-      return (
-        <Marker
-          onClick={() => this.handleMarkerClick(marker.id)}
-          key={marker.id}
-          lat={marker.lat}
-          lng={marker.lng}
-        />
-      );
-    });
-
-    const Modals = this.props.markers && this.props.markers.map((marker) => {
-      return (
-        <GoogleMapsModal
-          lat={marker.lat}
-          lng={marker.lng}
-          id={marker.id + '-modal'}
-          key={marker.id + '-modal'}
-          visible={this.state.visibleModals.includes(marker.id)}
-        />
-      );
-    });
-
-    return (
-      <div className='GoogleMaps-wrapper'>
-        <GoogleMap
-          defaultCenter={this.props.center}
-          defaultZoom={this.props.zoom}
-          bootstrapURLKeys={{key: this.props.apiKey, language: this.props.lang}}
-        >
-        {Markers}
-        {Modals}
-        </GoogleMap>
-      </div>
-    );
-  }
-  handleMarkerClick(modalId) {
-    const visibleModals = this.state.visibleModals;
-    this.setState(visibleModals.includes(modalId)
-      ? {visibleModals: visibleModals.filter(x => x !== modalId)}
-      : {visibleModals: visibleModals.concat([modalId])});
-  }
-}
+const GoogleMaps = ({center, zoom, apiKey, lang, markers,
+                     visibleModals, handleToggleModalVisibility}) => {
+  return (
+    <div className='GoogleMaps-wrapper'>
+      <GoogleMap
+        defaultCenter={center}
+        defaultZoom={zoom}
+        bootstrapURLKeys={{key: apiKey, language: lang}}
+      >
+        { markers.map((marker) => {
+          return (
+            <Marker
+              onClick={() => handleToggleModalVisibility(marker.id)}
+              key={marker.id}
+              lat={marker.lat}
+              lng={marker.lng}
+            />
+          );
+        }) }
+        { markers.map((marker) => {
+          return (
+            <GoogleMapsModal
+              lat={marker.lat}
+              lng={marker.lng}
+              id={marker.id + '-modal'}
+              key={marker.id + '-modal'}
+              visible={visibleModals.includes(marker.id)}
+              eventData={marker.eventData}
+            />
+          );
+        }) }
+      </GoogleMap>
+    </div>
+  );
+};
 
 GoogleMaps.propTypes = {
   markers: PropTypes.array,
+  visibleModals: PropTypes.array,
   zoom: PropTypes.number,
   center: PropTypes.object,
   apiKey: PropTypes.string,
-  lang: PropTypes.string
+  lang: PropTypes.string,
+  handleToggleModalVisibility: PropTypes.func
 };
 
 GoogleMaps.defaultProps = {
@@ -74,3 +61,5 @@ GoogleMaps.defaultProps = {
   apiKey: 'AIzaSyAmIiexMwCIAGIfiHHwHsvxB-srsBEvftQ',
   lang: 'en'
 };
+
+export default GoogleMaps;

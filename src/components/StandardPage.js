@@ -13,11 +13,38 @@ import { eventsFetchData } from '../actions/events';
 
 import './StandardPage.css';
 
+const eventsWithCoordinates = (events) => {
+  return events.filter(e => e.location && e.location.latitude && e.location.longitude)
+    .reduce((acc, e) => {
+      acc.markers.push({
+        id: e.id,
+        lat: e.location.latitude,
+        lng: e.location.longitude,
+        eventData: e
+      });
+      return acc;
+    }, {markers: []});
+};
+
 export class StandardPage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      visibleModals: []
+    };
+  }
+
   static fetchData({ store }) {
     return store.dispatch(
       eventsFetchData('/api/events')
     );
+  }
+
+  toggleModalVisibility(modalId) {
+    const visibleModals = this.state.visibleModals;
+    this.setState(visibleModals.includes(modalId)
+      ? {visibleModals: visibleModals.filter(x => x !== modalId)}
+      : {visibleModals: visibleModals.concat([modalId])});
   }
 
   componentDidMount() {
@@ -28,22 +55,6 @@ export class StandardPage extends Component {
   }
 
   render() {
-    const mapProps = {
-      markers: [{
-        id: 'mitt id',
-        lat: 56.0456282,
-        lng: 12.7045333
-      }, {
-        id: 'mitt id2',
-        lat: 56.0451487,
-        lng: 12.6956927
-      }, {
-        id: 'mitt id3',
-        lat: 56.0478332,
-        lng: 12.6940619
-      }
-      ]
-    };
     if (this.props.hasErrored) {
       return (
        <p>Error!</p>
@@ -52,7 +63,7 @@ export class StandardPage extends Component {
 
     const dataIsEmpty = !Object.keys(this.props.data).length;
     if (this.props.isLoading || dataIsEmpty) {
-      return <p>Loading!</p>
+      return <p>Loading!</p>;
     }
     return (
       <div className='StandardPage'>
@@ -81,13 +92,19 @@ export class StandardPage extends Component {
           <SideNavigationLink name='Infopoints' href='#asdf' />
         </SideNavigation>
         <main>
-          <GoogleMaps {...mapProps} />
+          <GoogleMaps
+            {...eventsWithCoordinates(this.props.data)}
+            visibleModals={this.state.visibleModals}
+            handleToggleModalVisibility={this.toggleModalVisibility.bind(this)}
+          />
           <EventShowcase>
             {this.props.data.map(event => (
             <Event
+              key={event.id}
+              id={event.id}
               name={event.name}
-              href='#asdf'
-              imgSrc={event.imgUrl} />
+              imgSrc={event.imgUrl}
+              onClick={this.toggleModalVisibility.bind(this)} />
             ))}
           </EventShowcase>
         </main>
@@ -104,10 +121,7 @@ export class StandardPage extends Component {
 
 StandardPage.propTypes = {
   fetchData: PropTypes.func.isRequired,
-  data: PropTypes.oneOf(
-    PropTypes.array,
-    PropTypes.object
-  ),
+  data: PropTypes.any, // TODO
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired
 };
