@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Helsingborg places import from google
-Description: Imports places från google place api
+Description: Imports places from Google Places API
 Author: Meridium
 Version: 0.1
 Author URI: http://meridium.se
-Text Domain: Helsingborg-dsc-google-place
+Text Domain: Helsingborg-dsc-google-places
 */
 
 /*******************************
