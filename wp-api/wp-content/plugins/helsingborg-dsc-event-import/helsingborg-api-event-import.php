@@ -11,6 +11,7 @@ Text Domain: Helsingborg-dsc-event-import
 * global variables
 *******************************/
 $helsingborg_api_event_import = 'Helsingborg API event import plugin';
+
 /*******************************
 * includes
 *******************************/
