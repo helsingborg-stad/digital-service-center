@@ -10,11 +10,31 @@ function helsing_dsc_events_register_routes() {
 }
 
 function helsingborg_dsc_events_response() {
+  $response = [];
   $imported_events = get_posts([ post_type => 'imported_event', numberposts => -1, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
   $editable_events = get_posts([ post_type => 'editable_event', numberposts => -1, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
   $imported_events_parsed = parse_imported_events($imported_events);
   $editable_events_parsed = parse_editable_events($editable_events);
-  return rest_ensure_response(array_merge((array)$imported_events_parsed, (array)$editable_events_parsed));
+  $response['events'] = array_merge((array)$imported_events_parsed, (array)$editable_events_parsed);
+  $response['landingPages']['visitor'] = [
+    heading => get_option('hdsc-landing-settings-heading-visitor', 'Explore Helsingborg'),
+    topLinks => get_links_for_option('hdsc-landing-settings-top-links-visitor'),
+    subTopLinks => get_links_for_option('hdsc-landing-settings-sub-top-links-visitor')
+  ];
+  $response['landingPages']['local'] = [
+    heading => get_option('hdsc-landing-settings-heading-local', 'Explore Helsingborg'),
+    topLinks => get_links_for_option('hdsc-landing-settings-top-links-local'),
+    subTopLinks => get_links_for_option('hdsc-landing-settings-sub-top-links-local')
+  ];
+  return rest_ensure_response($response);
+}
+
+function get_links_for_option($option) {
+  return array_map(function($pageId) {
+      $page = get_post($pageId);
+      return [name => $page->post_title, href => $page->post_name];
+    }, get_option($option, [])
+  );
 }
 
 function get_short_content($post_content) {

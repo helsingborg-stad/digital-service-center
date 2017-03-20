@@ -11,7 +11,7 @@ import WeatherWidget from './WeatherWidget';
 import { connect } from 'react-redux';
 import { eventsFetchData } from '../actions/events';
 
-import './StandardPage.css';
+import './LandingPage.css';
 
 const eventsWithCoordinates = (events) => {
   return events.filter(e => e.location && e.location.latitude && e.location.longitude)
@@ -26,7 +26,7 @@ const eventsWithCoordinates = (events) => {
     }, {markers: []});
 };
 
-export class StandardPage extends Component {
+export class LandingPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -48,7 +48,7 @@ export class StandardPage extends Component {
   }
 
   componentDidMount() {
-    const dataIsEmpty = !Object.keys(this.props.data).length;
+    const dataIsEmpty = !Object.keys(this.props.events).length;
     if (dataIsEmpty) {
       this.props.fetchData('/api/events');
     }
@@ -61,22 +61,19 @@ export class StandardPage extends Component {
       );
     }
 
-    const dataIsEmpty = !Object.keys(this.props.data).length;
+    const dataIsEmpty = !Object.keys(this.props.events).length;
     if (this.props.isLoading || dataIsEmpty) {
       return <p>Loading!</p>;
     }
+    const pageData = this.props.landingPages[this.props.type];
     return (
-      <div className='StandardPage'>
+      <div className='LandingPage'>
         <Lipping />
-        <SiteHeader heading='Explore Helsingborg' bgColor='#c70d53'>
-          <SiteHeaderLink name='Guided Tours' href='#asdf' />
-          <SiteHeaderLink name='Mobile infopoint' href='#asdf' />
-          <SiteHeaderLink name='Something else' href='#asdf' />
+        <SiteHeader heading={pageData.heading} bgColor={this.props.bgColor}>
+          { pageData.topLinks.map(({name, href}) => <SiteHeaderLink name={name} href={href} />) }
         </SiteHeader>
         <SiteSubHeader>
-          <SiteSubHeaderLink name='Local' href='#asdf' />
-          <SiteSubHeaderLink name='Vägbeskrivning på Knutpunkten' href='#asdf' />
-          <SiteSubHeaderLink name='Ett bättre Helsingborg' href='#asdf' />
+          { pageData.subTopLinks.map(({name, href}) => <SiteSubHeaderLink name={name} href={href} />) }
         </SiteSubHeader>
         <SideNavigation>
           <SideNavigationLink name='Stay' href='#asdf'>
@@ -93,12 +90,12 @@ export class StandardPage extends Component {
         </SideNavigation>
         <main>
           <GoogleMaps
-            {...eventsWithCoordinates(this.props.data)}
+            {...eventsWithCoordinates(this.props.events)}
             visibleModals={this.state.visibleModals}
             handleToggleModalVisibility={this.toggleModalVisibility.bind(this)}
           />
           <EventShowcase>
-            {this.props.data.map(event => (
+            {this.props.events.map(event => (
             <Event
               key={event.id}
               id={event.id}
@@ -119,16 +116,20 @@ export class StandardPage extends Component {
   }
 }
 
-StandardPage.propTypes = {
+LandingPage.propTypes = {
+  type: PropTypes.oneOf(['visitor', 'local']),
+  bgColor: PropTypes.string,
   fetchData: PropTypes.func.isRequired,
-  data: PropTypes.any, // TODO
+  events: PropTypes.any, // TODO
+  landingPages: PropTypes.any, // TODO
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = (state) => {
   return {
-    data: state.events,
+    events: state.events,
+    landingPages: state.landingPages,
     hasErrored: state.eventsHasErrored,
     isLoading: state.eventsAreLoading
   };
@@ -140,4 +141,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(StandardPage);
+export default connect(mapStateToProps, mapDispatchToProps)(LandingPage);
