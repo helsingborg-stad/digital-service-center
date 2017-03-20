@@ -21,5 +21,10 @@
 }
 
 .SiteSubHeader-logo {
-  width: 29.5rem;
+  width: 130px;
+  height: 37.5px;
+  margin-left: 3.75rem;
+  vertical-align: super;
 }
+
+.cls-1{fill:#ec6707;}

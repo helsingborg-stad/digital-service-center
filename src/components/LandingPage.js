@@ -70,10 +70,14 @@ export class LandingPage extends Component {
       <div className='LandingPage'>
         <Lipping />
         <SiteHeader heading={pageData.heading} bgColor={this.props.bgColor}>
-          { pageData.topLinks.map(({name, href}) => <SiteHeaderLink name={name} href={href} />) }
+          { pageData.topLinks.map(({name, href}) => (
+            <SiteHeaderLink name={name} href={href} key={href} />))
+          }
         </SiteHeader>
-        <SiteSubHeader>
-          { pageData.subTopLinks.map(({name, href}) => <SiteSubHeaderLink name={name} href={href} />) }
+        <SiteSubHeader logoColor={this.props.bgColor}>
+          { pageData.subTopLinks.map(({name, href}) => (
+            <SiteSubHeaderLink name={name} href={href} key={href} />))
+          }
         </SiteSubHeader>
         <SideNavigation>
           <SideNavigationLink name='Stay' href='#asdf'>
