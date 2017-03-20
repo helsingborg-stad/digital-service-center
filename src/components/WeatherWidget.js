@@ -3,7 +3,8 @@ import './WeatherWidget.css';
 
 export default class WeatherWidget extends Component {
   render() {
-    return (
+    return null;
+    /*(
       <div className='WeatherWidget'>
         <br />
         <br />
@@ -20,6 +21,6 @@ export default class WeatherWidget extends Component {
         <br />
         <br />
       </div>
-    );
+    );*/
   }
 }

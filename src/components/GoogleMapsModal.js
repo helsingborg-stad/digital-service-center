@@ -5,7 +5,7 @@ import classnames from 'classnames';
 
 import './GoogleMapsModal.css';
 
-const Modal = ({showMoreInfo, handleShowMoreClick, visible}) => {
+const Modal = ({showMoreInfo, handleShowMoreClick, visible, eventData}) => {
   return (
     <div
       className={classnames(
@@ -16,25 +16,12 @@ const Modal = ({showMoreInfo, handleShowMoreClick, visible}) => {
     >
       <div className='GoogleMapsModal-triangle' />
       <div style={{float: 'left', width: '306px'}}>
-        <img className='GoogleMapsModal-img' src='http://lorempixel.com/330/175' role='presentation' />
-        <h4 className='GoogleMapsModal-heading'>Olympia</h4>
+        <img className='GoogleMapsModal-img' src={eventData.imgUrl} role='presentation' />
+        <h4 className='GoogleMapsModal-heading'>{eventData.name}</h4>
         <div className='GoogleMapsModal-preamble'>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+          <p>{eventData.shortContent}</p>
         </div>
       </div>
-      { showMoreInfo &&
-      <div style={{float: 'left', width: '330px', paddingLeft: '1.5rem'}}>
-        <div className='GoogleMapsModal-moreInfo'>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-          <p>
-            <b>Opening hours</b>: Mon - friday: 10 - 19
-          </p>
-          <p>
-            <b>Contact</b>: <a href='mailto:info@sofiero.se'>info@sofiero.se</a>
-          </p>
-        </div>
-      </div>
-      }
       <div className='GoogleMapsModal-buttonWrapper'>
         <Link href='#asdf' className='GoogleMapsModal-button GoogleMapsModal-button--emphasized'>
           Navigate
@@ -50,7 +37,11 @@ const Modal = ({showMoreInfo, handleShowMoreClick, visible}) => {
 Modal.propTypes = {
   showMoreInfo: PropTypes.bool,
   handleShowMoreClick: PropTypes.func,
-  visible: PropTypes.bool
+  visible: PropTypes.bool,
+  eventData: PropTypes.shape({
+    name: PropTypes.string,
+    content: PropTypes.string
+  })
 };
 
 export default class GoogleMapsModal extends Component {
@@ -67,6 +58,7 @@ export default class GoogleMapsModal extends Component {
         handleShowMoreClick={this.handleShowMoreInfoClick.bind(this)}
         showMoreInfo={this.state.showMoreInfo}
         visible={this.props.visible}
+        eventData={this.props.eventData}
       />
     );
   }
@@ -79,5 +71,9 @@ GoogleMapsModal.propTypes = {
   lat: PropTypes.number.isRequired,
   lng: PropTypes.number.isRequired,
   id: PropTypes.string.isRequired,
-  visible: PropTypes.bool
+  visible: PropTypes.bool,
+  eventData: PropTypes.shape({
+    name: PropTypes.string,
+    content: PropTypes.string
+  })
 };

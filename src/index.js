@@ -36,3 +36,16 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
+
+// Make hot reload preserve Redux state during development
+if (process.env.NODE_ENV === 'development' && module.hot) {
+  module.hot.accept('./routes', () => {
+    const ReloadedApp = require('./routes').default;
+    ReactDOM.render(
+      <Provider store={store}>
+        <ReloadedApp store={store} />
+      </Provider>,
+      document.getElementById('root')
+    );
+  });
+}

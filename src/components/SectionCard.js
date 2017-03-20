@@ -10,7 +10,7 @@ export default class SectionCard extends Component {
         <h2 className='SectionCard-heading'>{this.props.section}</h2>
         <div className='SectionCard-tagWrapper'>
         {this.props.tags.map(tag => {
-          return (<Link key={Math.random()} className='SectionCard-tag' href={tag.href}>
+          return (<Link key={Math.random()} className='SectionCard-tag' to={tag.href}>
             {tag.name}
           </Link>);
         })}
@@ -20,7 +20,7 @@ export default class SectionCard extends Component {
             <div className='SectionCard-postWrapper'>
             {this.props.posts.map(post => {
               return (
-                <Link key={Math.random()} className='SectionCard-post' href={post.href}>
+                <Link key={Math.random()} className='SectionCard-post' to={post.href}>
                   { post.imgUrl &&
                     <img className='SectionCard-postImage' src={post.imgUrl} role='presentation' />
                   }

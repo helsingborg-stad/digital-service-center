@@ -4,12 +4,12 @@ import { Router, Route, browserHistory, IndexRedirect, IndexRoute } from 'react-
 import { syncHistoryWithStore } from 'react-router-redux';
 
 import Startpage from './components/Startpage.js';
-import StandardPage from './components/StandardPage.js';
+import LandingPage from './components/LandingPage.js';
 
 const App = ({ children, location }) => (
   <div>
     <ReactCSSTransitionGroup
-      component="div"
+      component='div'
       transitionName='pageChange'
       transitionEnterTimeout={750}
       transitionLeaveTimeout={500}
@@ -38,12 +38,17 @@ const Routes = (props = {}) => {
 
   return (
     <Router history={history}>
-      <Route path="/" component={App}>
+      <Route path='/' component={App}>
         <IndexRoute component={Startpage} />
-        <Route path="standard" component={StandardPage} />
+        <Route
+          path='visitor(/:event)'
+          component={() => <LandingPage type='visitor' bgColor='#c70d53' />} />
+        <Route
+          path='local(/:event)'
+          component={() => <LandingPage type='local' bgColor='hotpink' />} />
       </Route>
-      <Route path="*">
-        <IndexRedirect to="/" />
+      <Route path='*'>
+        <IndexRedirect to='/' />
       </Route>
     </Router>
   );

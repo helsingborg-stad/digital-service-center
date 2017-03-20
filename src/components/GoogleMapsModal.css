@@ -51,6 +51,7 @@
   margin: -1.5rem 0 0 -1.5rem;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
+  width: 330px;
 }
 
 .GoogleMapsModal--expanded .GoogleMapsModal-img {

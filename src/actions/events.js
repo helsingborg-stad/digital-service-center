@@ -1,3 +1,5 @@
+import { landingPagesFetchDataSuccess } from './landingPages';
+
 export function eventsHasErrored(bool) {
   return {
     type: 'EVENTS_HAS_ERRORED',
@@ -35,7 +37,10 @@ export function eventsFetchData(url) {
         return response;
       })
       .then((response) => response.json())
-      .then((events) => dispatch(eventsFetchDataSuccess(events)))
+      .then((data) => {
+        dispatch(landingPagesFetchDataSuccess(data.landingPages));
+        dispatch(eventsFetchDataSuccess(data.events));
+      })
       .catch(() => dispatch(eventsHasErrored(true)));
   };
 }
