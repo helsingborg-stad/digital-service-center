@@ -19,31 +19,47 @@ export class SiteHeader extends Component {
     };
   }
   render() {
+    const Row = ({children}) => (
+      <div style={{display: 'flex', justifyContent: 'space-between'}}>{children}</div>
+    );
+
+    const Column = ({children}) => (
+      <div>{children}</div>
+    );
+
     return (
       <div className='SiteHeader' style={{backgroundColor: this.props.bgColor}}>
-        <h1 className='SiteHeader-heading'>{this.props.heading}</h1>
-        { this.props.children }
-        <div style={{float: 'right', marginRight: '2rem'}}>
-          <div style={{float: 'left', marginTop: '17px'}}>
-            <SearchField inline />
-          </div>
-          <div style={{float: 'left'}}>
-            <button className='SiteHeader-wifi'>Helsingborg Free Wifi</button>
-          </div>
-          <div style={{float: 'left'}}>
-            <span className='SiteHeader-clock'>
-              <ReactInterval timeout={5000} enabled={true}
-                callback={() => {
-                  const time = getCurrentTime();
-                  if (this.state.currentTime !== time) {
-                    this.setState({currentTime: time});
-                  }
-                }}
-              />
-              { this.state.currentTime }
-            </span>
-          </div>
-        </div>
+        <Row>
+          <Column>
+            <h1 className='SiteHeader-heading'>{this.props.heading}</h1>
+          </Column>
+          <Column>
+          { this.props.children }
+          </Column>
+          <Column>
+            <div style={{marginLeft: 'auto', paddingRight: '2rem'}}>
+              <div style={{float: 'left', marginTop: '17px'}}>
+                <SearchField inline />
+              </div>
+              <div style={{float: 'left'}}>
+                <button className='SiteHeader-wifi'>Helsingborg Free Wifi</button>
+              </div>
+              <div style={{float: 'left'}}>
+                <span className='SiteHeader-clock'>
+                  <ReactInterval timeout={5000} enabled={true}
+                    callback={() => {
+                      const time = getCurrentTime();
+                      if (this.state.currentTime !== time) {
+                        this.setState({currentTime: time});
+                      }
+                    }}
+                  />
+                  { this.state.currentTime }
+                </span>
+              </div>
+            </div>
+          </Column>
+        </Row>
       </div>
     );
   }

@@ -3,6 +3,12 @@
   background: #fff;
 }
 
+.SiteSubHeaderLink-wrapper {
+  display: inline-block;
+  width: calc(100% - 130px - 3.35rem - 20.3rem); /* Center links between logo and left side of sidebar */
+  text-align: center;
+}
+
 .SiteSubHeaderLink {
     position: relative;
     display: inline-block;
@@ -23,8 +29,6 @@
 .SiteSubHeader-logo {
   width: 130px;
   height: 37.5px;
-  margin-left: 3.75rem;
+  margin-left: 3.35rem;
   vertical-align: super;
 }
-
-.cls-1{fill:#ec6707;}

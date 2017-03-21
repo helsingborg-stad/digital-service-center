@@ -45,7 +45,7 @@ const Routes = (props = {}) => {
           component={() => <LandingPage type='visitor' bgColor='#c70d53' />} />
         <Route
           path='local(/:event)'
-          component={() => <LandingPage type='local' bgColor='hotpink' />} />
+          component={() => <LandingPage type='local' bgColor='#ea671f' />} />
       </Route>
       <Route path='*'>
         <IndexRedirect to='/' />

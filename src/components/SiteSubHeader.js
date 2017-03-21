@@ -7,7 +7,7 @@ export const SiteSubHeader = ({children, logoColor}) => {
   return (
     <div className='SiteSubHeader'>
       <Logo className='SiteSubHeader-logo' color={logoColor} />
-      <span>
+      <span className='SiteSubHeaderLink-wrapper'>
       {children}
       </span>
     </div>
