@@ -28,7 +28,6 @@
 
 .SiteSubHeader-logo {
   width: 130px;
-  height: 37.5px;
+  height: 100%;
   margin-left: 3.35rem;
-  vertical-align: super;
 }

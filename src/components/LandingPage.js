@@ -8,6 +8,8 @@ import { EventShowcase, Event } from './EventShowcase';
 import AsideMenu from './AsideMenu';
 import Calendar from './Calendar';
 import WeatherWidget from './WeatherWidget';
+import LandingPageLoading from './LandingPageLoading';
+import LandingPageError from './LandingPageError';
 import { connect } from 'react-redux';
 import { eventsFetchData } from '../actions/events';
 
@@ -56,14 +58,12 @@ export class LandingPage extends Component {
 
   render() {
     if (this.props.hasErrored) {
-      return (
-       <p>Error!</p>
-      );
+      return <LandingPageError reloadPage={() => this.props.fetchData('/api/events')} />;
     }
 
     const dataIsEmpty = !Object.keys(this.props.events).length;
     if (this.props.isLoading || dataIsEmpty) {
-      return <p>Loading!</p>;
+      return <LandingPageLoading bgColor={this.props.bgColor} />;
     }
     const pageData = this.props.landingPages[this.props.type];
     return (

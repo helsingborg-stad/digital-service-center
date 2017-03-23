@@ -5,33 +5,34 @@
 
 /*
  ** Animations
- *
- * Also contains animations for sub-components
  */
 
-/* Hide component during leaving animation due to bug with react-router@4
-   https://github.com/ReactTraining/react-router/issues/4351
-   TODO: Add leaving animation when the bug is fixed
- */
- .pageChange-leave.LandingPage,
- .pageChange-leave-active.LandingPage {
-   display: none;
- }
-
-.pageChange-enter.LandingPage .AsideMenu {
-  transform: translateX(325px);
-}
-.pageChange-enter-active.LandingPage .AsideMenu {
-  transform: translateX(0);
-  transition: 0.3s all ease-in;
-}
-
-.pageChange-enter.LandingPage .EventShowcase {
+.pageChange-leave.LandingPage {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  transform: translateY(20vh);
+  height: 100%;
+  overflow: hidden;
+  transform: translateX(0);
+  transition: 0.6s transform ease;
 }
-.pageChange-enter-active.LandingPage .EventShowcase {
-  width: calc(100% - 325px - 0.85rem);
-  transform: translateY(0);
-  transition: 0.25s all ease-in;
+
+.pageChange-leave-active.LandingPage {
+  transform: translateX(100%);
+}
+
+.pageChange-enter.LandingPage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  transform: translateX(100%);
+  transition: 0.6s transform ease;
+}
+
+.pageChange-enter-active.LandingPage {
+  transform: translateX(0);
 }
