@@ -25,6 +25,7 @@ function helsingborg_dsc_google_places_init() {
 include('includes/load-scripts.php');
 include('includes/save-google-places.php');
 include('includes/delete-google-places.php');
+include('includes/display-functions.php');
 include('includes/google-places-admin.php');
 include('includes/register-google-places-api.php');
 

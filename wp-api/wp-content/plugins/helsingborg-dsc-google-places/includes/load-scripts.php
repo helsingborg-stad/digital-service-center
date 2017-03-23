@@ -11,6 +11,14 @@ function load_google_places_search($hook) {
 }
 add_action('admin_enqueue_scripts', 'load_google_places_search');
 
+function load_checkbox_marker($hook) {
+    if ($hook != 'toplevel_page_helsingborg-dsc-google-places') {
+        return;
+    }
+    wp_enqueue_script('google_places_checkbox_marker_wp_admin', plugins_url('js/checkbox-marker.js', __FILE__));
+}
+add_action('admin_enqueue_scripts', 'load_checkbox_marker');
+
 function load_google_places($hook) {
     if ($hook != 'toplevel_page_helsingborg-dsc-google-places') {
         return;
