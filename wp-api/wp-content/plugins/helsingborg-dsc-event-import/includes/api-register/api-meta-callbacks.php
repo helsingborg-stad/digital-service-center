@@ -8,6 +8,11 @@ function get_imported_event_data($post, $field_name, $request)
     return get_post_meta($post['id'], 'imported_event_data', true);
 }
 
+function get_event_iframe($post, $field_name, $request)
+{
+    return get_post_meta($post['id'], 'event_iframe', true);
+}
+
 function get_all_categories($post, $field_name, $request)
 {
     $imported_category = wp_get_post_terms($post['id'], 'imported_category');

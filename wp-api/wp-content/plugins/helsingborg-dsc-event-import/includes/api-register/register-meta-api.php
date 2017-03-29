@@ -126,6 +126,14 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
+    register_rest_field( array('editable_event'),
+        'iframe',
+        array(
+          'get_callback'    => 'get_event_iframe',
+          'update_callback' => null,
+          'schema'          => null,
+        )
+    );
     // register_rest_field( 'imported_event',
     //     'supporters',
     //     array(

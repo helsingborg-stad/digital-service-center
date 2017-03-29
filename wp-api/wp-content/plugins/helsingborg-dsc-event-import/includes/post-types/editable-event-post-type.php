@@ -34,13 +34,69 @@ function editable_event_post_type() {
 	add_theme_support('post-thumbnails');
 
 	function add_place_and_contact_metaboxes() {
+        //add_meta_box('test_iframe', 'Iframe', 'test_iframe', 'editable_event', 'advanced', 'default');
+        add_meta_box('event_iframe', 'Iframe', 'event_iframe', 'editable_event', 'normal', 'high');
         add_meta_box('event_occasions', 'Tidpunkter', 'event_occasions', 'editable_event', 'normal', 'high');
 		add_meta_box('event_location', 'Platsinformation', 'event_location', 'editable_event', 'normal', 'high');
         add_meta_box('event_organizers', 'Organisatör', 'event_organizers', 'editable_event', 'normal', 'high');
         add_meta_box('event_booking_information', 'Bokningsinformation', 'event_booking_information', 'editable_event', 'normal', 'high');
         add_meta_box('event_social_media', 'Sociala medier länkar', 'event_social_media', 'editable_event', 'normal', 'high');
         add_meta_box('event_media', 'Relaterad media länkar', 'event_media', 'editable_event', 'normal', 'high');
+        
 	}
+
+    function event_iframe() {
+        global $post;
+        echo '<input type="hidden" name="event_iframe_meta_noncename" id="event_iframe_meta_noncename" value="' . 
+		wp_create_nonce( plugin_basename(__FILE__) ) . '" />';
+        $iframe = get_post_meta($post->ID, 'event_iframe', false);
+        $check_active;
+        if( $iframe[0]['active'] == true) {
+            $check_active = 'checked="checked"';
+        }
+        echo '<div style="width: 200px; display: inline-block;">';
+        echo '<p>Iframe url</p>';
+        echo '<input type="text" name="iframe_src" id="iframe_src" value="' . $iframe[0]['src'] . '">';
+        echo '<p>Höjd</p>';
+        echo '<input type="number" min="0" name="iframe_height" id="iframe_height" value="' . $iframe[0]['height'] . '">';
+        echo '<p>Bredd</p>';
+        echo '<input type="number" min="0" name="iframe_width" id="iframe_width" value="' . $iframe[0]['width'] . '">';
+        echo '<p>Avgränsa höjd</p>';
+        echo '<input type="number" min="0" name="iframe_top_offset" id="iframe_top_offset" value="' . $iframe[0]['top_offset'] . '">';
+        echo '<p>Avgränsa från vänster</p>';
+        echo '<input type="number" min="0" name="iframe_left_offset" id="iframe_left_offset" value="' . $iframe[0]['left_offset'] . '">';
+        echo '<p>Använd iframe</p>';
+        echo '<input type="checkbox" min="0" name="iframe_active"' . $check_active . '>';
+        echo '</div>';
+        echo '<div style="margin-left: 50px; margin-top: 45px; display: inline-block; vertical-align: top; border: 2px solid #D5CC5A; overflow: hidden;">
+                <iframe scrolling="no" id="preview"></iframe>
+              </div>';
+    }
+
+    // function event_iframe() {
+    //     global $post;
+
+    //     echo '<input type="hidden" name="event_iframe_meta_noncename" id="event_iframe_meta_noncename" value="' . 
+	// 	wp_create_nonce( plugin_basename(__FILE__) ) . '" />';
+
+    //     $iframe = get_post_meta($post->ID, 'iframe', true);
+    //     $saved_iframes = get_option('saved_iframes');
+
+    //     if(count($saved_iframes)) {
+    //         echo '<select name="iframe_select">';
+    //         echo '<option>--Sparade iframes--</option>';
+    //         echo '<option value="no-iframe">--Ta bort--</option>';
+    //         foreach($saved_iframes as $saved_iframe) {
+    //             if($saved_iframe['iframe_name'] == $iframe['iframe_name']) {
+    //                 echo '<option value='.$saved_iframe['iframe_name'] . ' selected="selected">'.$saved_iframe['iframe_name'] .'</option>';
+    //             } else {
+    //                 echo '<option value='. $saved_iframe['iframe_name'] . '>' . $saved_iframe['iframe_name'] . '</option>';
+
+    //             }
+    //         }
+    //         echo '</select>';
+    //     }
+    // }
 
     function event_occasions() {
         global $post;
@@ -200,6 +256,23 @@ function editable_event_post_type() {
         echo '<p>Vimeo</p>';
 		echo '<input type="text" name="event-vimeo" value="' . $vimeo  . '" class="widefat" />';
     }
+
+    add_action('save_post', 'save_event_iframe_meta', 1, 2);
+
+    function save_event_iframe_meta($post_id, $post) {
+		$iframe_args = array(
+                'src' => $_POST['iframe_src'],
+                'height' => $_POST['iframe_height'],
+                'width' => $_POST['iframe_width'],
+                'top_offset' => $_POST['iframe_top_offset'],
+                'left_offset' => $_POST['iframe_left_offset'],
+                'active' => $_POST['iframe_active']
+            );
+
+        $event_meta['event_iframe'] = $iframe_args;        
+
+        save_event($post_id, $post, $event_meta, 'event_iframe_meta_noncename');            
+	}
 
     add_action('save_post', 'save_event_occasions_meta', 1, 2);
 
