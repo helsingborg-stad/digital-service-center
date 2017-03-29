@@ -73,31 +73,6 @@ function editable_event_post_type() {
               </div>';
     }
 
-    // function event_iframe() {
-    //     global $post;
-
-    //     echo '<input type="hidden" name="event_iframe_meta_noncename" id="event_iframe_meta_noncename" value="' . 
-	// 	wp_create_nonce( plugin_basename(__FILE__) ) . '" />';
-
-    //     $iframe = get_post_meta($post->ID, 'iframe', true);
-    //     $saved_iframes = get_option('saved_iframes');
-
-    //     if(count($saved_iframes)) {
-    //         echo '<select name="iframe_select">';
-    //         echo '<option>--Sparade iframes--</option>';
-    //         echo '<option value="no-iframe">--Ta bort--</option>';
-    //         foreach($saved_iframes as $saved_iframe) {
-    //             if($saved_iframe['iframe_name'] == $iframe['iframe_name']) {
-    //                 echo '<option value='.$saved_iframe['iframe_name'] . ' selected="selected">'.$saved_iframe['iframe_name'] .'</option>';
-    //             } else {
-    //                 echo '<option value='. $saved_iframe['iframe_name'] . '>' . $saved_iframe['iframe_name'] . '</option>';
-
-    //             }
-    //         }
-    //         echo '</select>';
-    //     }
-    // }
-
     function event_occasions() {
         global $post;
 
