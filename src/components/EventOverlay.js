@@ -1,8 +1,7 @@
-import React, { Component, PropTypes } from 'react';
-import Link from './Link';
+import React, { PropTypes } from 'react';
 import Scrollbars from 'react-custom-scrollbars';
-import './EventOverlay.css';
 import closeCrossSvg from '../media/close-cross.svg';
+import './EventOverlay.css';
 
 const EventOverlayBackdrop = ({children}) => (
   <div className='EventOverlayBackdrop'>{children}</div>
@@ -19,6 +18,7 @@ const getLocation = (event) => {
 
 const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
 const getDateFormatted = (dateStr) => {
   const date = new Date(dateStr);
   return {
@@ -36,7 +36,6 @@ const EventOverlay = ({event, handleClose}) => {
         <div className='EventOverlay-imgWrapper'>
           <img className='EventOverlay-img' src={event.imgUrl} />
         </div>
-        {/* TODO: Make less hacky height calculation*/}
         <Scrollbars style={{ marginTop: '1rem', width: 'calc(100% + 1rem)', height: 'calc( 80vh - 4.6875rem - 10.25rem - 2vh - (((76vw - 325px)*0.65)*0.5625)' }}>
         <span className='EventOverlay-content-scrollWrapper'>
         <h2 className='EventOverlay-heading'>{ event.name }</h2>
@@ -115,5 +114,3 @@ EventOverlay.propTypes = {
 };
 
 export default EventOverlay;
-// imgSrc
-// heading

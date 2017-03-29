@@ -105,6 +105,7 @@ export class LandingPage extends Component {
             {...eventsWithCoordinates(this.props.events)}
             visibleModals={this.state.visibleModals}
             handleToggleModalVisibility={this.toggleModalVisibility.bind(this)}
+            handleShowMoreInfo={this.changeOverlayEvent.bind(this)}
           />
           <EventShowcase>
             {this.props.events.map(event => (

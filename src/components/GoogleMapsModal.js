@@ -5,12 +5,11 @@ import classnames from 'classnames';
 
 import './GoogleMapsModal.css';
 
-const Modal = ({showMoreInfo, handleShowMoreClick, visible, eventData}) => {
+const Modal = ({onShowMoreInfo, visible, eventData}) => {
   return (
     <div
       className={classnames(
         'GoogleMapsModal',
-        showMoreInfo && 'GoogleMapsModal--expanded',
         visible && 'GoogleMapsModal--visible')
       }
     >
@@ -26,7 +25,10 @@ const Modal = ({showMoreInfo, handleShowMoreClick, visible, eventData}) => {
         <Link href='#asdf' className='GoogleMapsModal-button GoogleMapsModal-button--emphasized'>
           Navigate
         </Link>
-        <RippleButton onClick={handleShowMoreClick} className='GoogleMapsModal-button GoogleMapsModal-button--alignRight'>
+        <RippleButton
+          onClick={() => onShowMoreInfo(eventData.id)}
+          className='GoogleMapsModal-button GoogleMapsModal-button--alignRight'
+        >
           More info
         </RippleButton>
       </div>
@@ -35,8 +37,7 @@ const Modal = ({showMoreInfo, handleShowMoreClick, visible, eventData}) => {
 };
 
 Modal.propTypes = {
-  showMoreInfo: PropTypes.bool,
-  handleShowMoreClick: PropTypes.func,
+  onShowMoreInfo: PropTypes.func,
   visible: PropTypes.bool,
   eventData: PropTypes.shape({
     name: PropTypes.string,
@@ -45,25 +46,15 @@ Modal.propTypes = {
 };
 
 export default class GoogleMapsModal extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showMoreInfo: false
-    };
-  }
   render() {
     return (
       <Modal
         key={this.props.id}
-        handleShowMoreClick={this.handleShowMoreInfoClick.bind(this)}
-        showMoreInfo={this.state.showMoreInfo}
+        onShowMoreInfo={this.props.handleShowMoreInfo}
         visible={this.props.visible}
         eventData={this.props.eventData}
       />
     );
-  }
-  handleShowMoreInfoClick() {
-    this.setState({showMoreInfo: !this.state.showMoreInfo});
   }
 }
 
@@ -72,6 +63,7 @@ GoogleMapsModal.propTypes = {
   lng: PropTypes.number.isRequired,
   id: PropTypes.string.isRequired,
   visible: PropTypes.bool,
+  handleShowMoreInfo: PropTypes.func.isRequired,
   eventData: PropTypes.shape({
     name: PropTypes.string,
     content: PropTypes.string

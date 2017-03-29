@@ -8,8 +8,8 @@ const Marker = ({onClick}) => <div className='GoogleMaps-marker' onClick={onClic
 
 Marker.propTypes = { onClick: PropTypes.func.isRequired };
 
-const GoogleMaps = ({center, zoom, apiKey, lang, markers,
-                     visibleModals, handleToggleModalVisibility}) => {
+const GoogleMaps = ({center, zoom, apiKey, lang, markers, visibleModals,
+                     handleToggleModalVisibility, handleShowMoreInfo}) => {
   return (
     <div className='GoogleMaps-wrapper'>
       <GoogleMap
@@ -36,6 +36,7 @@ const GoogleMaps = ({center, zoom, apiKey, lang, markers,
               key={marker.id + '-modal'}
               visible={visibleModals.includes(marker.id)}
               eventData={marker.eventData}
+              handleShowMoreInfo={handleShowMoreInfo}
             />
           );
         }) }
@@ -51,7 +52,8 @@ GoogleMaps.propTypes = {
   center: PropTypes.object,
   apiKey: PropTypes.string,
   lang: PropTypes.string,
-  handleToggleModalVisibility: PropTypes.func
+  handleToggleModalVisibility: PropTypes.func,
+  handleShowMoreInfo: PropTypes.func
 };
 
 GoogleMaps.defaultProps = {
