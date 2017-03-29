@@ -6,6 +6,7 @@ import { SideNavigation, SideNavigationLink } from './SideNavigation';
 import GoogleMaps from './GoogleMaps';
 import { EventShowcase, Event } from './EventShowcase';
 import EventOverlay from './EventOverlay';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import AsideMenu from './AsideMenu';
 import Calendar from './Calendar';
 import WeatherWidget from './WeatherWidget';
@@ -117,12 +118,21 @@ export class LandingPage extends Component {
               onClick={this.changeOverlayEvent.bind(this)} />
             ))}
           </EventShowcase>
-          { this.state.visibleOverlayEvent &&
-            <EventOverlay
-              event={this.state.visibleOverlayEvent}
-              handleClose={() => this.changeOverlayEvent(null)}
-            />
-          }
+         <ReactCSSTransitionGroup
+            transitionName="EventOverlay-transitionGroup"
+            transitionEnterTimeout={300}
+            transitionLeaveTimeout={300}
+            transitionEnter={true}
+            transitionLeave={true}
+          >
+            { this.state.visibleOverlayEvent &&
+              <EventOverlay
+                key='event-overlay'
+                event={this.state.visibleOverlayEvent}
+                handleClose={() => this.changeOverlayEvent(null)}
+              />
+            }
+          </ReactCSSTransitionGroup>
         </main>
         <aside>
           <AsideMenu>

@@ -1,4 +1,26 @@
 
+.EventOverlay-transitionGroup-enter .EventOverlay,
+.EventOverlay-transitionGroup-leave .EventOverlay {
+  transform: scale(0.7);
+  opacity: 0;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+.EventOverlay-transitionGroup-enter-active .EventOverlay {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.EventOverlay-transitionGroup-enter.EventOverlayBackdrop,
+.EventOverlay-transitionGroup-leave.EventOverlayBackdrop {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.EventOverlay-transitionGroup-enter-active.EventOverlayBackdrop {
+  opacity: 1;
+}
+
 .EventOverlayBackdrop {
   position: fixed;
   width: 100%;

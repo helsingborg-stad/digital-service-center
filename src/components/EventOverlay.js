@@ -66,7 +66,7 @@ const EventOverlay = ({event, handleClose}) => {
           <h3>Date and time</h3>
           {event.occasions.map(occ => {
             return (
-              <div>
+              <div key={Math.random}>
                 <span className='EventOverlay-dateGraphic'>
                   {getDateFormatted(occ.startDate).day}
                   <br />
