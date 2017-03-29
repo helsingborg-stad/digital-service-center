@@ -14,7 +14,7 @@ const Modal = ({onShowMoreInfo, visible, eventData}) => {
       }
     >
       <div className='GoogleMapsModal-triangle' />
-      <div style={{float: 'left', width: '306px'}}>
+      <div>
         <img className='GoogleMapsModal-img' src={eventData.imgUrl} role='presentation' />
         <h4 className='GoogleMapsModal-heading'>{eventData.name}</h4>
         <div className='GoogleMapsModal-preamble'>
