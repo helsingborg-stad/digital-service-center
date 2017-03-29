@@ -1,0 +1,168 @@
+
+.EventOverlayBackdrop {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.EventOverlay {
+  position: fixed;
+  top: 6.6875rem;
+  left: 13vw;
+  width: calc(100% - 325px - 24vw);
+  height: calc( 80vh - 4.6875rem - 3.25rem - 2vh);
+  background: #fff;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.EventOverlay-main {
+  position: relative;
+  float: left;
+  width: 65%;
+  height: 100%;
+  padding: 2rem;
+}
+
+.EventOverlay-imgWrapper {
+  height: auto;
+  overflow: hidden;
+  padding: 56.25% 0 0 0; /* Force 16:9 aspect ratio */
+}
+
+.EventOverlay-img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.EventOverlay-heading {
+  font-size: 1.875rem;
+  margin: 0.8125rem 0;
+}
+
+.EventOverlay-content-scrollWrapper {
+  display: block;
+  margin: -1rem 1rem 0 0;
+}
+
+.EventOverlay-content {
+  font-size: 0.9375rem;
+  color: #535353;
+}
+
+.EventOverlay-content > p:first-of-type {
+  margin-top: 0;
+}
+
+.EventOverlay-buttonWrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 2rem;
+}
+
+.EventOverlay-button {
+  border: 0;
+  background: #c70d53;
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 0.8rem 1.25rem;
+  margin-right: 1.5rem;
+}
+
+.EventOverlay-aside {
+  width: 35%;
+  height: 100%;
+  float: left;
+  background: #f1f1f1;
+  padding: 1rem 1.5rem;
+}
+
+.EventOverlay-asideBox {
+  font-size: 0.8125rem;
+  padding: 0.75rem 0.8rem 1rem;
+  margin-bottom: 1rem;
+  background: #fff;
+}
+
+.EventOverlay-asideBox h3 {
+  font-size: 1rem;
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+}
+
+.EventOverlay-asideBox ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0.5rem;
+}
+
+.EventOverlay-asideBox li {
+  padding: 0.25rem 0;
+}
+
+.EventOverlay-asideBox a {
+  font-weight: 500;
+}
+
+.EventOverlay-closeButton-wrapper {
+  text-align: right;
+  margin-bottom: 1rem;
+}
+
+.EventOverlay-closeButton {
+  border: 0;
+  background: #fff;
+  border-radius: 50%;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0.25rem;
+  line-height: 1.45rem;
+  cursor: pointer;
+}
+
+.EventOverlay-closeButton > img {
+  width: 12px;
+  height: 12px;
+}
+
+.EventOverlay-dateGraphic {
+  display: inline-block;
+  width: 2rem;
+  height: 2rem;
+  font-size: 0.625rem;
+  padding: 0.3rem;
+  margin-top: 0.25rem;
+  text-align: center;
+  text-transform: uppercase;
+  color: #c70d53;
+  border: 1px solid rgba(199, 13, 83, 0.33); /* #c70d53 @ 33% opacity */
+  border-radius: 50%;
+  line-height: 0.625rem;
+  font-weight: bold;
+}
+
+.EventOverlay-dateGraphic__month {
+  font-size: 0.375rem;
+  font-weight: 500;
+}
+
+.EventOverlay-date {
+  display: inline-block;
+  line-height: 2rem;
+  transform: translateY(-3px);
+  padding-left: 0.33rem;
+}

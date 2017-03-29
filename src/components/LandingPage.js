@@ -5,6 +5,7 @@ import { SiteSubHeader, SiteSubHeaderLink } from './SiteSubHeader';
 import { SideNavigation, SideNavigationLink } from './SideNavigation';
 import GoogleMaps from './GoogleMaps';
 import { EventShowcase, Event } from './EventShowcase';
+import EventOverlay from './EventOverlay';
 import AsideMenu from './AsideMenu';
 import Calendar from './Calendar';
 import WeatherWidget from './WeatherWidget';
@@ -32,7 +33,8 @@ export class LandingPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      visibleModals: []
+      visibleModals: [],
+      visibleOverlayEvent: null
     };
   }
 
@@ -47,6 +49,12 @@ export class LandingPage extends Component {
     this.setState(visibleModals.includes(modalId)
       ? {visibleModals: visibleModals.filter(x => x !== modalId)}
       : {visibleModals: visibleModals.concat([modalId])});
+  }
+
+  changeOverlayEvent(eventId) {
+    this.setState({
+      visibleOverlayEvent: this.props.events.find(e => e.id === eventId) || null
+    });
   }
 
   componentDidMount() {
@@ -105,9 +113,15 @@ export class LandingPage extends Component {
               id={event.id}
               name={event.name}
               imgSrc={event.imgUrl}
-              onClick={this.toggleModalVisibility.bind(this)} />
+              onClick={this.changeOverlayEvent.bind(this)} />
             ))}
           </EventShowcase>
+          { this.state.visibleOverlayEvent &&
+            <EventOverlay
+              event={this.state.visibleOverlayEvent}
+              handleClose={() => this.changeOverlayEvent(null)}
+            />
+          }
         </main>
         <aside>
           <AsideMenu>
