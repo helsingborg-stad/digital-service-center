@@ -1,12 +1,15 @@
 import React from 'react';
 import Link from './Link';
+import {Link as RouterLink } from 'react-router';
 import Logo from './Logo';
 import './SiteSubHeader.css';
 
 export const SiteSubHeader = ({children, logoColor}) => {
   return (
     <div className='SiteSubHeader'>
-      <Logo className='SiteSubHeader-logo' color={logoColor} />
+      <RouterLink to='/'>
+        <Logo className='SiteSubHeader-logo' color={logoColor} />
+      </RouterLink>
       <span className='SiteSubHeaderLink-wrapper'>
       {children}
       </span>
