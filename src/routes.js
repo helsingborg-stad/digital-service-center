@@ -29,6 +29,7 @@ App.propTypes = {
   location: React.PropTypes.object
 };
 
+
 const Routes = (props = {}) => {
   let history = browserHistory;
 
@@ -41,11 +42,21 @@ const Routes = (props = {}) => {
       <Route path='/' component={App}>
         <IndexRoute component={Startpage} />
         <Route
-          path='visitor(/:event)'
+          path='visitor/category(/:category)'
           component={() => <LandingPage type='visitor' bgColor='#c70d53' />} />
         <Route
-          path='local(/:event)'
+          path='visitor(/:event)'
+          component={({params}) => (
+            <LandingPage type='visitor' bgColor='#c70d53' activeEvent={params.event} />
+          )} />
+        <Route
+          path='local/category/:event'
           component={() => <LandingPage type='local' bgColor='#ea671f' />} />
+        <Route
+          path='local(/:event)'
+          component={({params}) => (
+            <LandingPage type='local' bgColor='#ea671f' activeEvent={params.event} />
+          )} />
       </Route>
       <Route path='*'>
         <IndexRedirect to='/' />

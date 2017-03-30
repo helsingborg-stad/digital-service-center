@@ -54,6 +54,7 @@ function parse_imported_events($events) {
     $post_meta = get_post_meta($event->ID, 'imported_event_data', true);
     $response = [
       id         => $event->ID,
+      slug       => $event->post_name,
       name       => $event->post_title,
       content    => $event->post_content,
       shortContent => get_short_content($event->post_content),
@@ -94,6 +95,7 @@ function parse_editable_events($events) {
   return array_map(function($event) {
     return [
       id         => $event->ID,
+      slug       => $event->post_name,
       name       => $event->post_title,
       content    => $event->post_content,
       categories => array_map(function($category) {

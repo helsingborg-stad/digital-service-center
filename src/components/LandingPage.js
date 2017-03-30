@@ -35,7 +35,7 @@ export class LandingPage extends Component {
     super(props);
     this.state = {
       visibleModals: [],
-      visibleOverlayEvent: null
+      visibleOverlayEvent: props.activeEvent || null
     };
   }
 
@@ -52,9 +52,10 @@ export class LandingPage extends Component {
       : {visibleModals: visibleModals.concat([modalId])});
   }
 
-  changeOverlayEvent(eventId) {
+  changeOverlayEvent(eventSlug) {
+    const event = this.props.events.find(e => e.slug === eventSlug);
     this.setState({
-      visibleOverlayEvent: this.props.events.find(e => e.id === eventId) || null
+      visibleOverlayEvent: event ? event.slug : null
     });
   }
 
@@ -113,6 +114,7 @@ export class LandingPage extends Component {
             <Event
               key={event.id}
               id={event.id}
+              slug={event.slug}
               name={event.name}
               imgSrc={event.imgUrl}
               onClick={this.changeOverlayEvent.bind(this)} />
@@ -128,7 +130,7 @@ export class LandingPage extends Component {
             { this.state.visibleOverlayEvent &&
               <EventOverlay
                 key='event-overlay'
-                event={this.state.visibleOverlayEvent}
+                event={this.props.events.find(e => e.slug === this.state.visibleOverlayEvent)}
                 handleClose={() => this.changeOverlayEvent(null)}
               />
             }
@@ -152,7 +154,8 @@ LandingPage.propTypes = {
   events: PropTypes.any, // TODO
   landingPages: PropTypes.any, // TODO
   hasErrored: PropTypes.bool.isRequired,
-  isLoading: PropTypes.bool.isRequired
+  isLoading: PropTypes.bool.isRequired,
+  activeEvent: PropTypes.string
 };
 
 const mapStateToProps = (state) => {

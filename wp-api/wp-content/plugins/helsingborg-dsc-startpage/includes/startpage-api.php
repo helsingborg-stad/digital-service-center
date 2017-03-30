@@ -83,7 +83,7 @@ function get_visitor_or_local_tags($type) {
     $category = get_category($category_id);
     return [
       name => html_entity_decode($category->name),
-      href => '/' . $type . '/' . $category->slug
+      href => '/' . $type . '/category/' . $category->slug
     ];
   }, get_categories_for_posts($all_events));
 }
