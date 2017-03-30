@@ -26,7 +26,7 @@ const Modal = ({onShowMoreInfo, visible, eventData}) => {
           Navigate
         </Link>
         <RippleButton
-          onClick={() => onShowMoreInfo(eventData.id)}
+          onClick={() => onShowMoreInfo(eventData.slug)}
           className='GoogleMapsModal-button GoogleMapsModal-button--alignRight'
         >
           More info
