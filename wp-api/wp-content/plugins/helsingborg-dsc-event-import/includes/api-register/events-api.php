@@ -55,7 +55,7 @@ function parse_imported_events($events) {
     $response = [
       id         => $event->ID,
       slug       => $event->post_name,
-      name       => $event->post_title,
+      name       => html_entity_decode($event->post_title),
       content    => $event->post_content,
       shortContent => get_short_content($event->post_content),
       categories => array_map(function($category) {
@@ -96,7 +96,7 @@ function parse_editable_events($events) {
     return [
       id         => $event->ID,
       slug       => $event->post_name,
-      name       => $event->post_title,
+      name       => html_entity_decode($event->post_title),
       content    => $event->post_content,
       categories => array_map(function($category) {
         return [
