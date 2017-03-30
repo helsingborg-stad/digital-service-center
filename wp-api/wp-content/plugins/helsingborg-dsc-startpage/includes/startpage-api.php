@@ -44,10 +44,11 @@ function get_preamble($post_content) {
   if ($contains_more_html_comment) {
     $post_content = substr($post_content, 0, strpos($post_content, "<!--more-->"));
     $post_content = preg_replace('/<p>/', '', $post_content);
+    $post_content = preg_replace('/</p>/', '', $post_content);
   }
-  $decoded = html_entity_decode($post_content);
+  $decoded = strip_tags(html_entity_decode($post_content));
   return strlen($decoded) > 100
-    ? substr(html_entity_decode($post_content), 0, 100) . '...'
+    ? substr($decoded, 0, 100) . '...'
     : $decoded;
 }
 
