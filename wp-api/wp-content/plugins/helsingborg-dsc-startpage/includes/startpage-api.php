@@ -42,9 +42,9 @@ function get_categories_for_posts($posts) {
 function get_preamble($post_content) {
   $contains_more_html_comment = preg_match('/<!--more-->/', $post_content);
   if ($contains_more_html_comment) {
+    // Get all text before "<!--more-->" and strip all <p> tags manually
     $post_content = substr($post_content, 0, strpos($post_content, "<!--more-->"));
-    $post_content = preg_replace('/<p>/', '', $post_content);
-    $post_content = preg_replace('/</p>/', '', $post_content);
+    $post_content = preg_replace('/<p[^>]*>(.*)<\/p[^>]*>/i', '$1', $post_content);
   }
   $decoded = strip_tags(html_entity_decode($post_content));
   return strlen($decoded) > 100
