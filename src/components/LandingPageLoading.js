@@ -22,6 +22,7 @@ export class LandingPageLoading extends Component {
             <Event
               key={Math.random()}
               id=''
+              slug=''
               name=''
               onClick={() => {}} />
             ))}

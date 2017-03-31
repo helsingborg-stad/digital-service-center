@@ -59,7 +59,7 @@ export class Event extends Component {
 Event.propTypes = {
   onClick: React.PropTypes.func.isRequired,
   id: React.PropTypes.any,
-  slug: React.PropTypes.slug,
+  slug: React.PropTypes.string,
   name: React.PropTypes.string.isRequired,
   imgSrc: React.PropTypes.string
 };

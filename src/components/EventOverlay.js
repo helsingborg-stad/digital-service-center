@@ -57,7 +57,7 @@ const EventOverlay = ({event, handleClose}) => {
       <div className='EventOverlay-aside'>
         <div className='EventOverlay-closeButton-wrapper'>
           <button className='EventOverlay-closeButton' onClick={handleClose}>
-            <img src={closeCrossSvg} />
+            <img src={closeCrossSvg} alt="Close" />
           </button>
         </div>
         { event.occasions && event.occasions.length &&

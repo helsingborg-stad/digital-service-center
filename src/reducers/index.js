@@ -3,6 +3,7 @@ import { routerReducer } from 'react-router-redux';
 import { startpage, startpageHasErrored, startpageIsLoading } from './startpage';
 import { events, eventsHasErrored, eventsAreLoading } from './events';
 import { landingPages } from './landingPages';
+import { iframeUrl } from './iframeUrl';
 
 export default combineReducers({
   startpage,
@@ -12,5 +13,6 @@ export default combineReducers({
   eventsHasErrored,
   eventsAreLoading,
   landingPages,
+  iframeUrl,
   routing: routerReducer
 });

@@ -85,7 +85,7 @@ SiteHeader.defaultProps = {
 export class SiteHeaderLink extends Component {
   render() {
     return (
-      <Link className='SiteHeaderLink' href={this.props.href}>
+      <Link className='SiteHeaderLink' iframe={{ url: this.props.href}}>
         {this.props.name}
       </Link>
     );

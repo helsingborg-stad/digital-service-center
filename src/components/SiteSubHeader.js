@@ -26,7 +26,7 @@ SiteSubHeader.propTypes = {
 };
 
 export const SiteSubHeaderLink = ({name, href}) => {
-  return <Link className='SiteSubHeaderLink' href={href}>{name}</Link>;
+  return <Link className='SiteSubHeaderLink' iframe={{url: href}}>{name}</Link>;
 };
 
 SiteSubHeaderLink.propTypes = {

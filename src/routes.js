@@ -1,34 +1,10 @@
 import React from 'react';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { Router, Route, browserHistory, IndexRedirect, IndexRoute } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
-import Startpage from './components/Startpage.js';
-import LandingPage from './components/LandingPage.js';
-
-const App = ({ children, location }) => (
-  <div>
-    <ReactCSSTransitionGroup
-      component='div'
-      transitionName='pageChange'
-      transitionEnterTimeout={600}
-      transitionLeaveTimeout={600}
-    >
-      {React.cloneElement(children, {
-        key: location.pathname
-      })}
-    </ReactCSSTransitionGroup>
-  </div>
-);
-
-App.propTypes = {
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.node),
-    React.PropTypes.node
-  ]),
-  location: React.PropTypes.object
-};
-
+import App from './components/App';
+import Startpage from './components/Startpage';
+import LandingPage from './components/LandingPage';
 
 const Routes = (props = {}) => {
   let history = browserHistory;
