@@ -36,7 +36,7 @@ export class Event extends Component {
         role='button'
         className='Event'
         style={{position: 'relative', overflow: 'hidden', cursor: 'pointer'}}
-        onClick={() => this.props.onClick(this.props.id)}
+        onClick={() => this.props.onClick(this.props.slug)}
         onMouseUp={ this.handleClick.bind(this) }
       >
         <img className='Event-img' src={this.props.imgSrc} alt='' />
@@ -59,6 +59,7 @@ export class Event extends Component {
 Event.propTypes = {
   onClick: React.PropTypes.func.isRequired,
   id: React.PropTypes.any,
+  slug: React.PropTypes.slug,
   name: React.PropTypes.string.isRequired,
   imgSrc: React.PropTypes.string
 };

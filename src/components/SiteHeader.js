@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './SiteHeader.css';
 import Link from './Link';
+import { Link as RouterLink } from 'react-router';
 import SearchField from './SearchField';
 import ReactInterval from 'react-interval';
 
@@ -31,7 +32,9 @@ export class SiteHeader extends Component {
       <div className='SiteHeader' style={{backgroundColor: this.props.bgColor}}>
         <Row>
           <Column>
-            <h1 className='SiteHeader-heading'>{this.props.heading}</h1>
+            <RouterLink to='/'>
+              <h1 className='SiteHeader-heading'>{this.props.heading}</h1>
+            </RouterLink>
           </Column>
           <Column>
           { this.props.children }

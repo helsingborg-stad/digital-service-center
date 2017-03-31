@@ -5,6 +5,8 @@ import { SiteSubHeader, SiteSubHeaderLink } from './SiteSubHeader';
 import { SideNavigation, SideNavigationLink } from './SideNavigation';
 import GoogleMaps from './GoogleMaps';
 import { EventShowcase, Event } from './EventShowcase';
+import EventOverlay from './EventOverlay';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import AsideMenu from './AsideMenu';
 import Calendar from './Calendar';
 import WeatherWidget from './WeatherWidget';
@@ -32,7 +34,8 @@ export class LandingPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      visibleModals: []
+      visibleModals: [],
+      visibleOverlayEvent: props.activeEvent || null
     };
   }
 
@@ -47,6 +50,13 @@ export class LandingPage extends Component {
     this.setState(visibleModals.includes(modalId)
       ? {visibleModals: visibleModals.filter(x => x !== modalId)}
       : {visibleModals: visibleModals.concat([modalId])});
+  }
+
+  changeOverlayEvent(eventSlug) {
+    const event = this.props.events.find(e => e.slug === eventSlug);
+    this.setState({
+      visibleOverlayEvent: event ? event.slug : null
+    });
   }
 
   componentDidMount() {
@@ -97,17 +107,34 @@ export class LandingPage extends Component {
             {...eventsWithCoordinates(this.props.events)}
             visibleModals={this.state.visibleModals}
             handleToggleModalVisibility={this.toggleModalVisibility.bind(this)}
+            handleShowMoreInfo={this.changeOverlayEvent.bind(this)}
           />
           <EventShowcase>
             {this.props.events.map(event => (
             <Event
               key={event.id}
               id={event.id}
+              slug={event.slug}
               name={event.name}
               imgSrc={event.imgUrl}
-              onClick={this.toggleModalVisibility.bind(this)} />
+              onClick={this.changeOverlayEvent.bind(this)} />
             ))}
           </EventShowcase>
+         <ReactCSSTransitionGroup
+            transitionName="EventOverlay-transitionGroup"
+            transitionEnterTimeout={300}
+            transitionLeaveTimeout={300}
+            transitionEnter={true}
+            transitionLeave={true}
+          >
+            { this.state.visibleOverlayEvent &&
+              <EventOverlay
+                key='event-overlay'
+                event={this.props.events.find(e => e.slug === this.state.visibleOverlayEvent)}
+                handleClose={() => this.changeOverlayEvent(null)}
+              />
+            }
+          </ReactCSSTransitionGroup>
         </main>
         <aside>
           <AsideMenu>
@@ -127,7 +154,8 @@ LandingPage.propTypes = {
   events: PropTypes.any, // TODO
   landingPages: PropTypes.any, // TODO
   hasErrored: PropTypes.bool.isRequired,
-  isLoading: PropTypes.bool.isRequired
+  isLoading: PropTypes.bool.isRequired,
+  activeEvent: PropTypes.string
 };
 
 const mapStateToProps = (state) => {

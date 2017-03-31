@@ -21,9 +21,6 @@
   visibility: visible;
 }
 
-.GoogleMapsModal--expanded {
-  width: 685px;
-}
 
 .GoogleMapsModal-triangle {
    width: 40px;
@@ -52,10 +49,6 @@
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
   width: 330px;
-}
-
-.GoogleMapsModal--expanded .GoogleMapsModal-img {
-  border-top-right-radius: 0;
 }
 
 .GoogleMapsModal-heading {

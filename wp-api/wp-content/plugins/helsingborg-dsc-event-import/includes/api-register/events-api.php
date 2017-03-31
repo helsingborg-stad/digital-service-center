@@ -54,7 +54,8 @@ function parse_imported_events($events) {
     $post_meta = get_post_meta($event->ID, 'imported_event_data', true);
     $response = [
       id         => $event->ID,
-      name       => $event->post_title,
+      slug       => $event->post_name,
+      name       => html_entity_decode($event->post_title),
       content    => $event->post_content,
       shortContent => get_short_content($event->post_content),
       categories => array_map(function($category) {
@@ -92,9 +93,10 @@ function parse_imported_events($events) {
 
 function parse_editable_events($events) {
   return array_map(function($event) {
-    return [
+    $response = [
       id         => $event->ID,
-      name       => $event->post_title,
+      slug       => $event->post_name,
+      name       => html_entity_decode($event->post_title),
       content    => $event->post_content,
       categories => array_map(function($category) {
         return [
@@ -103,7 +105,12 @@ function parse_editable_events($events) {
           slug => $category->slug
         ];
       }, get_the_category($event->ID)),
-      // TODO: add occasion, location, et al
+    // TODO: add occasion, location, et al
     ];
+    $thumbnail_url = get_the_post_thumbnail_url($event->ID);
+    if ($thumbnail_url) {
+      $response['imgUrl'] = $thumbnail_url;
+    }
+    return $response;
   }, $events);
 }
