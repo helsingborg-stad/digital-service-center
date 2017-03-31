@@ -126,7 +126,7 @@ function register_imported_event_meta_fields() {
           'schema'          => null,
         )
     );
-    register_rest_field( array('editable_event'),
+    register_rest_field( array('editable_event', 'page'),
         'iframe',
         array(
           'get_callback'    => 'get_event_iframe',

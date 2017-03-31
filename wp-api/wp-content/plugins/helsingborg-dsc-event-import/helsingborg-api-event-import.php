@@ -23,6 +23,7 @@ function helsingborg_api_event_import_init() {
 include('includes/post-types/import-event-post-type.php');
 include('includes/post-types/editable-event-post-type.php');
 include('includes/post-types/imported-taxonomy.php');
+include('includes/post-types/iframe-page-meta.php');
 include('includes/post-types/load-scripts.php');
 
 include('includes/api-register/api-meta-callbacks.php');
