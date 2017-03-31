@@ -93,7 +93,7 @@ function parse_imported_events($events) {
 
 function parse_editable_events($events) {
   return array_map(function($event) {
-    return [
+    $response = [
       id         => $event->ID,
       slug       => $event->post_name,
       name       => html_entity_decode($event->post_title),
@@ -105,7 +105,12 @@ function parse_editable_events($events) {
           slug => $category->slug
         ];
       }, get_the_category($event->ID)),
-      // TODO: add occasion, location, et al
+    // TODO: add occasion, location, et al
     ];
+    $thumbnail_url = get_the_post_thumbnail_url($event->ID);
+    if ($thumbnail_url) {
+      $response['imgUrl'] = $thumbnail_url;
+    }
+    return $response;
   }, $events);
 }
