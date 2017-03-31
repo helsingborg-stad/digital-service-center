@@ -93,10 +93,13 @@ function helsingborg_dsc_startpage_response() {
     return rest_ensure_response([
       backgroundUrl => get_option('hdsc-startpage-setting-background-url'),
       heading => get_option('hdsc-startpage-setting-heading', 'Digital Service Center'),
-      topLinks => array_map(function($pageId) {
+      topLinks => array_values(array_filter(array_map(function($pageId) {
         $page = get_post($pageId);
-        return [name => $page->post_title, href => $page->post_name];
+        $iframeMeta = get_post_meta($pageId, 'event_iframe', true);
+        $iframeUrl = $iframeMeta['src'];
+        return [name => $page->post_title, href => $iframeUrl];
       }, get_option('hdsc-startpage-setting-top-links', [])),
+      function ($link) { return strlen($link['href']) > 0; })),
 
       visitorHeading => get_option('hdsc-startpage-setting-visitor-heading', 'Visitor'),
       visitorTags => get_visitor_or_local_tags('visitor'),

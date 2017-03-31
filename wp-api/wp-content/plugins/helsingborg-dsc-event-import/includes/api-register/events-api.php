@@ -30,11 +30,17 @@ function helsingborg_dsc_events_response() {
 }
 
 function get_links_for_option($option) {
-  return array_map(function($pageId) {
+  $posts = array_map(function($pageId) {
       $page = get_post($pageId);
-      return [name => $page->post_title, href => $page->post_name];
+      $iframeMeta = get_post_meta($pageId, 'event_iframe', true);
+      $iframeUrl = $iframeMeta['src'];
+      return [name => $page->post_title, href => $iframeUrl];
     }, get_option($option, [])
   );
+  $postsWithIframe = array_values(array_filter($posts, function ($link) {
+    return strlen($link['href']) > 0; }
+  ));
+  return $postsWithIframe;
 }
 
 function get_short_content($post_content) {
