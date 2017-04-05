@@ -18,7 +18,7 @@ function get_all_categories($post, $field_name, $request)
     $imported_category = wp_get_post_terms($post['id'], 'imported_category');
     $categories = wp_get_post_terms($post['id'], 'category');
     $all_categories = array();
-    
+
     foreach($imported_category as $imported_category) {
         array_push($all_categories, array(
             'term_id' => $imported_category->term_id,

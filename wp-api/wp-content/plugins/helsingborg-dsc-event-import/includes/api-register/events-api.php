@@ -85,8 +85,9 @@ function parse_imported_events($events) {
         postalCode => $post_meta->location->postal_code,
         latitude => floatval($post_meta->location->latitude),
         longitude => floatval($post_meta->location->longitude)
-      ]
-      // TODO: Add social media links, et al
+      ],
+      youtubeUrl => $post_meta->youtube,
+      vimeoUrl => $post_meta->vimeo
     ];
 
     $thumbnail_url = get_the_post_thumbnail_url($event->ID);
@@ -111,12 +112,38 @@ function parse_editable_events($events) {
           slug => $category->slug
         ];
       }, get_the_category($event->ID)),
-    // TODO: add occasion, location, et al
     ];
+
     $thumbnail_url = get_the_post_thumbnail_url($event->ID);
     if ($thumbnail_url) {
       $response['imgUrl'] = $thumbnail_url;
     }
+
+    $occasion = get_post_meta($event->ID, 'occasions', true);
+    $response['occasions'] = [[
+      startDate => $occasion['start_date'],
+      endDate => $occasion['end_date'],
+      doorTime => $occasion['door_time']
+    ]];
+
+    $location = get_post_meta($event->ID, 'location', true);
+    $response['location'] = [
+      streetAddress => $location['street_address'],
+      postalCode => $location['postal_code'],
+      latitude => floatval($location['latitude']),
+      longitude => floatval($location['longitude'])
+    ];
+
+    $youtubeUrl = get_post_meta($event->ID, 'youtube', true);
+    if ($youtubeUrl) {
+      $response['youtubeUrl'] = $youtubeUrl;
+    }
+
+    $vimeoUrl = get_post_meta($event->ID, 'vimeo', true);
+    if ($vimeoUrl) {
+      $response['vimeoUrl'] = $vimeoUrl;
+    }
+
     return $response;
   }, $events);
 }
