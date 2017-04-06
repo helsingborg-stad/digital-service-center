@@ -90,6 +90,15 @@ function parse_imported_events($events) {
       vimeoUrl => $post_meta->vimeo
     ];
 
+    if ($post_meta->booking_link) {
+      $response['bookingLink'] = $post_meta->booking_link;
+    }
+
+    $organizer = $post_meta->organizers && $post_meta->organizers[0] ? $post_meta->organizers[0] : null;
+    if ($organizer && $organizer->contacts && $organizer->contacts[0] && strlen($organizer->contacts[0]->email)) {
+      $response['contact'] = $organizer->contacts[0]->email;
+    }
+
     $thumbnail_url = get_the_post_thumbnail_url($event->ID);
     if ($thumbnail_url) {
       $response['imgUrl'] = $thumbnail_url;
@@ -117,6 +126,11 @@ function parse_editable_events($events) {
     $thumbnail_url = get_the_post_thumbnail_url($event->ID);
     if ($thumbnail_url) {
       $response['imgUrl'] = $thumbnail_url;
+    }
+
+    $booking_link = get_post_meta($event->ID, 'booking_link', true);
+    if ($booking_link) {
+      $response['bookingLink'] = $booking_link;
     }
 
     $occasion = get_post_meta($event->ID, 'occasions', true);

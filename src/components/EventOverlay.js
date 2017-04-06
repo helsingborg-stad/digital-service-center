@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Scrollbars from 'react-custom-scrollbars';
+import Link from './Link';
 import closeCrossSvg from '../media/close-cross.svg';
 import './EventOverlay.css';
 import ReactPlayer from 'react-player';
@@ -88,9 +89,11 @@ const EventOverlay = ({event, handleClose, showVideoButton, onVideoButtonClick})
         <a href='#asdf' className='EventOverlay-button'>
           Take me there
         </a>
-        <a href='#asdf' className='EventOverlay-button'>
+        { event.bookingLink &&
+        <Link iframe={{url:event.bookingLink}} className='EventOverlay-button'>
           Tickets
-        </a>
+        </Link>
+        }
         { showVideoButton &&
         <button className='EventOverlay-videoButton' onClick={onVideoButtonClick}>
           Video
@@ -116,10 +119,14 @@ const EventOverlay = ({event, handleClose, showVideoButton, onVideoButtonClick})
         { getLocation(event) }
       </div>
       }
+      { event.contact &&
       <div className='EventOverlay-asideBox'>
         <h3>Contact</h3>
-        <a href='#'>info@helsingborg.se</a>
+        <a href={`mailto:${event.contact}`}>{event.contact}</a>
       </div>
+      }
+      {/*TODO: implement moreinformation links from back-end*/}
+      { event.moreInformation &&
       <div className='EventOverlay-asideBox'>
         <h3>More information</h3>
         <ul>
@@ -130,6 +137,7 @@ const EventOverlay = ({event, handleClose, showVideoButton, onVideoButtonClick})
           <li><a href='#asdf'>When flowers rhodedendron</a></li>
         </ul>
       </div>
+      }
     </div>
   </div>
   );
