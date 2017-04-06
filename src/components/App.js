@@ -22,7 +22,11 @@ const App = ({ children, location, iframe, closeIframe }) => (
       transitionEnterTimeout={300}
       transitionLeaveTimeout={300}
     >
-      { iframe && <IframeOverlay url={iframe} handleClose={closeIframe} /> }
+      { iframe &&
+      <IframeOverlay
+        url={iframe.url} maxWidth={iframe.width} maxHeight={iframe.height}
+        offsetTop={iframe.offsetTop} offsetLeft={iframe.offsetLeft} handleClose={closeIframe} />
+      }
     </ReactCSSTransitionGroup>
   </div>
 );
@@ -33,7 +37,7 @@ App.propTypes = {
     React.PropTypes.node
   ]),
   location: React.PropTypes.object,
-  iframe: React.PropTypes.string,
+  iframe: React.PropTypes.object,
   closeIframe: React.PropTypes.func
 };
 

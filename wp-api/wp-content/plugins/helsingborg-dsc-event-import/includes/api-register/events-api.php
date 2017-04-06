@@ -33,13 +33,21 @@ function get_links_for_option($option) {
   $posts = array_map(function($pageId) {
       $page = get_post($pageId);
       $iframeMeta = get_post_meta($pageId, 'event_iframe', true);
-      $iframeUrl = $iframeMeta['src'];
-      return [name => $page->post_title, href => $iframeUrl];
+      return [
+        name => $page->post_title,
+        url => $iframeMeta['src'],
+        active => $iframeMeta['active'] == 'on',
+        width => intval($iframeMeta['width'] ?? 0),
+        height => intval($iframeMeta['height'] ?? 0),
+        offsetTop => intval($iframeMeta['top_offset'] ?? 0),
+        offsetLeft => intval($iframeMeta['left_offset'] ?? 0)
+      ];
     }, get_option($option, [])
   );
   $postsWithIframe = array_values(array_filter($posts, function ($link) {
-    return strlen($link['href']) > 0; }
+    return $link['active'] && strlen($link['url']) > 0; }
   ));
+  unset($postsWithIframe[0]['active']); // Remove 'active' property, since it's irrelevant for the API response
   return $postsWithIframe;
 }
 

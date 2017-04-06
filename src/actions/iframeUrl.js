@@ -1,7 +1,7 @@
 
-export function iframeUrl(url) {
+export function iframeUrl(iframe) {
   return {
     type: 'IFRAME_URL',
-    url
+    iframe
   };
 }

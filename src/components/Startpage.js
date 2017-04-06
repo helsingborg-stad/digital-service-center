@@ -50,10 +50,7 @@ export class Startpage extends Component {
           <MultimediaBackground backgroundUrl={this.props.data.backgroundUrl}>
             <TopBar>
               { this.props.data.topLinks.map(topLink => (
-                <TopBarLink
-                  key={topLink.href + topLink.name}
-                  href={topLink.href}
-                  linkName={topLink.name} />
+                <TopBarLink key={topLink.href + topLink.name} topLink={topLink} />
               ))}
             </TopBar>
             <h1 className='Startpage-heading'>{this.props.data.heading}</h1>
