@@ -13,6 +13,7 @@ add_action('admin_init', function() {
   register_setting( 'hdsc-landing-settings', 'hdsc-landing-settings-heading-local');
   register_setting( 'hdsc-landing-settings', 'hdsc-landing-settings-top-links-local');
   register_setting( 'hdsc-landing-settings', 'hdsc-landing-settings-sub-top-links-local');
+  register_setting( 'hdsc-landing-settings', 'hdsc-landing-settings-free-wifi-page');
 });
 
 function hdsc_landing_get_selectable_links_for_option($option) {
@@ -116,6 +117,22 @@ function hdsc_landing_menu_callback() {
       </tr>
 
       </tbody></table>
+      <h3>Free wifi</h3>
+      <table class="form-table">
+        <tr>
+          <th><label for="hdsc-landing-settings-free-wifi-page">Link</label></th>
+          <td>
+          <?php
+          $current_selected_wifi_page = get_option('hdsc-landing-settings-free-wifi-page');
+          $args = [
+            'name' => 'hdsc-landing-settings-free-wifi-page',
+            'selected' => $current_selected_wifi_page
+          ];
+          wp_dropdown_pages($args); 
+          ?>
+          </td>
+        </tr>
+      </table>
       <?php submit_button(); ?>
     </form>
   </div>
