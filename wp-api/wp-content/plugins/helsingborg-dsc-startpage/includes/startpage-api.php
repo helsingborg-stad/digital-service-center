@@ -89,18 +89,32 @@ function get_visitor_or_local_tags($type) {
   }, get_categories_for_posts($all_events));
 }
 
+function get_top_links($pages) {
+  $posts = array_map(function($pageId) {
+    $page = get_post($pageId);
+    $iframeMeta = get_post_meta($pageId, 'event_iframe', true);
+    return [
+      name => $page->post_title,
+      url => $iframeMeta['src'],
+      active => $iframeMeta['active'] == 'on',
+      width => intval($iframeMeta['width'] ?? 0),
+      height => intval($iframeMeta['height'] ?? 0),
+      offsetTop => intval($iframeMeta['top_offset'] ?? 0),
+      offsetLeft => intval($iframeMeta['left_offset'] ?? 0)
+    ];
+  }, $pages);
+  $postsWithIframe = array_values(array_filter($posts, function ($link) {
+    return $link['active'] && strlen($link['url']) > 0; }
+  ));
+  unset($postsWithIframe[0]['active']); // Remove 'active' property, since it's irrelevant for the API response
+  return $postsWithIframe;
+}
+
 function helsingborg_dsc_startpage_response() {
     return rest_ensure_response([
       backgroundUrl => get_option('hdsc-startpage-setting-background-url'),
       heading => get_option('hdsc-startpage-setting-heading', 'Digital Service Center'),
-      topLinks => array_values(array_filter(array_map(function($pageId) {
-        $page = get_post($pageId);
-        $iframeMeta = get_post_meta($pageId, 'event_iframe', true);
-        $iframeUrl = $iframeMeta['src'];
-        return [name => $page->post_title, href => $iframeUrl];
-      }, get_option('hdsc-startpage-setting-top-links', [])),
-      function ($link) { return strlen($link['href']) > 0; })),
-
+      topLinks => get_top_links(get_option('hdsc-startpage-setting-top-links', [])),
       visitorHeading => get_option('hdsc-startpage-setting-visitor-heading', 'Visitor'),
       visitorTags => get_visitor_or_local_tags('visitor'),
       visitorPosts => get_visitor_or_local_posts('visitor'),

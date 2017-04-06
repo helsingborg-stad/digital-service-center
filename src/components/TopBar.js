@@ -22,14 +22,13 @@ TopBar.propTypes = {
 export class TopBarLink extends Component {
   render() {
     return (
-      <Link className='TopBarLink' iframe={{url: this.props.href}}>
-        {this.props.linkName}
+      <Link className='TopBarLink' iframe={this.props.topLink}>
+        {this.props.topLink.name}
       </Link>
     );
   }
 }
 
 TopBarLink.propTypes = {
-  href: React.PropTypes.string.isRequired,
-  linkName: React.PropTypes.string.isRequired
+  topLink: React.PropTypes.object.isRequired
 };

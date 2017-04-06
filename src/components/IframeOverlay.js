@@ -10,7 +10,7 @@ IframeOverlayBackdrop.propTypes = {
   children: PropTypes.element.isRequired
 };
 
-const IframeOverlay = ({url, handleClose}) => {
+const IframeOverlay = ({url, maxWidth, maxHeight, offsetTop, offsetLeft, handleClose}) => {
   return (
   <IframeOverlayBackdrop>
     <div className='IframeOverlay'>
@@ -19,15 +19,23 @@ const IframeOverlay = ({url, handleClose}) => {
           <img src={closeCrossSvg} alt="Close" />
         </button>
       </div>
-      <iframe
-        frameBorder="0"
-        marginHeight="0"
-        marginWidth="0"
-        width="100%"
-        height="100%"
-        style={{borderRadius: '5px'}}
-        src={url}
-      />
+      <div style={{overflow: 'hidden', width: '100%', height: '100%', textAlign: 'center'}}>
+        <iframe
+          frameBorder="0"
+          marginHeight="0"
+          marginWidth="0"
+          width="100%"
+          height="100%"
+          style={{
+            borderRadius: '5px',
+            maxWidth: maxWidth > 0 ? maxWidth : 'none',
+            maxHeight: maxHeight > 0 ? maxHeight : 'none',
+            marginTop: -offsetTop,
+            marginLeft: -offsetLeft
+          }}
+          src={url}
+        />
+      </div>
     </div>
   </IframeOverlayBackdrop>
   );
@@ -35,7 +43,18 @@ const IframeOverlay = ({url, handleClose}) => {
 
 IframeOverlay.propTypes = {
   handleClose: PropTypes.func.isRequired,
-  url: PropTypes.string.isRequired
+  url: PropTypes.string.isRequired,
+  maxWidth: PropTypes.number,
+  maxHeight: PropTypes.number,
+  offsetTop: PropTypes.number,
+  offsetLeft: PropTypes.number
+};
+
+IframeOverlay.defaultProps = {
+  maxWidth: 0,
+  maxHeight: 0,
+  offsetTop: 0,
+  offsetLeft: 0
 };
 
 export default IframeOverlay;

@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import InactivityMonitor from './util/inactivityMonitor';
 import './index.css';
 
 import configureStore from './store/configureStore';
@@ -28,6 +29,14 @@ if (process.env.NODE_ENV === 'development') {
       return [newUrl, config];
     }
   });
+}
+
+if (window && process.env.NODE_ENV !== 'development') {
+  // eslint-disable-next-line no-new
+  new InactivityMonitor({
+    timeout: 3 * 60 * 1000,
+    idleAction: () => window.location.assign(location.origin)}
+  );
 }
 
 ReactDOM.render(

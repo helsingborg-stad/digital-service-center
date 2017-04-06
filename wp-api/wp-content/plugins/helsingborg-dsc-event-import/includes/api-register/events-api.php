@@ -33,13 +33,21 @@ function get_links_for_option($option) {
   $posts = array_map(function($pageId) {
       $page = get_post($pageId);
       $iframeMeta = get_post_meta($pageId, 'event_iframe', true);
-      $iframeUrl = $iframeMeta['src'];
-      return [name => $page->post_title, href => $iframeUrl];
+      return [
+        name => $page->post_title,
+        url => $iframeMeta['src'],
+        active => $iframeMeta['active'] == 'on',
+        width => intval($iframeMeta['width'] ?? 0),
+        height => intval($iframeMeta['height'] ?? 0),
+        offsetTop => intval($iframeMeta['top_offset'] ?? 0),
+        offsetLeft => intval($iframeMeta['left_offset'] ?? 0)
+      ];
     }, get_option($option, [])
   );
   $postsWithIframe = array_values(array_filter($posts, function ($link) {
-    return strlen($link['href']) > 0; }
+    return $link['active'] && strlen($link['url']) > 0; }
   ));
+  unset($postsWithIframe[0]['active']); // Remove 'active' property, since it's irrelevant for the API response
   return $postsWithIframe;
 }
 
@@ -85,9 +93,19 @@ function parse_imported_events($events) {
         postalCode => $post_meta->location->postal_code,
         latitude => floatval($post_meta->location->latitude),
         longitude => floatval($post_meta->location->longitude)
-      ]
-      // TODO: Add social media links, et al
+      ],
+      youtubeUrl => $post_meta->youtube,
+      vimeoUrl => $post_meta->vimeo
     ];
+
+    if ($post_meta->booking_link) {
+      $response['bookingLink'] = $post_meta->booking_link;
+    }
+
+    $organizer = $post_meta->organizers && $post_meta->organizers[0] ? $post_meta->organizers[0] : null;
+    if ($organizer && $organizer->contacts && $organizer->contacts[0] && strlen($organizer->contacts[0]->email)) {
+      $response['contact'] = $organizer->contacts[0]->email;
+    }
 
     $thumbnail_url = get_the_post_thumbnail_url($event->ID);
     if ($thumbnail_url) {
@@ -111,12 +129,45 @@ function parse_editable_events($events) {
           slug => $category->slug
         ];
       }, get_the_category($event->ID)),
-    // TODO: add occasion, location, et al
     ];
+
     $thumbnail_url = get_the_post_thumbnail_url($event->ID);
     if ($thumbnail_url) {
       $response['imgUrl'] = $thumbnail_url;
     }
+
+    $booking_link = get_post_meta($event->ID, 'booking_link', true);
+    if ($booking_link) {
+      $response['bookingLink'] = $booking_link;
+    }
+
+    $occasion = get_post_meta($event->ID, 'occasions', true);
+    if (strlen($occasion['start_date']) && strlen($occasion['end_date']) && strlen($occasion['door_time'])) {
+      $response['occasions'] = [[
+        startDate => str_replace('T', ' ', $occasion['start_date']),
+        endDate => str_replace('T', ' ', $occasion['end_date']),
+        doorTime => str_replace('T', ' ', $occasion['door_time'])
+      ]];
+    }
+
+    $location = get_post_meta($event->ID, 'location', true);
+    $response['location'] = [
+      streetAddress => $location['street_address'],
+      postalCode => $location['postal_code'],
+      latitude => floatval($location['latitude']),
+      longitude => floatval($location['longitude'])
+    ];
+
+    $youtubeUrl = get_post_meta($event->ID, 'youtube', true);
+    if ($youtubeUrl) {
+      $response['youtubeUrl'] = $youtubeUrl;
+    }
+
+    $vimeoUrl = get_post_meta($event->ID, 'vimeo', true);
+    if ($vimeoUrl) {
+      $response['vimeoUrl'] = $vimeoUrl;
+    }
+
     return $response;
   }, $events);
 }

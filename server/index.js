@@ -1,5 +1,7 @@
+process.env['NODE_ENV'] = 'production';
+
 require('import-export');
-require('babel-core/register')({ presets: ['es2015', 'react'] });
+require('babel-core/register')({ presets: ['react-app'] });
 require('ignore-styles');
 require('es6-promise').polyfill();
 require('isomorphic-fetch');

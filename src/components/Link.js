@@ -38,7 +38,6 @@ class Link extends React.Component {
         </a>
       );
     } else if (this.props.iframe) {
-      const iframe = this.props.iframe;
       return (
         // TODO: Break out into own component (like IFrameLink)
         // TODO: Change to `button`
@@ -46,7 +45,7 @@ class Link extends React.Component {
           className={this.props.className}
           style={{position: 'relative', overflow: 'hidden'}}
           href='javascript:;'
-          onClick={() => this.props.openIframe(iframe.url)}
+          onClick={() => this.props.openIframe(this.props.iframe)}
           onMouseUp={ this.handleClick.bind(this) }
         >
           {this.props.children}
