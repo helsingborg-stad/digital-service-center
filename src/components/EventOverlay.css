@@ -205,6 +205,17 @@
   padding-left: 0.33rem;
 }
 
+.EventOverlay-dateSeparator {
+  display: inline-block;
+  line-height: 2rem;
+  transform: translateY(-3px);
+  padding: 0 0.5rem;
+}
+
+.EventOverlay-dateSeparator--narrow {
+  padding: 0 0 0 0.25rem;
+}
+
 .EventOverlay-videoWrapper {
   position: fixed;
   width: 100%;

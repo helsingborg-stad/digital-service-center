@@ -82,9 +82,9 @@ function editable_event_post_type() {
         $occasions = get_post_meta($post->ID, 'occasions', false);
 
         echo '<p>Start datum</p>';
-        echo '<input type="date" name="event-start_date" value="' . $occasions[0]['start_date']  . '" class="widefat" />';
+        echo '<input type="datetime-local" name="event-start_date" value="' . $occasions[0]['start_date']  . '" class="widefat" />';
         echo '<p>Slut datum</p>';
-        echo '<input type="date" name="event-end_date" value="' . $occasions[0]['end_date']  . '" class="widefat" />';
+        echo '<input type="datetime-local" name="event-end_date" value="' . $occasions[0]['end_date']  . '" class="widefat" />';
         echo '<p>Dörrarna öppnas</p>';
         echo '<input type="datetime-local" name="event-door_time" value="' . $occasions[0]['door_time']  . '" class="widefat" />';
     }

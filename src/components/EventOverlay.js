@@ -37,6 +37,37 @@ const CloseButton = ({handleClose}) => (
 </div>
 );
 
+const EventDate = ({start, end}) => (
+  <div>
+    <span className='EventOverlay-dateGraphic'>
+      {start.day}
+      <br />
+      <span className='EventOverlay-dateGraphic__month'>
+        {start.month}
+      </span>
+    </span>
+    <span className='EventOverlay-date'>
+      {start.time}
+    </span>
+    { end.day > (start.day)
+    ? <span className='EventOverlay-dateSeparator'>–</span>
+    : <span className='EventOverlay-dateSeparator EventOverlay-dateSeparator--narrow'>-</span>
+    }
+    { end.day > (start.day) &&
+    <span className='EventOverlay-dateGraphic'>
+      {end.day}
+      <br />
+      <span className='EventOverlay-dateGraphic__month'>
+        {end.month}
+      </span>
+    </span>
+    }
+    <span className='EventOverlay-date'>
+      {end.time}
+    </span>
+  </div>
+);
+
 const EventOverlay = ({event, handleClose, showVideoButton, onVideoButtonClick}) => {
   return (
   <div className='EventOverlay'>
@@ -71,24 +102,12 @@ const EventOverlay = ({event, handleClose, showVideoButton, onVideoButtonClick})
       <CloseButton handleClose={handleClose} />
       { event.occasions && event.occasions.length &&
       <div className='EventOverlay-asideBox'>
-        {/* TODO: fix format when occasions span multiple consecutive days, and clean up the code, since right now it's a mess */}
         <h3>Date and time</h3>
-        {event.occasions.map(occ => {
-          return (
-            <div key={Math.random}>
-              <span className='EventOverlay-dateGraphic'>
-                {getDateFormatted(occ.startDate).day}
-                <br />
-                <span className='EventOverlay-dateGraphic__month'>
-                  {getDateFormatted(occ.startDate).month}
-                </span>
-              </span>
-              <span className='EventOverlay-date'>
-                {getDateFormatted(occ.startDate).time} - {getDateFormatted(occ.endDate).time}
-              </span>
-            </div>
-          );
-        })}
+        { event.occasions.map(occ => <EventDate
+                                       start={getDateFormatted(occ.startDate)}
+                                       end={getDateFormatted(occ.endDate)}
+                                       key={Math.random()} />)
+        }
       </div>
       }
       { getLocation(event) &&
