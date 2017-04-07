@@ -8,7 +8,7 @@ function helsingborg_dsc_startpage_get_today_events() {
     $post_meta = get_post_meta($post->ID, 'imported_event_data', true);
     $door_times = array_map(function($occasion) {
       return $occasion->door_time;
-    }, $post_meta->occasions);
+    }, $post_meta->occasions ?? []);
     $is_any_door_time_today = !empty(array_filter($door_times, function($door_time) {
       return date('Y-m-d') == date('Y-m-d', strtotime($door_time));
     }));
@@ -92,7 +92,7 @@ function get_visitor_or_local_tags($type) {
 function get_top_links($pages) {
   $posts = array_map(function($pageId) {
     $page = get_post($pageId);
-    $iframeMeta = get_post_meta($pageId, 'event_iframe', true);
+    $iframeMeta = get_post_meta($pageId, 'event_iframe', false)[0];
     return [
       name => $page->post_title,
       url => $iframeMeta['src'],

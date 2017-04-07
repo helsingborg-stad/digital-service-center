@@ -26,13 +26,25 @@ function helsingborg_dsc_events_response() {
     topLinks => get_links_for_option('hdsc-landing-settings-top-links-local'),
     subTopLinks => get_links_for_option('hdsc-landing-settings-sub-top-links-local')
   ];
+
+  $free_wifi = get_post_meta(get_option('hdsc-landing-settings-free-wifi-page'), 'event_iframe', true);
+  if ($free_wifi) {
+    $response['freeWifi'] = [
+      url => $free_wifi['src'],
+      width => intval($free_wifi['width'] ?? 0),
+      height => intval($free_wifi['height'] ?? 0),
+      offsetTop => intval($free_wifi['top_offset'] ?? 0),
+      offsetLeft => intval($free_wifi['left_offset'] ?? 0)
+    ];
+  }
+
   return rest_ensure_response($response);
 }
 
 function get_links_for_option($option) {
   $posts = array_map(function($pageId) {
       $page = get_post($pageId);
-      $iframeMeta = get_post_meta($pageId, 'event_iframe', true);
+      $iframeMeta = get_post_meta($pageId, 'event_iframe', false)[0];
       return [
         name => $page->post_title,
         url => $iframeMeta['src'],
@@ -85,7 +97,7 @@ function parse_imported_events($events) {
           endDate => $occasion->end_date,
           doorTime => $occasion->door_time
         ];
-      }, $post_meta->occasions),
+      }, $post_meta->occasions ?? []),
       location => [
         id => $post_meta->location->id,
         title => $post_meta->location->title,

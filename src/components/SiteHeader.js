@@ -45,6 +45,7 @@ export class SiteHeader extends Component {
                 <SearchField inline />
               </div>
               <div style={{float: 'left'}}>
+                {console.log(this)}
                 <button className='SiteHeader-wifi'>Helsingborg Free Wifi</button>
               </div>
               <div style={{float: 'left'}}>
