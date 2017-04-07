@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import ReactGA from 'react-ga';
 import InactivityMonitor from './util/inactivityMonitor';
 import './index.css';
 
@@ -39,9 +40,22 @@ function startApp(store) {
     );
   }
 
+  const analyticsId = store.getState().siteSettings &&
+    store.getState().siteSettings.googleAnalyticsId;
+
+  if (analyticsId) {
+    ReactGA.initialize(analyticsId);
+  }
+
+  const logPageView = analyticsId ?
+    () => {
+      ReactGA.set({ page: window.location.pathname });
+      ReactGA.pageview(window.location.pathname);
+    } : () => {};
+
   ReactDOM.render(
     <Provider store={store}>
-      <Routes store={store} />
+      <Routes store={store} onUpdate={logPageView} />
     </Provider>,
     document.getElementById('root')
   );

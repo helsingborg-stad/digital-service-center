@@ -14,7 +14,7 @@ const Routes = (props = {}) => {
   }
 
   return (
-    <Router history={history}>
+    <Router history={history} onUpdate={props.onUpdate}>
       <Route path='/' component={App}>
         <IndexRoute component={Startpage} />
         <Route
@@ -42,7 +42,8 @@ const Routes = (props = {}) => {
 };
 
 Routes.propTypes = {
-  store: React.PropTypes.object
+  store: React.PropTypes.object,
+  onUpdate: React.PropTypes.func
 };
 
 export default Routes;
