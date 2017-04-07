@@ -13,8 +13,6 @@ const initialState = window.__REDUX_STATE__ || {};
 // eslint-disable-next-line no-underscore-dangle
 delete window.__REDUX_STATE__;
 
-const store = configureStore(initialState);
-
 // Replace all calls to /api/ to the WordPress back-end,
 // when in development mode (this won't get included when building,
 // since the if statement evaluates to false)
@@ -31,30 +29,45 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
-if (window && process.env.NODE_ENV !== 'development') {
-  // eslint-disable-next-line no-new
-  new InactivityMonitor({
-    timeout: 3 * 60 * 1000,
-    idleAction: () => window.location.assign(location.origin)}
+function startApp(store) {
+  const timeoutLength = store.getState().siteSettings && store.getState().siteSettings.idleTimeout;
+  if (window && process.env.NODE_ENV !== 'development' && timeoutLength) {
+    // eslint-disable-next-line no-new
+    new InactivityMonitor({
+      timeout: timeoutLength * 1000,
+      idleAction: () => window.location.assign(location.origin)}
+    );
+  }
+
+  ReactDOM.render(
+    <Provider store={store}>
+      <Routes store={store} />
+    </Provider>,
+    document.getElementById('root')
   );
+
+  // Make hot reload preserve Redux state during development
+  if (process.env.NODE_ENV === 'development' && module.hot) {
+    module.hot.accept('./routes', () => {
+      const ReloadedApp = require('./routes').default;
+      ReactDOM.render(
+        <Provider store={store}>
+          <ReloadedApp store={store} />
+        </Provider>,
+        document.getElementById('root')
+      );
+    });
+  }
 }
 
-ReactDOM.render(
-  <Provider store={store}>
-    <Routes store={store} />
-  </Provider>,
-  document.getElementById('root')
-);
-
-// Make hot reload preserve Redux state during development
-if (process.env.NODE_ENV === 'development' && module.hot) {
-  module.hot.accept('./routes', () => {
-    const ReloadedApp = require('./routes').default;
-    ReactDOM.render(
-      <Provider store={store}>
-        <ReloadedApp store={store} />
-      </Provider>,
-      document.getElementById('root')
-    );
-  });
+if (initialState.siteSettings) {
+  const store = configureStore(initialState);
+  startApp(store);
+} else {
+  fetch('/api/site-settings')
+    .then(res => res.json())
+    .then(res => {
+      const store = configureStore(Object.assign({}, initialState, {siteSettings: res}));
+      startApp(store);
+    });
 }

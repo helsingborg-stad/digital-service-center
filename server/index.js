@@ -87,23 +87,32 @@ app.get('*', (req, res) => {
           const Comp = components[components.length - 1].WrappedComponent;
           const fetchData = (Comp && Comp.fetchData) || (() => Promise.resolve());
 
+          const fetchSiteSettings = fetch('/api/site-settings').then(x => x.json());
+
           const { location, params, history } = renderProps;
 
-          fetchData({ store, location, params, history })
-            .then(() => {
-              const state = store.getState();
+          // Fetch site settings from API, then wait for eventual fetchData method on
+          // active router component to resolve, so we can pre-render the app.
+          // TODO: Make fetchData and fetchSiteSettings get called simultaneously;
+          // right now we wait for fetchSiteSettings to resolve before we call fetchData
+          fetchSiteSettings.then((siteSettings) => {
+            store.dispatch({type: 'SITE_SETTINGS', siteSettings});
+            fetchData({ store, location, params, history })
+              .then(() => {
+                const state = store.getState();
 
-              const renderedApp = renderToString(
-                createElement(Provider, {store},
-                  createElement(RouterContext, renderProps)
-                )
-              ) + `<script>window.__REDUX_STATE__ = ${JSON.stringify(state)}</script>`;
+                const renderedApp = renderToString(
+                  createElement(Provider, {store},
+                    createElement(RouterContext, renderProps)
+                  )
+                ) + `<script>window.__REDUX_STATE__ = ${JSON.stringify(state)}</script>`;
 
-              const RenderedApp = htmlData
-                .replace('<div style="display:none">{{SSR}}</div>', renderedApp);
-              res.status(200).send(RenderedApp);
-            })
-            .catch(() => error());
+                const RenderedApp = htmlData
+                  .replace('<div style="display:none">{{SSR}}</div>', renderedApp);
+                res.status(200).send(RenderedApp);
+              });
+          })
+          .catch(() => error());
         } else {
           error();
         }
