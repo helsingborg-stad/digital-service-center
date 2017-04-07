@@ -29,7 +29,7 @@ function helsingborg_dsc_events_response() {
 
   $free_wifi = get_post_meta(get_option('hdsc-landing-settings-free-wifi-page'), 'event_iframe', true);
   if ($free_wifi) {
-    $response['freeWifi'] = [
+    $response['landingPages']['shared']['freeWifi'] = [
       url => $free_wifi['src'],
       width => intval($free_wifi['width'] ?? 0),
       height => intval($free_wifi['height'] ?? 0),

@@ -79,7 +79,8 @@ export class LandingPage extends Component {
     return (
       <div className='LandingPage'>
         <Lipping />
-        <SiteHeader heading={pageData.heading} bgColor={this.props.bgColor}>
+        {console.log(this.props)}
+        <SiteHeader heading={pageData.heading} bgColor={this.props.bgColor} freeWifiLink={this.props.landingPages.shared.freeWifi}>
           { pageData.topLinks.map(({name, href}) => (
             <SiteHeaderLink name={name} href={href} key={href} />))
           }

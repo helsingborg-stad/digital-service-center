@@ -32,17 +32,18 @@
 }
 
 .SiteHeader-wifi {
-    width: 6rem;
-    padding: 1.8rem 0 0;
-    margin: 0 1rem;
-    font-size: 0.8rem;
-    font-weight: 300;
-    border: 0;
-    color: #fff;
-    background: url('../media/wifi.svg') no-repeat;
-    background-size: 24px;
-    background-position: center 10px;
-    text-align: center;
+  display: inline-block;
+  width: 6rem;
+  padding: 1.8rem 0 0;
+  margin: 0 1rem;
+  font-size: 0.8rem;
+  font-weight: 300;
+  border: 0;
+  color: #fff;
+  background: url('../media/wifi.svg') no-repeat;
+  background-size: 24px;
+  background-position: center 10px;
+  text-align: center;
 }
 
 .SiteHeader-clock {

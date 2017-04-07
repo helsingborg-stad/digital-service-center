@@ -45,8 +45,11 @@ export class SiteHeader extends Component {
                 <SearchField inline />
               </div>
               <div style={{float: 'left'}}>
-                {console.log(this)}
-                <button className='SiteHeader-wifi'>Helsingborg Free Wifi</button>
+                { this.props.freeWifiLink &&
+                <Link iframe={this.props.freeWifiLink} className='SiteHeader-wifi'>
+                  Helsingborg Free Wifi
+                </Link>
+                }
               </div>
               <div style={{float: 'left'}}>
                 <span className='SiteHeader-clock'>
@@ -72,6 +75,7 @@ export class SiteHeader extends Component {
 SiteHeader.propTypes = {
   heading: React.PropTypes.string,
   bgColor: React.PropTypes.string,
+  freeWifiLink: React.PropTypes.object,
   children: React.PropTypes.oneOfType([
     React.PropTypes.arrayOf(React.PropTypes.node),
     React.PropTypes.node
