@@ -1,7 +1,7 @@
 .GoogleMapsModal {
   position: relative;
   display: inline-block;
-  width: 330px;
+  width: 260px;
   background: #fff;
   box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.15);
   border-radius: 3px;
@@ -9,14 +9,15 @@
 }
 
 .GoogleMapsModal {
-  transform: scale(0.7) transLateX(-210px) translateY(-30px);
+  transform: scale(0.7) transLateX(-176px) translateY(10px);
+  transform-origin: 50% 0;
   opacity: 0;
   transition: transform 0.3s, opacity 0.3s;
   visibility: hidden;
 }
 
 .GoogleMapsModal--visible {
-  transform: scale(1) transLateX(-157px) translateY(35px);
+  transform: scale(1) transLateX(-123px) translateY(35px);
   opacity: 1;
   visibility: visible;
 }
@@ -27,7 +28,7 @@
    height: 40px;
    position: absolute;
    top: -40px;
-   left: 151px;
+   left: 117px;
    overflow: hidden;
    box-shadow: 0 9px 10px -17px rgba(0,0,0,0.5);
    pointer-events: none;
@@ -48,7 +49,7 @@
   margin: -1.5rem 0 0 -1.5rem;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
-  width: 330px;
+  width: 260px;
 }
 
 .GoogleMapsModal-heading {
