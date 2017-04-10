@@ -1,0 +1,42 @@
+.SideNavigation {
+  position: fixed;
+  display: inline-block;
+  top: 20vh;
+  left: 2rem;
+  padding: 0;
+  margin: 0;
+  z-index: 9;
+  list-style: none;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.SideNavigationLink {
+  position: relative;
+  font-size: 0.9375rem;
+  background: #fff;
+  color: #c70d53;
+  padding: 0.75rem 2rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.SideNavigationLink:first-child {
+  padding-top: 1rem;
+}
+
+.SideNavigationLink:last-child {
+  padding-bottom: 1rem;
+}
+
+.SideNavigationLink--selected {
+  background: #f4a428;
+  color: #fff;
+}
+
+.SideNavigation ul {
+  position: absolute;
+  top: -40px;
+  right: -192px;
+  list-style: none;
+}

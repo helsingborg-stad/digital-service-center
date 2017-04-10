@@ -1,6 +1,6 @@
 .AsideMenu {
   background: #f4a428;
-  height: calc( 100vh - 4.6875rem - 3.25rem);
+  height: calc( 80vh - 4.6875rem - 3.25rem);
   position: absolute;
   top: calc( 4.6875rem + 3.25rem );
   right: 0;

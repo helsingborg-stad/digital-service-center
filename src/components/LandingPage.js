@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Lipping from './Lipping';
 import { SiteHeader, SiteHeaderLink } from './SiteHeader';
 import { SiteSubHeader, SiteSubHeaderLink } from './SiteSubHeader';
+import { SiteFooter, SiteFooterLink } from './SiteFooter';
 import { SideNavigation, SideNavigationLink } from './SideNavigation';
 import GoogleMaps from './GoogleMaps';
 import { EventShowcase, Event } from './EventShowcase';
@@ -35,7 +36,20 @@ export class LandingPage extends Component {
     super(props);
     this.state = {
       visibleModals: [],
-      visibleOverlayEvent: props.activeEvent || null
+      visibleOverlayEvent: props.activeEvent || null,
+      categories: [
+        { name: 'Stay', id: 0, children: [
+          {name: 'Hotel', id: 1, children: [], selected: false },
+          {name: 'Motel', id: 2, children: [], selected: false },
+          {name: 'Bed & Breakfast', id: 3, children: [], selected: false }
+        ], selected: false},
+        { name: 'Eat', id: 4, children: [], selected: false},
+        { name: 'See & Do', id: 5, children: [], selected: false},
+        { name: 'Events', id: 6, children: [], selected: false},
+        { name: 'Today', id: 7, children: [], selected: false},
+        { name: 'Nightlife', id: 8, children: [], selected: false},
+        { name: 'Infopoints', id: 9, children: [], selected: false}
+      ]
     };
   }
 
@@ -66,6 +80,15 @@ export class LandingPage extends Component {
     }
   }
 
+  handleSideNavClick(id) {
+    const categories = this.state.categories.map(cat =>
+      cat.id === id ? Object.assign({}, cat, {id: id, selected: !cat.selected}) : cat
+    );
+    this.setState({
+      categories: categories
+    });
+  }
+
   render() {
     if (this.props.hasErrored) {
       return <LandingPageError reloadPage={() => this.props.fetchData('/api/events')} />;
@@ -79,7 +102,6 @@ export class LandingPage extends Component {
     return (
       <div className='LandingPage'>
         <Lipping />
-        {console.log(this.props)}
         <SiteHeader heading={pageData.heading} bgColor={this.props.bgColor} freeWifiLink={this.props.landingPages.shared.freeWifi}>
           { pageData.topLinks.map(({name, href}) => (
             <SiteHeaderLink name={name} href={href} key={href} />))
@@ -91,17 +113,18 @@ export class LandingPage extends Component {
           }
         </SiteSubHeader>
         <SideNavigation>
-          <SideNavigationLink name='Stay' href='#asdf'>
-            <SideNavigationLink name='Hotel' href='#asdf' />
-            <SideNavigationLink name='Motel' href='#asdf' />
-            <SideNavigationLink name='Bed &amp; Breakfast' href='#asdf' selected />
-          </SideNavigationLink>
-          <SideNavigationLink name='Eat' href='#asdf' />
-          <SideNavigationLink name='See &amp; Do' href='#asdf' />
-          <SideNavigationLink name='Events' href='#asdf' />
-          <SideNavigationLink name='Today' href='#asdf' />
-          <SideNavigationLink name='Nightlife' href='#asdf' />
-          <SideNavigationLink name='Infopoints' href='#asdf' />
+          {this.state.categories.map(cat =>
+            <SideNavigationLink
+              key={cat.id}
+              name={cat.name}
+              selected={cat.selected}
+              handleClick={() => this.handleSideNavClick(cat.id)}
+            >
+              { cat.children && cat.children.map(innerCat =>
+              <SideNavigationLink name={innerCat.name} key={innerCat.key} />)
+              }
+            </SideNavigationLink>)
+          }
         </SideNavigation>
         <main>
           <GoogleMaps
@@ -121,6 +144,11 @@ export class LandingPage extends Component {
               onClick={this.changeOverlayEvent.bind(this)} />
             ))}
           </EventShowcase>
+          <SiteFooter>
+            { [...pageData.topLinks, ...pageData.subTopLinks].map(({name, href}) => (
+              <SiteFooterLink name={name} href={href} key={href} />))
+            }
+          </SiteFooter>
          <ReactCSSTransitionGroup
             transitionName="EventOverlay-transitionGroup"
             transitionEnterTimeout={300}
