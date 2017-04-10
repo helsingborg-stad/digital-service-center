@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './SiteHeader.css';
 import Link from './Link';
 import { Link as RouterLink } from 'react-router';
-import SearchField from './SearchField';
 import ReactInterval from 'react-interval';
 
 function getCurrentTime() {
@@ -41,9 +40,6 @@ export class SiteHeader extends Component {
           </Column>
           <Column>
             <div style={{marginLeft: 'auto', paddingRight: '2rem'}}>
-              <div style={{float: 'left', marginTop: '17px'}}>
-                <SearchField inline />
-              </div>
               <div style={{float: 'left'}}>
                 { this.props.freeWifiLink &&
                 <Link iframe={this.props.freeWifiLink} className='SiteHeader-wifi'>

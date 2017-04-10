@@ -4,6 +4,7 @@ import { SiteHeader, SiteHeaderLink } from './SiteHeader';
 import { SiteSubHeader, SiteSubHeaderLink } from './SiteSubHeader';
 import { SiteFooter, SiteFooterLink } from './SiteFooter';
 import { SideNavigation, SideNavigationLink } from './SideNavigation';
+import SearchField from './SearchField';
 import GoogleMaps from './GoogleMaps';
 import { EventShowcase, Event } from './EventShowcase';
 import EventOverlay from './EventOverlay';
@@ -112,6 +113,9 @@ export class LandingPage extends Component {
             <SiteSubHeaderLink name={name} href={href} key={href} />))
           }
         </SiteSubHeader>
+        <div className='LandingPage-searchWrapper'>
+          <SearchField inline />
+        </div>
         <SideNavigation>
           {this.state.categories.map(cat =>
             <SideNavigationLink

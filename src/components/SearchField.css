@@ -5,7 +5,7 @@
 }
 
 .SearchField--inline {
-    width: 18rem;
+    width: 100%;
     margin: 0;
 }
 
@@ -30,7 +30,11 @@
     height: 2.625rem;
     font-size: 1.0625rem;
     padding-left: 4rem;
-    background: rgba(0,0,0,0.2);
+    background: rgba(0,0,0,0.51);
+}
+
+.SearchField-input--inline::-webkit-input-placeholder {
+    color: #f2f2f2;
 }
 
 .SearchField-button {
