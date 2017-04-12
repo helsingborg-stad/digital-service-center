@@ -60,7 +60,7 @@ GoogleMaps.defaultProps = {
   center: {lat: 56.0456282, lng: 12.7045333},
   zoom: 15,
   markers: [],
-  apiKey: 'AIzaSyAmIiexMwCIAGIfiHHwHsvxB-srsBEvftQ',
+  apiKey: '',
   lang: 'en'
 };
 

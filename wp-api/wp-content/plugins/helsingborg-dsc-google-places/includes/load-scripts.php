@@ -23,8 +23,7 @@ function load_google_places($hook) {
     if ($hook != 'toplevel_page_helsingborg-dsc-google-places') {
         return;
     }
-    // TODO: fetch api key from settings field
-    wp_enqueue_script('google_places_wp_admin', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBPGb8bx7dKL2KMdLzarIwgUQvz_uy_4qU&libraries=places&callback=initMap', null, null, true);
+    wp_enqueue_script('google_places_wp_admin', 'https://maps.googleapis.com/maps/api/js?key=' . get_option('hdsc-site-setting-google-maps-api-key') . '&libraries=places&callback=initMap', null, null, true);
 }
 add_action('admin_enqueue_scripts', 'load_google_places');
 

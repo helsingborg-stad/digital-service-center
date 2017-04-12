@@ -136,6 +136,7 @@ export class LandingPage extends Component {
             visibleModals={this.state.visibleModals}
             handleToggleModalVisibility={this.toggleModalVisibility.bind(this)}
             handleShowMoreInfo={this.changeOverlayEvent.bind(this)}
+            apiKey={this.props.googleMapsApiKey}
           />
           <EventShowcase>
             {this.props.events.map(event => (
@@ -188,7 +189,8 @@ LandingPage.propTypes = {
   landingPages: PropTypes.any, // TODO
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  activeEvent: PropTypes.string
+  activeEvent: PropTypes.string,
+  googleMapsApiKey: PropTypes.string
 };
 
 const mapStateToProps = (state) => {
@@ -196,7 +198,8 @@ const mapStateToProps = (state) => {
     events: state.events,
     landingPages: state.landingPages,
     hasErrored: state.eventsHasErrored,
-    isLoading: state.eventsAreLoading
+    isLoading: state.eventsAreLoading,
+    googleMapsApiKey: state.siteSettings.googleMapsApiKey
   };
 };
 

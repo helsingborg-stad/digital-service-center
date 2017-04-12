@@ -12,6 +12,7 @@ function helsing_dsc_site_settings_register_routes() {
 function helsingborg_dsc_site_settings_response() {
   return [
     googleAnalyticsId => get_option('hdsc-site-setting-google-analytics', null),
+    googleMapsApiKey => get_option('hdsc-site-setting-google-maps-api-key', null),
     idleTimeout => intval(get_option('hdsc-site-setting-idle-timeout', 0))
   ];
 }
