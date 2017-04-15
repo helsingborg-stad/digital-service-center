@@ -11,7 +11,7 @@ add_action('admin_init', function() {
   register_setting( 'hdsc-startpage-settings', 'hdsc-startpage-setting-heading');
   register_setting( 'hdsc-startpage-settings', 'hdsc-startpage-setting-visitor-heading');
   register_setting( 'hdsc-startpage-settings', 'hdsc-startpage-setting-local-heading');
-  register_setting( 'hdsc-startpage-settings', 'hdsc-startpage-setting-today-heading');
+  register_setting( 'hdsc-startpage-settings', 'hdsc-startpage-setting-events-heading');
   register_setting( 'hdsc-startpage-settings', 'hdsc-startpage-setting-top-links');
   register_setting( 'hdsc-startpage-settings', 'hdsc-startpage-setting-visitor-category');
   register_setting( 'hdsc-startpage-settings', 'hdsc-startpage-setting-local-category');
@@ -139,8 +139,8 @@ function hdsc_startpage_menu_callback() {
       </tr>
 
       <tr>
-        <th><label for="startpageform-today-heading">Today Heading</label></th>
-        <td><input id="startpageform-today-heading" type="text" class="regular-text" name="hdsc-startpage-setting-today-heading" value="<?php echo get_option('hdsc-startpage-setting-today-heading'); ?>" /></td>
+        <th><label for="startpageform-events-heading">Events Heading</label></th>
+        <td><input id="startpageform-events-heading" type="text" class="regular-text" name="hdsc-startpage-setting-events-heading" value="<?php echo get_option('hdsc-startpage-setting-events-heading'); ?>" /></td>
       </tr>
 
       <tr>

@@ -71,10 +71,10 @@ export class Startpage extends Component {
               </Column>
               <Column>
                 <SectionCard
-                  section={this.props.data.todayHeading}
+                  section={this.props.data.eventsHeading}
                   bgColor='#c90e52'
-                  tags={this.props.data.todayTags}
-                  posts={this.props.data.todayPosts} />
+                  tags={this.props.data.eventsTags}
+                  posts={this.props.data.eventsPosts} />
               </Column>
             </Row>
             <SearchField />
@@ -96,9 +96,9 @@ Startpage.propTypes = {
     localHeading: PropTypes.string,
     localTags: PropTypes.array,
     localPosts: PropTypes.array,
-    todayHeading: PropTypes.string,
-    todayTags: PropTypes.array,
-    todayPosts: PropTypes.array
+    eventsHeading: PropTypes.string,
+    eventsTags: PropTypes.array,
+    eventsPosts: PropTypes.array
   }).isRequired,
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired
