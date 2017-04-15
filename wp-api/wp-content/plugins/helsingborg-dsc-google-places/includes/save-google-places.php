@@ -154,4 +154,44 @@ function all_google_place_types() {
     ];
 }
 
+add_action('admin_post_fetch_google_places_based_on_selected_place_types', fetch_google_places_based_on_selected_place_types);
+
+function fetch_google_places_based_on_selected_place_types() {
+    $distinct_place_types = array_reduce(
+        get_option('saved_google_place_types', []),
+        function($acc, $p) {
+            $place_type = $p['google_place_type'];
+            if (!in_array($place_type, $acc)) {
+                $acc[] = $place_type;
+            }
+            return $acc;
+        },
+        []
+    );
+
+    function get_api_url_for_place_type($place_type) {
+        return 'https://maps.googleapis.com/maps/api/place/radarsearch/json?location=55.919290,12.667164&radius=18000&types=' . $place_type . '&sensor=false&key=' . get_option('hdsc-site-setting-google-maps-api-key');
+    }
+
+    $saved_google_places = get_option('saved_google_places', []);
+
+    foreach ($distinct_place_types as $place_type) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+        curl_setopt($ch, CURLOPT_URL, get_api_url_for_place_type($place_type));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $response = json_decode(curl_exec($ch), true);
+        foreach ($response['results'] as $result) {
+            $place_id = $result['place_id'];
+            if (!in_array($place_id, $saved_google_places)) {
+                $saved_google_places[] = $place_id;
+            }
+        }
+    }
+
+    update_option('saved_google_places', $saved_google_places);
+
+    return wp_redirect(admin_url('admin.php?page=helsingborg-dsc-google-places'));
+}
+
 ?>

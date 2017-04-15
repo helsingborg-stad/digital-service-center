@@ -24,6 +24,9 @@ function helsingborg_dsc_google_places_admin_init() {
         <?php list_google_place_types_form(); ?>
         <br>
         <hr>
+        <?php fetch_google_places(); ?>
+        <br>
+        <hr>
         <?php exclude_google_place_form(); ?>
         <br>
         <?php list_excluded_google_places_form(); ?>
