@@ -1,23 +1,25 @@
-.TopBar {
-    width: 100%;
-    height: 58px;
+.BottomBar {
+    position: absolute;
+    bottom: 0;
+    left: 0.85rem;
+    width: calc(100% - 0.85rem);
     text-align: center;
     background: rgba(3, 3, 3, 0.7);
 }
 
-.TopBarLink {
+.BottomBarLink {
     position: relative;
     display: inline-block;
     font-size: 0.85rem;
-    padding: 0 2em;
+    padding: 5px 2em 0;
     margin-right: 2.5em;
-    line-height: 58px;
+    line-height: 55px;
     color: #c5c5c5;
     font-weight: bold;
     text-decoration: none;
     text-transform: uppercase;
 }
 
-.TopBarLink:last-of-type {
+.BottomBarLink:last-of-type {
     margin-right: 0;
 }
