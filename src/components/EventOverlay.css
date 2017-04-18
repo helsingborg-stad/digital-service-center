@@ -33,48 +33,31 @@
 
 .EventOverlay {
   position: fixed;
-  top: 6.6875rem;
+  bottom: 3.6875rem;
   left: 13vw;
   width: calc(100% - 325px - 24vw);
-  height: calc( 80vh - 4.6875rem - 3.25rem - 2vh);
+  max-width: 700px;
+  max-height: calc( 100vh - 4.6875rem - 1.25rem);
   background: #fff;
   border-radius: 3px;
-  overflow: hidden;
-}
-
-.EventOverlay-main {
-  position: relative;
-  float: left;
-  width: 65%;
-  height: 100%;
   padding: 2rem;
 }
 
-.EventOverlay-imgWrapper {
-  height: auto;
-  overflow: hidden;
-  padding: 56.25% 0 0 0; /* Force 16:9 aspect ratio */
-}
-
 .EventOverlay-img {
-  display: block;
-  max-width: 100%;
-  max-height: 100%;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  width: calc(100% + 4rem);
+  margin-top: -2rem;
+  margin-left: -2rem;
+  border-radius: 3px 3px 0 0;
 }
 
 .EventOverlay-heading {
   font-size: 1.875rem;
-  margin: 0.8125rem 0;
+  margin: 0.35rem 0 -0.5rem;
 }
 
 .EventOverlay-content-scrollWrapper {
   display: block;
-  margin: -1rem 1rem 0 0;
+  margin: 0 1rem 0 0;
 }
 
 .EventOverlay-content {
@@ -86,15 +69,9 @@
   margin-top: 0;
 }
 
-.EventOverlay-buttonWrapper {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 2rem;
-}
-
 .EventOverlay-button {
+  display: block;
+  text-align: center;
   border: 0;
   background: #c70d53;
   color: #fff;
@@ -102,11 +79,10 @@
   font-weight: bold;
   text-transform: uppercase;
   padding: 0.8rem 1.25rem;
-  margin-right: 1.5rem;
+  margin-top: 1rem;
 }
 
 .EventOverlay-videoButton {
-  float: right;
   font-size: 0.8125rem;
   font-weight: bold;
   color: #d50246;
@@ -117,42 +93,33 @@
   background: transparent url('../media/film.svg') no-repeat;
   background-size: 24px;
   background-position: 11px 5px;
-  transform: translateY(-0.2rem);
   cursor: pointer;
 }
 
-.EventOverlay-aside {
-  width: 35%;
-  height: 100%;
-  float: left;
-  background: #f1f1f1;
-  padding: 1rem 1.5rem;
-}
-
-.EventOverlay-asideBox {
+.EventOverlay-metaBox {
   font-size: 0.8125rem;
-  padding: 0.75rem 0.8rem 1rem;
+  padding: 0.75rem 0 0.25rem;
   margin-bottom: 1rem;
   background: #fff;
 }
 
-.EventOverlay-asideBox h3 {
+.EventOverlay-metaBox h3 {
   font-size: 1rem;
   margin: 0 0 0.5rem;
   font-weight: 600;
 }
 
-.EventOverlay-asideBox ul {
+.EventOverlay-metaBox ul {
   list-style: none;
   padding: 0;
   margin: 0.75rem 0 0.5rem;
 }
 
-.EventOverlay-asideBox li {
+.EventOverlay-metaBox li {
   padding: 0.25rem 0;
 }
 
-.EventOverlay-asideBox a {
+.EventOverlay-metaBox a {
   font-weight: 500;
 }
 
