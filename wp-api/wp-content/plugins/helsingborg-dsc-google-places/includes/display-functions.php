@@ -9,7 +9,7 @@ function map_google_place_type_form(){
 <?php
 $all_categories_args = [
     'taxonomy' => [
-        'imported_category', 
+        'imported_category',
         'category'
     ],
     'hide_empty' => 0
@@ -44,8 +44,8 @@ $all_google_place_types = all_google_place_types();
                 </td>
             </tr>
         </tbody>
-    </table> 
-    <button class="button button-primary" type="submit">Koppla kategorier</button>      
+    </table>
+    <button class="button button-primary" type="submit">Koppla kategorier</button>
 </form>
 <?php
 }
@@ -80,10 +80,10 @@ function list_google_place_types_form(){
                 </tr>
             </thead>
             <tbody>
-            <?php 
+            <?php
             if(count($saved_google_place_types)) {
                 foreach($saved_google_place_types as $saved_google_place_type) {
-                    $category_name = get_term( $saved_google_place_type['event_category_id'])->name;                  
+                    $category_name = get_term( $saved_google_place_type['event_category_id'])->name;
                     echo '<tr>';
                     echo '<th> <input type="checkbox" name="saved_google_place_types_checkbox[]" value="' . $saved_google_place_type['event_category_id'] . '" /> </th>';
                     echo '<td>' . $category_name . '</td>';
@@ -96,7 +96,27 @@ function list_google_place_types_form(){
         </table>
     </form>
     <?php
-    google_places_list_paging($paging_values, 'Kategorier');   
+    google_places_list_paging($paging_values, 'Kategorier');
+}
+
+function fetch_google_places() {
+    ?>
+    <h2>Hämta platsinformation från Google</h2>
+    <form action="<?php get_site_url() ?>admin-post.php" method="post">
+        <input type="hidden" name="action" value="fetch_google_places_based_on_selected_place_types">
+        <br>
+        <button class="button button-primary" type="submit">Importera</button>
+    </form>
+    <br>
+    <?php
+    $saved_google_places = get_option('saved_google_places');
+    foreach($saved_google_places as $place) {
+        echo $place . '<br>';
+    }
+
+    foreach(get_option('saved_google_places_details', []) as $place_details) {
+        echo $place_details['data']['result']['name'] . '<br>';
+    }
 }
 
 function exclude_google_place_form() {
@@ -161,7 +181,7 @@ function list_excluded_google_places_form() {
         </table>
     </form>
 <?php
-    google_places_list_paging($paging_values, 'Platser'); 
+    google_places_list_paging($paging_values, 'Platser');
 }
 
 function get_paging_values($number_of_items, $querystr){
@@ -172,7 +192,7 @@ function get_paging_values($number_of_items, $querystr){
     $first_page = false;
     $last_page = false;
     $additional_query_strings;
-    $query_string_format = '&' . $querystr . '='; 
+    $query_string_format = '&' . $querystr . '=';
     $query_strings = [
         'types_page',
         'excluded_page'
@@ -181,7 +201,7 @@ function get_paging_values($number_of_items, $querystr){
     foreach($query_strings as $query_string) {
         if($query_string != $querystr && $_REQUEST[$query_string] != null) {
             $additional_query_strings = $additional_query_strings . '&' . $query_string . '=' . $_REQUEST[$query_string];
-        } 
+        }
     }
 
     if($_REQUEST[$querystr] != null) {
@@ -197,18 +217,18 @@ function get_paging_values($number_of_items, $querystr){
         }
         if($current_page < $total_pages) {
             $next_page = $query_string_format . ($current_page + 1);
-        } 
-    } 
-    else {       
+        }
+    }
+    else {
         if($total_pages >= 2) {
             $next_page = $query_string_format . 2;
-    
+
         }
         if($total_pages > 2) {
             $last_page = $query_string_format . $total_pages;
         }
     }
-   
+
     $paging_values = [
         'number_of_pages' => $total_pages,
         'number_of_items' => $number_of_items,
@@ -228,12 +248,12 @@ function google_places_list_paging($paging_values, $label) {
         <div class="tablenav-pages" style="float: none;">
             <span class="displaying-num"><?php echo $paging_values['number_of_items'] . ' ' . $label; ?></span>
             <span class="pagination-links">
-            <?php 
+            <?php
                 if($paging_values['first_page'] != false) {
                     echo '<a class="first-page" href="' . admin_url('admin.php?page=helsingborg-dsc-google-places') . $paging_values['first_page'] . $paging_values['additional_query_strings'] . '">
                             <span class="screen-reader-text">Första sidan</span>
                             <span aria-hidden="true">«</span>
-                            </a>';         
+                            </a>';
                 } else {
                     echo '<span class="tablenav-pages-navspan" aria-hidden="true">«</span>';
                 }
@@ -244,7 +264,7 @@ function google_places_list_paging($paging_values, $label) {
                           </a>';
                 } else {
                     echo '<span class="tablenav-pages-navspan" aria-hidden="true">‹</span>';
-                }              
+                }
                 ?>
                 <span class="screen-reader-text">Nuvarande sida</span>
                 <span id="table-paging" class="paging-input">

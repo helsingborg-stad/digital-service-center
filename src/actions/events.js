@@ -21,6 +21,13 @@ export function eventsFetchDataSuccess(events) {
   };
 }
 
+export function eventsCategoriesFetchDataSuccess(categories) {
+  return {
+    type: 'EVENTS_CATEGORIES_FETCH_DATA_SUCCESS',
+    categories
+  };
+}
+
 export function eventsFetchData(url) {
   return (dispatch) => {
     dispatch(eventsAreLoading(true));
@@ -39,8 +46,13 @@ export function eventsFetchData(url) {
       .then((response) => response.json())
       .then((data) => {
         dispatch(landingPagesFetchDataSuccess(data.landingPages));
+        dispatch(eventsCategoriesFetchDataSuccess(data.categories));
         dispatch(eventsFetchDataSuccess(data.events));
       })
-      .catch(() => dispatch(eventsHasErrored(true)));
+      .catch((e) => {
+        // eslint-disable-next-line no-console
+        console.warn('eventsFetchData error', e);
+        dispatch(eventsHasErrored(true));
+      });
   };
 }

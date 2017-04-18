@@ -154,4 +154,64 @@ function all_google_place_types() {
     ];
 }
 
+add_action('admin_post_fetch_google_places_based_on_selected_place_types', fetch_google_places_based_on_selected_place_types);
+
+function fetch_google_places_based_on_selected_place_types() {
+    $distinct_place_types = array_reduce(
+        get_option('saved_google_place_types', []),
+        function($acc, $p) {
+            $place_type = $p['google_place_type'];
+            if (!in_array($place_type, $acc)) {
+                $acc[] = $place_type;
+            }
+            return $acc;
+        },
+        []
+    );
+
+    function get_api_url_for_place_type($place_type) {
+        return 'https://maps.googleapis.com/maps/api/place/radarsearch/json?location=56.049665,12.727122&radius=2000&types=' . $place_type . '&sensor=false&key=' . get_option('hdsc-site-setting-google-maps-api-key');
+    }
+
+    $saved_google_places = get_option('saved_google_places', []);
+
+    foreach ($distinct_place_types as $place_type) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+        curl_setopt($ch, CURLOPT_URL, get_api_url_for_place_type($place_type));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $response = json_decode(curl_exec($ch), true);
+        foreach ($response['results'] as $result) {
+            $place_id = $result['place_id'];
+            if (!in_array($place_id, $saved_google_places)) {
+                $saved_google_places[] = $place_id;
+            }
+        }
+    }
+
+    update_option('saved_google_places', $saved_google_places);
+
+    function get_api_url_for_place_details($place_id) {
+        return 'https://maps.googleapis.com/maps/api/place/details/json?placeid=' . $place_id . '&language=sv&key=' . get_option('hdsc-site-setting-google-maps-api-key');
+    }
+
+    $saved_google_places_details = get_option('saved_google_places_details', []);
+
+    foreach ($saved_google_places as $place_id) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+        curl_setopt($ch, CURLOPT_URL, get_api_url_for_place_details($place_id));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $response = json_decode(curl_exec($ch), true);
+        $saved_google_places_details[$place_id] = [
+            data => $response,
+            updated => date('Y-m-d H:i:s')
+        ];
+    }
+
+    update_option('saved_google_places_details', $saved_google_places_details);
+
+    return wp_redirect(admin_url('admin.php?page=helsingborg-dsc-google-places'));
+}
+
 ?>

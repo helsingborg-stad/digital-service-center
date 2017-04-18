@@ -72,72 +72,81 @@ const EventDate = ({start, end}) => (
 const EventOverlay = ({event, handleClose, showVideoButton, onVideoButtonClick}) => {
   return (
   <div className='EventOverlay'>
-    <div className='EventOverlay-main'>
-      <div className='EventOverlay-imgWrapper'>
-        <img className='EventOverlay-img' src={event.imgUrl} />
-      </div>
-      <Scrollbars style={{ marginTop: '1rem', width: 'calc(100% + 1rem)', height: 'calc( 80vh - 4.6875rem - 10.25rem - 2vh - (((76vw - 325px)*0.65)*0.5625)' }}>
-      <span className='EventOverlay-content-scrollWrapper'>
-      <h2 className='EventOverlay-heading'>{ event.name }</h2>
-        <span
-          className='EventOverlay-content'
-          dangerouslySetInnerHTML={{ __html: event.content.replace(/\r\n/g, '<br />') }}
-        />
-      </span>
-      </Scrollbars>
-      <div className='EventOverlay-buttonWrapper'>
-        <a href='#asdf' className='EventOverlay-button'>
-          Take me there
-        </a>
-        { event.bookingLink &&
-        <Link iframe={{url:event.bookingLink}} className='EventOverlay-button'>
-          Tickets
-        </Link>
-        }
-        { showVideoButton &&
-        <button className='EventOverlay-videoButton' onClick={onVideoButtonClick}>
-          Video
-        </button>
-        }
-      </div>
-    </div>
-    <div className='EventOverlay-aside'>
+    <div style={{position: 'absolute', top: '-2.5rem', right: '0'}}>
       <CloseButton handleClose={handleClose} />
-      { event.occasions && event.occasions.length &&
-      <div className='EventOverlay-asideBox'>
-        <h3>Date and time</h3>
-        { event.occasions.map(occ => <EventDate
-                                       start={getDateFormatted(occ.startDate)}
-                                       end={getDateFormatted(occ.endDate)}
-                                       key={Math.random()} />)
-        }
+    </div>
+    <img className='EventOverlay-img' src={event.imgUrl} alt={ event.name } />
+    <h2 className='EventOverlay-heading'>{ event.name }</h2>
+      <div style={{width: '58%', marginRight: '5%', float: 'left'}}>
+        <Scrollbars style={{ marginTop: '1rem', width: 'calc(100% + 1rem)' }} autoHeight autoHeightMax='100vh - 4.6875rem - 1.25rem - (550px)'>
+          { event.content &&
+          <span className='EventOverlay-content-scrollWrapper'>
+            <span
+              className='EventOverlay-content'
+              dangerouslySetInnerHTML={{ __html: event.content.replace(/\r\n/g, '<br />') }}
+            />
+          </span>
+          }
+        </Scrollbars>
       </div>
+    <div style={{width: '37%', float: 'right'}}>
+    { (event.openingHours && !!event.openingHours.length) &&
+    <div className='EventOverlay-metaBox'>
+      <h3>Date and time</h3>
+      { event.openingHours.map(date => <span>{date}<br /></span>)
       }
-      { getLocation(event) &&
-      <div className='EventOverlay-asideBox'>
-        <h3>Location</h3>
-        { getLocation(event) }
-      </div>
+    </div>
+    }
+    { (event.occasions && !!event.occasions.length) &&
+    <div className='EventOverlay-metaBox'>
+      <h3>Date and time</h3>
+      { event.occasions.map(occ => <EventDate
+                                      start={getDateFormatted(occ.startDate)}
+                                      end={getDateFormatted(occ.endDate)}
+                                      key={Math.random()} />)
       }
-      { event.contact &&
-      <div className='EventOverlay-asideBox'>
-        <h3>Contact</h3>
-        <a href={`mailto:${event.contact}`}>{event.contact}</a>
-      </div>
+    </div>
+    }
+    { getLocation(event) &&
+    <div className='EventOverlay-metaBox'>
+      <h3>Location</h3>
+      { getLocation(event) }
+    </div>
+    }
+    { event.contact &&
+    <div className='EventOverlay-metaBox'>
+      <h3>Contact</h3>
+      <a href={`mailto:${event.contact}`}>{event.contact}</a>
+    </div>
+    }
+    {/*TODO: implement moreinformation links from back-end*/}
+    { event.moreInformation &&
+    <div className='EventOverlay-metaBox'>
+      <h3>More information</h3>
+      <ul>
+        <li><a href='#asdf'>When flowers rhodedendron</a></li>
+        <li><a href='#asdf'>When flowers rhodedendron</a></li>
+        <li><a href='#asdf'>When flowers rhodedendron</a></li>
+        <li><a href='#asdf'>When flowers rhodedendron</a></li>
+        <li><a href='#asdf'>When flowers rhodedendron</a></li>
+      </ul>
+    </div>
+    }
+    <div className='EventOverlay-buttonWrapper'>
+      { showVideoButton &&
+      <button className='EventOverlay-videoButton' onClick={onVideoButtonClick}>
+        Video
+      </button>
       }
-      {/*TODO: implement moreinformation links from back-end*/}
-      { event.moreInformation &&
-      <div className='EventOverlay-asideBox'>
-        <h3>More information</h3>
-        <ul>
-          <li><a href='#asdf'>When flowers rhodedendron</a></li>
-          <li><a href='#asdf'>When flowers rhodedendron</a></li>
-          <li><a href='#asdf'>When flowers rhodedendron</a></li>
-          <li><a href='#asdf'>When flowers rhodedendron</a></li>
-          <li><a href='#asdf'>When flowers rhodedendron</a></li>
-        </ul>
-      </div>
+      <a href='#asdf' className='EventOverlay-button'>
+        Take me there
+      </a>
+      { event.bookingLink &&
+      <Link iframe={{url:event.bookingLink}} className='EventOverlay-button'>
+        Tickets
+      </Link>
       }
+    </div>
     </div>
   </div>
   );

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import TopBar from './TopBar';
+import BottomBar from './BottomBar';
 
 export default class StartpageError extends Component {
   render() {
@@ -13,7 +13,7 @@ export default class StartpageError extends Component {
 
     return (
       <div style={{background: '#333', minHeight: '100vh'}}>
-        <TopBar />
+        <BottomBar />
         <Row>
           <Column />
           <Column>

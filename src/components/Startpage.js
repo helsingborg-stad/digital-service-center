@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Lipping from './Lipping';
 import MultimediaBackground from './MultimediaBackground';
-import TopBar, { TopBarLink } from './TopBar';
+import BottomBar, { BottomBarLink } from './BottomBar';
 import SectionCard from './SectionCard';
 import SearchField from './SearchField';
 import { connect } from 'react-redux';
@@ -48,11 +48,6 @@ export class Startpage extends Component {
         <div className='Startpage'>
           <Lipping />
           <MultimediaBackground backgroundUrl={this.props.data.backgroundUrl}>
-            <TopBar>
-              { this.props.data.topLinks.map(topLink => (
-                <TopBarLink key={topLink.href + topLink.name} topLink={topLink} />
-              ))}
-            </TopBar>
             <h1 className='Startpage-heading'>{this.props.data.heading}</h1>
             <Row>
               <Column>
@@ -71,13 +66,18 @@ export class Startpage extends Component {
               </Column>
               <Column>
                 <SectionCard
-                  section={this.props.data.todayHeading}
+                  section={this.props.data.eventsHeading}
                   bgColor='#c90e52'
-                  tags={this.props.data.todayTags}
-                  posts={this.props.data.todayPosts} />
+                  tags={this.props.data.eventsTags}
+                  posts={this.props.data.eventsPosts} />
               </Column>
             </Row>
             <SearchField />
+            <BottomBar>
+              { this.props.data.topLinks.map(link => (
+                <BottomBarLink key={link.href + link.name} link={link} />
+              ))}
+            </BottomBar>
           </MultimediaBackground>
         </div>
     );
@@ -96,9 +96,9 @@ Startpage.propTypes = {
     localHeading: PropTypes.string,
     localTags: PropTypes.array,
     localPosts: PropTypes.array,
-    todayHeading: PropTypes.string,
-    todayTags: PropTypes.array,
-    todayPosts: PropTypes.array
+    eventsHeading: PropTypes.string,
+    eventsTags: PropTypes.array,
+    eventsPosts: PropTypes.array
   }).isRequired,
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired

@@ -1,27 +1,27 @@
 <?php
 
-// Gets all events which are occurring today
-function helsingborg_dsc_startpage_get_today_events() {
+function helsingborg_dsc_startpage_get_upcoming_events() {
   $imported_posts = get_posts([ post_type => 'imported_event', numberposts => -1]);
   $editable_posts = get_posts([ post_type => 'editable_event', numberposts => -1]);
-  $today_imported_posts = array_filter($imported_posts, function($post) {
+  $imported_upcoming = array_filter($imported_posts, function($post) {
     $post_meta = get_post_meta($post->ID, 'imported_event_data', true);
     $door_times = array_map(function($occasion) {
       return $occasion->door_time;
     }, $post_meta->occasions ?? []);
-    $is_any_door_time_today = !empty(array_filter($door_times, function($door_time) {
-      return date('Y-m-d') == date('Y-m-d', strtotime($door_time));
+    $is_today_or_later = !empty(array_filter($door_times, function($door_time) {
+      return date('Y-m-d', strtotime($door_time)) >= date('Y-m-d');
     }));
-    return $is_any_door_time_today;
+    return $is_today_or_later;
   });
-  $today_editable_posts = array_filter($editable_posts, function($post) {
+  $editable_upcoming = array_filter($editable_posts, function($post) {
     $occasions = get_post_meta($post->ID, 'occasions', false);
     $door_time = $occasions[0]['door_time'];
-    $is_door_time_today = date('Y-m-d') == date('Y-m-d', strtotime($door_time));
-    return $is_door_time_today;
+    $is_today_or_later = date('Y-m-d', strtotime($door_time)) >= date('Y-m-d');
+    return $is_today_or_later;
   });
-  $all_today_posts = array_merge((array)$today_imported_posts, (array)$today_editable_posts);
-  return array_values(array_slice($all_today_posts, 0, 10));
+  $all_events = array_merge((array)$imported_upcoming, (array)$editable_upcoming);
+
+  return array_values(array_slice($all_events, 0, 10));
 }
 
 // Gets all distinct categories for a list of posts (excluding 'Visitor' and 'Local')
@@ -123,17 +123,17 @@ function helsingborg_dsc_startpage_response() {
       localTags => get_visitor_or_local_tags('local'),
       localPosts => get_visitor_or_local_posts('local'),
 
-      todayHeading => get_option('hdsc-startpage-setting-today-heading', 'Today'),
-      todayTags => array_map(function($category_id) {
+      eventsHeading => get_option('hdsc-startpage-setting-events-heading', 'Events'),
+      eventsTags => array_map(function($category_id) {
         $category = get_category($category_id);
         return [
           name => html_entity_decode($category->name),
-          href => '/today/' . $category->slug
+          href => '/events/' . $category->slug
         ];
-      }, get_categories_for_posts(helsingborg_dsc_startpage_get_today_events())),
-      todayPosts => array_map(function($post) {
-        return post_mapping_helper($post, 'today');
-      }, helsingborg_dsc_startpage_get_today_events()),
+      }, get_categories_for_posts(helsingborg_dsc_startpage_get_upcoming_events())),
+      eventsPosts => array_map(function($post) {
+        return post_mapping_helper($post, 'events');
+      }, helsingborg_dsc_startpage_get_upcoming_events()),
     ]);
 }
 

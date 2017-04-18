@@ -19,14 +19,28 @@ import { eventsFetchData } from '../actions/events';
 
 import './LandingPage.css';
 
-const eventsWithCoordinates = (events) => {
-  return events.filter(e => e.location && e.location.latitude && e.location.longitude)
+const selectedEventsWithCoordinates = (events, activeCategories, eventCategories) => {
+  const getActiveColorForEvent = (event) => {
+    const firstActiveCat = event.categories.map(c => c.id).find(c => activeCategories.includes(c));
+    return eventCategories.find(c => c.id === firstActiveCat).activeColor;
+  };
+
+  const selectedEvents = !activeCategories.length
+    ? events
+    : events.filter(e => {
+      return e.categories.map(c => c.id).some(c => activeCategories.includes(c));
+    }).map(e => {
+      return Object.assign({}, e, { activeColor: getActiveColorForEvent(e) });
+    });
+
+  return selectedEvents.filter(e => e.location && e.location.latitude && e.location.longitude)
     .reduce((acc, e) => {
       acc.markers.push({
         id: e.id,
         lat: e.location.latitude,
         lng: e.location.longitude,
-        eventData: e
+        eventData: e,
+        activeColor: e.activeColor
       });
       return acc;
     }, {markers: []});
@@ -38,19 +52,7 @@ export class LandingPage extends Component {
     this.state = {
       visibleModals: [],
       visibleOverlayEvent: props.activeEvent || null,
-      categories: [
-        { name: 'Stay', id: 0, children: [
-          {name: 'Hotel', id: 1, children: [], selected: false },
-          {name: 'Motel', id: 2, children: [], selected: false },
-          {name: 'Bed & Breakfast', id: 3, children: [], selected: false }
-        ], selected: false},
-        { name: 'Eat', id: 4, children: [], selected: false},
-        { name: 'See & Do', id: 5, children: [], selected: false},
-        { name: 'Events', id: 6, children: [], selected: false},
-        { name: 'Today', id: 7, children: [], selected: false},
-        { name: 'Nightlife', id: 8, children: [], selected: false},
-        { name: 'Infopoints', id: 9, children: [], selected: false}
-      ]
+      activeCategories: []
     };
   }
 
@@ -61,7 +63,7 @@ export class LandingPage extends Component {
   }
 
   toggleModalVisibility(modalId) {
-    const visibleModals = this.state.visibleModals;
+    const { visibleModals } = this.state;
     this.setState(visibleModals.includes(modalId)
       ? {visibleModals: visibleModals.filter(x => x !== modalId)}
       : {visibleModals: visibleModals.concat([modalId])});
@@ -82,12 +84,10 @@ export class LandingPage extends Component {
   }
 
   handleSideNavClick(id) {
-    const categories = this.state.categories.map(cat =>
-      cat.id === id ? Object.assign({}, cat, {id: id, selected: !cat.selected}) : cat
-    );
-    this.setState({
-      categories: categories
-    });
+    const { activeCategories } = this.state;
+    this.setState(activeCategories.includes(id)
+      ? {activeCategories: activeCategories.filter(x => x !== id)}
+      : {activeCategories: activeCategories.concat([id])});
   }
 
   render() {
@@ -104,35 +104,32 @@ export class LandingPage extends Component {
       <div className='LandingPage'>
         <Lipping />
         <SiteHeader heading={pageData.heading} bgColor={this.props.bgColor} freeWifiLink={this.props.landingPages.shared.freeWifi}>
-          { pageData.topLinks.map(({name, href}) => (
-            <SiteHeaderLink name={name} href={href} key={href} />))
+          { pageData.topLinks.map(({name, url}) => (
+            <SiteHeaderLink name={name} href={url} key={url} />))
           }
         </SiteHeader>
         <SiteSubHeader logoColor={this.props.bgColor}>
-          { pageData.subTopLinks.map(({name, href}) => (
-            <SiteSubHeaderLink name={name} href={href} key={href} />))
+          { pageData.subTopLinks.map(({name, url}) => (
+            <SiteSubHeaderLink name={name} href={url} key={url} />))
           }
         </SiteSubHeader>
         <div className='LandingPage-searchWrapper'>
           <SearchField inline />
         </div>
         <SideNavigation>
-          {this.state.categories.map(cat =>
+          {this.props.categories && this.props.categories.map(cat =>
             <SideNavigationLink
               key={cat.id}
               name={cat.name}
-              selected={cat.selected}
+              selected={this.state.activeCategories.includes(cat.id)}
+              activeColor={cat.activeColor}
               handleClick={() => this.handleSideNavClick(cat.id)}
-            >
-              { cat.children && cat.children.map(innerCat =>
-              <SideNavigationLink name={innerCat.name} key={innerCat.key} />)
-              }
-            </SideNavigationLink>)
+            />)
           }
         </SideNavigation>
         <main>
           <GoogleMaps
-            {...eventsWithCoordinates(this.props.events)}
+            {...selectedEventsWithCoordinates(this.props.events, this.state.activeCategories, this.props.categories)}
             visibleModals={this.state.visibleModals}
             handleToggleModalVisibility={this.toggleModalVisibility.bind(this)}
             handleShowMoreInfo={this.changeOverlayEvent.bind(this)}
@@ -150,8 +147,8 @@ export class LandingPage extends Component {
             ))}
           </EventShowcase>
           <SiteFooter>
-            { [...pageData.topLinks, ...pageData.subTopLinks].map(({name, href}) => (
-              <SiteFooterLink name={name} href={href} key={href} />))
+            { [...pageData.topLinks, ...pageData.subTopLinks].map(({name, url}) => (
+              <SiteFooterLink name={name} href={url} key={url} />))
             }
           </SiteFooter>
          <ReactCSSTransitionGroup
@@ -186,6 +183,7 @@ LandingPage.propTypes = {
   bgColor: PropTypes.string,
   fetchData: PropTypes.func.isRequired,
   events: PropTypes.any, // TODO
+  categories: PropTypes.array,
   landingPages: PropTypes.any, // TODO
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
@@ -196,6 +194,7 @@ LandingPage.propTypes = {
 const mapStateToProps = (state) => {
   return {
     events: state.events,
+    categories: state.eventsCategories,
     landingPages: state.landingPages,
     hasErrored: state.eventsHasErrored,
     isLoading: state.eventsAreLoading,

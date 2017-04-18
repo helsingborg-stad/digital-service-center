@@ -4,9 +4,14 @@ import GoogleMapsModal from './GoogleMapsModal';
 
 import './GoogleMaps.css';
 
-const Marker = ({onClick}) => <div className='GoogleMaps-marker' onClick={onClick} />;
+const Marker = ({onClick, color}) =>
+  <div className='GoogleMaps-marker' style={{background: color}} onClick={onClick} />;
 
-Marker.propTypes = { onClick: PropTypes.func.isRequired };
+Marker.propTypes = { onClick: PropTypes.func.isRequired, color: PropTypes.string };
+
+Marker.defaultProps = {
+  color: '#d00f49'
+};
 
 const GoogleMaps = ({center, zoom, apiKey, lang, markers, visibleModals,
                      handleToggleModalVisibility, handleShowMoreInfo}) => {
@@ -24,6 +29,7 @@ const GoogleMaps = ({center, zoom, apiKey, lang, markers, visibleModals,
               key={marker.id}
               lat={marker.lat}
               lng={marker.lng}
+              color={marker.activeColor}
             />
           );
         }) }

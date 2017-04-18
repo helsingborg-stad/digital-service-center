@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Lipping from './Lipping';
-import TopBar from './TopBar';
+import BottomBar from './BottomBar';
 import SectionCard from './SectionCard';
 
 export default class StartpageLoading extends Component {
@@ -23,7 +23,7 @@ export default class StartpageLoading extends Component {
       <div>
         <Lipping />
         <div style={{background: '#333', minHeight: '100vh'}}>
-          <TopBar />
+          <BottomBar />
           <h1 className='Startpage-heading'>Loading</h1>
           <Row>
             <Column>
