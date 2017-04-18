@@ -4,10 +4,17 @@ import GoogleMapsModal from './GoogleMapsModal';
 
 import './GoogleMaps.css';
 
-const Marker = ({onClick, color}) =>
-  <div className='GoogleMaps-marker' style={{background: color}} onClick={onClick} />;
+const Marker = ({onClick, color, name}) => (
+  <div className='GoogleMaps-marker' style={{background: color}} onClick={onClick}>
+    <span className='GoogleMaps-marker__name'>{name}</span>
+  </div>
+);
 
-Marker.propTypes = { onClick: PropTypes.func.isRequired, color: PropTypes.string };
+Marker.propTypes = {
+  onClick: PropTypes.func.isRequired,
+  color: PropTypes.string,
+  name: PropTypes.string
+};
 
 Marker.defaultProps = {
   color: '#d00f49'
@@ -30,6 +37,7 @@ const GoogleMaps = ({center, zoom, apiKey, lang, markers, visibleModals,
               lat={marker.lat}
               lng={marker.lng}
               color={marker.activeColor}
+              name={marker.eventData.name}
             />
           );
         }) }
