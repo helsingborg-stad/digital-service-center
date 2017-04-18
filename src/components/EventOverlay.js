@@ -79,15 +79,24 @@ const EventOverlay = ({event, handleClose, showVideoButton, onVideoButtonClick})
     <h2 className='EventOverlay-heading'>{ event.name }</h2>
       <div style={{width: '58%', marginRight: '5%', float: 'left'}}>
         <Scrollbars style={{ marginTop: '1rem', width: 'calc(100% + 1rem)' }} autoHeight autoHeightMax='100vh - 4.6875rem - 1.25rem - (550px)'>
+          { event.content &&
           <span className='EventOverlay-content-scrollWrapper'>
             <span
               className='EventOverlay-content'
               dangerouslySetInnerHTML={{ __html: event.content.replace(/\r\n/g, '<br />') }}
             />
           </span>
+          }
         </Scrollbars>
       </div>
     <div style={{width: '37%', float: 'right'}}>
+    { (event.openingHours && !!event.openingHours.length) &&
+    <div className='EventOverlay-metaBox'>
+      <h3>Date and time</h3>
+      { event.openingHours.map(date => <span>{date}<br /></span>)
+      }
+    </div>
+    }
     { (event.occasions && !!event.occasions.length) &&
     <div className='EventOverlay-metaBox'>
       <h3>Date and time</h3>

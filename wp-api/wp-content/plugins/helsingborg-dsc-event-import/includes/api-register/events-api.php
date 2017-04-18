@@ -192,15 +192,14 @@ function parse_google_places() {
       id => $place_data['place_id'],
       slug => sanitize_title($place_data['name']),
       name => $place_data['name'],
+      imgUrl => 'http://lorempixel.com/700/394/?v=' . rand(),
       categories => get_google_place_categories($place_data['types']),
       location => [
         formattedAddress => $place_data['formatted_address'],
         latitude => $place_data['geometry']['location']['lat'],
         longitude => $place_data['geometry']['location']['lng']
       ],
-      openingHours => [
-        $place_data['opening_hours']['weekday_text']
-      ]
+      openingHours => $place_data['opening_hours']['weekday_text']
     ];
   }, get_option('saved_google_places_details', []));
   return array_values($places);

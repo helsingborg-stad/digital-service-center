@@ -170,7 +170,7 @@ function fetch_google_places_based_on_selected_place_types() {
     );
 
     function get_api_url_for_place_type($place_type) {
-        return 'https://maps.googleapis.com/maps/api/place/radarsearch/json?location=55.919290,12.667164&radius=18000&types=' . $place_type . '&sensor=false&key=' . get_option('hdsc-site-setting-google-maps-api-key');
+        return 'https://maps.googleapis.com/maps/api/place/radarsearch/json?location=56.049665,12.727122&radius=2000&types=' . $place_type . '&sensor=false&key=' . get_option('hdsc-site-setting-google-maps-api-key');
     }
 
     $saved_google_places = get_option('saved_google_places', []);
