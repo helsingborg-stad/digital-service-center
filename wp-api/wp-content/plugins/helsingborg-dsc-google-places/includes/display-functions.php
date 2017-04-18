@@ -113,6 +113,10 @@ function fetch_google_places() {
     foreach($saved_google_places as $place) {
         echo $place . '<br>';
     }
+
+    foreach(get_option('saved_google_places_details', []) as $place_details) {
+        echo $place_details['data']['result']['name'] . '<br>';
+    }
 }
 
 function exclude_google_place_form() {

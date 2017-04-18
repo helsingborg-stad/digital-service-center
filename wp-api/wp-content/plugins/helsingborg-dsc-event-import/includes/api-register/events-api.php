@@ -15,7 +15,8 @@ function helsingborg_dsc_events_response() {
   $editable_events = get_posts([ post_type => 'editable_event', numberposts => -1, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
   $imported_events_parsed = parse_imported_events($imported_events);
   $editable_events_parsed = parse_editable_events($editable_events);
-  $response['events'] = array_merge((array)$imported_events_parsed, (array)$editable_events_parsed);
+  $google_places_parsed = parse_google_places();
+  $response['events'] = array_merge((array)$imported_events_parsed, (array)$editable_events_parsed, (array)$google_places_parsed);
   $response['landingPages']['visitor'] = [
     heading => get_option('hdsc-landing-settings-heading-visitor', 'Explore Helsingborg'),
     topLinks => get_links_for_option('hdsc-landing-settings-top-links-visitor'),
@@ -182,4 +183,39 @@ function parse_editable_events($events) {
 
     return $response;
   }, $events);
+}
+
+function parse_google_places() {
+  $places = array_map(function($place) {
+    $place_data = $place['data']['result'];
+    return [
+      id => $place_data['place_id'],
+      slug => sanitize_title($place_data['name']),
+      name => $place_data['name'],
+      categories => get_google_place_categories($place_data['types']),
+      location => [
+        formattedAddress => $place_data['formatted_address'],
+        latitude => $place_data['geometry']['location']['lat'],
+        longitude => $place_data['geometry']['location']['lng']
+      ],
+      openingHours => [
+        $place_data['opening_hours']['weekday_text']
+      ]
+    ];
+  }, get_option('saved_google_places_details', []));
+  return array_values($places);
+}
+
+function get_google_place_categories($place_types) {
+  return $distinct_place_types = array_reduce(
+      get_option('saved_google_place_types', []),
+      function($acc, $p) use($place_types) {
+          $place_type = $p['google_place_type'];
+          if (in_array($place_type, $place_types)) {
+              $acc[] = [ id => $p['event_category_id'], slug => $p['event_slug'], name => $p['event_taxonomy'] ];
+          }
+          return $acc;
+      },
+      []
+  );
 }
