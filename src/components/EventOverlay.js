@@ -75,7 +75,7 @@ const EventOverlay = ({event, handleClose, showVideoButton, onVideoButtonClick})
     <div style={{position: 'absolute', top: '-2.5rem', right: '0'}}>
       <CloseButton handleClose={handleClose} />
     </div>
-    <img className='EventOverlay-img' src={event.imgUrl} />
+    <img className='EventOverlay-img' src={event.imgUrl} alt={ event.name } />
     <h2 className='EventOverlay-heading'>{ event.name }</h2>
       <div style={{width: '58%', marginRight: '5%', float: 'left'}}>
         <Scrollbars style={{ marginTop: '1rem', width: 'calc(100% + 1rem)' }} autoHeight autoHeightMax='100vh - 4.6875rem - 1.25rem - (550px)'>

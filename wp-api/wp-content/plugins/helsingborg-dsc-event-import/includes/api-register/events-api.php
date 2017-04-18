@@ -16,7 +16,9 @@ function helsingborg_dsc_events_response() {
   $imported_events_parsed = parse_imported_events($imported_events);
   $editable_events_parsed = parse_editable_events($editable_events);
   $google_places_parsed = parse_google_places();
-  $response['events'] = array_merge((array)$imported_events_parsed, (array)$editable_events_parsed, (array)$google_places_parsed);
+  $all_events = array_merge((array)$imported_events_parsed, (array)$editable_events_parsed, (array)$google_places_parsed);
+  $response['events'] = $all_events;
+  $response['categories'] = get_event_categories($all_events);
   $response['landingPages']['visitor'] = [
     heading => get_option('hdsc-landing-settings-heading-visitor', 'Explore Helsingborg'),
     topLinks => get_links_for_option('hdsc-landing-settings-top-links-visitor'),
@@ -40,6 +42,36 @@ function helsingborg_dsc_events_response() {
   }
 
   return rest_ensure_response($response);
+}
+
+function get_event_categories($events) {
+  $colors = [
+    '#f7a600',
+    '#e3000f',
+    '#a84c98',
+    '#4db4e7',
+    '#76b828',
+    '#0095db',
+    '#d35098'
+  ];
+  $categories = array_reduce(
+    $events,
+    function($acc, $event) {
+        $categories = $event['categories'];
+        foreach($categories as $category) {
+          if (!in_array($category, $acc)) {
+              $acc[] = $category;
+          }
+        }
+        return $acc;
+    },
+    []
+  );
+  $categories = array_slice($categories, 0, 7);
+  foreach ($categories as $idx=>&$cat) {
+    $cat['activeColor'] = $colors[$idx];
+  }
+  return $categories;
 }
 
 function get_links_for_option($option) {
@@ -211,7 +243,8 @@ function get_google_place_categories($place_types) {
       function($acc, $p) use($place_types) {
           $place_type = $p['google_place_type'];
           if (in_array($place_type, $place_types)) {
-              $acc[] = [ id => $p['event_category_id'], slug => $p['event_slug'], name => $p['event_taxonomy'] ];
+              $cat = get_category(intval($p['event_category_id']));
+              $acc[] = [ id => $cat->cat_ID, slug => $cat->slug, name => $cat->cat_name];
           }
           return $acc;
       },

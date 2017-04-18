@@ -3,6 +3,9 @@ import { Ripple } from './react-ripple-effect';
 import { Link as RouterLink } from 'react-router';
 import { connect } from 'react-redux';
 import { iframeUrl } from '../actions/iframeUrl';
+import classNames from 'classnames';
+
+import './Link.css';
 
 class Link extends React.Component {
   constructor() {
@@ -41,16 +44,16 @@ class Link extends React.Component {
       return (
         // TODO: Break out into own component (like IFrameLink)
         // TODO: Change to `button`
-        <a
-          className={this.props.className}
+        <button
+          className={classNames('Link', this.props.className)}
           style={{position: 'relative', overflow: 'hidden'}}
-          href='javascript:;'
+          href=''
           onClick={() => this.props.openIframe(this.props.iframe)}
           onMouseUp={ this.handleClick.bind(this) }
         >
           {this.props.children}
           <Ripple cursorPos={ this.state.cursorPos } />
-        </a>
+        </button>
       );
     }
     return null;

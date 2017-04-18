@@ -14,7 +14,7 @@ export class SideNavigationLink extends Component {
     return (
       <li
         className={cn('SideNavigationLink', {'SideNavigationLink--selected': this.props.selected})}
-        aria-role='button'
+        style={{ background: this.props.selected ? this.props.activeColor : '#fff'}}
         onClick={this.props.handleClick
       }>
         {this.props.name}

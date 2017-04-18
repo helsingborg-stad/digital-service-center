@@ -5,10 +5,6 @@ import { EventShowcase, Event } from './EventShowcase';
 import AsideMenu from './AsideMenu';
 
 export class LandingPageLoading extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div className='LandingPage'>
