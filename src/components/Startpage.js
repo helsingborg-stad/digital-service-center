@@ -11,6 +11,15 @@ import StartpageError from './StartpageError.js';
 
 import './Startpage.css';
 
+class VergicMountPoint extends Component {
+  shouldComponentUpdate() {
+    return false;
+  }
+  render() {
+    return <div id='vergic' />;
+  }
+}
+
 export class Startpage extends Component {
   static fetchData({ store }) {
     return store.dispatch(
@@ -48,6 +57,7 @@ export class Startpage extends Component {
         <div className='Startpage'>
           <Lipping />
           <MultimediaBackground backgroundUrl={this.props.data.backgroundUrl}>
+            <VergicMountPoint />
             <h1 className='Startpage-heading'>{this.props.data.heading}</h1>
             <Row>
               <Column>
