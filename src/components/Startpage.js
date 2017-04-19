@@ -57,7 +57,6 @@ export class Startpage extends Component {
         <div className='Startpage'>
           <Lipping />
           <MultimediaBackground backgroundUrl={this.props.data.backgroundUrl}>
-            <VergicMountPoint />
             <h1 className='Startpage-heading'>{this.props.data.heading}</h1>
             <Row>
               <Column>
@@ -90,6 +89,7 @@ export class Startpage extends Component {
               { this.props.data.topLinks.map(link => (
                 <BottomBarLink key={link.href + link.name} link={link} />
               ))}
+              <VergicMountPoint />
             </BottomBar>
           </MultimediaBackground>
         </div>
