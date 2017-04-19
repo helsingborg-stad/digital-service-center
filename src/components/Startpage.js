@@ -53,6 +53,7 @@ export class Startpage extends Component {
               <Column>
                 <SectionCard
                   section={this.props.data.visitorHeading}
+                  link={'/visitor'}
                   bgColor='#f4a428'
                   tags={this.props.data.visitorTags}
                   posts={this.props.data.visitorPosts} />
@@ -60,6 +61,7 @@ export class Startpage extends Component {
               <Column>
                 <SectionCard
                   section={this.props.data.localHeading}
+                  link={'/local'}
                   bgColor='#eb6421'
                   tags={this.props.data.localTags}
                   posts={this.props.data.localPosts} />
@@ -67,6 +69,7 @@ export class Startpage extends Component {
               <Column>
                 <SectionCard
                   section={this.props.data.eventsHeading}
+                  link={'/events'}
                   bgColor='#c90e52'
                   tags={this.props.data.eventsTags}
                   posts={this.props.data.eventsPosts} />

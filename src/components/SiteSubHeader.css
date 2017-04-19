@@ -4,7 +4,7 @@
 }
 
 .SiteSubHeaderLink-wrapper {
-  display: inline-block;
+  float: left;
   width: calc(100% - 130px - 3.35rem - 20.3rem); /* Center links between logo and left side of sidebar */
   text-align: center;
 }

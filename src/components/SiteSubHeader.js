@@ -7,12 +7,14 @@ import './SiteSubHeader.css';
 export const SiteSubHeader = ({children, logoColor}) => {
   return (
     <div className='SiteSubHeader'>
+      <div style={{float: 'left', height: '3.25rem'}}>
       <RouterLink to='/'>
         <Logo className='SiteSubHeader-logo' color={logoColor} />
       </RouterLink>
-      <span className='SiteSubHeaderLink-wrapper'>
+      </div>
+      <div className='SiteSubHeaderLink-wrapper'>
       {children}
-      </span>
+      </div>
     </div>
   );
 };

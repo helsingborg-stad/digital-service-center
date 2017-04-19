@@ -7,7 +7,9 @@ export default class SectionCard extends Component {
   render() {
     return (
       <div className='SectionCard' style={{backgroundColor: this.props.bgColor}}>
-        <h2 className='SectionCard-heading'>{this.props.section}</h2>
+        <Link to={this.props.link}>
+          <h2 className='SectionCard-heading'>{this.props.section}</h2>
+        </Link>
         <div className='SectionCard-tagWrapper'>
         {this.props.tags.map(tag => {
           return (<Link key={Math.random()} className='SectionCard-tag' to={tag.href}>
@@ -39,6 +41,7 @@ export default class SectionCard extends Component {
 
 SectionCard.propTypes = {
   section: PropTypes.string,
+  link: PropTypes.string,
   bgColor: PropTypes.string,
   tags: PropTypes.arrayOf(PropTypes.shape({
     href: PropTypes.string,

@@ -18,7 +18,7 @@ function helsingborg_dsc_events_response() {
   $google_places_parsed = parse_google_places();
   $all_events = array_merge((array)$imported_events_parsed, (array)$editable_events_parsed, (array)$google_places_parsed);
   $response['events'] = $all_events;
-  $response['categories'] = get_event_categories($all_events);
+  $response['categories'] = get_event_categories($google_places_parsed);
   $response['landingPages']['visitor'] = [
     heading => get_option('hdsc-landing-settings-heading-visitor', 'Explore Helsingborg'),
     topLinks => get_links_for_option('hdsc-landing-settings-top-links-visitor'),
@@ -69,6 +69,7 @@ function get_event_categories($events) {
   );
   $categories = array_slice($categories, 0, 7);
   foreach ($categories as $idx=>&$cat) {
+    $cat['name'] = html_entity_decode($cat['name']);
     $cat['activeColor'] = $colors[$idx];
   }
   return $categories;
