@@ -26,7 +26,7 @@ const selectedEventsWithCoordinates = (events, activeCategories, eventCategories
   };
 
   const selectedEvents = !activeCategories.length
-    ? events
+    ? []
     : events.filter(e => {
       return e.categories.map(c => c.id).some(c => activeCategories.includes(c));
     }).map(e => {
