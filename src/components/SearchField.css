@@ -14,7 +14,9 @@
     height: 3.5rem;
     border: 0;
     border-radius: 28px;
-    background: rgba(0,0,0,0.7);
+    background: url('../media/search.svg') rgba(0,0,0,0.7) no-repeat;
+    background-size: 30px;
+    background-position: 19px 14px;
     font-size: 1.33rem;
     padding: 0 2rem 0 6rem;
     color: #fff;
@@ -26,26 +28,15 @@
     outline: 0; /* TODO: Make sure we add a visual focus indicator */
 }
 
+.SearchField-input::-webkit-input-placeholder {
+    color: #f2f2f2;
+}
+
 .SearchField-input--inline {
     height: 2.625rem;
     font-size: 1.0625rem;
     padding-left: 4rem;
-    background: rgba(0,0,0,0.51);
-}
-
-.SearchField-input--inline::-webkit-input-placeholder {
-    color: #f2f2f2;
-}
-
-.SearchField-button {
-    position: absolute;
-    top: 14px;
-    left: 19px;
-    width: 30px;
-}
-
-.SearchField-button--inline {
-    top: 10px;
-    left: 12px;
-    width: 22px;
+    background-color: rgba(0,0,0,0.51);
+    background-size: 22px;
+    background-position: 12px 10px;
 }

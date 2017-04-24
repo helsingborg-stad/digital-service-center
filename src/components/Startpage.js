@@ -6,6 +6,7 @@ import SectionCard from './SectionCard';
 import SearchField from './SearchField';
 import { connect } from 'react-redux';
 import { startpageFetchData } from '../actions/startpage';
+import { searchFetchData } from '../actions/search';
 import StartpageLoading from './StartpageLoading.js';
 import StartpageError from './StartpageError.js';
 
@@ -24,6 +25,12 @@ export class Startpage extends Component {
   static fetchData({ store }) {
     return store.dispatch(
       startpageFetchData('/api/startpage')
+    );
+  }
+
+  static fetchSearchResults({ store }) {
+    return store.dispatch(
+      searchFetchData('/api/search')
     );
   }
 
@@ -84,7 +91,7 @@ export class Startpage extends Component {
                   posts={this.props.data.eventsPosts} />
               </Column>
             </Row>
-            <SearchField />
+            <SearchField onSearchChange={(val) => console.log('search', val)} />
             <BottomBar>
               { this.props.data.topLinks.map(link => (
                 <BottomBarLink key={link.href + link.name} link={link} />
@@ -121,13 +128,17 @@ const mapStateToProps = (state) => {
   return {
     data: state.startpage,
     hasErrored: state.startpageHasErrored,
-    isLoading: state.startpageIsLoading
+    isLoading: state.startpageIsLoading,
+    searchResults: state.searchResults,
+    searchIsLoading: state.searchIsLoading,
+    searchHasErrored: state.searchHasErrored
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: (url) => dispatch(startpageFetchData(url))
+    fetchData: (url) => dispatch(startpageFetchData(url)),
+    fetchSearchResults: (url) => dispatch(searchFetchData(url))
   };
 };
 
