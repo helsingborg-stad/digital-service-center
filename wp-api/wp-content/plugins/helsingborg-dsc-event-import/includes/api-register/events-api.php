@@ -150,7 +150,10 @@ function parse_imported_events($events) {
 
     $organizer = $post_meta->organizers && $post_meta->organizers[0] ? $post_meta->organizers[0] : null;
     if ($organizer && $organizer->contacts && $organizer->contacts[0] && strlen($organizer->contacts[0]->email)) {
-      $response['contact'] = $organizer->contacts[0]->email;
+      $response['contactEmail'] = $organizer->contacts[0]->email;
+    }
+    if ($organizer && $organizer->contacts && $organizer->contacts[0] && strlen($organizer->contacts[0]->phone_number)) {
+      $response['contactPhone'] = $organizer->contacts[0]->phone_number;
     }
 
     $thumbnail_url = get_the_post_thumbnail_url($event->ID);
@@ -232,7 +235,8 @@ function parse_google_places() {
         latitude => $place_data['geometry']['location']['lat'],
         longitude => $place_data['geometry']['location']['lng']
       ],
-      openingHours => $place_data['opening_hours']['weekday_text']
+      openingHours => $place_data['opening_hours']['weekday_text'],
+      contactPhone => $place_data['formatted_phone_number']
     ];
   }, get_option('saved_google_places_details', []));
   return array_values($places);

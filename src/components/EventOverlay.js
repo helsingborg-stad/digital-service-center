@@ -113,10 +113,16 @@ const EventOverlay = ({event, handleClose, showVideoButton, onVideoButtonClick})
       { getLocation(event) }
     </div>
     }
-    { event.contact &&
+    { (event.contactEmail || event.contactPhone) &&
     <div className='EventOverlay-metaBox'>
       <h3>Contact</h3>
-      <a href={`mailto:${event.contact}`}>{event.contact}</a>
+      { event.contactEmail &&
+      <div><a href={`mailto:${event.contactEmail}`}>{event.contactEmail}</a></div>
+      }
+      { (event.contactEmail && event.contactPhone) && <div style={{height: '0.5rem'}} /> }
+      { event.contactPhone &&
+      <div><a href={`tel:${event.contactPhone}`}>{event.contactPhone}</a></div>
+      }
     </div>
     }
     {/*TODO: implement moreinformation links from back-end*/}
