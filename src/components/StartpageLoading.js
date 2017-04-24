@@ -23,7 +23,6 @@ export default class StartpageLoading extends Component {
       <div>
         <Lipping />
         <div style={{background: '#333', minHeight: '100vh'}}>
-          <BottomBar />
           <h1 className='Startpage-heading'>Loading</h1>
           <Row>
             <Column>
@@ -49,6 +48,7 @@ export default class StartpageLoading extends Component {
             </Column>
           </Row>
         </div>
+        <BottomBar><div style={{height: '3.75rem'}} /></BottomBar>
       </div>
     );
   }

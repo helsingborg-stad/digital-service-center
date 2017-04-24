@@ -13,7 +13,6 @@ export default class StartpageError extends Component {
 
     return (
       <div style={{background: '#333', minHeight: '100vh'}}>
-        <BottomBar />
         <Row>
           <Column />
           <Column>
@@ -33,6 +32,7 @@ export default class StartpageError extends Component {
           </Column>
           <Column />
         </Row>
+        <BottomBar><div style={{height: '3.75rem'}} /></BottomBar>
       </div>
     );
   }
