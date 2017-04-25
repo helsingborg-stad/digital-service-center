@@ -30,6 +30,7 @@ function helsingborg_dsc_events_response() {
     subTopLinks => get_links_for_option('hdsc-landing-settings-sub-top-links-local')
   ];
 
+  $response['landingPages']['shared'] = [];
   $free_wifi = get_post_meta(get_option('hdsc-landing-settings-free-wifi-page'), 'event_iframe', true);
   if ($free_wifi) {
     $response['landingPages']['shared']['freeWifi'] = [
