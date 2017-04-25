@@ -13,5 +13,7 @@ function helsingborg_dsc_landing_pages() {
 }
 
 include('includes/landing-pages-settings.php');
+include('includes/save-categories.php');
+include('includes/landing-pages-categories.php');
 
 ?>
