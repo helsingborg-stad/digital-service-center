@@ -173,10 +173,10 @@
   border-right: solid 4px white;
 }
 
-.Calendar.Calendar--local .calendar-button-wrapper button.alendarButton{
+.Calendar.Calendar--local .Calendar-button-wrapper button.CalendarButton{
   background-color: rgb(234, 103, 31);
 }
-.Calendar.Calendar--visitor .calendar-button-wrapper button.CalendarButton{
+.Calendar.Calendar--visitor .Calendar-button-wrapper button.CalendarButton{
   background-color: rgb(199, 13, 83);
 }
 
