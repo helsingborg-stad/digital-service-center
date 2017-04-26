@@ -17,6 +17,7 @@
   background: #fff;
   color: #c70d53;
   padding: 0.75rem 2rem;
+  padding-left: 3rem;
   font-weight: bold;
   cursor: pointer;
 }
@@ -32,7 +33,22 @@
 .SideNavigationLink--selected {
   color: #fff;
 }
-
+.SideNavigationLink__icon {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 0.75rem;
+    transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    width: 1.625rem;
+}
+.SideNavigationLink__icon svg{
+    max-width: 1.625rem;
+    display: inline-block;
+}
 .SideNavigation ul {
   position: absolute;
   top: -40px;
