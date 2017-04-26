@@ -43,7 +43,7 @@ export default class Calendar extends React.Component {
 
     const day = Moment().day();
     const maxDaysToDelete = 5;
-    const isMonToFri = !(day > 0 && day <= maxDaysToDelete);
+    const isMonToFri = (day > 0 && day <= maxDaysToDelete);
     let daysToAdd = 0;
     let startDate = Moment();
     let endDate = Moment();
