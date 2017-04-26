@@ -103,7 +103,11 @@ export class LandingPage extends Component {
     return (
       <div className='LandingPage'>
         <Lipping />
-        <SiteHeader heading={pageData.heading} bgColor={this.props.bgColor} freeWifiLink={this.props.landingPages.shared.freeWifi}>
+        <SiteHeader
+          heading={pageData.heading}
+          bgColor={this.props.bgColor}
+          freeWifiLink={this.props.landingPages.shared.freeWifi}
+        >
           { pageData.topLinks.map(({name, url}) => (
             <SiteHeaderLink name={name} href={url} key={url} />))
           }
@@ -146,7 +150,7 @@ export class LandingPage extends Component {
               onClick={this.changeOverlayEvent.bind(this)} />
             ))}
           </EventShowcase>
-          <SiteFooter>
+          <SiteFooter color={this.props.bgColor}>
             { [...pageData.topLinks, ...pageData.subTopLinks].map(({name, url}) => (
               <SiteFooterLink name={name} href={url} key={url} />))
             }
