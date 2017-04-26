@@ -128,6 +128,7 @@ export class LandingPage extends Component {
               selected={this.state.activeCategories.includes(cat.id)}
               activeColor={cat.activeColor}
               handleClick={() => this.handleSideNavClick(cat.id)}
+              icon='Bed'
             />)
           }
         </SideNavigation>
