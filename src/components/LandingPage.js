@@ -169,7 +169,7 @@ export class LandingPage extends Component {
         </main>
         <aside>
           <AsideMenu>
-            <Calendar />
+            <Calendar themeCssClass={this.props.type} />
             <WeatherWidget />
           </AsideMenu>
         </aside>
