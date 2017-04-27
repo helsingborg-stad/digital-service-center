@@ -18,7 +18,7 @@ export default class SectionCard extends Component {
         })}
         </div>
         <div className='SectionCard-scrollWrapper'>
-          <Scrollbars style={{ width: '100%', height: '35vh' }}>
+          <Scrollbars style={{ width: '100%', height: '40vh' }}>
             <div className='SectionCard-postWrapper'>
             {this.props.posts.map(post => {
               return (

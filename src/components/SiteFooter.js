@@ -2,9 +2,9 @@ import React from 'react';
 import Link from './Link';
 import './SiteFooter.css';
 
-export const SiteFooter = ({children}) => {
+export const SiteFooter = ({children, color}) => {
   return (
-    <div className='SiteFooter'>
+    <div className='SiteFooter' style={{background: color}}>
       <span className='SiteFooterLink-wrapper'>
       {children}
       </span>
@@ -16,7 +16,8 @@ SiteFooter.propTypes = {
   children: React.PropTypes.oneOfType([
     React.PropTypes.arrayOf(React.PropTypes.node),
     React.PropTypes.node
-  ])
+  ]),
+  color: React.PropTypes.string
 };
 
 export const SiteFooterLink = ({name, href}) => {

@@ -108,15 +108,40 @@ function fetch_google_places() {
         <button class="button button-primary" type="submit">Importera</button>
     </form>
     <br>
+    <table class="wp-list-table widefat fixed striped" style="width: 715px;">
+        <thead>
+            <tr>
+                <td width="24">
+                    <input type="checkbox" name="selectAll" id="selectAllGooglePlaceTypes" />
+                </td>
+                <th>
+                    <strong>Namn</strong>
+                </td>
+                <th>
+                    <strong>Place ID</strong>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+        foreach(get_option('saved_google_places_details', []) as $place_details) {
+        ?>
+            <tr>
+                <th><input type="checkbox" name="saved_google_place_types_checkbox[]" value="<?php echo $saved_google_place_type['event_category_id']; ?>" /></th>
+                <td><a href="<?php echo $place_details['data']['result']['url']; ?>" target="_blank"><?php echo $place_details['data']['result']['name']; ?></a></td>
+                <td><?php echo $place_details['data']['result']['place_id']; ?></td>
+            </tr>
+        <?php
+        }
+        ?>
+        </tbody>
+    </table>
+    <div class="tablenav">
+        <div class="tablenav-pages" style="float: none;">
+            <span class="displaying-num"><?php echo count(get_option('saved_google_places_details', [])) ?> platser</span>
+        </div>
+    </div>
     <?php
-    $saved_google_places = get_option('saved_google_places');
-    foreach($saved_google_places as $place) {
-        echo $place . '<br>';
-    }
-
-    foreach(get_option('saved_google_places_details', []) as $place_details) {
-        echo $place_details['data']['result']['name'] . '<br>';
-    }
 }
 
 function exclude_google_place_form() {

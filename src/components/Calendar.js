@@ -1,47 +1,143 @@
-import React, { Component } from 'react';
-import { MonthView, TransitionView } from 'react-date-picker';
-import 'react-date-picker/index.css';
+import React from 'react';
+import { DayPickerRangeController } from 'react-dates';
+import 'react-dates/lib/css/_datepicker.css';
+import Moment from 'moment';
 import './Calendar.css';
 
-export default class Calendar extends Component {
+const CalendarHeader = ({text}) => (
+   <div className="CalendarHeader">{text}</div>
+);
+
+CalendarHeader.propTypes = {
+  text: React.PropTypes.string.isRequired
+};
+
+const CalendarButton = ({onClick, text}) => (
+  <button className="CalendarButton" onClick={onClick} >{text}</button>
+);
+
+CalendarButton.propTypes = {
+  onClick: React.PropTypes.func.isRequired,
+  text: React.PropTypes.string.isRequired
+};
+
+export default class Calendar extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      startDate: null,
+      endDate: null,
+      focusedInput: 'startDate',
+      selectedMonth: Moment()
+    };
+  }
+  handleSetDateToday() {
+    const today = Moment();
+    this.setState({startDate: today, endDate: today });
+  }
+  handleSetDateTomorrow(){
+    const tomorrow = Moment().add(1, 'days');
+    this.setState({startDate: tomorrow, endDate: tomorrow });
+  }
+  handleSetDateWeekend(){
+
+    const day = Moment().day();
+    const maxDaysToDelete = 5;
+    const isMonToFri = (day > 0 && day <= maxDaysToDelete);
+    let daysToAdd = 0;
+    let startDate = Moment();
+    let endDate = Moment();
+
+    if (isMonToFri) {
+      // mon = 4, tus = 3, wed = 2, thu = 1, fri = 0
+      daysToAdd = maxDaysToDelete - day;
+
+      startDate = startDate.add(daysToAdd, 'days');
+      endDate = endDate.add(daysToAdd + 2, 'days');
+    } else {
+      // sunday = 0, saturday = 1
+      daysToAdd = day === 0 ? day : 1;
+      endDate = endDate.add(daysToAdd, 'days');
+    }
+
+    this.setState({ startDate, endDate });
+  }
+  handleResetDate(){
+    this.setState({startDate: null, endDate: null, focusedInput: 'startDate'});
+  }
+  onDatesChange({ startDate, endDate }) {
+    let changedEndDate = endDate;
+    if (this.state.focusedInput === 'startDate' && endDate !== null) {
+      changedEndDate = null;
+    }
+
+    this.setState({ startDate, endDate: changedEndDate });
+  }
+  onFocusChange(focusedInput) {
+    this.setState({
+      focusedInput: !focusedInput ? 'startDate' : focusedInput
+    });
+  }
+  onMonthClick(onNextClick) {
+    const selectedMonth = onNextClick
+      ? this.state.selectedMonth.add(1, 'months')
+      : this.state.selectedMonth.add(-1, 'months');
+    this.setState({ selectedMonth });
+  }
+  navMonth(goNext, selectedMonth) {
+    const newSelectedMonth = goNext
+      ? Moment(selectedMonth).add(1, 'months')
+      : Moment(selectedMonth).subtract(1, 'months');
+    return newSelectedMonth.locale("sv").format('MMM');
+  }
+  isPassedDay(day){
+    return day.isBefore(Moment()) && !day.isSame(Moment(), 'days');
+  }
   render() {
-    const getDayOfMonth = () => {
-      return new Date().getDate();
-    };
-    const getWorkDay = () => {
-      const date = new Date();
-      const weekdays = new Array(7);
-
-      weekdays[0] = 'Sun';
-      weekdays[1] = 'Mon';
-      weekdays[2] = 'Tue';
-      weekdays[3] = 'Wed';
-      weekdays[4] = 'Thu';
-      weekdays[5] = 'Fri';
-      weekdays[6] = 'Sat';
-
-      return weekdays[date.getDay()];
-    };
-
     return (
-      <div>
-        <div className='Calendar-header'>
-          <span className='Calendar-header-workday'>{getWorkDay()}</span>
-          <span className='Calendar-header-day'>{getDayOfMonth()}</span>
-        </div>
-        <TransitionView>
-          <MonthView
-            navigation={true}
-            locale='en'
-            forceValidDate={false}
-            highlightWeekends={false}
-            highlightToday={true}
-            weekNumbers={false}
-            weekStartDay={0}
-            footer={false}
+      <div className={`Calendar Calendar--${this.props.themeCssClass}`}>
+        <CalendarHeader
+          text="Välj datum"
+        />
+        <DayPickerRangeController
+          startDate={this.state.startDate}
+          endDate={this.state.endDate}
+          onDatesChange={this.onDatesChange.bind(this)}
+          focusedInput={this.state.focusedInput}
+          onFocusChange={this.onFocusChange.bind(this)}
+          navNext={<div>{this.navMonth(true, this.state.selectedMonth)}</div>}
+          navPrev={<div>{this.navMonth(false, this.state.selectedMonth)}</div>}
+          onNextMonthClick={this.onMonthClick.bind(this, true)}
+          onPrevMonthClick={this.onMonthClick.bind(this, false)}
+          isDayBlocked={this.isPassedDay.bind(this)}
+        />
+        <div className="Calendar-button-wrapper">
+          <CalendarButton
+            onClick={this.handleSetDateToday.bind(this)}
+            text="Idag"
           />
-        </TransitionView>
+          <CalendarButton
+            onClick={this.handleSetDateTomorrow.bind(this)}
+            text="Imorgon"
+          />
+          <CalendarButton
+            onClick={this.handleSetDateWeekend.bind(this)}
+            text="Helg"
+          />
+          <CalendarButton
+            onClick={this.handleResetDate.bind(this)}
+            text="Allt"
+          />
+        </div>
       </div>
     );
   }
 }
+
+Calendar.defaultProps = {
+  themeCssClass: 'events'
+};
+
+Calendar.propTypes = {
+  themeCssClass: React.PropTypes.string
+};

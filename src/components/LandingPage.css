@@ -7,7 +7,7 @@
   position: absolute;
   z-index: 9;
   left: calc(50% - 300px);
-  bottom: calc(20vh + 1.4rem);
+  bottom: calc(23vh + 1.4rem);
   width: 350px
 }
 

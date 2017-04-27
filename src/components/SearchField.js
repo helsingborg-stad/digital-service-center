@@ -1,44 +1,32 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './SearchField.css';
-import searchIcon from '../media/search.svg';
 import classnames from 'classnames';
-import SearchResultOverlay from './SearchResultOverlay';
 
-export default class SearchField extends Component {
-  render() {
-    return (
-      <div className={classnames('SearchField', this.props.inline && 'SearchField--inline')}>
-      <form method='get' id='search' action='#' onSubmit={this.handleSearchSubmit}>
+const SearchField = ({ inline, onSearchChange }) => {
+  return (
+    <div className={classnames('SearchField', inline && 'SearchField--inline')}>
       <input
         type='search'
-        onFocus={()=>console.log('test')}
+        onChange={(ev) => onSearchChange(ev.target.value)}
         className={classnames(
           'SearchField-input',
-          this.props.inline && 'SearchField-input--inline'
+          inline && 'SearchField-input--inline'
           )
         }
         placeholder='Search'
       />
-      <input
-        className={classnames(
-          'SearchField-button',
-          this.props.inline && 'SearchField-button--inline'
-          )
-        }
-        name="searchsubmit" type="image" src={searchIcon} value="Sök" />
-      </form>
-      </div>
-    );
-  }
-  handleSearchSubmit() {
-    return false;
-  }
-}
+    </div>
+  );
+};
 
 SearchField.propTypes = {
-  inline: React.PropTypes.bool
+  inline: React.PropTypes.bool,
+  onSearchChange: React.PropTypes.func
 };
 
 SearchField.defaultProps = {
-  inline: false
+  inline: false,
+  onSearchChange: () => {}
 };
+
+export default SearchField;
