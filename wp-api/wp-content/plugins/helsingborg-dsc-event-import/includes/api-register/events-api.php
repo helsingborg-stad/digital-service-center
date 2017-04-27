@@ -22,12 +22,14 @@ function helsingborg_dsc_events_response() {
   $response['landingPages']['visitor'] = [
     heading => get_option('hdsc-landing-settings-heading-visitor', 'Explore Helsingborg'),
     topLinks => get_links_for_option('hdsc-landing-settings-top-links-visitor'),
-    subTopLinks => get_links_for_option('hdsc-landing-settings-sub-top-links-visitor')
+    subTopLinks => get_links_for_option('hdsc-landing-settings-sub-top-links-visitor'),
+    subMenuCategories => get_structured_landing_categories('hdsc-landing-visitor-categories')
   ];
   $response['landingPages']['local'] = [
     heading => get_option('hdsc-landing-settings-heading-local', 'Explore Helsingborg'),
     topLinks => get_links_for_option('hdsc-landing-settings-top-links-local'),
-    subTopLinks => get_links_for_option('hdsc-landing-settings-sub-top-links-local')
+    subTopLinks => get_links_for_option('hdsc-landing-settings-sub-top-links-local'),
+    subMenuCategories => get_structured_landing_categories('hdsc-landing-local-categories')
   ];
 
   $free_wifi = get_post_meta(get_option('hdsc-landing-settings-free-wifi-page'), 'event_iframe', true);
@@ -251,4 +253,17 @@ function get_google_place_categories($place_types) {
       },
       []
   );
+}
+
+function get_structured_landing_categories($option) {
+  $categories = get_option($option);
+  $structured_array = [];
+
+  if(is_array($categories)) {
+    foreach($categories as $category) {
+      $structured_array[$category['main_category']] = $category['sub_categories'];
+    }
+  }
+
+  return $structured_array;
 }
