@@ -25,13 +25,3 @@ export function events(state = {}, action) {
     return state;
   }
 }
-
-export function eventsCategories(state = [], action) {
-  switch (action.type) {
-  case 'EVENTS_CATEGORIES_FETCH_DATA_SUCCESS':
-    return action.categories;
-
-  default:
-    return state;
-  }
-}

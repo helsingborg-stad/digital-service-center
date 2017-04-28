@@ -29,7 +29,7 @@ function save_main_category($option) {
     }
 
     $new_category_obj = [
-        main_category => $new_category_id,
+        main_category => (int)$new_category_id,
         sub_categories => []
     ];
 
@@ -89,9 +89,10 @@ function save_sub_categories($option, $post_name) {
     if(!empty($_POST['sub_categories'])) {
         foreach($saved_categories as $key => $saved_category) {
             if($saved_category['main_category'] == $main_category) {
+                $sub_cats = array_map(function($cat) { return (int)$cat; }, $_POST['sub_categories']);
                 $new_category = [
                     main_category => $saved_category['main_category'],
-                    sub_categories => $_POST['sub_categories']
+                    sub_categories => $sub_cats
                 ];
                 $saved_categories[$key] = $new_category;
                 update_option($option, $saved_categories);
@@ -115,7 +116,7 @@ function delete_local_category() {
     delete_category('hdsc-landing-local-categories', 'saved_main_local_categories');
 }
 
-function delete_category($option, $post_name) { 
+function delete_category($option, $post_name) {
     $category_to_delete = $_POST[$post_name];
 
     if($category_to_delete == null) {

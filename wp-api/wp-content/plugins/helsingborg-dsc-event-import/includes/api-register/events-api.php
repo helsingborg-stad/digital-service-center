@@ -17,19 +17,28 @@ function helsingborg_dsc_events_response() {
   $editable_events_parsed = parse_editable_events($editable_events);
   $google_places_parsed = parse_google_places();
   $all_events = array_merge((array)$imported_events_parsed, (array)$editable_events_parsed, (array)$google_places_parsed);
+  $categories_to_show_on_map = array_reduce($all_events, function($acc, $event) {
+    $cat_ids = array_map(function($cat) { return $cat['id']; }, $event['categories']);
+    foreach ($cat_ids as $cat_id) {
+      $event_contains_location = $event['location']['latitude'] != null && $event['location']['longitude'] != null;
+      if ($event_contains_location && !in_array($cat_id, $acc)) {
+        $acc[] = $cat_id;
+      }
+    }
+    return $acc;
+  }, []);
   $response['events'] = $all_events;
-  $response['categories'] = get_event_categories($google_places_parsed);
   $response['landingPages']['visitor'] = [
     heading => get_option('hdsc-landing-settings-heading-visitor', 'Explore Helsingborg'),
     topLinks => get_links_for_option('hdsc-landing-settings-top-links-visitor'),
     subTopLinks => get_links_for_option('hdsc-landing-settings-sub-top-links-visitor'),
-    subMenuCategories => get_structured_landing_categories('hdsc-landing-visitor-categories')
+    categories => get_landing_page_categories('hdsc-landing-visitor-categories', $categories_to_show_on_map)
   ];
   $response['landingPages']['local'] = [
     heading => get_option('hdsc-landing-settings-heading-local', 'Explore Helsingborg'),
     topLinks => get_links_for_option('hdsc-landing-settings-top-links-local'),
     subTopLinks => get_links_for_option('hdsc-landing-settings-sub-top-links-local'),
-    subMenuCategories => get_structured_landing_categories('hdsc-landing-local-categories')
+    categories => get_landing_page_categories('hdsc-landing-local-categories', $categories_to_show_on_map)
   ];
 
   $response['landingPages']['shared'] = [];
@@ -47,7 +56,29 @@ function helsingborg_dsc_events_response() {
   return rest_ensure_response($response);
 }
 
-function get_event_categories($events) {
+function get_landing_page_categories($option, $categories_to_include) {
+  $mapped_categories = get_option($option, []);
+
+  // Remove mapped categories with no matched events
+  foreach ($mapped_categories as $idx=>$mapped_cat) {
+    $main_cat = $mapped_cat['main_category'];
+    $sub_cats = $mapped_cat['sub_categories'];
+    $main_category_included = in_array($main_cat, $categories_to_include);
+    $included_sub_categories_count = count(array_intersect($sub_cats, $categories_to_include));
+    // Remove entire category + sub-category pair if no match is found
+    if (!$main_category_included && count($included_sub_categories_count) == 0) {
+      unset($mapped_categories[$idx]);
+    }
+    // Remove any unmapped sub-categories
+    else if (count($included_sub_categories_count) < count($sub_cats)) {
+      foreach($sub_cats as $sub_cat_idx=>$sub_cat) {
+        if (!in_array($sub_cat, $categories_to_include)) {
+          unset($mapped_categories[$idx]['sub_categories'][$sub_cat_idx]);
+        }
+      }
+    }
+  }
+
   $colors = [
     '#f7a600',
     '#e3000f',
@@ -57,25 +88,30 @@ function get_event_categories($events) {
     '#0095db',
     '#d35098'
   ];
-  $categories = array_reduce(
-    $events,
-    function($acc, $event) {
-        $categories = $event['categories'];
-        foreach($categories as $category) {
-          if (!in_array($category, $acc)) {
-              $acc[] = $category;
-          }
-        }
-        return $acc;
-    },
-    []
-  );
-  $categories = array_slice($categories, 0, 7);
-  foreach ($categories as $idx=>&$cat) {
-    $cat['name'] = html_entity_decode($cat['name']);
-    $cat['activeColor'] = $colors[$idx];
+
+  $res = [];
+  foreach ($mapped_categories as $idx=>$cat_map) {
+    $res[] = parse_category_to_landing_page_format($cat_map['main_category'], $colors[$idx], 'Bed', $cat_map['sub_categories']);
   }
-  return $categories;
+  return $res;
+}
+
+function parse_category_to_landing_page_format($cat_id, $color, $icon_name, $sub_category_ids) {
+  $cat = get_category($cat_id);
+  $response = [
+    id => $cat->cat_ID,
+    name => html_entity_decode($cat->cat_name),
+    activeColor => $color,
+    iconName => $icon_name,
+  ];
+  $response['subCategories'] = array_map(function($sub_cat_id) {
+    $sub_cat = get_category($sub_cat_id);
+    return [
+      id => $sub_cat->cat_ID,
+      name => html_entity_decode($sub_cat->cat_name)
+    ];
+  }, $sub_category_ids);
+  return $response;
 }
 
 function get_links_for_option($option) {
@@ -248,27 +284,16 @@ function parse_google_places() {
 function get_google_place_categories($place_types) {
   return $distinct_place_types = array_reduce(
       get_option('saved_google_place_types', []),
-      function($acc, $p) use($place_types) {
+      function($acc, $p) use ($place_types) {
           $place_type = $p['google_place_type'];
           if (in_array($place_type, $place_types)) {
               $cat = get_category(intval($p['event_category_id']));
-              $acc[] = [ id => $cat->cat_ID, slug => $cat->slug, name => $cat->cat_name];
+              if ($cat->cat_ID != null) {
+                $acc[] = [ id => $cat->cat_ID, slug => $cat->slug, name => $cat->cat_name];
+              }
           }
           return $acc;
       },
       []
   );
-}
-
-function get_structured_landing_categories($option) {
-  $categories = get_option($option);
-  $structured_array = [];
-
-  if(is_array($categories)) {
-    foreach($categories as $category) {
-      $structured_array[$category['main_category']] = $category['sub_categories'];
-    }
-  }
-
-  return $structured_array;
 }

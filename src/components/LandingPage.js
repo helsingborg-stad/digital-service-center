@@ -121,7 +121,7 @@ export class LandingPage extends Component {
           <SearchField inline />
         </div>
         <SideNavigation>
-          {this.props.categories && this.props.categories.map(cat =>
+          {pageData.categories && !!pageData.categories.length && pageData.categories.map(cat =>
             <SideNavigationLink
               key={cat.id}
               name={cat.name}
@@ -134,7 +134,7 @@ export class LandingPage extends Component {
         </SideNavigation>
         <main>
           <GoogleMaps
-            {...selectedEventsWithCoordinates(this.props.events, this.state.activeCategories, this.props.categories)}
+            {...selectedEventsWithCoordinates(this.props.events, this.state.activeCategories, pageData.categories)}
             visibleModals={this.state.visibleModals}
             handleToggleModalVisibility={this.toggleModalVisibility.bind(this)}
             handleShowMoreInfo={this.changeOverlayEvent.bind(this)}
@@ -199,7 +199,6 @@ LandingPage.propTypes = {
 const mapStateToProps = (state) => {
   return {
     events: state.events,
-    categories: state.eventsCategories,
     landingPages: state.landingPages,
     hasErrored: state.eventsHasErrored,
     isLoading: state.eventsAreLoading,
