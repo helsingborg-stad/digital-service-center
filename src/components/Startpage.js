@@ -70,7 +70,7 @@ export class Startpage extends Component {
                 <SectionCard
                   section={this.props.data.visitorHeading}
                   link={'/visitor'}
-                  bgColor='#f4a428'
+                  bgColor='#c90e52'
                   tags={this.props.data.visitorTags}
                   posts={this.props.data.visitorPosts} />
               </Column>
@@ -86,7 +86,7 @@ export class Startpage extends Component {
                 <SectionCard
                   section={this.props.data.eventsHeading}
                   link={'/events'}
-                  bgColor='#c90e52'
+                  bgColor='#f4a428'
                   tags={this.props.data.eventsTags}
                   posts={this.props.data.eventsPosts} />
               </Column>
