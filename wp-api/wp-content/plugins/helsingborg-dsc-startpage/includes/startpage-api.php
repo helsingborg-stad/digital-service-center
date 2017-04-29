@@ -77,16 +77,16 @@ function get_visitor_or_local_posts($type) {
 }
 
 function get_visitor_or_local_tags($type) {
-  $imported_events = get_posts([ post_type => 'imported_event', numberposts => -1, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
-  $editable_events = get_posts([ post_type => 'editable_event', numberposts => -1, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
-  $all_events = array_merge($imported_events, $editable_events);
-  return array_map(function($category_id) use ($type) {
-    $category = get_category($category_id);
-    return [
+  $mapped_cats = get_option('hdsc-landing-' . $type .'-categories', []);
+  $response = [];
+  foreach ($mapped_cats as $mapped_cat) {
+    $category = get_category($mapped_cat['main_category']);
+    $response[] = [
       name => html_entity_decode($category->name),
       href => '/' . $type . '/category/' . $category->slug
     ];
-  }, get_categories_for_posts($all_events));
+  }
+  return $response;
 }
 
 function get_top_links($pages) {
