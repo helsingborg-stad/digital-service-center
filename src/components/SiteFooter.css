@@ -8,26 +8,40 @@
   text-align: center;
 }
 
+.SiteFooter-back-to-start {
+  position: relative;
+  float: left;
+  font-size: 0.875rem;
+  padding: 0 1em;
+  margin-left: 0.5em;
+  line-height: 3.25rem;
+  color: #fff;
+  font-weight: bold;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
 .SiteFooterLink-wrapper {
   display: inline-block;
   text-align: center;
+  margin-left: -170px;
 }
 
 .SiteFooterLink {
-    position: relative;
-    display: inline-block;
-    font-size: 0.875rem;
-    padding: 0 1em;
-    margin-right: 2.5em;
-    line-height: 3.25rem;
-    color: #fff;
-    font-weight: bold;
-    text-decoration: none;
-    text-transform: uppercase;
+  position: relative;
+  display: inline-block;
+  font-size: 0.875rem;
+  padding: 0 1em;
+  margin-right: 2.5em;
+  line-height: 3.25rem;
+  color: #fff;
+  font-weight: bold;
+  text-decoration: none;
+  text-transform: uppercase;
 }
 
 .SiteFooter:last-of-type {
-    margin-right: 0;
+  margin-right: 0;
 }
 
 .SiteFooter-logo {
