@@ -187,9 +187,6 @@
   font-size: 12px;
 }
 
-.Calendar-button-wrapper button.CalendarButton:not(:last-of-type) {
-  border-right: solid 4px #fff;
-}
 
 .Calendar.Calendar--local .Calendar-button-wrapper button.CalendarButton {
   background-color: rgb(234, 103, 31);
@@ -199,5 +196,5 @@
 }
 
 button.CalendarButton:not(:last-of-type) {
-  margin-right: 5px;
+  margin-right: 8px;
 }

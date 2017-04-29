@@ -1,10 +1,10 @@
 .AsideMenu {
   background: #fff;
-  height: calc( 77vh - 4.6875rem - 3.25rem);
+  height: calc(77vh - 4.6875rem);
   position: absolute;
-  top: calc( 4.6875rem + 3.25rem );
+  top: 4.6875rem;
   right: 0;
   width: 325px;
-  border: 1px solid #e3e3e3;
-  border-right: 0;
+  border-left: 1px solid #e3e3e3;
+  border-bottom: 1px solid #e3e3e3;
 }

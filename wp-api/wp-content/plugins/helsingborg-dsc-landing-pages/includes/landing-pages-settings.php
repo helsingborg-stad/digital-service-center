@@ -8,11 +8,9 @@ add_action('admin_menu', hdsc_landing_settings_init);
 
 add_action('admin_init', function() {
   register_setting( 'hdsc-landing-settings', 'hdsc-landing-settings-heading-visitor');
-  register_setting( 'hdsc-landing-settings', 'hdsc-landing-settings-top-links-visitor');
-  register_setting( 'hdsc-landing-settings', 'hdsc-landing-settings-sub-top-links-visitor');
+  register_setting( 'hdsc-landing-settings', 'hdsc-landing-settings-bottom-links-visitor');
   register_setting( 'hdsc-landing-settings', 'hdsc-landing-settings-heading-local');
-  register_setting( 'hdsc-landing-settings', 'hdsc-landing-settings-top-links-local');
-  register_setting( 'hdsc-landing-settings', 'hdsc-landing-settings-sub-top-links-local');
+  register_setting( 'hdsc-landing-settings', 'hdsc-landing-settings-bottom-links-local');
   register_setting( 'hdsc-landing-settings', 'hdsc-landing-settings-free-wifi-page');
 });
 
@@ -63,21 +61,10 @@ function hdsc_landing_menu_callback() {
       </tr>
 
       <tr>
-        <th><label for="landingform-top-links-visitor">Top links</label></th>
+        <th><label for="landingform-bottom-links-visitor">Bottom links</label></th>
         <td>
-          <select id="landingform-top-links-visitor" multiple name="hdsc-landing-settings-top-links-visitor[]">
-          <?php foreach(hdsc_landing_get_selectable_links_for_option('hdsc-landing-settings-top-links-visitor') as $id=>$page) {
-            echo '<option value="' . $id . '"' . ($page['selected'] ? "selected" : "") . '>' . $page['title'] . '</option>';
-          } ?>
-          </select>
-        </td>
-      </tr>
-
-      <tr>
-        <th><label for="landingform-sub-top-links-visitor">Sub-top links</label></th>
-        <td>
-          <select id="landingform-sub-top-links-visitor" multiple name="hdsc-landing-settings-sub-top-links-visitor[]">
-          <?php foreach(hdsc_landing_get_selectable_links_for_option('hdsc-landing-settings-sub-top-links-visitor') as $id=>$page) {
+          <select id="landingform-bottom-links-visitor" multiple name="hdsc-landing-settings-bottom-links-visitor[]">
+          <?php foreach(hdsc_landing_get_selectable_links_for_option('hdsc-landing-settings-bottom-links-visitor') as $id=>$page) {
             echo '<option value="' . $id . '"' . ($page['selected'] ? "selected" : "") . '>' . $page['title'] . '</option>';
           } ?>
           </select>
@@ -95,21 +82,10 @@ function hdsc_landing_menu_callback() {
       </tr>
 
       <tr>
-        <th><label for="landingform-top-links-local">Top links</label></th>
+        <th><label for="landingform-bottom-links-local">Bottom links</label></th>
         <td>
-          <select id="landingform-top-links-local" multiple name="hdsc-landing-settings-top-links-local[]">
-          <?php foreach(hdsc_landing_get_selectable_links_for_option('hdsc-landing-settings-top-links-local') as $id=>$page) {
-            echo '<option value="' . $id . '"' . ($page['selected'] ? "selected" : "") . '>' . $page['title'] . '</option>';
-          } ?>
-          </select>
-        </td>
-      </tr>
-
-      <tr>
-        <th><label for="landingform-sub-top-links">Sub-top links</label></th>
-        <td>
-          <select id="landingform-sub-top-links" multiple name="hdsc-landing-settings-sub-top-links-local[]">
-          <?php foreach(hdsc_landing_get_selectable_links_for_option('hdsc-landing-settings-sub-top-links-local') as $id=>$page) {
+          <select id="landingform-bottom-links-local" multiple name="hdsc-landing-settings-bottom-links-local[]">
+          <?php foreach(hdsc_landing_get_selectable_links_for_option('hdsc-landing-settings-bottom-links-local') as $id=>$page) {
             echo '<option value="' . $id . '"' . ($page['selected'] ? "selected" : "") . '>' . $page['title'] . '</option>';
           } ?>
           </select>
@@ -128,7 +104,7 @@ function hdsc_landing_menu_callback() {
             'name' => 'hdsc-landing-settings-free-wifi-page',
             'selected' => $current_selected_wifi_page
           ];
-          wp_dropdown_pages($args); 
+          wp_dropdown_pages($args);
           ?>
           </td>
         </tr>

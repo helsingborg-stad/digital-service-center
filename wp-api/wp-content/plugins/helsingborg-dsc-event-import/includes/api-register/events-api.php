@@ -30,14 +30,12 @@ function helsingborg_dsc_events_response() {
   $response['events'] = $all_events;
   $response['landingPages']['visitor'] = [
     heading => get_option('hdsc-landing-settings-heading-visitor', 'Explore Helsingborg'),
-    topLinks => get_links_for_option('hdsc-landing-settings-top-links-visitor'),
-    subTopLinks => get_links_for_option('hdsc-landing-settings-sub-top-links-visitor'),
+    bottomLinks => get_links_for_option('hdsc-landing-settings-bottom-links-visitor'),
     categories => get_landing_page_categories('hdsc-landing-visitor-categories', $categories_to_show_on_map)
   ];
   $response['landingPages']['local'] = [
     heading => get_option('hdsc-landing-settings-heading-local', 'Explore Helsingborg'),
-    topLinks => get_links_for_option('hdsc-landing-settings-top-links-local'),
-    subTopLinks => get_links_for_option('hdsc-landing-settings-sub-top-links-local'),
+    bottomLinks => get_links_for_option('hdsc-landing-settings-bottom-links-local'),
     categories => get_landing_page_categories('hdsc-landing-local-categories', $categories_to_show_on_map)
   ];
 

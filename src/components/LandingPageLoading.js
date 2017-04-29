@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import Lipping from './Lipping';
-import { SiteSubHeader } from './SiteSubHeader';
 import { EventShowcase, Event } from './EventShowcase';
 import AsideMenu from './AsideMenu';
 
@@ -10,7 +9,6 @@ export class LandingPageLoading extends Component {
       <div className='LandingPage'>
         <Lipping />
       <div className='SiteHeader' style={{backgroundColor: this.props.bgColor}} />
-        <SiteSubHeader logoColor={this.props.bgColor} />
         <main>
           <div className='GoogleMaps-wrapper' />
           <EventShowcase>

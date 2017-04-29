@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Lipping from './Lipping';
-import { SiteHeader, SiteHeaderLink } from './SiteHeader';
-import { SiteSubHeader, SiteSubHeaderLink } from './SiteSubHeader';
+import SiteHeader from './SiteHeader';
 import { SiteFooter, SiteFooterLink } from './SiteFooter';
 import { SideNavigation, SideNavigationLink } from './SideNavigation';
 import SearchField from './SearchField';
@@ -107,16 +106,7 @@ export class LandingPage extends Component {
           heading={pageData.heading}
           bgColor={this.props.bgColor}
           freeWifiLink={this.props.landingPages.shared.freeWifi}
-        >
-          { pageData.topLinks.map(({name, url}) => (
-            <SiteHeaderLink name={name} href={url} key={url} />))
-          }
-        </SiteHeader>
-        <SiteSubHeader logoColor={this.props.bgColor}>
-          { pageData.subTopLinks.map(({name, url}) => (
-            <SiteSubHeaderLink name={name} href={url} key={url} />))
-          }
-        </SiteSubHeader>
+        />
         <div className='LandingPage-searchWrapper'>
           <SearchField inline />
         </div>
@@ -152,7 +142,7 @@ export class LandingPage extends Component {
             ))}
           </EventShowcase>
           <SiteFooter color={this.props.bgColor}>
-            { [...pageData.topLinks, ...pageData.subTopLinks].map(({name, url}) => (
+            { pageData.bottomLinks.map(({name, url}) => (
               <SiteFooterLink name={name} href={url} key={url} />))
             }
           </SiteFooter>
