@@ -35,12 +35,11 @@ export default class Calendar extends React.Component {
     const today = Moment();
     this.setState({startDate: today, endDate: today });
   }
-  handleSetDateTomorrow(){
+  handleSetDateTomorrow() {
     const tomorrow = Moment().add(1, 'days');
     this.setState({startDate: tomorrow, endDate: tomorrow });
   }
-  handleSetDateWeekend(){
-
+  handleSetDateWeekend() {
     const day = Moment().day();
     const maxDaysToDelete = 5;
     const isMonToFri = (day > 0 && day <= maxDaysToDelete);
@@ -62,7 +61,7 @@ export default class Calendar extends React.Component {
 
     this.setState({ startDate, endDate });
   }
-  handleResetDate(){
+  handleResetDate() {
     this.setState({startDate: null, endDate: null, focusedInput: 'startDate'});
   }
   onDatesChange({ startDate, endDate }) {
@@ -88,9 +87,9 @@ export default class Calendar extends React.Component {
     const newSelectedMonth = goNext
       ? Moment(selectedMonth).add(1, 'months')
       : Moment(selectedMonth).subtract(1, 'months');
-    return newSelectedMonth.locale("sv").format('MMM');
+    return newSelectedMonth.locale('sv').format('MMM');
   }
-  isPassedDay(day){
+  isPassedDay(day) {
     return day.isBefore(Moment()) && !day.isSame(Moment(), 'days');
   }
   render() {

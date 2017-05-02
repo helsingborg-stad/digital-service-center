@@ -5,6 +5,7 @@ import { SiteFooter, SiteFooterLink } from './SiteFooter';
 import { SideNavigation, SideNavigationLink } from './SideNavigation';
 import SearchField from './SearchField';
 import GoogleMaps from './GoogleMaps';
+import GoogleMapsDirections from './GoogleMapsDirections';
 import { EventShowcase, Event } from './EventShowcase';
 import EventOverlay from './EventOverlay';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
@@ -51,7 +52,8 @@ export class LandingPage extends Component {
     this.state = {
       visibleModals: [],
       visibleOverlayEvent: props.activeEvent || null,
-      activeCategories: []
+      activeCategories: [],
+      directions: null
     };
   }
 
@@ -82,6 +84,12 @@ export class LandingPage extends Component {
     }
   }
 
+  showDirections(directions) {
+    this.setState({
+      directions: directions
+    });
+  }
+
   handleSideNavClick(id) {
     const { activeCategories } = this.state;
     this.setState(activeCategories.includes(id)
@@ -110,6 +118,7 @@ export class LandingPage extends Component {
         <div className='LandingPage-searchWrapper'>
           <SearchField inline />
         </div>
+        {!this.state.directions &&
         <SideNavigation>
           {pageData.categories && !!pageData.categories.length && pageData.categories.map(cat =>
             <SideNavigationLink
@@ -122,14 +131,25 @@ export class LandingPage extends Component {
             />)
           }
         </SideNavigation>
+        }
         <main>
-          <GoogleMaps
-            {...selectedEventsWithCoordinates(this.props.events, this.state.activeCategories, pageData.categories)}
-            visibleModals={this.state.visibleModals}
-            handleToggleModalVisibility={this.toggleModalVisibility.bind(this)}
-            handleShowMoreInfo={this.changeOverlayEvent.bind(this)}
-            apiKey={this.props.googleMapsApiKey}
-          />
+          <div className='LandingPage-mapWrapper'>
+            {!this.state.directions
+            ? <GoogleMaps
+              {...selectedEventsWithCoordinates(this.props.events, this.state.activeCategories, pageData.categories)}
+              visibleModals={this.state.visibleModals}
+              handleToggleModalVisibility={this.toggleModalVisibility.bind(this)}
+              handleShowMoreInfo={this.changeOverlayEvent.bind(this)}
+              apiKey={this.props.googleMapsApiKey}
+              handleShowDirections={this.showDirections.bind(this)}
+            />
+            : <GoogleMapsDirections
+              origin={this.state.directions.origin}
+              destination={this.state.directions.destination}
+              handleClose={() => this.showDirections(null).bind(this)}
+            />
+            }
+          </div>
           <EventShowcase>
             {this.props.events.map(event => (
             <Event
@@ -153,11 +173,12 @@ export class LandingPage extends Component {
             transitionEnter={true}
             transitionLeave={true}
           >
-            { this.state.visibleOverlayEvent &&
+            { this.state.visibleOverlayEvent && !this.state.directions &&
               <EventOverlay
                 key='event-overlay'
                 event={this.props.events.find(e => e.slug === this.state.visibleOverlayEvent)}
                 handleClose={() => this.changeOverlayEvent(null)}
+                handleShowDirections={this.showDirections.bind(this)}
               />
             }
           </ReactCSSTransitionGroup>
@@ -183,7 +204,17 @@ LandingPage.propTypes = {
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
   activeEvent: PropTypes.string,
-  googleMapsApiKey: PropTypes.string
+  googleMapsApiKey: PropTypes.string,
+  directions: PropTypes.shape({
+    origin: PropTypes.shape({
+      lat: PropTypes.number.isRequired,
+      lng: PropTypes.number.isRequired
+    }).isRequired,
+    destination: PropTypes.shape({
+      lat: PropTypes.number.isRequired,
+      lng: PropTypes.number.isRequired
+    }).isRequired
+  })
 };
 
 const mapStateToProps = (state) => {

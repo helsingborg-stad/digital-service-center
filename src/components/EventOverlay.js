@@ -4,6 +4,17 @@ import Link from './Link';
 import closeCrossSvg from '../media/close-cross.svg';
 import './EventOverlay.css';
 import ReactPlayer from 'react-player';
+import { RippleButton } from './react-ripple-effect';
+import getUserLocation from '../util/getUserLocation';
+
+const handleNavigationClick = (destinationLat, destinationLng, callback) => {
+  getUserLocation().then((location) => {
+    callback({
+      origin: {lat: location.lat, lng: location.lng},
+      destination: {lat: destinationLat, lng: destinationLng}
+    });
+  });
+};
 
 const EventOverlayBackdrop = ({children}) => (
   <div className='EventOverlayBackdrop'>{children}</div>
@@ -69,7 +80,7 @@ const EventDate = ({start, end}) => (
   </div>
 );
 
-const EventOverlay = ({event, handleClose, showVideoButton, onVideoButtonClick}) => {
+const EventOverlay = ({event, handleClose, showVideoButton, onVideoButtonClick, handleShowDirections}) => {
   return (
   <div className='EventOverlay'>
     <div style={{position: 'absolute', top: '-2.5rem', right: '0'}}>
@@ -144,9 +155,15 @@ const EventOverlay = ({event, handleClose, showVideoButton, onVideoButtonClick})
         Video
       </button>
       }
-      <a href='#asdf' className='EventOverlay-button'>
-        Take me there
-      </a>
+      { event.location && !!event.location.latitude && !!event.location.longitude &&
+        <RippleButton
+          onClick={() =>
+            handleNavigationClick(event.location.latitude, event.location.longitude, handleShowDirections)}
+          className='EventOverlay-button'
+        >
+          Take me there
+        </RippleButton>
+      }
       { event.bookingLink &&
       <Link iframe={{url:event.bookingLink}} className='EventOverlay-button'>
         Tickets
@@ -160,7 +177,8 @@ const EventOverlay = ({event, handleClose, showVideoButton, onVideoButtonClick})
 
 EventOverlay.propTypes = {
   handleClose: PropTypes.func,
-  event: PropTypes.object // todo
+  event: PropTypes.object, // todo
+  handleShowDirections: PropTypes.func
 };
 
 export default class extends Component {
@@ -185,6 +203,7 @@ export default class extends Component {
         <EventOverlay
           event={this.props.event}
           handleClose={this.props.handleClose}
+          handleShowDirections={this.props.handleShowDirections}
           onVideoButtonClick={this.handlePlayVideo.bind(this, true)}
           showVideoButton={this.state.videoUrl} />
         :

@@ -21,9 +21,8 @@ Marker.defaultProps = {
 };
 
 const GoogleMaps = ({center, zoom, apiKey, lang, markers, visibleModals,
-                     handleToggleModalVisibility, handleShowMoreInfo}) => {
+                     handleToggleModalVisibility, handleShowMoreInfo, handleShowDirections}) => {
   return (
-    <div className='GoogleMaps-wrapper'>
       <GoogleMap
         defaultCenter={center}
         defaultZoom={zoom}
@@ -51,11 +50,11 @@ const GoogleMaps = ({center, zoom, apiKey, lang, markers, visibleModals,
               visible={visibleModals.includes(marker.id)}
               eventData={marker.eventData}
               handleShowMoreInfo={handleShowMoreInfo}
+              handleShowDirections={handleShowDirections}
             />
           );
         }) }
       </GoogleMap>
-    </div>
   );
 };
 
@@ -67,7 +66,8 @@ GoogleMaps.propTypes = {
   apiKey: PropTypes.string,
   lang: PropTypes.string,
   handleToggleModalVisibility: PropTypes.func,
-  handleShowMoreInfo: PropTypes.func
+  handleShowMoreInfo: PropTypes.func,
+  handleShowDirections: PropTypes.func
 };
 
 GoogleMaps.defaultProps = {
@@ -75,7 +75,10 @@ GoogleMaps.defaultProps = {
   zoom: 15,
   markers: [],
   apiKey: '',
-  lang: 'en'
+  lang: 'en',
+  handleToggleModalVisibility: () => {},
+  handleShowMoreInfo: () => {},
+  handleShowDirections: () => {}
 };
 
 export default GoogleMaps;

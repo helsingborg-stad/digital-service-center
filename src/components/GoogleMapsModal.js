@@ -1,11 +1,25 @@
-import React, {PropTypes, Component} from 'react';
-import Link from './Link';
+import React, {PropTypes} from 'react';
 import { RippleButton } from './react-ripple-effect';
 import classnames from 'classnames';
-
 import './GoogleMapsModal.css';
+import getUserLocation from '../util/getUserLocation';
 
-const Modal = ({onShowMoreInfo, visible, eventData}) => {
+const handleNavigationClick = (destinationLat, destinationLng, callback) => {
+  getUserLocation().then((location) => {
+    callback({
+      origin: {lat: location.lat, lng: location.lng},
+      destination: {lat: destinationLat, lng: destinationLng}
+    });
+  });
+};
+
+const GoogleMapsModal = ({
+  handleShowMoreInfo,
+  visible,
+  eventData,
+  handleShowDirections,
+  lat,
+  lng}) => {
   return (
     <div
       className={classnames(
@@ -22,21 +36,26 @@ const Modal = ({onShowMoreInfo, visible, eventData}) => {
         </div>
       </div>
       <div className='GoogleMapsModal-buttonWrapper'>
-        <Link href='#asdf' className='GoogleMapsModal-button GoogleMapsModal-button--emphasized'>
-          Navigate
-        </Link>
         <RippleButton
-          onClick={() => onShowMoreInfo(eventData.slug)}
+          onClick={() => handleNavigationClick(lat, lng, handleShowDirections)}
+          className='GoogleMapsModal-button GoogleMapsModal-button--emphasized'
+        >
+          Navigate
+        </RippleButton>
+
+        <RippleButton
+          onClick={() => handleShowMoreInfo(eventData.slug)}
           className='GoogleMapsModal-button GoogleMapsModal-button--alignRight'
         >
           More info
         </RippleButton>
+
       </div>
     </div>
   );
 };
 
-Modal.propTypes = {
+/*GoogleMapsModal.propTypes = {
   onShowMoreInfo: PropTypes.func,
   visible: PropTypes.bool,
   eventData: PropTypes.shape({
@@ -56,7 +75,7 @@ export default class GoogleMapsModal extends Component {
       />
     );
   }
-}
+}*/
 
 GoogleMapsModal.propTypes = {
   lat: PropTypes.number.isRequired,
@@ -67,5 +86,8 @@ GoogleMapsModal.propTypes = {
   eventData: PropTypes.shape({
     name: PropTypes.string,
     content: PropTypes.string
-  })
+  }),
+  handleShowDirections: PropTypes.func.isRequired
 };
+
+export default GoogleMapsModal;

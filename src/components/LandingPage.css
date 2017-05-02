@@ -11,6 +11,14 @@
   width: 350px
 }
 
+.LandingPage-mapWrapper {
+  position: relative;
+  width: calc(100% - 325px);
+  height: calc(77vh - 4.6875rem);
+  padding-left: 0.85rem;
+  border-bottom: 1px solid #e3e3e3;
+}
+
 /*
  ** Animations
  */

@@ -1,0 +1,19 @@
+.GoogleMapsDirections-closeButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  border: 0;
+  background: #fff;
+  border-radius: 50%;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0.25rem;
+  line-height: 1.45rem;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.GoogleMapsDirections-closeButton > img {
+  width: 12px;
+  height: 12px;
+}
