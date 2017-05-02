@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
+import React, { PropTypes } from 'react';
+import classNames from 'classnames';
 import './AsideMenu.css';
 
-export default class AsideMenu extends Component {
-  render() {
-    return (
-      <div className='AsideMenu'>
-        {this.props.children}
-      </div>
-    );
-  }
-}
+const AsideMenu = ({children, fullHeight}) => (
+<div className={classNames('AsideMenu', {'AsideMenu--fullHeight': fullHeight})}>
+  {children}
+</div>
+);
+
+export default AsideMenu;
 
 AsideMenu.propTypes = {
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.node),
-    React.PropTypes.node
-  ])
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(React.PropTypes.node),
+    PropTypes.node
+  ]),
+  fullHeight: PropTypes.bool
 };

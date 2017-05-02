@@ -39,6 +39,15 @@ function helsingborg_dsc_events_response() {
     categories => get_landing_page_categories('hdsc-landing-local-categories', $categories_to_show_on_map)
   ];
 
+  $response['landingPages']['events'] = [
+    heading => get_option('hdsc-landing-settings-heading-events', 'Events'),
+    bottomLinks => get_links_for_option('hdsc-landing-settings-bottom-links-events'),
+    excludedCategoryIds => [
+      intval(get_option('hdsc-startpage-setting-visitor-category', 0)),
+      intval(get_option('hdsc-startpage-setting-local-category', 0))
+    ]
+  ];
+
   $response['landingPages']['shared'] = [];
   $free_wifi = get_post_meta(get_option('hdsc-landing-settings-free-wifi-page'), 'event_iframe', true);
   if ($free_wifi) {
@@ -153,6 +162,7 @@ function parse_imported_events($events) {
       id         => $event->ID,
       slug       => $event->post_name,
       name       => html_entity_decode($event->post_title),
+      type       => 'event',
       content    => $event->post_content,
       shortContent => get_short_content($event->post_content),
       categories => array_map(function($category) {
@@ -207,6 +217,7 @@ function parse_editable_events($events) {
       id         => $event->ID,
       slug       => $event->post_name,
       name       => html_entity_decode($event->post_title),
+      type       => 'event',
       content    => $event->post_content,
       categories => array_map(function($category) {
         return [
@@ -265,6 +276,7 @@ function parse_google_places() {
       id => $place_data['place_id'],
       slug => sanitize_title($place_data['name']),
       name => $place_data['name'],
+      type => 'place',
       imgUrl => 'http://lorempixel.com/700/394/?v=' . rand(),
       categories => get_google_place_categories($place_data['types']),
       location => [

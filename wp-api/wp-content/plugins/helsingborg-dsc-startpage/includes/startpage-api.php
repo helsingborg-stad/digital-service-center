@@ -128,7 +128,7 @@ function helsingborg_dsc_startpage_response() {
         $category = get_category($category_id);
         return [
           name => html_entity_decode($category->name),
-          href => '/events/' . $category->slug
+          href => '/events/category/' . $category->slug
         ];
       }, get_categories_for_posts(helsingborg_dsc_startpage_get_upcoming_events())),
       eventsPosts => array_map(function($post) {

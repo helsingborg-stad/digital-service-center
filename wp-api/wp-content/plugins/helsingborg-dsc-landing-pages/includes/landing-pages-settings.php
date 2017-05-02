@@ -93,6 +93,28 @@ function hdsc_landing_menu_callback() {
       </tr>
 
       </tbody></table>
+
+      <div class="wrap"><h3>Events</h3></div>
+      <table class="form-table"><tbody>
+
+      <tr>
+        <th><label for="landingform-heading-events">Heading</label></th>
+        <td><input id="landingform-heading-events" type="text" class="regular-text" name="hdsc-landing-settings-heading-events" value="<?php echo get_option('hdsc-landing-settings-heading-events'); ?>" /></td>
+      </tr>
+
+      <tr>
+        <th><label for="landingform-bottom-links-events">Bottom links</label></th>
+        <td>
+          <select id="landingform-bottom-links-events" multiple name="hdsc-landing-settings-bottom-links-events[]">
+          <?php foreach(hdsc_landing_get_selectable_links_for_option('hdsc-landing-settings-bottom-links-events') as $id=>$page) {
+            echo '<option value="' . $id . '"' . ($page['selected'] ? "selected" : "") . '>' . $page['title'] . '</option>';
+          } ?>
+          </select>
+        </td>
+      </tr>
+
+      </tbody></table>
+
       <h3>Free wifi</h3>
       <table class="form-table">
         <tr>
