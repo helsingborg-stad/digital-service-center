@@ -4,8 +4,8 @@ import Link from './Link';
 import closeCrossSvg from '../media/close-cross.svg';
 import './EventOverlay.css';
 import ReactPlayer from 'react-player';
-import { RippleButton } from './react-ripple-effect';
 import getUserLocation from '../util/getUserLocation';
+import LoadingButton from './LoadingButton.js';
 
 const handleNavigationClick = (destinationLat, destinationLng, callback) => {
   getUserLocation().then((location) => {
@@ -156,13 +156,12 @@ const EventOverlay = ({event, handleClose, showVideoButton, onVideoButtonClick, 
       </button>
       }
       { event.location && !!event.location.latitude && !!event.location.longitude &&
-        <RippleButton
+        <LoadingButton
           onClick={() =>
             handleNavigationClick(event.location.latitude, event.location.longitude, handleShowDirections)}
-          className='EventOverlay-button'
-        >
-          Take me there
-        </RippleButton>
+          cssClassName='EventOverlay-button'
+          text='Take me there'
+        />
       }
       { event.bookingLink &&
       <Link iframe={{url:event.bookingLink}} className='EventOverlay-button'>

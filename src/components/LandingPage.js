@@ -145,7 +145,7 @@ export class LandingPage extends Component {
             : <GoogleMapsDirections
               origin={this.state.directions.origin}
               destination={this.state.directions.destination}
-              handleClose={() => this.showDirections(null).bind(this)}
+              handleClose={this.showDirections.bind(this, null)}
             />
             }
           </div>

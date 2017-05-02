@@ -1,8 +1,10 @@
 import React, {PropTypes} from 'react';
+import LoadingButton from './LoadingButton.js';
 import { RippleButton } from './react-ripple-effect';
 import classnames from 'classnames';
 import './GoogleMapsModal.css';
 import getUserLocation from '../util/getUserLocation';
+
 
 const handleNavigationClick = (destinationLat, destinationLng, callback) => {
   getUserLocation().then((location) => {
@@ -36,12 +38,12 @@ const GoogleMapsModal = ({
         </div>
       </div>
       <div className='GoogleMapsModal-buttonWrapper'>
-        <RippleButton
+        <LoadingButton
           onClick={() => handleNavigationClick(lat, lng, handleShowDirections)}
-          className='GoogleMapsModal-button GoogleMapsModal-button--emphasized'
-        >
-          Navigate
-        </RippleButton>
+          cssClassName='GoogleMapsModal-button GoogleMapsModal-button--emphasized'
+          text='Navigate'
+          style={{padding: '0.5rem 1rem', fontSize: '0.8125rem', background: '#c70d53'}}
+          />
 
         <RippleButton
           onClick={() => handleShowMoreInfo(eventData.slug)}
