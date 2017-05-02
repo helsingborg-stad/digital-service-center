@@ -11,7 +11,6 @@ import EventOverlay from './EventOverlay';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import AsideMenu from './AsideMenu';
 import Calendar from './Calendar';
-import WeatherWidget from './WeatherWidget';
 import LandingPageLoading from './LandingPageLoading';
 import LandingPageError from './LandingPageError';
 import { connect } from 'react-redux';
@@ -186,7 +185,6 @@ export class LandingPage extends Component {
         <aside>
           <AsideMenu>
             <Calendar themeCssClass={this.props.type} />
-            <WeatherWidget />
           </AsideMenu>
         </aside>
       </div>
