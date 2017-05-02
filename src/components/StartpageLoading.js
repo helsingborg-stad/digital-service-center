@@ -28,7 +28,7 @@ export default class StartpageLoading extends Component {
             <Column>
               <SectionCard
                 section='&nbsp;'
-                bgColor='#f4a428'
+                bgColor='#c90e52'
                 tags={emptyTags()}
                 posts={[]} />
             </Column>
@@ -42,7 +42,7 @@ export default class StartpageLoading extends Component {
             <Column>
               <SectionCard
                 section='&nbsp;'
-                bgColor='#c90e52'
+                bgColor='#f4a428'
                 tags={emptyTags()}
                 posts={[]} />
             </Column>
