@@ -11,8 +11,9 @@ function helsing_dsc_events_register_routes() {
 
 function helsingborg_dsc_events_response() {
   $response = [];
-  $imported_events = get_posts([ post_type => 'imported_event', numberposts => -1, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
-  $editable_events = get_posts([ post_type => 'editable_event', numberposts => -1, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
+  $imported_events = get_posts([ post_type => 'imported_event', 'suppress_filters' => false, numberposts => -1, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
+  $editable_events = get_posts([ post_type => 'editable_event', 'suppress_filters' => false, numberposts => -1, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
+  
   $imported_events_parsed = parse_imported_events($imported_events);
   $editable_events_parsed = parse_editable_events($editable_events);
   $google_places_parsed = parse_google_places();
@@ -49,7 +50,15 @@ function helsingborg_dsc_events_response() {
   ];
 
   $response['landingPages']['shared'] = [];
-  $free_wifi = get_post_meta(get_option('hdsc-landing-settings-free-wifi-page'), 'event_iframe', true);
+  $free_wifi_id = get_option('hdsc-landing-settings-free-wifi-page');
+  if(!isset($free_wifi_id)){
+    return rest_ensure_response($response);
+  }
+  $free_wifi_page = get_current_post_language($free_wifi_id);
+  if(!isset($free_wifi_page)) {
+    return rest_ensure_response($response);
+  }
+  $free_wifi = get_post_meta($free_wifi_page->ID, 'event_iframe', true);
   if ($free_wifi) {
     $response['landingPages']['shared']['freeWifi'] = [
       url => $free_wifi['src'],
@@ -63,9 +72,31 @@ function helsingborg_dsc_events_response() {
   return rest_ensure_response($response);
 }
 
+if(!function_exists('get_post_id_translated')) {
+  function get_post_id_translated($post_id) {
+    return function_exists('icl_object_id') ? icl_object_id($post_id) : $post_id;
+  }
+}
+
+function get_current_post_language($post_id) {
+  $lang = $_REQUEST['lang'];
+
+  if(get_post_id_translated($post_id) != null) {
+    return get_post(get_post_id_translated($post_id));
+  }
+  else if(!isset($lang)) {
+    return get_post($post_id);
+  }
+  else {
+    return;
+  }
+}
+
 function get_landing_page_categories($option, $categories_to_include) {
   $mapped_categories = get_option($option, []);
-
+  if(!is_array($mapped_categories)) {
+    $mapped_categories = [];
+  }
   // Remove mapped categories with no matched events
   foreach ($mapped_categories as $idx=>$mapped_cat) {
     $main_cat = $mapped_cat['main_category'];
@@ -123,8 +154,11 @@ function parse_category_to_landing_page_format($cat_id, $color, $icon_name, $sub
 
 function get_links_for_option($option) {
   $posts = array_map(function($pageId) {
-      $page = get_post($pageId);
-      $iframeMeta = get_post_meta($pageId, 'event_iframe', false)[0];
+      $page = get_current_post_language($pageId);
+      if(!isset($page)) {
+        return;
+      }
+      $iframeMeta = get_post_meta($page->ID, 'event_iframe', false)[0];
       return [
         name => $page->post_title,
         url => $iframeMeta['src'],

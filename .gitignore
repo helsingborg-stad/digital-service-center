@@ -417,3 +417,8 @@ wp-api/wp-content/uploads/
 
 # Build folder for front-end
 build/
+
+# WPML plugin
+wp-api/wp-content/plugins/sitepress-multilingual-cms/
+wp-api/wp-content/plugins/wpml-string-translation/
+wp-api/wp-content/plugins/wpml-translation-management/

@@ -1,8 +1,8 @@
 <?php
 
 function helsingborg_dsc_startpage_get_upcoming_events() {
-  $imported_posts = get_posts([ post_type => 'imported_event', numberposts => -1]);
-  $editable_posts = get_posts([ post_type => 'editable_event', numberposts => -1]);
+  $imported_posts = get_posts([ post_type => 'imported_event', 'suppress_filters' => false, numberposts => -1]);
+  $editable_posts = get_posts([ post_type => 'editable_event', 'suppress_filters' => false, numberposts => -1]);
   $imported_upcoming = array_filter($imported_posts, function($post) {
     $post_meta = get_post_meta($post->ID, 'imported_event_data', true);
     $door_times = array_map(function($occasion) {
@@ -68,8 +68,8 @@ function post_mapping_helper($post, $type) {
 
 // Gets imported and editable events for either 'visitor' or 'local' category, and returns a merged array
 function get_visitor_or_local_posts($type) {
-  $imported_posts = get_posts([ post_type => 'imported_event', posts_per_page => 10, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
-  $editable_posts = get_posts([ post_type => 'editable_event', posts_per_page => 10, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
+  $imported_posts = get_posts([ post_type => 'imported_event', 'suppress_filters' => false, posts_per_page => 10, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
+  $editable_posts = get_posts([ post_type => 'editable_event', 'suppress_filters' => false, posts_per_page => 10, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
   $all_posts = array_merge($imported_posts, $editable_posts);
   return array_map(function($post) use ($type) {
     return post_mapping_helper($post, $type);
@@ -78,6 +78,9 @@ function get_visitor_or_local_posts($type) {
 
 function get_visitor_or_local_tags($type) {
   $mapped_cats = get_option('hdsc-landing-' . $type .'-categories', []);
+  if(!is_array($mapped_cats)) {
+    $mapped_cats = [];
+  }
   $response = [];
   foreach ($mapped_cats as $mapped_cat) {
     $category = get_category($mapped_cat['main_category']);
@@ -89,10 +92,27 @@ function get_visitor_or_local_tags($type) {
   return $response;
 }
 
+if(!function_exists('get_post_id_translated')) {
+  function get_post_id_translated($post_id) {
+    return function_exists('icl_object_id') ? icl_object_id($post_id) : $post_id;
+  }
+}
+
+
 function get_top_links($pages) {
   $posts = array_map(function($pageId) {
-    $page = get_post($pageId);
-    $iframeMeta = get_post_meta($pageId, 'event_iframe', false)[0];
+    $page;
+    $lang = $_REQUEST['lang'];
+    if(get_post_id_translated($pageId) != null) {
+      $page = get_post(get_post_id_translated($pageId));
+    }
+    else if(!isset($lang)) {
+      $page = get_post($pageId);
+    }
+    else {
+      return;
+    }
+    $iframeMeta = get_post_meta($page->ID, 'event_iframe', false)[0];
     return [
       name => $page->post_title,
       url => $iframeMeta['src'],

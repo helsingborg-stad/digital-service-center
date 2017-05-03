@@ -19,6 +19,9 @@ add_action('admin_init', function() {
 
 function hdsc_startpage_get_selectable_top_links() {
   $selectedPageIds = get_option('hdsc-startpage-setting-top-links', []);
+  if(!is_array($selectedPageIds)) {
+    $selectedPageIds = [];
+  }
   $ret = [];
   $pages = get_pages('sort_column=menu_order');
   if ($pages == null) {

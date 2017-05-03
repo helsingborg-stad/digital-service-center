@@ -16,6 +16,9 @@ add_action('admin_init', function() {
 
 function hdsc_landing_get_selectable_links_for_option($option) {
   $selectedPageIds = get_option($option, []);
+  if(!is_array($selectedPageIds)) {
+    $selectedPageIds = [];
+  }
   $ret = [];
   $pages = get_pages('sort_column=menu_order');
   if ($pages == null) {
