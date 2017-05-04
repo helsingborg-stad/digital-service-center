@@ -12,9 +12,9 @@ import AsideMenu from './AsideMenu';
 import Calendar from './Calendar';
 import { connect } from 'react-redux';
 import { eventsFetchData } from '../actions/events';
-
+import EventsDateList from './EventsDateList.js';
 import './EventsPage.css';
-
+import GoogleMapsDirections from './GoogleMapsDirections';
 
 const getDistinctEventCategories = (events, excludedCategories) => {
   const distinctCategories = events.reduce((acc, event) => {
@@ -41,7 +41,9 @@ export class EventsPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      visibleOverlayEvent: props.activeEvent || null
+      visibleOverlayEvent: props.activeEvent || null,
+      selectedDates: null,
+      directions: null
     };
   }
 
@@ -51,10 +53,22 @@ export class EventsPage extends Component {
     );
   }
 
+  showDirections(directions) {
+    this.setState({
+      directions: directions
+    });
+  }
+
   changeOverlayEvent(eventSlug) {
     const event = this.props.events.find(e => e.slug === eventSlug);
     this.setState({
       visibleOverlayEvent: event ? event.slug : null
+    });
+  }
+
+  handleSelectedDates(selectedDates) {
+    this.setState({
+      selectedDates: selectedDates
     });
   }
 
@@ -75,6 +89,7 @@ export class EventsPage extends Component {
       return <LandingPageLoading bgColor='#f4a428' />;
     }
     const pageData = this.props.landingPages.events;
+
     return (
       <div className='EventsPage'>
         <Lipping />
@@ -84,28 +99,37 @@ export class EventsPage extends Component {
           freeWifiLink={this.props.landingPages.shared.freeWifi}
         />
         <main>
-          <div className='EventsPage-eventsWrapper'>
-            <Scrollbars style={{ width: 'calc(100% - 0.5rem)', margin: '0.5rem 0' }}>
-            { getDistinctEventCategories(this.props.events, pageData.excludedCategoryIds)
-              .map(c => (
-                <div key={c.id}>
-                  <h2 dangerouslySetInnerHTML={{ __html: c.name}} />
-                  <div className='EventsPage-eventWrapper'>
-                    { getEventsForCategory(this.props.events, c.id).map(event => (
-                    <Event
-                      key={event.id}
-                      id={event.id}
-                      slug={event.slug}
-                      name={event.name}
-                      imgSrc={event.imgUrl}
-                      onClick={this.changeOverlayEvent.bind(this)} />
-                    ))}
+          {!this.state.directions
+            ? <div className='EventsPage-eventsWrapper'>
+              <Scrollbars style={{ width: 'calc(100% - 0.5rem)', margin: '0.5rem 0' }}>
+              { getDistinctEventCategories(this.props.events, pageData.excludedCategoryIds)
+                .map(c => (
+                  <div key={c.id}>
+                    <h2 dangerouslySetInnerHTML={{ __html: c.name}} />
+                    <div className='EventsPage-eventWrapper'>
+                      { getEventsForCategory(this.props.events, c.id).map(event => (
+                      <Event
+                        key={event.id}
+                        id={event.id}
+                        slug={event.slug}
+                        name={event.name}
+                        imgSrc={event.imgUrl}
+                        onClick={this.changeOverlayEvent.bind(this)} />
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))
-            }
-            </Scrollbars>
-          </div>
+                ))
+              }
+              </Scrollbars>
+            </div>
+            : <div className='EventsPage-mapWrapper'>
+              <GoogleMapsDirections
+                origin={this.state.directions.origin}
+                destination={this.state.directions.destination}
+                handleClose={this.showDirections.bind(this, null)}
+                />
+              </div>
+          }
           <SiteFooter color='#f4a428'>
             { pageData.bottomLinks.map(({name, url}) => (
               <SiteFooterLink name={name} href={url} key={url} />))
@@ -122,6 +146,7 @@ export class EventsPage extends Component {
               <EventOverlay
                 key='event-overlay'
                 event={this.props.events.find(e => e.slug === this.state.visibleOverlayEvent)}
+                handleShowDirections={this.showDirections.bind(this)}
                 handleClose={() => this.changeOverlayEvent(null)}
               />
             }
@@ -129,7 +154,17 @@ export class EventsPage extends Component {
         </main>
         <aside>
           <AsideMenu fullHeight>
-            <Calendar themeCssClass='#f4a428' />
+            <Calendar
+              themeCssClass='#f4a428'
+              handleSelectedDates={this.handleSelectedDates.bind(this)}
+            />
+            <Scrollbars autoHeight autoHeightMax='100vh - 3.25rem - 4.6875rem - 400px - 2rem'>
+            <EventsDateList
+              events={this.props.events}
+              selectedDates={this.state.selectedDates}
+              handleOverlayEvent={this.changeOverlayEvent.bind(this)}
+            />
+            </Scrollbars>
           </AsideMenu>
         </aside>
       </div>
@@ -144,7 +179,11 @@ EventsPage.propTypes = {
   landingPages: PropTypes.any, // TODO
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  activeEvent: PropTypes.string
+  activeEvent: PropTypes.string,
+  selectedDates: PropTypes.shape({
+    startDate: PropTypes.object,
+    endDate: PropTypes.object
+  })
 };
 
 const mapStateToProps = (state) => {

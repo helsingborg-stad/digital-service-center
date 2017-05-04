@@ -1,0 +1,50 @@
+.EventDateList {
+  padding: 0 1.5rem;
+  margin-top: 0;
+}
+
+.EventDateList li {
+  list-style: none;
+  border-top: solid 1px #E3E3E3;
+  padding: 1rem 0;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction:         row;
+  -webkit-flex-wrap: nowrap;
+  flex-wrap:         nowrap;
+
+}
+
+.EventDateList li:hover{
+  cursor: pointer;
+}
+
+.EventDateList-date {
+  font-size: 0.75rem;
+  color: #777;
+  width: 100%;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+.EventDateList-name {
+  font-weight: bold;
+  font-size: 0.9375rem;
+  color: rgb(203,0,80);
+  display: block;
+}
+
+.EventDateList-img {
+  width: 100%;
+
+}
+.EventDateList-contentWrapper {
+  width: 30%;
+  position: relative;
+}
+
+.EventDateList-contentWrapper:last-of-type {
+  width: 70%;
+  padding-left: 1rem;
+}
