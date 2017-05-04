@@ -26,6 +26,7 @@ function helsingborg_dsc_crm_import_menu_callback() {
     <div class="wrap">
         <form action="options.php" method="post">
             <?php
+            // phpinfo();
                 settings_fields('hdsc-crm-import');
                 do_settings_sections('hdsc-crm-import');
             ?>
@@ -37,6 +38,16 @@ function helsingborg_dsc_crm_import_menu_callback() {
                     <p><string><?php _e('Settings saved.') ?></string></p>
                 </div>
             <?php } ?>
+            <?php if (isset($_GET['updated'])) { ?>
+                <div id="message" class="updated">
+                    <p><string><?php _e('Import utförd.') ?></string></p>
+                </div>
+            <?php } ?>
+            <?php if (isset($_GET['deleted'])) { ?>
+                <div id="message" class="updated">
+                    <p><string><?php _e('Tidigare import har rensats.') ?></string></p>
+                </div>
+            <?php } ?>
 
             <h2>Inställningar</h2>
             <table class="form-table"><tbody>
@@ -45,19 +56,6 @@ function helsingborg_dsc_crm_import_menu_callback() {
                     <td><input id="crmimportform-service-url" type="text" class="regular-text" name="hdsc-crm-import-service-url" value="<?php echo get_option('hdsc-crm-import-service-url'); ?>" /></td>
                 </tr>
             </tbody></table>
-
-            <!--<h2>Manuell import/rensning</h2>
-
-            <table class="form-table"><tbody>
-                <tr>
-                    <th>Importera från CRM</th>
-                    <td><input type="submit" name="crm-import" value="Importera"></td>
-                </tr>
-                <tr>
-                    <th>Rensa tidigare import</th>
-                    <td><input type="submit" name="crm-clear" value="Rensa"></td>
-                </tr>
-            </tbody></table>-->
 
             <div><h2>Schemalägg hämtning</h2></div>
             <table class="form-table"><tbody>
