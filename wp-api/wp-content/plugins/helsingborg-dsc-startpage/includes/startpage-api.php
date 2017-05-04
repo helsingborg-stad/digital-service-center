@@ -132,7 +132,11 @@ function get_top_links($pages) {
       ];
     }
   }, $pages);
-
+  foreach($pages as $key => $value) {
+    if(empty($value)) {
+      unset($posts[$key]);
+    }          
+  }
   return $posts;
 }
 

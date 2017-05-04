@@ -178,6 +178,11 @@ function get_links_for_option($option) {
       }
     }, get_option($option, [])
   );
+  foreach($posts as $key => $value) {
+    if(empty($value)) {
+      unset($posts[$key]);
+    }          
+  }
   return $posts;
 }
 
