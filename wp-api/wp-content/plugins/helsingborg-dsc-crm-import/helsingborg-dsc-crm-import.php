@@ -13,7 +13,6 @@ function helsingborg_dsc_crm_import() {
 }
 
 include('includes/crm-import.php');
-include('includes/crm-display-function.php');
 include('includes/helsingborg-dsc-crm-import-admin.php');
 
 ?>
