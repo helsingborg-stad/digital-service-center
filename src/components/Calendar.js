@@ -4,6 +4,12 @@ import 'react-dates/lib/css/_datepicker.css';
 import Moment from 'moment';
 import './Calendar.css';
 
+function triggerSelectedDates(calendar, selectedDates) {
+  if (calendar.props.handleSelectedDates) {
+    calendar.props.handleSelectedDates(selectedDates);
+  }
+}
+
 const CalendarHeader = ({text}) => (
    <div className="CalendarHeader">{text}</div>
 );
@@ -34,10 +40,12 @@ export default class Calendar extends React.Component {
   handleSetDateToday() {
     const today = Moment();
     this.setState({startDate: today, endDate: today });
+    triggerSelectedDates(this, {startDate: today, endDate: today});
   }
   handleSetDateTomorrow() {
     const tomorrow = Moment().add(1, 'days');
     this.setState({startDate: tomorrow, endDate: tomorrow });
+    triggerSelectedDates(this, {startDate: tomorrow, endDate: tomorrow});
   }
   handleSetDateWeekend() {
     const day = Moment().day();
@@ -60,17 +68,21 @@ export default class Calendar extends React.Component {
     }
 
     this.setState({ startDate, endDate });
+    triggerSelectedDates(this, {startDate, endDate});
   }
   handleResetDate() {
     this.setState({startDate: null, endDate: null, focusedInput: 'startDate'});
+    triggerSelectedDates(this, null);
   }
   onDatesChange({ startDate, endDate }) {
     let changedEndDate = endDate;
-    if (this.state.focusedInput === 'startDate' && endDate !== null) {
-      changedEndDate = null;
+    if (this.state.focusedInput === 'startDate' && endDate === null) {
+      changedEndDate = startDate;
     }
 
-    this.setState({ startDate, endDate: changedEndDate });
+    const newDate = { startDate: startDate, endDate: changedEndDate };
+    this.setState({ startDate: newDate.startDate, endDate: newDate.endDate });
+    triggerSelectedDates(this, newDate);
   }
   onFocusChange(focusedInput) {
     this.setState({
@@ -138,5 +150,6 @@ Calendar.defaultProps = {
 };
 
 Calendar.propTypes = {
-  themeCssClass: React.PropTypes.string
+  themeCssClass: React.PropTypes.string,
+  handleSelectedDates: React.PropTypes.func
 };

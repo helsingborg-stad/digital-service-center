@@ -135,7 +135,11 @@ export class LandingPage extends Component {
           <div className='LandingPage-mapWrapper'>
             {!this.state.directions
             ? <GoogleMaps
-              {...selectedEventsWithCoordinates(this.props.events, this.state.activeCategories, pageData.categories)}
+              {...selectedEventsWithCoordinates(
+                this.props.events,
+                this.state.activeCategories,
+                pageData.categories
+              )}
               visibleModals={this.state.visibleModals}
               handleToggleModalVisibility={this.toggleModalVisibility.bind(this)}
               handleShowMoreInfo={this.changeOverlayEvent.bind(this)}
@@ -184,7 +188,9 @@ export class LandingPage extends Component {
         </main>
         <aside>
           <AsideMenu>
-            <Calendar themeCssClass={this.props.type} />
+            <Calendar
+              themeCssClass={this.props.type}
+            />
           </AsideMenu>
         </aside>
       </div>

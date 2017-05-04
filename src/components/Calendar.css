@@ -1,3 +1,6 @@
+.Calendar {
+  min-height: 404px;
+}
 
  .Calendar .CalendarHeader {
     font-size: 14px;
@@ -14,24 +17,13 @@
 
 .Calendar .DayPicker.DayPicker--horizontal .DayPicker__focus-region .DayPickerNavigation__prev,
 .Calendar .DayPicker.DayPicker--horizontal .DayPicker__focus-region .DayPickerNavigation__next {
-  color: rgb(199, 13, 83);
+  color: rgb(203,0,80);
   font-weight: bold;
   background-color: transparent;
   top: 24px;
   border: none;
   font-size: 15px;
 }
-
- .Calendar--local .DayPicker.DayPicker--horizontal .DayPicker__focus-region .DayPickerNavigation__prev,
- .Calendar--local .DayPicker.DayPicker--horizontal .DayPicker__focus-region .DayPickerNavigation__next {
-  color: rgb(234, 103, 31);
- }
-
-  /* Double color in case of new default color / events page */
- .Calendar--visitor .DayPicker.DayPicker--horizontal .DayPicker__focus-region .DayPickerNavigation__prev,
- .Calendar--visitor .DayPicker.DayPicker--horizontal .DayPicker__focus-region .DayPickerNavigation__next {
-  color: rgb(199, 13, 83);
- }
 
 .Calendar .DayPicker.DayPicker--horizontal .DayPicker__focus-region .transition-container.transition-container--horizontal table tbody {
   border-top: 13px solid white;
@@ -107,15 +99,9 @@
 }
 
 .Calendar .DayPicker.DayPicker--horizontal .DayPicker__focus-region .transition-container.transition-container--horizontal table tbody .CalendarDay.CalendarDay--selected-start button {
-  background-color: rgb(199, 13, 83);
+  background-color: rgb(203,0,80);
+  border: solid 1px rgb(203,0,80);
   color: white;
-}
-.Calendar.Calendar--local .DayPicker.DayPicker--horizontal .DayPicker__focus-region .transition-container.transition-container--horizontal table tbody .CalendarDay.CalendarDay--selected-start button {
-  background-color: rgb(234, 103, 31);
-}
-/* Double color in case of new default color / events page */
-.Calendar.Calendar--visitor .DayPicker.DayPicker--horizontal .DayPicker__focus-region .transition-container.transition-container--horizontal table tbody .CalendarDay.CalendarDay--selected-start button {
-  background-color: rgb(199, 13, 83);
 }
 
 .Calendar .DayPicker.DayPicker--horizontal .DayPicker__focus-region .transition-container.transition-container--horizontal table tbody .CalendarDay--selected-span,
@@ -127,20 +113,7 @@
 .Calendar .DayPicker.DayPicker--horizontal .DayPicker__focus-region .transition-container.transition-container--horizontal table tbody .CalendarDay--selected-span button,
 .Calendar .DayPicker.DayPicker--horizontal .DayPicker__focus-region .transition-container.transition-container--horizontal table tbody .CalendarDay.CalendarDay--selected-end button,
 .Calendar .DayPicker.DayPicker--horizontal .DayPicker__focus-region .transition-container.transition-container--horizontal table tbody .CalendarDay.CalendarDay--last-in-range button {
-  border: solid 2px  rgb(199, 13, 83);
-}
-
-/* Double color in case of new default color / events page */
-.Calendar--visitor .DayPicker.DayPicker--horizontal .DayPicker__focus-region .transition-container.transition-container--horizontal table tbody .CalendarDay--selected-span button,
-.Calendar--visitor .DayPicker.DayPicker--horizontal .DayPicker__focus-region .transition-container.transition-container--horizontal table tbody .CalendarDay.CalendarDay--selected-end button,
-.Calendar--visitor .DayPicker.DayPicker--horizontal .DayPicker__focus-region .transition-container.transition-container--horizontal table tbody .CalendarDay.CalendarDay--last-in-range button {
-  border: solid 2px  rgb(199, 13, 83);
-}
-
-.Calendar--local .DayPicker.DayPicker--horizontal .DayPicker__focus-region .transition-container.transition-container--horizontal table tbody .CalendarDay--selected-span button,
-.Calendar--local .DayPicker.DayPicker--horizontal .DayPicker__focus-region .transition-container.transition-container--horizontal table tbody .CalendarDay.CalendarDay--selected-end button,
-.Calendar--local .DayPicker.DayPicker--horizontal .DayPicker__focus-region .transition-container.transition-container--horizontal table tbody .CalendarDay.CalendarDay--last-in-range button {
-  border: solid 2px  rgb(234, 103, 31);
+  border: solid 2px  rgb(203,0,80);
 }
 
 .Calendar .CalendarDay--blocked-calendar {
@@ -151,15 +124,11 @@
   color: #bababa !important;
 }
 
-.Calendar--visitor .CalendarDay--hovered:not(.CalendarDay--blocked-calendar),
-.Calendar--visitor .CalendarDay--hovered-span:not(.CalendarDay--blocked-calendar) {
-  background: rgb(239, 106, 156) !important;
+.Calendar .CalendarDay--hovered:not(.CalendarDay--blocked-calendar),
+.Calendar .CalendarDay--hovered-span:not(.CalendarDay--blocked-calendar) {
+  background: rgb(203,0,80) !important;
 }
 
-.Calendar--local .CalendarDay--hovered:not(.CalendarDay--blocked-calendar),
-.Calendar--local .CalendarDay--hovered-span:not(.CalendarDay--blocked-calendar) {
-  background: rgb(237, 160, 118) !important;
-}
 .Calendar .CalendarDay--after-hovered-start {
   background: #fff !important;
 }
@@ -171,8 +140,8 @@
 .Calendar-button-wrapper {
   display: flex;
   flex-flow: row wrap;
-  max-width: 274px;
-  margin: 20px auto 0;
+  padding: 0 1.5rem;
+  margin: 20px auto 1rem;
   justify-content: space-around;
 }
 
@@ -182,17 +151,9 @@
   margin: auto;
   border: none;
   color: #fff;
-  background-color: rgb(199, 13, 83);
+  background-color: rgb(203,0,80);
   text-transform: uppercase;
   font-size: 12px;
-}
-
-
-.Calendar.Calendar--local .Calendar-button-wrapper button.CalendarButton {
-  background-color: rgb(234, 103, 31);
-}
-.Calendar.Calendar--visitor .Calendar-button-wrapper button.CalendarButton {
-  background-color: rgb(199, 13, 83);
 }
 
 button.CalendarButton:not(:last-of-type) {
