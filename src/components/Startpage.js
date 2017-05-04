@@ -9,6 +9,8 @@ import { startpageFetchData } from '../actions/startpage';
 import { searchFetchData } from '../actions/search';
 import StartpageLoading from './StartpageLoading.js';
 import StartpageError from './StartpageError.js';
+import EnFlag from './icons-flags/en-flag';
+import SvFlag from './icons-flags/sv-flag';
 
 import './Startpage.css';
 
@@ -96,6 +98,10 @@ export class Startpage extends Component {
               { this.props.data.topLinks.map(link => (
                 <BottomBarLink key={link.href + link.name} link={link} />
               ))}
+              <div className='Startpage-langWrapper'>
+                <SvFlag className='flags' />
+                <EnFlag className='flags' />
+              </div>
               <VergicMountPoint />
             </BottomBar>
           </MultimediaBackground>
