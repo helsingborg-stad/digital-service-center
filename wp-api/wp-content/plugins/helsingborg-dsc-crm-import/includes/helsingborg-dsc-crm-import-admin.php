@@ -1,4 +1,5 @@
 <?php
+
 add_action('admin_menu', helsingborg_dsc_crm_import_admin_menu);
 
 function helsingborg_dsc_crm_import_admin_menu() {
@@ -7,6 +8,9 @@ function helsingborg_dsc_crm_import_admin_menu() {
 
 add_action('admin_init', function() {
     register_setting('hdsc-crm-import', 'hdsc-crm-import-service-url');
+    register_setting('hdsc-crm-import', 'hdsc-crm-import-scheduled-timestamp');
+    register_setting('hdsc-crm-import', 'hdsc-crm-import-scheduled-recurrence');
+    register_setting('hdsc-crm-import', 'hdsc-crm-import-schedule-activated');
 });
 
 function helsingborg_dsc_crm_import_menu_callback() {
@@ -26,7 +30,7 @@ function helsingborg_dsc_crm_import_menu_callback() {
                 do_settings_sections('hdsc-crm-import');
             ?>
 
-            <div class="wrap"><h2>CRM import</h2></div>
+            <h1>CRM import</h1>
 
             <?php if (isset($_GET['settings-updated'])) { ?>
                 <div id="message" class="updated">
@@ -34,15 +38,66 @@ function helsingborg_dsc_crm_import_menu_callback() {
                 </div>
             <?php } ?>
 
+            <h2>Inställningar</h2>
             <table class="form-table"><tbody>
                 <tr>
                     <th><label for="crmimportform-service-url">CRM service url</label></th>
                     <td><input id="crmimportform-service-url" type="text" class="regular-text" name="hdsc-crm-import-service-url" value="<?php echo get_option('hdsc-crm-import-service-url'); ?>" /></td>
                 </tr>
             </tbody></table>
+
+            <!--<h2>Manuell import/rensning</h2>
+
+            <table class="form-table"><tbody>
+                <tr>
+                    <th>Importera från CRM</th>
+                    <td><input type="submit" name="crm-import" value="Importera"></td>
+                </tr>
+                <tr>
+                    <th>Rensa tidigare import</th>
+                    <td><input type="submit" name="crm-clear" value="Rensa"></td>
+                </tr>
+            </tbody></table>-->
+
+            <div><h2>Schemalägg hämtning</h2></div>
+            <table class="form-table"><tbody>
+                <tr>
+                    <th><label for="crmimportform-scheduled-timestamp">Tidpunkt för första körning</label></th>
+                    <td><input id="crmimportform-scheduled-timestamp" class="regular-text" type="datetime-local" name="hdsc-crm-import-scheduled-timestamp" value="<?php echo get_option('hdsc-crm-import-scheduled-timestamp'); ?>" required/></td>
+                </tr>
+                <tr>
+                    <th><label for="crmimportform-scheduled-recurrence">Hur ofta</label></th>
+                    <td>
+                        <input id="crmimportform-scheduled-recurrence" type="radio" name="hdsc-crm-import-scheduled-recurrence" value="hourly" <?php checked('hourly', get_option('hdsc-crm-import-scheduled-recurrence')); ?> />
+                        En gång/timme
+                        <br>
+                        <input id="crmimportform-scheduled-recurrence" type="radio" name="hdsc-crm-import-scheduled-recurrence" value="twicedaily" <?php checked('twicedaily', get_option('hdsc-crm-import-scheduled-recurrence')); ?> />
+                        Två gånger/dygn
+                        <br>
+                        <input id="crmimportform-scheduled-recurrence" type="radio" name="hdsc-crm-import-scheduled-recurrence" value="daily" <?php checked('daily', get_option('hdsc-crm-import-scheduled-recurrence')); ?> />
+                        En gång/dygn
+                    </td>
+                </tr>
+                <tr>
+                    <th><label for="crmimportform-schedule-activated">Aktivera schemalagd hämtning</label></th>
+                    <td><input id="crmimportform-schedule-activated" type="checkbox" name="hdsc-crm-import-schedule-activated" value="schedule-activated" <?php checked('schedule-activated', get_option('hdsc-crm-import-schedule-activated')); ?> /></td>
+                </tr>
+            </tbody></table>
+
             <?php submit_button(); ?>
         </form>
+        <div class="wrap"><h2>Importera/rensa</h2></div>
+        <form action="<?php get_site_url() ?>admin-post.php" method="post">
+            <p>Importera från CRM</p>
+            <input type="hidden" name="action" value="manually_import_crm">
+            <button class="button button-primary" type="submit">Importera</button>
+        </form>
+        <form action="<?php get_site_url() ?>admin-post.php" method="post">
+            <input type="hidden" name="action" value="manually_clear_import">
+            <p>Rensa tidigare import</p>
+            <button class="button button-primary" type="submit">Rensa</button>
+        </form>
     </div>
-<?php    
+<?php
 }
 ?>
