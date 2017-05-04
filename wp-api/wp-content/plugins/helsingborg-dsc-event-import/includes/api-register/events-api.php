@@ -159,22 +159,26 @@ function get_links_for_option($option) {
         return;
       }
       $iframeMeta = get_post_meta($page->ID, 'event_iframe', false)[0];
-      return [
-        name => $page->post_title,
-        url => $iframeMeta['src'],
-        active => $iframeMeta['active'] == 'on',
-        width => intval($iframeMeta['width'] ?? 0),
-        height => intval($iframeMeta['height'] ?? 0),
-        offsetTop => intval($iframeMeta['top_offset'] ?? 0),
-        offsetLeft => intval($iframeMeta['left_offset'] ?? 0)
-      ];
+      if ($iframeMeta['active'] == 'on') {
+        return [
+          name => $page->post_title,
+          url => $iframeMeta['src'],
+          width => intval($iframeMeta['width'] ?? 0),
+          height => intval($iframeMeta['height'] ?? 0),
+          offsetTop => intval($iframeMeta['top_offset'] ?? 0),
+          offsetLeft => intval($iframeMeta['left_offset'] ?? 0)
+        ];
+      }
+      else {
+        return [
+          type => 'page',
+          name => $page->post_title,
+          content => $page->post_content
+        ];
+      }
     }, get_option($option, [])
   );
-  $postsWithIframe = array_values(array_filter($posts, function ($link) {
-    return $link['active'] && strlen($link['url']) > 0; }
-  ));
-  unset($postsWithIframe[0]['active']); // Remove 'active' property, since it's irrelevant for the API response
-  return $postsWithIframe;
+  return $posts;
 }
 
 function get_short_content($post_content) {
