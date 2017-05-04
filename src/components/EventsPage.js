@@ -159,11 +159,11 @@ export class EventsPage extends Component {
               handleSelectedDates={this.handleSelectedDates.bind(this)}
             />
             <Scrollbars autoHeight autoHeightMax='100vh - 3.25rem - 4.6875rem - 400px - 2rem'>
-            <EventsDateList
-              events={this.props.events}
-              selectedDates={this.state.selectedDates}
-              handleOverlayEvent={this.changeOverlayEvent.bind(this)}
-            />
+              <EventsDateList
+                events={this.props.events}
+                selectedDates={this.state.selectedDates}
+                handleOverlayEvent={this.changeOverlayEvent.bind(this)}
+              />
             </Scrollbars>
           </AsideMenu>
         </aside>
@@ -179,11 +179,7 @@ EventsPage.propTypes = {
   landingPages: PropTypes.any, // TODO
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  activeEvent: PropTypes.string,
-  selectedDates: PropTypes.shape({
-    startDate: PropTypes.object,
-    endDate: PropTypes.object
-  })
+  activeEvent: PropTypes.string
 };
 
 const mapStateToProps = (state) => {
