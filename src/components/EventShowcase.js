@@ -39,7 +39,7 @@ export class Event extends Component {
         onClick={() => this.props.onClick(this.props.slug)}
         onMouseUp={ this.handleClick.bind(this) }
       >
-        <img className='Event-img' src={this.props.imgSrc} alt='' />
+        <img className='Event-img' src={this.props.imgUrl} alt='' />
         <span className='Event-title'>{this.props.name}</span>
         <Ripple cursorPos={ this.state.cursorPos } />
       </span>
@@ -61,5 +61,5 @@ Event.propTypes = {
   id: React.PropTypes.any,
   slug: React.PropTypes.string,
   name: React.PropTypes.string.isRequired,
-  imgSrc: React.PropTypes.string
+  imgUrl: React.PropTypes.string
 };

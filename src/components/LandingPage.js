@@ -166,10 +166,7 @@ export class LandingPage extends Component {
             {this.props.events.map(event => (
             <Event
               key={event.id}
-              id={event.id}
-              slug={event.slug}
-              name={event.name}
-              imgSrc={event.imgUrl}
+              {...event}
               onClick={this.changeOverlayEvent.bind(this)} />
             ))}
           </EventShowcase>
