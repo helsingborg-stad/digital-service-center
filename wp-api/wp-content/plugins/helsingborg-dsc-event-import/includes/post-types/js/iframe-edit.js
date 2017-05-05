@@ -6,12 +6,12 @@ jQuery(function($) {
     });
 
     $('#iframe_height').bind('input', function() {
-        var height = checkEmptyValue($(this).attr('value'));
+        var height = checkEmptyValue($(this).attr('value')) !== 0 ? checkEmptyValue($(this).attr('value')) : 150;
         $('#preview').attr('height', height);
     });
 
     $('#iframe_width').bind('input', function() {
-        var width = checkEmptyValue($(this).attr('value'));
+        var width = checkEmptyValue($(this).attr('value')) !== 0 ? checkEmptyValue($(this).attr('value')) : 300;
         $('#preview').attr('width', width);
     });
 
@@ -27,8 +27,8 @@ jQuery(function($) {
 
     var load_preview_iframe = function() {
         var src = $('#iframe_src').val();
-        var height = $('#iframe_height').val();
-        var width = $('#iframe_width').val();
+        var height = $('#iframe_height').val() !== "" ? $('#iframe_width').val() : 150;
+        var width = $('#iframe_width').val() !== "" ? $('#iframe_width').val() : 300;
         var marginTop = $('#iframe_top_offset').val();
         var marginLeft = $('#iframe_left_offset').val();
 
@@ -40,7 +40,6 @@ jQuery(function($) {
     }
 
     var checkEmptyValue = function(value) {
-        console.log(value);
         if(value == '') {
             return 0;
         }
