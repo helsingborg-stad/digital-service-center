@@ -13,7 +13,7 @@ function helsingborg_dsc_events_response() {
   $response = [];
   $imported_events = get_posts([ post_type => 'imported_event', 'suppress_filters' => false, numberposts => -1, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
   $editable_events = get_posts([ post_type => 'editable_event', 'suppress_filters' => false, numberposts => -1, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
-  
+
   $imported_events_parsed = parse_imported_events($imported_events);
   $editable_events_parsed = parse_editable_events($editable_events);
   $google_places_parsed = parse_google_places();
@@ -129,8 +129,11 @@ function get_landing_page_categories($option, $categories_to_include) {
 
   $res = [];
   foreach ($mapped_categories as $idx=>$cat_map) {
-    $res[] = parse_category_to_landing_page_format($cat_map['main_category'], $colors[$idx], 'Bed', $cat_map['sub_categories']);
+    $res[] = parse_category_to_landing_page_format($cat_map['main_category'], $colors[$idx], $cat_map['icon_name'], $cat_map['sub_categories']);
   }
+  usort($res, function ($a, $b) {
+    return $a['name'] <=> $b['name'];
+  });
   return $res;
 }
 
@@ -149,6 +152,9 @@ function parse_category_to_landing_page_format($cat_id, $color, $icon_name, $sub
       name => html_entity_decode($sub_cat->cat_name)
     ];
   }, $sub_category_ids);
+  usort($response['subCategories'], function ($a, $b) {
+    return $a['name'] <=> $b['name'];
+  });
   return $response;
 }
 
@@ -181,7 +187,7 @@ function get_links_for_option($option) {
   foreach($posts as $key => $value) {
     if(empty($value)) {
       unset($posts[$key]);
-    }          
+    }
   }
   return $posts;
 }

@@ -22,9 +22,11 @@ const SideNavigationLink = ({selected, activeColor, handleClick, name, children,
     style={{ background: selected ? activeColor : '#fff'}}
     onClick={handleClick
   }>
+    { icon &&
     <span className='SideNavigationLink__icon'>
       {Icons[`${icon}Icon`]({color: selected ? '#fff' : activeColor, className: 'foo'})}
     </span>
+    }
     {name}
     {selected && children && !!children.length &&
     <ul>
