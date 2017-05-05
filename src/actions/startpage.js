@@ -23,11 +23,16 @@ export function startpageFetchDataSuccess(startpage, lang) {
 }
 
 export function startpageFetchData(url, lang) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch(startpageIsLoading(true, lang));
     dispatch(startpageHasErrored(false, lang));
 
-    return fetch(url)
+    // Only add `lang` query string if the requested language is not default,
+    // to prevent 302 redirect
+    const defaultLang = getState().siteSettings.languages.find(l => l.isDefault).shortName;
+    const langUrl = lang === defaultLang ? url : `${url}?lang=${lang}`;
+
+    return fetch(langUrl)
       .then((response) => {
         if (!response.ok) {
           throw Error(response.statusText);

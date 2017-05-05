@@ -1,3 +1,5 @@
+// import store from '../store';
+
 import { landingPagesFetchDataSuccess } from './landingPages';
 
 export function eventsHasErrored(bool, lang) {
@@ -25,11 +27,16 @@ export function eventsFetchDataSuccess(events, lang) {
 }
 
 export function eventsFetchData(url, lang) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch(eventsAreLoading(true, lang));
     dispatch(eventsHasErrored(false, lang));
 
-    return fetch(url)
+    // Only add `lang` query string if the requested language is not default,
+    // to prevent 302 redirect
+    const defaultLang = getState().siteSettings.languages.find(l => l.isDefault).shortName;
+    const langUrl = lang === defaultLang ? url : `${url}?lang=${lang}`;
+
+    return fetch(langUrl)
       .then((response) => {
         if (!response.ok) {
           throw Error(response.statusText);
