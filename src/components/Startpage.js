@@ -7,11 +7,9 @@ import SearchField from './SearchField';
 import { connect } from 'react-redux';
 import { startpageFetchData } from '../actions/startpage';
 import { searchFetchData } from '../actions/search';
+import LanguageFlags from './LanguageFlags';
 import StartpageLoading from './StartpageLoading.js';
 import StartpageError from './StartpageError.js';
-import EnFlag from './icons-flags/en-flag';
-import SvFlag from './icons-flags/sv-flag';
-
 import './Startpage.css';
 
 class VergicMountPoint extends Component {
@@ -100,8 +98,7 @@ export class Startpage extends Component {
                 <BottomBarLink key={link.href + link.name} link={link} />
               ))}
               <div className='Startpage-langWrapper'>
-                <SvFlag className='flags' />
-                <EnFlag className='flags' />
+                <LanguageFlags />
               </div>
               <VergicMountPoint />
             </BottomBar>

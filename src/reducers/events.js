@@ -1,7 +1,7 @@
 export function eventsHasErrored(state = {}, action) {
   switch (action.type) {
   case 'EVENTS_HAS_ERRORED':
-    return { [action.lang]: action.hasErrored };
+    return Object.assign({}, state, { [action.lang]: action.hasErrored });
 
   default:
     return state;
@@ -11,7 +11,7 @@ export function eventsHasErrored(state = {}, action) {
 export function eventsAreLoading(state = {}, action) {
   switch (action.type) {
   case 'EVENTS_ARE_LOADING':
-    return { [action.lang]: action.isLoading };
+    return Object.assign({}, state, { [action.lang]: action.isLoading });
 
   default:
     return state;
@@ -21,7 +21,7 @@ export function eventsAreLoading(state = {}, action) {
 export function events(state = {}, action) {
   switch (action.type) {
   case 'EVENTS_FETCH_DATA_SUCCESS':
-    return { [action.lang]: action.events };
+    return Object.assign({}, state, { [action.lang]: action.events });
 
   default:
     return state;

@@ -123,8 +123,7 @@ function get_top_links($pages) {
         offsetTop => intval($iframeMeta['top_offset'] ?? 0),
         offsetLeft => intval($iframeMeta['left_offset'] ?? 0)
       ];
-    }
-    else {
+    } else {
       return [
         type => 'page',
         name => $page->post_title,
@@ -132,10 +131,11 @@ function get_top_links($pages) {
       ];
     }
   }, $pages);
-  foreach($pages as $key => $value) {
-    if(empty($value)) {
+
+  foreach($posts as $key => $value) {
+    if(!$value) {
       unset($posts[$key]);
-    }          
+    }
   }
   return $posts;
 }
