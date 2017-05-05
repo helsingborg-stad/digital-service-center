@@ -69,7 +69,7 @@ export class Startpage extends Component {
               <Column>
                 <SectionCard
                   section={this.props.data.visitorHeading}
-                  link={'/visitor'}
+                  link={this.props.data.visitorHeadingLink}
                   bgColor='#c90e52'
                   tags={this.props.data.visitorTags}
                   posts={this.props.data.visitorPosts} />
@@ -77,7 +77,7 @@ export class Startpage extends Component {
               <Column>
                 <SectionCard
                   section={this.props.data.localHeading}
-                  link={'/local'}
+                  link={this.props.data.localHeadingLink}
                   bgColor='#eb6421'
                   tags={this.props.data.localTags}
                   posts={this.props.data.localPosts} />
@@ -85,7 +85,7 @@ export class Startpage extends Component {
               <Column>
                 <SectionCard
                   section={this.props.data.eventsHeading}
-                  link={'/events'}
+                  link={this.props.data.eventsHeadingLink}
                   bgColor='#f4a428'
                   tags={this.props.data.eventsTags}
                   showTimeSpanButtons={true}
@@ -116,12 +116,15 @@ Startpage.propTypes = {
     heading: PropTypes.string,
     topLinks: PropTypes.array,
     visitorHeading: PropTypes.string,
+    visitorHeadingLink: PropTypes.string,
     visitorTags: PropTypes.array,
     visitorPosts: PropTypes.array,
     localHeading: PropTypes.string,
+    localHeadingLink: PropTypes.string,
     localTags: PropTypes.array,
     localPosts: PropTypes.array,
     eventsHeading: PropTypes.string,
+    eventsHeadingLink: PropTypes.string,
     eventsTags: PropTypes.array,
     eventsPosts: PropTypes.array
   }),
