@@ -7,6 +7,17 @@ import Startpage from './components/Startpage';
 import LandingPage from './components/LandingPage';
 import EventsPage from './components/EventsPage';
 
+const defaultLanguage = 'sv';
+const languageRedirect = (nextState, replace) => {
+  console.log(nextState.location.pathname);
+  if (!nextState.location.pathname.startsWith(defaultLanguage + '/') && !nextState.location.pathname.startsWith('/' + defaultLanguage + '/')) {
+    const redirectPath = defaultLanguage + nextState.location.pathname;
+    replace({
+      pathname: redirectPath
+    });
+  }
+};
+
 const Routes = (props = {}) => {
   let history = browserHistory;
 
@@ -16,38 +27,39 @@ const Routes = (props = {}) => {
 
   return (
     <Router history={history} onUpdate={props.onUpdate}>
-      <Route path='/' component={App}>
+      <Route path='/:lang' component={App} onEnter={languageRedirect}>
         <IndexRoute component={Startpage} />
         <Route
-          path='visitor/category/:category'
+          path='/:lang/visitor/category/:category'
           component={() => <LandingPage type='visitor' bgColor='#c70d53' />} />
         <Route
-          path='visitor(/:event)'
+          path='/:lang/visitor(/:event)'
           component={({params}) => (
             <LandingPage type='visitor' bgColor='#c70d53' activeEvent={params.event} />
           )} />
         <Route
-          path='local/category/:category'
+          path='/:lang/local/category/:category'
           component={() => <LandingPage type='local' bgColor='#ea671f' />} />
         <Route
-          path='local(/:event)'
+          path='/:lang/local(/:event)'
           component={({params}) => (
             <LandingPage type='local' bgColor='#ea671f' activeEvent={params.event} />
           )} />
         <Route
-          path='events/category/:category'
+          path='/:lang/events/category/:category'
           component={() => (
             <EventsPage />
           )} />
         <Route
-          path='events(/:event)'
+          path='/:lang/events(/:event)'
           component={({params}) => (
             <EventsPage activeEvent={params.event} />
           )} />
       </Route>
       <Route path='*'>
-        <IndexRedirect to='/' />
+        <IndexRedirect to={`/${defaultLanguage}/`} />
       </Route>
+      <Route/>
     </Router>
   );
 };
