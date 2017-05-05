@@ -23,7 +23,26 @@ import './LandingPage.css';
 const selectedEventsWithCoordinates = (events, activeCategories, eventCategories) => {
   const getActiveColorForEvent = (event) => {
     const firstActiveCat = event.categories.map(c => c.id).find(c => activeCategories.includes(c));
-    return eventCategories.find(c => c.id === firstActiveCat).activeColor;
+    let foundCategory = eventCategories.find(c => c.id === firstActiveCat);
+
+    //
+    // Category not found, search in subcategories
+    //
+    if (!foundCategory) {
+      const foundSubCategories = eventCategories.filter(cat => {
+        return cat.subCategories && cat.subCategories.length;
+      }).map(cat => cat.subCategories)
+      .reduce((acc, cat) => acc.concat(cat), []);
+
+      foundSubCategories.forEach(item => {
+        if (item.id === firstActiveCat) {
+          foundCategory = item;
+          return;
+        }
+      });
+    }
+
+    return foundCategory ? foundCategory.activeColor : null;
   };
 
   const selectedEvents = !activeCategories.length
@@ -98,11 +117,24 @@ export class LandingPage extends Component {
     });
   }
 
-  handleSideNavClick(id) {
+  handleSideNavClick({id, subCategories, parentId}) {
+
     const { activeCategories } = this.state;
+    let categoryIds = !parentId && subCategories && subCategories.length
+      ? subCategories.map(sub => (sub.id)) : [];
+
+    categoryIds = categoryIds.concat([id]);
+    if (parentId && activeCategories
+      .filter(x => x !== id)
+      .every(activeId => {
+        return subCategories.map(sub => (sub.id)).indexOf(activeId) === -1;
+      })) {
+      categoryIds = categoryIds.concat([parentId]);
+    }
+
     this.setState(activeCategories.includes(id)
-      ? {activeCategories: activeCategories.filter(x => x !== id)}
-      : {activeCategories: activeCategories.concat([id])});
+      ? {activeCategories: activeCategories.filter(x => !categoryIds.includes(x))}
+      : {activeCategories: activeCategories.concat(categoryIds)});
   }
 
   render() {
@@ -129,13 +161,16 @@ export class LandingPage extends Component {
         {!this.state.directions &&
         <SideNavigation>
           {pageData.categories && !!pageData.categories.length && pageData.categories.map(cat =>
+
             <SideNavigationLink
+              id={cat.id}
               key={cat.id}
               name={cat.name}
-              selected={this.state.activeCategories.includes(cat.id)}
+              activeCategories={this.state.activeCategories}
               activeColor={cat.activeColor}
-              handleClick={() => this.handleSideNavClick(cat.id)}
+              handleClick={this.handleSideNavClick.bind(this)}
               icon='Bed'
+              subCategories={cat.subCategories}
             />)
           }
         </SideNavigation>

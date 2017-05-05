@@ -2,7 +2,7 @@
   position: fixed;
   display: inline-block;
   top: 20vh;
-  left: 2rem;
+  left: 0.85rem;
   padding: 0;
   margin: 0;
   z-index: 9;
@@ -34,25 +34,36 @@
 .SideNavigationLink--selected {
   color: #fff;
 }
+
+.SideNavigationLink--has-children {
+  padding-right: 0;
+  padding-bottom: 0;
+}
+
+.SideNavigationLink--has-children ul li.SideNavigationLink {
+  padding-right: 2rem;
+  padding-left: 2rem;
+}
+
 .SideNavigationLink__icon {
     display: block;
     position: absolute;
-    top: 50%;
+    top: 0.75rem;
     left: 0.75rem;
-    transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    -o-transform: translateY(-50%);
-    -webkit-transform: translateY(-50%);
-    -moz-transform: translateY(-50%);
     width: 1.625rem;
 }
+
+.SideNavigationLink:first-child .SideNavigationLink__icon {
+  top: 1rem;
+}
+
 .SideNavigationLink__icon svg{
     max-width: 1.625rem;
     display: inline-block;
 }
 .SideNavigation ul {
-  position: absolute;
-  top: -40px;
-  right: -192px;
+  position: relative;
   list-style: none;
+  padding: 0;
+  margin-top: 0.75rem;
 }
