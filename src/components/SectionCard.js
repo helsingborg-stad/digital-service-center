@@ -11,11 +11,27 @@ export default class SectionCard extends Component {
           <h2 className='SectionCard-heading'>{this.props.section}</h2>
         </Link>
         <div className='SectionCard-tagWrapper'>
-        {this.props.tags.map(tag => {
+        {!this.props.showTimeSpanButtons && this.props.tags.map(tag => {
           return (<Link key={Math.random()} className='SectionCard-tag' to={tag.href}>
             {tag.name}
           </Link>);
         })}
+        {this.props.showTimeSpanButtons &&
+          <span>
+            <Link className='SectionCard-tag' to='/sv/events?selectedTimeSpan=today'>
+            Idag
+            </Link>
+            <Link className='SectionCard-tag' to='/sv/events?selectedTimeSpan=tomorrow'>
+              Imorgon
+            </Link>
+            <Link className='SectionCard-tag' to='/sv/events?selectedTimeSpan=weekend'>
+              Helg
+            </Link>
+            <Link className='SectionCard-tag' to='/sv/events?selectedTimeSpan=all'>
+              Alla
+            </Link>
+          </span>
+        }
         </div>
         <div className='SectionCard-scrollWrapper'>
           <Scrollbars style={{ width: '100%', height: '40vh' }}>
@@ -52,7 +68,8 @@ SectionCard.propTypes = {
     imgUrl: PropTypes.string,
     heading: PropTypes.string,
     preamble: PropTypes.string
-  }))
+  })),
+  showTimeSpanButtons: PropTypes.bool
 };
 
 SectionCard.defaultProps = {

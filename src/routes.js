@@ -9,7 +9,6 @@ import EventsPage from './components/EventsPage';
 
 const defaultLanguage = 'sv';
 const languageRedirect = (nextState, replace) => {
-  console.log(nextState.location.pathname);
   if (!nextState.location.pathname.startsWith(defaultLanguage + '/') && !nextState.location.pathname.startsWith('/' + defaultLanguage + '/')) {
     const redirectPath = defaultLanguage + nextState.location.pathname;
     replace({

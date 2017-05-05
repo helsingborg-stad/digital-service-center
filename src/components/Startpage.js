@@ -90,6 +90,7 @@ export class Startpage extends Component {
                   link={'/events'}
                   bgColor='#f4a428'
                   tags={this.props.data.eventsTags}
+                  showTimeSpanButtons="true"
                   posts={this.props.data.eventsPosts} />
               </Column>
             </Row>

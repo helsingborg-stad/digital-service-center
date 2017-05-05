@@ -47,3 +47,8 @@
   background: rgba(0,0,0,0.5);
   white-space: normal;
 }
+.Event-date {
+  font-size: 0.75rem;
+  display: block;
+  color: #F6A402;
+}

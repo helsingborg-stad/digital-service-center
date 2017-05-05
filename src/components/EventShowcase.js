@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { Ripple } from './react-ripple-effect';
 import './EventShowcase.css';
+import Moment from 'moment';
 
 export class EventShowcase extends Component {
   render() {
@@ -40,7 +41,19 @@ export class Event extends Component {
         onMouseUp={ this.handleClick.bind(this) }
       >
         <img className='Event-img' src={this.props.imgUrl} alt='' />
-        <span className='Event-title'>{this.props.name}</span>
+        <span className='Event-title'>
+          {this.props.occasions && this.props.occasions.length &&
+            <span className='Event-date'>
+              {Moment(this.props.occasions.reduce((closestDate, occ) => {
+                if (!closestDate.occasions || closestDate.startDate >= occ.startDate) {
+                  return occ;
+                }
+                return closestDate;
+              }).startDate).format('YYYY-MM-DD')}
+            </span>
+          }
+          {this.props.name}
+        </span>
         <Ripple cursorPos={ this.state.cursorPos } />
       </span>
     );
@@ -61,5 +74,6 @@ Event.propTypes = {
   id: React.PropTypes.any,
   slug: React.PropTypes.string,
   name: React.PropTypes.string.isRequired,
-  imgUrl: React.PropTypes.string
+  imgUrl: React.PropTypes.string,
+  occasions: React.PropTypes.array
 };
