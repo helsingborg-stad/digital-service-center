@@ -2,7 +2,7 @@
   position: relative;
   width: calc(100% - 325px - 0.85rem);
   height: calc(100vh - 7.9375rem);
-  padding-left: 2.4rem;
+  padding-left: 2rem;
   margin-left: 0.85rem;
   background: #f0f1f2;
 }
