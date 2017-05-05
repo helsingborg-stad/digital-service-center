@@ -2,19 +2,20 @@ import React from 'react';
 import { Router, Route, browserHistory, IndexRedirect, IndexRoute } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
+import { activeLanguage } from './actions/activeLanguage';
+
 import App from './components/App';
 import Startpage from './components/Startpage';
 import LandingPage from './components/LandingPage';
 import EventsPage from './components/EventsPage';
 
-const defaultLanguage = 'sv';
-const languageRedirect = (nextState, replace) => {
-  if (!nextState.location.pathname.startsWith(defaultLanguage + '/')
-  && !nextState.location.pathname.startsWith('/' + defaultLanguage + '/')) {
+const setLanguageAndRedirectIfNecessary = (nextState, replace, store, defaultLanguage) => {
+  if (!nextState.params.lang) {
     const redirectPath = defaultLanguage + nextState.location.pathname;
-    replace({
-      pathname: redirectPath
-    });
+    replace({ pathname: redirectPath });
+  }
+  if (store) {
+    store.dispatch(activeLanguage(nextState.params.lang));
   }
 };
 
@@ -24,10 +25,15 @@ const Routes = (props = {}) => {
   if (props.store) {
     history = syncHistoryWithStore(browserHistory, props.store);
   }
+  const defaultLanguage = props.store
+    ? props.store.getState().siteSettings.languages.find(l => l.isDefault).shortName
+    : 'sv';
 
   return (
     <Router history={history} onUpdate={props.onUpdate}>
-      <Route path='/:lang' component={App} onEnter={languageRedirect}>
+      <Route path='/:lang' component={App} onEnter={(nextState, replace) => {
+        setLanguageAndRedirectIfNecessary(nextState, replace, props.store, defaultLanguage);
+      }}>
         <IndexRoute component={Startpage} />
         <Route
           path='/:lang/visitor/category/:category'

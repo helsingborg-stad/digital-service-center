@@ -24,11 +24,12 @@ const SideNavigationLink =
     style={{ background: activeCategories.includes(id) ? activeColor : '#fff'}}
     onClick={() => handleClick({id: id, subCategories: subCategories, parentId: null})}
   >
-  {console.log(id)}
+    { icon &&
     <span className='SideNavigationLink__icon'>
       {Icons[`${icon}Icon`]({color: activeCategories.includes(id)
         ? '#fff' : activeColor, className: 'foo'})}
     </span>
+    }
     {name}
     {activeCategories.includes(id) && subCategories && !!subCategories.length &&
     <ul>

@@ -152,6 +152,9 @@ function parse_category_to_landing_page_format($cat_id, $color, $icon_name, $sub
       activeColor => $color
     ];
   }, $sub_category_ids);
+  usort($response['subCategories'], function ($a, $b) {
+    return $a['name'] <=> $b['name'];
+  });
   return $response;
 }
 

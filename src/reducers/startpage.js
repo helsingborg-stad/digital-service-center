@@ -1,17 +1,17 @@
-export function startpageHasErrored(state = false, action) {
+export function startpageHasErrored(state = {}, action) {
   switch (action.type) {
   case 'STARTPAGE_HAS_ERRORED':
-    return action.hasErrored;
+    return { [action.lang]: action.hasErrored };
 
   default:
     return state;
   }
 }
 
-export function startpageIsLoading(state = false, action) {
+export function startpageIsLoading(state = {}, action) {
   switch (action.type) {
   case 'STARTPAGE_IS_LOADING':
-    return action.isLoading;
+    return { [action.lang]: action.isLoading };
 
   default:
     return state;
@@ -21,7 +21,7 @@ export function startpageIsLoading(state = false, action) {
 export function startpage(state = {}, action) {
   switch (action.type) {
   case 'STARTPAGE_FETCH_DATA_SUCCESS':
-    return action.startpage;
+    return { [action.lang]: action.startpage };
 
   default:
     return state;

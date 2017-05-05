@@ -101,6 +101,17 @@ function save_sub_categories($option, $post_name) {
         }
     }
 
+    if(!empty($_POST['icon_name'])) {
+        $newly_saved_categories = get_option($option, []);
+        foreach($newly_saved_categories as $key => $saved_category) {
+            if($saved_category['main_category'] == $main_category) {
+                $newly_saved_categories[$key]['icon_name'] = $_POST['icon_name'];
+                update_option($option, $newly_saved_categories);
+                break;
+            }
+        }
+    }
+
     return wp_redirect(admin_url('admin.php?page=landing-pages-categories'));
 }
 

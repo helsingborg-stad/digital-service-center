@@ -4,7 +4,7 @@ add_action( 'wp_ajax_nopriv_load_sub_categories', 'load_sub_categories' );
 
 function load_sub_categories() {
     if(isset($_POST['category_id'])) {
-	
+
     $category_id = $_POST['category_id'];
     $landing_type = $_POST['landing_type'];
     $args = [
@@ -27,8 +27,14 @@ function load_sub_categories() {
             ];
         }
     }
-    echo json_encode($sub_categories_values);
-	wp_die();
+
+    $icon_name = get_saved_icon_name($landing_type, $category_id);
+
+    echo json_encode([
+        categories => $sub_categories_values,
+        icon => $icon_name
+    ]);
+    wp_die();
     }
 }
 
@@ -42,6 +48,18 @@ function get_saved_sub_categories($type, $main_category_id) {
         }
     }
     return $saved_sub_categories;
+}
+
+function get_saved_icon_name($type, $main_category_id) {
+    $saved_categories = get_option($type);
+    $icon_name = '';
+    foreach($saved_categories as $saved_category) {
+        if($saved_category['main_category'] == $main_category_id) {
+            $icon_name = $saved_category['icon_name'];
+            break;
+        }
+    }
+    return $icon_name;
 }
 
 ?>

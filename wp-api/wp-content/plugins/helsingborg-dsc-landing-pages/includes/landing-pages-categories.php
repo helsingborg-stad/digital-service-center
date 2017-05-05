@@ -53,7 +53,7 @@ function landingpages_categories() {
                         <select name="saved_main_visit_categories" id="saved_main_visit_categories">
                             <?php
                                 $saved_visitor_main_categories = get_option('hdsc-landing-visitor-categories');
-                                $first_visitor_category; 
+                                $first_visitor_category;
                                 if(is_array($saved_visitor_main_categories)) {
                                     $first_visitor_category = reset($saved_visitor_main_categories);
                                     foreach($saved_visitor_main_categories as $saved_visitor_category) {
@@ -89,14 +89,38 @@ function landingpages_categories() {
                                         }
                                     }
                                 }
-                            ?>                        
+                            ?>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Välj ikon
+                    </th>
+                    <td>
+                        <div>
+                            <?php if($first_visitor_category['main_category'] != null) { ?>
+                                <select name="icon_name" id="landing_visitor_icon">
+                                <option value=""></option>
+                                <?php
+                                    $icon_names = ['Bed', 'Camera', 'Clock', 'Cocktail', 'Cutlery', 'Info', 'Star'];
+                                    foreach($icon_names as $icon_name) {
+                                        $selected = '';
+                                        if ($first_visitor_category['icon_name'] == $icon_name) {
+                                            $selected = 'selected';
+                                        }
+                                        echo '<option value="' . $icon_name .'"' . $selected . '>' . $icon_name . '</option>';
+                                    }
+                                ?>
+                                </select>
+                            <?php } ?>
                         </div>
                     </td>
                 </tr>
             </tbody>
         </table>
         <button class="button button-primary" name="visit_categories_form_option" value="Update" type="submit">Updatera</button>
-        <button class="button button-primary" name="visit_categories_form_option" value="Delete" type="submit">Ta bort</button>      
+        <button class="button button-primary" name="visit_categories_form_option" value="Delete" type="submit">Ta bort</button>
     </form>
     <br>
     <hr>
@@ -117,7 +141,7 @@ function landingpages_categories() {
             </tbody>
         </table>
         <button class="button button-primary" type="submit">Koppla kategorier</button>
-    </form>   
+    </form>
     <h3>Lägg till underkategorier</h3>
     <form action="admin-post.php" method="post" onkeypress="return event.keyCode !== 13;">
         <input type="hidden" name="action" value="update_or_delete_local_categories">
@@ -131,11 +155,11 @@ function landingpages_categories() {
                         <select name="saved_main_local_categories" id="saved_main_local_categories">
                             <?php
                                 $saved_local_main_categories = get_option('hdsc-landing-local-categories');
-                                $first_local_category; 
+                                $first_local_category;
                                 if(is_array($saved_local_main_categories)) {
                                     $first_local_category = reset($saved_local_main_categories);
                                     foreach($saved_local_main_categories as $saved_local_category) {
-                                        $saved_local_category_name = get_term($saved_local_category['main_category'])->name;    
+                                        $saved_local_category_name = get_term($saved_local_category['main_category'])->name;
                                         echo '<option value="' . $saved_local_category['main_category'] .'">' . $saved_local_category_name . '</option>';
                                     }
                                 }
@@ -168,6 +192,30 @@ function landingpages_categories() {
                                     }
                                 }
                             ?>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Välj ikon
+                    </th>
+                    <td>
+                        <div>
+                            <?php if($first_local_category['main_category'] != null) { ?>
+                                <select name="icon_name" id="landing_local_icon">
+                                <option value=""></option>
+                                <?php
+                                    $icon_names = ['Bed', 'Camera', 'Clock', 'Cocktail', 'Cutlery', 'Info', 'Star'];
+                                    foreach($icon_names as $icon_name) {
+                                        $selected = '';
+                                        if ($first_local_category['icon_name'] == $icon_name) {
+                                            $selected = 'selected';
+                                        }
+                                        echo '<option value="' . $icon_name .'"' . $selected . '>' . $icon_name . '</option>';
+                                    }
+                                ?>
+                                </select>
+                            <?php } ?>
                         </div>
                     </td>
                 </tr>

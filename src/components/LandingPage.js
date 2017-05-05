@@ -80,7 +80,7 @@ export class LandingPage extends Component {
 
   static fetchData({ store }) {
     return store.dispatch(
-      eventsFetchData('/api/events')
+      eventsFetchData('/api/events', store.getState().activeLanguage)
     );
   }
 
@@ -99,9 +99,9 @@ export class LandingPage extends Component {
   }
 
   componentDidMount() {
-    const dataIsEmpty = !Object.keys(this.props.events).length;
+    const dataIsEmpty = !this.props.events || !Object.keys(this.props.events).length;
     if (dataIsEmpty) {
-      this.props.fetchData('/api/events');
+      this.props.fetchData('/api/events', this.props.activeLanguage);
     }
   }
 
@@ -139,10 +139,10 @@ export class LandingPage extends Component {
 
   render() {
     if (this.props.hasErrored) {
-      return <LandingPageError reloadPage={() => this.props.fetchData('/api/events')} />;
+      return <LandingPageError reloadPage={() => this.props.fetchData('/api/events', this.props.activeLanguage)} />;
     }
 
-    const dataIsEmpty = !Object.keys(this.props.events).length;
+    const dataIsEmpty = !this.props.events || !Object.keys(this.props.events).length;
     if (this.props.isLoading || dataIsEmpty) {
       return <LandingPageLoading bgColor={this.props.bgColor} />;
     }
@@ -161,7 +161,6 @@ export class LandingPage extends Component {
         {!this.state.directions &&
         <SideNavigation>
           {pageData.categories && !!pageData.categories.length && pageData.categories.map(cat =>
-
             <SideNavigationLink
               id={cat.id}
               key={cat.id}
@@ -169,7 +168,7 @@ export class LandingPage extends Component {
               activeCategories={this.state.activeCategories}
               activeColor={cat.activeColor}
               handleClick={this.handleSideNavClick.bind(this)}
-              icon='Bed'
+              icon={cat.iconName}
               subCategories={cat.subCategories}
             />)
           }
@@ -251,6 +250,7 @@ LandingPage.propTypes = {
   type: PropTypes.oneOf(['visitor', 'local']),
   bgColor: PropTypes.string,
   fetchData: PropTypes.func.isRequired,
+  activeLanguage: PropTypes.string.isRequired,
   events: PropTypes.any, // TODO
   categories: PropTypes.array,
   landingPages: PropTypes.any, // TODO
@@ -272,17 +272,20 @@ LandingPage.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    events: state.events,
+    events: state.events[state.activeLanguage],
+    activeLanguage: state.activeLanguage,
     landingPages: state.landingPages,
-    hasErrored: state.eventsHasErrored,
-    isLoading: state.eventsAreLoading,
+    hasErrored: (state.activeLanguage in state.eventsHasErrored)
+      ? state.eventsHasErrored[state.activeLanguage] : false,
+    isLoading: (state.activeLanguage in state.eventsAreLoading)
+      ? state.eventsAreLoading[state.activeLanguage] : false,
     googleMapsApiKey: state.siteSettings.googleMapsApiKey
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: (url) => dispatch(eventsFetchData(url))
+    fetchData: (url, lang) => dispatch(eventsFetchData(url, lang))
   };
 };
 

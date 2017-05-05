@@ -49,7 +49,7 @@ export class EventsPage extends Component {
 
   static fetchData({ store }) {
     return store.dispatch(
-      eventsFetchData('/api/events')
+      eventsFetchData('/api/events', store.getState().activeLanguage)
     );
   }
 
@@ -73,18 +73,18 @@ export class EventsPage extends Component {
   }
 
   componentDidMount() {
-    const dataIsEmpty = !Object.keys(this.props.events).length;
+    const dataIsEmpty = !this.props.events || !Object.keys(this.props.events).length;
     if (dataIsEmpty) {
-      this.props.fetchData('/api/events');
+      this.props.fetchData('/api/events', this.props.activeLanguage);
     }
   }
 
   render() {
     if (this.props.hasErrored) {
-      return <LandingPageError reloadPage={() => this.props.fetchData('/api/events')} />;
+      return <LandingPageError reloadPage={() => this.props.fetchData('/api/events', this.props.activeLanguage)} />;
     }
 
-    const dataIsEmpty = !Object.keys(this.props.events).length;
+    const dataIsEmpty = !this.props.events || !Object.keys(this.props.events).length;
     if (this.props.isLoading || dataIsEmpty) {
       return <LandingPageLoading bgColor='#f4a428' />;
     }
@@ -178,6 +178,7 @@ export class EventsPage extends Component {
 EventsPage.propTypes = {
   bgColor: PropTypes.string,
   fetchData: PropTypes.func.isRequired,
+  activeLanguage: PropTypes.string.isRequired,
   events: PropTypes.any, // TODO
   landingPages: PropTypes.any, // TODO
   hasErrored: PropTypes.bool.isRequired,
@@ -187,16 +188,19 @@ EventsPage.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    events: state.events,
+    events: state.events[state.activeLanguage],
+    activeLanguage: state.activeLanguage,
     landingPages: state.landingPages,
-    hasErrored: state.eventsHasErrored,
-    isLoading: state.eventsAreLoading
+    hasErrored: (state.activeLanguage in state.eventsHasErrored)
+      ? state.eventsHasErrored[state.activeLanguage] : false,
+    isLoading: (state.activeLanguage in state.eventsAreLoading)
+      ? state.eventsAreLoading[state.activeLanguage] : false
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: (url) => dispatch(eventsFetchData(url))
+    fetchData: (url, lang) => dispatch(eventsFetchData(url, lang))
   };
 };
 
