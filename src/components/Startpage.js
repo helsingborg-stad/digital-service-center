@@ -26,7 +26,7 @@ class VergicMountPoint extends Component {
 export class Startpage extends Component {
   static fetchData({ store }) {
     return store.dispatch(
-      startpageFetchData('/api/startpage', 'sv')
+      startpageFetchData('/api/startpage', store.getState().activeLanguage)
     );
   }
 
@@ -39,14 +39,14 @@ export class Startpage extends Component {
   componentDidMount() {
     const dataIsEmpty = !this.props.data || !Object.keys(this.props.data).length;
     if (dataIsEmpty) {
-      this.props.fetchData('/api/startpage', 'sv');
+      this.props.fetchData('/api/startpage', this.props.activeLanguage);
     }
   }
 
   render() {
     if (this.props.hasErrored) {
       return (
-       <StartpageError reloadPage={() => this.props.fetchData('/api/startpage', 'sv')} />
+       <StartpageError reloadPage={() => this.props.fetchData('/api/startpage', this.props.activeLanguage)} />
       );
     }
 
@@ -113,6 +113,7 @@ export class Startpage extends Component {
 
 Startpage.propTypes = {
   fetchData: PropTypes.func.isRequired,
+  activeLanguage: PropTypes.string.isRequired,
   data: PropTypes.shape({
     backgroundUrl: PropTypes.string,
     heading: PropTypes.string,
@@ -133,9 +134,12 @@ Startpage.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    data: state.startpage.sv,
-    hasErrored: ('sv' in state.startpageHasErrored) ? state.startpageHasErrored.sv : false,
-    isLoading: ('sv' in state.startpageIsLoading) ? state.startpageIsLoading.sv : false,
+    data: state.startpage[state.activeLanguage],
+    activeLanguage: state.activeLanguage,
+    hasErrored: (state.activeLanguage in state.startpageHasErrored)
+      ? state.startpageHasErrored[state.activeLanguage] : false,
+    isLoading: (state.activeLanguage in state.startpageIsLoading)
+      ? state.startpageIsLoading[state.activeLanguage] : false,
     searchResults: state.searchResults,
     searchIsLoading: state.searchIsLoading,
     searchHasErrored: state.searchHasErrored
@@ -144,7 +148,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: (url) => dispatch(startpageFetchData(url, 'sv')),
+    fetchData: (url, lang) => dispatch(startpageFetchData(url, lang)),
     fetchSearchResults: (url) => dispatch(searchFetchData(url))
   };
 };

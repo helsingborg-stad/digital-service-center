@@ -61,7 +61,7 @@ export class LandingPage extends Component {
 
   static fetchData({ store }) {
     return store.dispatch(
-      eventsFetchData('/api/events', 'sv')
+      eventsFetchData('/api/events', store.getState().activeLanguage)
     );
   }
 
@@ -82,7 +82,7 @@ export class LandingPage extends Component {
   componentDidMount() {
     const dataIsEmpty = !this.props.events || !Object.keys(this.props.events).length;
     if (dataIsEmpty) {
-      this.props.fetchData('/api/events');
+      this.props.fetchData('/api/events', this.props.activeLanguage);
     }
   }
 
@@ -107,7 +107,7 @@ export class LandingPage extends Component {
 
   render() {
     if (this.props.hasErrored) {
-      return <LandingPageError reloadPage={() => this.props.fetchData('/api/events')} />;
+      return <LandingPageError reloadPage={() => this.props.fetchData('/api/events', this.props.activeLanguage)} />;
     }
 
     const dataIsEmpty = !this.props.events || !Object.keys(this.props.events).length;
@@ -216,6 +216,7 @@ LandingPage.propTypes = {
   type: PropTypes.oneOf(['visitor', 'local']),
   bgColor: PropTypes.string,
   fetchData: PropTypes.func.isRequired,
+  activeLanguage: PropTypes.string.isRequired,
   events: PropTypes.any, // TODO
   categories: PropTypes.array,
   landingPages: PropTypes.any, // TODO
@@ -237,17 +238,20 @@ LandingPage.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    events: state.events.sv,
+    events: state.events[state.activeLanguage],
+    activeLanguage: state.activeLanguage,
     landingPages: state.landingPages,
-    hasErrored: ('sv' in state.eventsHasErrored) ? state.eventsHasErrored.sv : false,
-    isLoading: ('sv' in state.eventsAreLoading) ? state.eventsAreLoading.sv : false,
+    hasErrored: (state.activeLanguage in state.eventsHasErrored)
+      ? state.eventsHasErrored[state.activeLanguage] : false,
+    isLoading: (state.activeLanguage in state.eventsAreLoading)
+      ? state.eventsAreLoading[state.activeLanguage] : false,
     googleMapsApiKey: state.siteSettings.googleMapsApiKey
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: (url) => dispatch(eventsFetchData(url, 'sv'))
+    fetchData: (url, lang) => dispatch(eventsFetchData(url, lang))
   };
 };
 
