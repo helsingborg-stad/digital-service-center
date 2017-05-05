@@ -6,6 +6,18 @@
   text-align: center;
 }
 
+.Startpage-langWrapper {
+  position: absolute;
+  top: 50%;
+  right: calc(5% + 0.85rem);
+  transform: translateY(-50%);
+}
+
+.Startpage-langWrapper .flags {
+  width: 2rem;
+  margin-left: 1.25rem;
+}
+
 /*
  ** Animations
  */

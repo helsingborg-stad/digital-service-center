@@ -101,25 +101,28 @@ export class EventsPage extends Component {
         <main>
           {!this.state.directions
             ? <div className='EventsPage-eventsWrapper'>
-              <Scrollbars style={{ width: 'calc(100% - 0.5rem)', margin: '0.5rem 0' }}>
-              { getDistinctEventCategories(this.props.events, pageData.excludedCategoryIds)
-                .map(c => (
-                  <div key={c.id}>
-                    <h2 dangerouslySetInnerHTML={{ __html: c.name}} />
-                    <div className='EventsPage-eventWrapper'>
-                      { getEventsForCategory(this.props.events, c.id).map(event => (
-                      <Event
-                        key={event.id}
-                        id={event.id}
-                        slug={event.slug}
-                        name={event.name}
-                        imgSrc={event.imgUrl}
-                        onClick={this.changeOverlayEvent.bind(this)} />
-                      ))}
+              <Scrollbars style={{ width: 'calc(100% - 0.5rem)' }}>
+                <div className='EventsPage-innerScrollWrapper'>
+                { getDistinctEventCategories(this.props.events, pageData.excludedCategoryIds)
+                  .map(c => (
+                    <div key={c.id}>
+                      <h2
+                        className='EventsPage-eventsHeading'
+                        dangerouslySetInnerHTML={{__html: c.name}}
+                      />
+                      <div className='EventsPage-eventWrapper'>
+                        { getEventsForCategory(this.props.events, c.id).map(event => (
+                          <Event
+                            key={event.id}
+                            {...event}
+                            onClick={this.changeOverlayEvent.bind(this)} />
+                          ))
+                        }
+                      </div>
                     </div>
-                  </div>
-                ))
-              }
+                  ))
+                }
+                </div>
               </Scrollbars>
             </div>
             : <div className='EventsPage-mapWrapper'>
@@ -159,11 +162,11 @@ export class EventsPage extends Component {
               handleSelectedDates={this.handleSelectedDates.bind(this)}
             />
             <Scrollbars autoHeight autoHeightMax='100vh - 3.25rem - 4.6875rem - 400px - 2rem'>
-            <EventsDateList
-              events={this.props.events}
-              selectedDates={this.state.selectedDates}
-              handleOverlayEvent={this.changeOverlayEvent.bind(this)}
-            />
+              <EventsDateList
+                events={this.props.events}
+                selectedDates={this.state.selectedDates}
+                handleOverlayEvent={this.changeOverlayEvent.bind(this)}
+              />
             </Scrollbars>
           </AsideMenu>
         </aside>
@@ -179,11 +182,7 @@ EventsPage.propTypes = {
   landingPages: PropTypes.any, // TODO
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  activeEvent: PropTypes.string,
-  selectedDates: PropTypes.shape({
-    startDate: PropTypes.object,
-    endDate: PropTypes.object
-  })
+  activeEvent: PropTypes.string
 };
 
 const mapStateToProps = (state) => {

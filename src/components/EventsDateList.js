@@ -27,7 +27,7 @@ const getEventsBySelectedDates = (events, selectedDates) => {
   );
 
   if (!selectedDates) {
-    return selectedEvents;
+    return getDistinctEventOrderedByStartDate({events: selectedEvents});
   }
 
   const MOMENT_BETWEEN_INCLUSIVE_SYMBOL = '[]';
@@ -62,7 +62,12 @@ const EventsDateList = ({events, selectedDates, handleOverlayEvent}) => {
           </div>
           <div className='EventDateList-contentWrapper'>
             <span className='EventDateList-date'>
-              {Moment(event.occasions[0].startDate).format('YYYY-MM-DD')}
+              {Moment(event.occasions.reduce((closestDate, occ) => {
+                if (!closestDate.occasions || closestDate.startDate >= occ.startDate) {
+                  return occ;
+                }
+                return closestDate;
+              }).startDate).format('YYYY-MM-DD')}
             </span>
             <span className='EventDateList-name'>
               {event.name}

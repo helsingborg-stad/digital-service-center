@@ -13,6 +13,8 @@ import AsideMenu from './AsideMenu';
 import Calendar from './Calendar';
 import LandingPageLoading from './LandingPageLoading';
 import LandingPageError from './LandingPageError';
+import Scrollbars from 'react-custom-scrollbars';
+import EventsDateList from './EventsDateList.js';
 import { connect } from 'react-redux';
 import { eventsFetchData } from '../actions/events';
 
@@ -52,7 +54,8 @@ export class LandingPage extends Component {
       visibleModals: [],
       visibleOverlayEvent: props.activeEvent || null,
       activeCategories: [],
-      directions: null
+      directions: null,
+      selectedDates: null
     };
   }
 
@@ -86,6 +89,12 @@ export class LandingPage extends Component {
   showDirections(directions) {
     this.setState({
       directions: directions
+    });
+  }
+
+  handleSelectedDates(selectedDates) {
+    this.setState({
+      selectedDates: selectedDates
     });
   }
 
@@ -157,10 +166,7 @@ export class LandingPage extends Component {
             {this.props.events.map(event => (
             <Event
               key={event.id}
-              id={event.id}
-              slug={event.slug}
-              name={event.name}
-              imgSrc={event.imgUrl}
+              {...event}
               onClick={this.changeOverlayEvent.bind(this)} />
             ))}
           </EventShowcase>
@@ -190,7 +196,15 @@ export class LandingPage extends Component {
           <AsideMenu>
             <Calendar
               themeCssClass={this.props.type}
+              handleSelectedDates={this.handleSelectedDates.bind(this)}
             />
+            <Scrollbars autoHeight autoHeightMax='80vh - 3.25rem - 4.6875rem - 400px - 2rem'>
+              <EventsDateList
+                events={this.props.events}
+                selectedDates={this.state.selectedDates}
+                handleOverlayEvent={this.changeOverlayEvent.bind(this)}
+              />
+            </Scrollbars>
           </AsideMenu>
         </aside>
       </div>

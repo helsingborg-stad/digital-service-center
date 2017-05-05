@@ -1,13 +1,24 @@
 .EventsPage-eventsWrapper {
   position: relative;
-  width: calc(100% - 325px);
-  height: calc(100vh - 8.3875rem);
-  padding-left: 3.25rem;
+  width: calc(100% - 325px - 0.85rem);
+  height: calc(100vh - 7.9375rem);
+  padding-left: 2rem;
+  margin-left: 0.85rem;
+  background: #f0f1f2;
+}
+
+.EventsPage-eventsHeading {
+  font-size: 1.25rem;
+  margin: 0;
 }
 
 .EventsPage-eventWrapper {
-  height: 200px;
-  margin-left: -1.25rem;
+  height: 20vh;
+  margin: -0.75rem 0 -0.85rem -1.25rem;
+}
+
+.EventsPage-innerScrollWrapper {
+  margin-top: 1rem;
 }
 
 .EventsPage-mapWrapper {
