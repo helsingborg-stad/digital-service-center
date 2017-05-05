@@ -204,7 +204,7 @@ export class LandingPage extends Component {
               onClick={this.changeOverlayEvent.bind(this)} />
             ))}
           </EventShowcase>
-          <SiteFooter color={this.props.bgColor}>
+          <SiteFooter color={this.props.bgColor} backToStartPath={`/${this.props.activeLanguage}/`}>
             { pageData.bottomLinks.map(({name, url}) => (
               <SiteFooterLink name={name} href={url} key={url} />))
             }

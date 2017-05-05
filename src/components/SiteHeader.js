@@ -22,9 +22,7 @@ export default class SiteHeader extends Component {
   render() {
     return (
       <div className='SiteHeader' style={{backgroundColor: this.props.bgColor}}>
-        <RouterLink to='/'>
-          <h1 className='SiteHeader-heading'>{this.props.heading}</h1>
-        </RouterLink>
+        <h1 className='SiteHeader-heading'>{this.props.heading}</h1>
         <div style={{float: 'right', paddingRight: '2rem'}}>
           <div style={{float: 'left', paddingRight: '2.5rem'}}>
             <Logo className='SiteSubHeader-logo' color='#fbfbfb' style={{width: '125px', paddingTop: '1.23rem'}} />

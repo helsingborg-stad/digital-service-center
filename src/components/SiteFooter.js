@@ -14,10 +14,10 @@ const LeftArrow = ({...props}) => (
   </svg>
 )
 
-export const SiteFooter = ({children, color}) => {
+export const SiteFooter = ({children, color, backToStartPath}) => {
   return (
     <div className='SiteFooter' style={{background: color}}>
-      <Link className='SiteFooter-back-to-start' to='/'>
+      <Link className='SiteFooter-back-to-start' to={backToStartPath}>
         <LeftArrow style={{width: '25px', transform: 'translateY(-2px)', marginRight: '0.6rem', marginBottom: '-0.7em'}} />
         Tillbaka till start
       </Link>
