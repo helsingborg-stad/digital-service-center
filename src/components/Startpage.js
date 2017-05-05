@@ -26,7 +26,7 @@ class VergicMountPoint extends Component {
 export class Startpage extends Component {
   static fetchData({ store }) {
     return store.dispatch(
-      startpageFetchData('/api/startpage')
+      startpageFetchData('/api/startpage', 'sv')
     );
   }
 
@@ -37,20 +37,20 @@ export class Startpage extends Component {
   }
 
   componentDidMount() {
-    const dataIsEmpty = !Object.keys(this.props.data).length;
+    const dataIsEmpty = !this.props.data || !Object.keys(this.props.data).length;
     if (dataIsEmpty) {
-      this.props.fetchData('/api/startpage');
+      this.props.fetchData('/api/startpage', 'sv');
     }
   }
 
   render() {
     if (this.props.hasErrored) {
       return (
-       <StartpageError reloadPage={() => this.props.fetchData('/api/startpage')} />
+       <StartpageError reloadPage={() => this.props.fetchData('/api/startpage', 'sv')} />
       );
     }
 
-    const dataIsEmpty = !Object.keys(this.props.data).length;
+    const dataIsEmpty = !this.props.data || !Object.keys(this.props.data).length;
     if (this.props.isLoading || dataIsEmpty) {
       return <StartpageLoading />;
     }
@@ -90,7 +90,7 @@ export class Startpage extends Component {
                   link={'/events'}
                   bgColor='#f4a428'
                   tags={this.props.data.eventsTags}
-                  showTimeSpanButtons="true"
+                  showTimeSpanButtons={true}
                   posts={this.props.data.eventsPosts} />
               </Column>
             </Row>
@@ -126,16 +126,16 @@ Startpage.propTypes = {
     eventsHeading: PropTypes.string,
     eventsTags: PropTypes.array,
     eventsPosts: PropTypes.array
-  }).isRequired,
+  }),
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = (state) => {
   return {
-    data: state.startpage,
-    hasErrored: state.startpageHasErrored,
-    isLoading: state.startpageIsLoading,
+    data: state.startpage.sv,
+    hasErrored: ('sv' in state.startpageHasErrored) ? state.startpageHasErrored.sv : false,
+    isLoading: ('sv' in state.startpageIsLoading) ? state.startpageIsLoading.sv : false,
     searchResults: state.searchResults,
     searchIsLoading: state.searchIsLoading,
     searchHasErrored: state.searchHasErrored
@@ -144,7 +144,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: (url) => dispatch(startpageFetchData(url)),
+    fetchData: (url) => dispatch(startpageFetchData(url, 'sv')),
     fetchSearchResults: (url) => dispatch(searchFetchData(url))
   };
 };

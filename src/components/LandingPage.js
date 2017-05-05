@@ -61,7 +61,7 @@ export class LandingPage extends Component {
 
   static fetchData({ store }) {
     return store.dispatch(
-      eventsFetchData('/api/events')
+      eventsFetchData('/api/events', 'sv')
     );
   }
 
@@ -80,7 +80,7 @@ export class LandingPage extends Component {
   }
 
   componentDidMount() {
-    const dataIsEmpty = !Object.keys(this.props.events).length;
+    const dataIsEmpty = !this.props.events || !Object.keys(this.props.events).length;
     if (dataIsEmpty) {
       this.props.fetchData('/api/events');
     }
@@ -110,7 +110,7 @@ export class LandingPage extends Component {
       return <LandingPageError reloadPage={() => this.props.fetchData('/api/events')} />;
     }
 
-    const dataIsEmpty = !Object.keys(this.props.events).length;
+    const dataIsEmpty = !this.props.events || !Object.keys(this.props.events).length;
     if (this.props.isLoading || dataIsEmpty) {
       return <LandingPageLoading bgColor={this.props.bgColor} />;
     }
@@ -237,17 +237,17 @@ LandingPage.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    events: state.events,
+    events: state.events.sv,
     landingPages: state.landingPages,
-    hasErrored: state.eventsHasErrored,
-    isLoading: state.eventsAreLoading,
+    hasErrored: ('sv' in state.eventsHasErrored) ? state.eventsHasErrored.sv : false,
+    isLoading: ('sv' in state.eventsAreLoading) ? state.eventsAreLoading.sv : false,
     googleMapsApiKey: state.siteSettings.googleMapsApiKey
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: (url) => dispatch(eventsFetchData(url))
+    fetchData: (url) => dispatch(eventsFetchData(url, 'sv'))
   };
 };
 

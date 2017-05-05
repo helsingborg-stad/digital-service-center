@@ -1,30 +1,33 @@
 import { landingPagesFetchDataSuccess } from './landingPages';
 
-export function eventsHasErrored(bool) {
+export function eventsHasErrored(bool, lang) {
   return {
     type: 'EVENTS_HAS_ERRORED',
+    lang,
     hasErrored: bool
   };
 }
 
-export function eventsAreLoading(bool) {
+export function eventsAreLoading(bool, lang) {
   return {
     type: 'EVENTS_ARE_LOADING',
+    lang,
     isLoading: bool
   };
 }
 
-export function eventsFetchDataSuccess(events) {
+export function eventsFetchDataSuccess(events, lang) {
   return {
     type: 'EVENTS_FETCH_DATA_SUCCESS',
+    lang,
     events
   };
 }
 
-export function eventsFetchData(url) {
+export function eventsFetchData(url, lang) {
   return (dispatch) => {
-    dispatch(eventsAreLoading(true));
-    dispatch(eventsHasErrored(false));
+    dispatch(eventsAreLoading(true, lang));
+    dispatch(eventsHasErrored(false, lang));
 
     return fetch(url)
       .then((response) => {
@@ -32,14 +35,14 @@ export function eventsFetchData(url) {
           throw Error(response.statusText);
         }
 
-        dispatch(eventsAreLoading(false));
+        dispatch(eventsAreLoading(false, lang));
 
         return response;
       })
       .then((response) => response.json())
       .then((data) => {
         dispatch(landingPagesFetchDataSuccess(data.landingPages));
-        dispatch(eventsFetchDataSuccess(data.events));
+        dispatch(eventsFetchDataSuccess(data.events, lang));
       })
       .catch((e) => {
         // eslint-disable-next-line no-console
