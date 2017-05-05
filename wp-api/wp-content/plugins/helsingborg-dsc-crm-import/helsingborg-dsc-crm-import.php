@@ -15,4 +15,8 @@ function helsingborg_dsc_crm_import() {
 include('includes/crm-import.php');
 include('includes/helsingborg-dsc-crm-import-admin.php');
 
+/*register and unregister scheduled events*/
+register_activation_hook(__FILE__, 'activate_scheduled_crm_import');
+register_deactivation_hook(__FILE__, 'deactivate_scheduled_crm_import');
+
 ?>
