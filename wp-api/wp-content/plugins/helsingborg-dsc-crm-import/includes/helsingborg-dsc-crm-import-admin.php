@@ -3,7 +3,8 @@
 add_action('admin_menu', helsingborg_dsc_crm_import_admin_menu);
 
 function helsingborg_dsc_crm_import_admin_menu() {
-  add_menu_page( 'CRM import', 'CRM import', 'manage_options', 'helsingborg-dsc-crm-import', helsingborg_dsc_crm_import_menu_callback );
+    add_menu_page( 'CRM import', 'CRM import', 'manage_options', 'helsingborg-dsc-crm-import', helsingborg_dsc_crm_import_menu_callback );
+    add_action('admin_init', 'activate_scheduled_crm_import');
 }
 
 add_action('admin_init', function() {
