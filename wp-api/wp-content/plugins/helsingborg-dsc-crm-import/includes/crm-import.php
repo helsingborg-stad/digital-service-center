@@ -20,28 +20,9 @@ function crm_clear() {
 }
 
 function perform_crm_import() {
-    $licenseData = array(
-        'ApplicationVersion' => '2017.1',
-        'FullUserName' => 'Nils Adamsson',
-        'LicenseId' => 3001,
-        'MajorCustomer' => false,
-        'Password' => '',
-        'Price' => 50,
-        'ProductLine' => 'Säljstöd',
-        'Test' => true,
-        'UserEmailAddress' => 'nils.adamsson@vitec.se'
-    );
-    $addressRequestData = array(
-        'City' => '',
-        'Municipality' => '',
-        'StreetName' => '',
-        'StreetNumber' => '',
-        'ZipCode' => ''
-    );
     $indata = array(
-        'licenseData' => $licenseData,
-        'addressRequestData' => $addressRequestData,
-        'excerptType' => 'WithTaxationInfo'
+        'userName' => 'enha1002',
+        'password' => 'ntUY9993',
     );
 
     $url = get_option('hdsc-crm-import-service-url');
@@ -51,7 +32,7 @@ function perform_crm_import() {
     }
 
     $client = new SoapClient($url);
-    $ret = $client->GetPropertyExcerptByAddress($indata);
+    $ret = $client->GetAllArticles($indata);
     if (is_null($ret)) {
         delete_option('hdsc-crm-import');
     } else {
@@ -61,6 +42,24 @@ function perform_crm_import() {
 
 function endsWith($haystack, $needle) {
      return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== false);
+}
+
+function activate_scheduled_crm_import() {
+    $run_import = get_option('hdsc-crm-import-schedule-activated');
+    if ($run_import) {
+        $scheduled_recurrence = get_option('hdsc-crm-import-scheduled-recurrence');
+        $scheduled_timestamp = get_option('hdsc-crm-import-scheduled-timestamp');
+        wp_schedule_event(strtotime($scheduled_timestamp), $scheduled_recurrence, 'scheduled_crm_import');
+    } else {
+      $next_timestamp = wp_next_scheduled( 'scheduled_crm_import' );
+      wp_unschedule_event( $next_timestamp, 'scheduled_crm_import');
+    }
+}
+
+add_action('scheduled_crm_import', 'crm_import');
+
+function deactivate_scheduled_crm_import() {
+	wp_clear_scheduled_hook('scheduled_crm_import');
 }
 
 ?>
