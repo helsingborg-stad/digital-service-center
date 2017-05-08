@@ -27,7 +27,7 @@ function perform_crm_import() {
     }
 
     $client = new SoapClient($url);
-    $ret = $client->GetAllArticles();
+    $ret = $client->GetAllArticles($indata);
     if (is_null($ret)) {
         delete_option('hdsc-crm-import');
     } else {
