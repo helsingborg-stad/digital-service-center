@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Lipping from './Lipping';
 import SiteHeader from './SiteHeader';
 import { SiteFooter, SiteFooterLink } from './SiteFooter';
+import VergicChatButton from './VergicChatButton';
 import { Event } from './EventShowcase';
 import Scrollbars from 'react-custom-scrollbars';
 import LandingPageLoading from './LandingPageLoading';
@@ -137,6 +138,7 @@ export class EventsPage extends Component {
             { pageData.bottomLinks.map(({name, url}) => (
               <SiteFooterLink name={name} href={url} key={url} />))
             }
+            <VergicChatButton className='SiteFooterLink' pageName={pageData.heading} />
           </SiteFooter>
          <ReactCSSTransitionGroup
             transitionName="EventOverlay-transitionGroup"

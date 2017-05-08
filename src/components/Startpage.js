@@ -10,16 +10,9 @@ import { searchFetchData } from '../actions/search';
 import LanguageFlags from './LanguageFlags';
 import StartpageLoading from './StartpageLoading.js';
 import StartpageError from './StartpageError.js';
-import './Startpage.css';
+import VergicChatButton from './VergicChatButton';
 
-class VergicMountPoint extends Component {
-  shouldComponentUpdate() {
-    return false;
-  }
-  render() {
-    return <div id='vergic' />;
-  }
-}
+import './Startpage.css';
 
 export class Startpage extends Component {
   static fetchData({ store }) {
@@ -97,10 +90,10 @@ export class Startpage extends Component {
               { this.props.data.topLinks.map(link => (
                 <BottomBarLink key={link.href + link.name} link={link} />
               ))}
+              <VergicChatButton className='BottomBarLink' />
               <div className='Startpage-langWrapper'>
                 <LanguageFlags />
               </div>
-              <VergicMountPoint />
             </BottomBar>
           </MultimediaBackground>
         </div>

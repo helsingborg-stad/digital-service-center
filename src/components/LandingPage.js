@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Lipping from './Lipping';
 import SiteHeader from './SiteHeader';
 import { SiteFooter, SiteFooterLink } from './SiteFooter';
+import VergicChatButton from './VergicChatButton';
 import { SideNavigation, SideNavigationLink } from './SideNavigation';
 import SearchField from './SearchField';
 import GoogleMaps from './GoogleMaps';
@@ -209,6 +210,7 @@ export class LandingPage extends Component {
             { pageData.bottomLinks.map(({name, url}) => (
               <SiteFooterLink name={name} href={url} key={url} />))
             }
+            <VergicChatButton className='SiteFooterLink' pageName={pageData.heading} />
           </SiteFooter>
          <ReactCSSTransitionGroup
             transitionName="EventOverlay-transitionGroup"

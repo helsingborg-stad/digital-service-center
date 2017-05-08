@@ -14,3 +14,8 @@ a {
   color: #d50246;
   text-decoration: none;
 }
+
+button {
+  font-family: Roboto, sans-serif;
+  cursor: pointer;
+}
