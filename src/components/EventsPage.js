@@ -160,6 +160,7 @@ export class EventsPage extends Component {
             <Calendar
               themeCssClass='#f4a428'
               handleSelectedDates={this.handleSelectedDates.bind(this)}
+              selectedTimeSpan={this.props.selectedTimeSpan}
             />
             <Scrollbars autoHeight autoHeightMax='100vh - 3.25rem - 4.6875rem - 400px - 2rem'>
               <EventsDateList
@@ -183,7 +184,8 @@ EventsPage.propTypes = {
   landingPages: PropTypes.any, // TODO
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  activeEvent: PropTypes.string
+  activeEvent: PropTypes.string,
+  selectedTimeSpan: PropTypes.string
 };
 
 const mapStateToProps = (state) => {

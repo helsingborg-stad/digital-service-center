@@ -76,6 +76,7 @@ export class LandingPage extends Component {
       directions: null,
       selectedDates: null
     };
+
   }
 
   static fetchData({ store }) {

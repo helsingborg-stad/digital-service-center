@@ -58,8 +58,8 @@ const Routes = (props = {}) => {
           )} />
         <Route
           path='/:lang/events(/:event)'
-          component={({params}) => (
-            <EventsPage activeEvent={params.event} />
+          component={({params, location}) => (
+            <EventsPage activeEvent={params.event} selectedTimeSpan={location.query.selectedTimeSpan} />
           )} />
       </Route>
       <Route path='*'>
