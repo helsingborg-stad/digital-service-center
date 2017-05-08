@@ -207,8 +207,8 @@ export class LandingPage extends Component {
             ))}
           </EventShowcase>
           <SiteFooter color={this.props.bgColor} backToStartPath={`/${this.props.activeLanguage}/`}>
-            { pageData.bottomLinks.map(({name, url}) => (
-              <SiteFooterLink name={name} href={url} key={url} />))
+            { pageData.bottomLinks.map((link) => (
+              <SiteFooterLink key={link.href + link.name} link={link} />))
             }
             <VergicChatButton className='SiteFooterLink' pageName={pageData.heading} />
           </SiteFooter>

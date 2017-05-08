@@ -3,6 +3,7 @@ import { Ripple } from './react-ripple-effect';
 import { Link as RouterLink } from 'react-router';
 import { connect } from 'react-redux';
 import { iframeUrl } from '../actions/iframeUrl';
+import { pageModalMarkup } from '../actions/pageModalMarkup';
 import classNames from 'classnames';
 
 import './Link.css';
@@ -42,13 +43,22 @@ class Link extends React.Component {
       );
     } else if (this.props.iframe) {
       return (
-        // TODO: Break out into own component (like IFrameLink)
-        // TODO: Change to `button`
         <button
           className={classNames('Link', this.props.className)}
           style={{position: 'relative', overflow: 'hidden'}}
-          href=''
           onClick={() => this.props.openIframe(this.props.iframe)}
+          onMouseUp={ this.handleClick.bind(this) }
+        >
+          {this.props.children}
+          <Ripple cursorPos={ this.state.cursorPos } />
+        </button>
+      );
+    } else if (this.props.page) {
+      return (
+        <button
+          className={classNames('Link', this.props.className)}
+          style={{position: 'relative', overflow: 'hidden'}}
+          onClick={() => this.props.openPageModal(this.props.page.content)}
           onMouseUp={ this.handleClick.bind(this) }
         >
           {this.props.children}
@@ -76,15 +86,21 @@ Link.propTypes = {
   iframe: PropTypes.shape({
     url: PropTypes.string
   }),
+  page: PropTypes.shape({
+    content: PropTypes.string
+  }),
   children: React.PropTypes.oneOfType([
     React.PropTypes.arrayOf(React.PropTypes.node),
     React.PropTypes.node
-  ])
+  ]),
+  openIframe: React.PropTypes.func,
+  openPageModal: React.PropTypes.func
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    openIframe: (url) => dispatch(iframeUrl(url))
+    openIframe: (url) => dispatch(iframeUrl(url)),
+    openPageModal: (content) => dispatch(pageModalMarkup(content))
   };
 };
 

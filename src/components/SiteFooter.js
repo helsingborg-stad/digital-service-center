@@ -36,11 +36,21 @@ SiteFooter.propTypes = {
   color: React.PropTypes.string
 };
 
-export const SiteFooterLink = ({name, href}) => {
-  return <Link className='SiteFooterLink' iframe={{url: href}}>{name}</Link>;
-};
-
-SiteFooterLink.propTypes = {
-  href: React.PropTypes.string.isRequired,
-  name: React.PropTypes.string.isRequired
+export const SiteFooterLink = ({link}) => {
+  switch (link.type) {
+  case 'iframe':
+    return (
+    <Link className='SiteFooterLink' iframe={link}>
+      {link.name}
+    </Link>
+    );
+  case 'page':
+    return (
+    <Link className='SiteFooterLink' page={link}>
+      {link.name}
+    </Link>
+    );
+  default:
+    return null;
+  }
 };
