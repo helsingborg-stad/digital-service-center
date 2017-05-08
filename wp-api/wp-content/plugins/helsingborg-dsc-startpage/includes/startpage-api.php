@@ -122,7 +122,7 @@ function get_top_links($pages) {
       return;
     }
     $iframeMeta = get_post_meta($page->ID, 'event_iframe', false)[0];
-    if($iframeMeta['active'] == 'on') {
+    if($iframeMeta['active'] == 'on' && strlen($iframeMeta['src'])) {
       return [
         type => 'iframe',
         name => $page->post_title,

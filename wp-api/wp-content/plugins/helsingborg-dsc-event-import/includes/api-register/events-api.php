@@ -165,7 +165,7 @@ function get_links_for_option($option) {
         return;
       }
       $iframeMeta = get_post_meta($page->ID, 'event_iframe', false)[0];
-      if ($iframeMeta['active'] == 'on') {
+      if ($iframeMeta['active'] == 'on' && strlen($iframeMeta['src'])) {
         return [
           type => 'iframe',
           name => $page->post_title,
