@@ -57,20 +57,21 @@ function editable_event_post_type() {
         echo '<div style="width: 200px; display: inline-block;">';
         echo '<p>Iframe url</p>';
         echo '<input type="text" name="iframe_src" id="iframe_src" value="' . $iframe[0]['src'] . '">';
-        echo '<p>Höjd</p>';
+        echo '<p>Höjd (valfri)</p>';
         echo '<input type="number" min="0" name="iframe_height" id="iframe_height" value="' . $iframe[0]['height'] . '">';
-        echo '<p>Bredd</p>';
+        echo '<p>Bredd (valfri)</p>';
         echo '<input type="number" min="0" name="iframe_width" id="iframe_width" value="' . $iframe[0]['width'] . '">';
-        echo '<p>Avgränsa höjd</p>';
+        echo '<p>Avgränsa höjd (valfri)</p>';
         echo '<input type="number" min="0" name="iframe_top_offset" id="iframe_top_offset" value="' . $iframe[0]['top_offset'] . '">';
-        echo '<p>Avgränsa från vänster</p>';
+        echo '<p>Avgränsa från vänster (valfri)</p>';
         echo '<input type="number" min="0" name="iframe_left_offset" id="iframe_left_offset" value="' . $iframe[0]['left_offset'] . '">';
         echo '<p>Använd iframe</p>';
         echo '<input type="checkbox" min="0" name="iframe_active"' . $check_active . '>';
         echo '</div>';
-        echo '<div style="margin-left: 50px; margin-top: 45px; display: inline-block; vertical-align: top; border: 2px solid #D5CC5A; overflow: hidden;">
-                <iframe scrolling="no" id="preview"></iframe>
+        echo '<div style="margin-left: 50px; margin-top: 45px; display: inline-block; vertical-align: top; overflow: hidden; width: calc(100% - 280px);">
+                <iframe style="max-width: calc(100% - 4px); border: 2px solid #D5CC5A;" scrolling="no" id="preview"></iframe>
               </div>';
+        echo '<br /><br /><small>Låt höjd/bredd vara blanka för att låta iframen uppta all tillgänglig yta (rekommenderas)</small>';
     }
 
     function event_occasions() {
