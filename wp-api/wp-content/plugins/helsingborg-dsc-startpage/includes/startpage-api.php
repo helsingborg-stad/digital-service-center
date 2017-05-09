@@ -136,7 +136,7 @@ function get_top_links($pages) {
       return [
         type => 'page',
         name => $page->post_title,
-        content => $page->post_content
+        url => '/page' . wp_make_link_relative(get_permalink($page))
       ];
     }
   }, $pages);

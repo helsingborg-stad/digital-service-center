@@ -3,7 +3,6 @@ import { Ripple } from './react-ripple-effect';
 import { Link as RouterLink } from 'react-router';
 import { connect } from 'react-redux';
 import { iframeUrl } from '../actions/iframeUrl';
-import { pageModalMarkup } from '../actions/pageModalMarkup';
 import classNames from 'classnames';
 
 import './Link.css';
@@ -54,11 +53,19 @@ class Link extends React.Component {
         </button>
       );
     } else if (this.props.page) {
+      let { url } = this.props.page;
+      // Add absolute path to helsingborg-dsc.local when in development mode
+      // In production mode, a reverse-proxy should pass this to the WordPress back-end,
+      // instead of to the React front-end
+      if (process.env.NODE_ENV === 'development') {
+        // Change format from `/page/my-page/` to `//helsingborg-dsc.local/my-page`
+        url = `//helsingborg-dsc.local/${url.slice('/page/'.length)}`;
+      }
       return (
         <button
           className={classNames('Link', this.props.className)}
           style={{position: 'relative', overflow: 'hidden'}}
-          onClick={() => this.props.openPageModal(this.props.page.content)}
+          onClick={() => this.props.openIframe({url})}
           onMouseUp={ this.handleClick.bind(this) }
         >
           {this.props.children}
@@ -93,14 +100,12 @@ Link.propTypes = {
     React.PropTypes.arrayOf(React.PropTypes.node),
     React.PropTypes.node
   ]),
-  openIframe: React.PropTypes.func,
-  openPageModal: React.PropTypes.func
+  openIframe: React.PropTypes.func
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    openIframe: (url) => dispatch(iframeUrl(url)),
-    openPageModal: (content) => dispatch(pageModalMarkup(content))
+    openIframe: (url) => dispatch(iframeUrl(url))
   };
 };
 

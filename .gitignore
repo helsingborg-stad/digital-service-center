@@ -422,3 +422,6 @@ build/
 wp-api/wp-content/plugins/sitepress-multilingual-cms/
 wp-api/wp-content/plugins/wpml-string-translation/
 wp-api/wp-content/plugins/wpml-translation-management/
+
+# Elementor plugin
+wp-api/wp-content/plugins/elementor/

@@ -1,12 +1,10 @@
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import IframeOverlay from './IframeOverlay';
-import PageOverlay from './PageOverlay';
 import { connect } from 'react-redux';
 import { iframeUrl } from '../actions/iframeUrl';
-import { pageModalMarkup } from '../actions/pageModalMarkup';
 
-const App = ({ children, location, iframe, closeIframe, pageModal, closePageModal }) => (
+const App = ({ children, location, iframe, closeIframe }) => (
   <div>
     <ReactCSSTransitionGroup
       component='div'
@@ -30,18 +28,6 @@ const App = ({ children, location, iframe, closeIframe, pageModal, closePageModa
         offsetTop={iframe.offsetTop} offsetLeft={iframe.offsetLeft} handleClose={closeIframe} />
       }
     </ReactCSSTransitionGroup>
-
-    <ReactCSSTransitionGroup
-      component='div'
-      transitionName='PageOverlay-transitionGroup'
-      transitionEnterTimeout={300}
-      transitionLeaveTimeout={300}
-    >
-      { pageModal &&
-      <PageOverlay
-        markup={pageModal} handleClose={closePageModal} />
-      }
-    </ReactCSSTransitionGroup>
   </div>
 );
 
@@ -52,22 +38,18 @@ App.propTypes = {
   ]),
   location: React.PropTypes.object,
   iframe: React.PropTypes.object,
-  closeIframe: React.PropTypes.func,
-  pageModal: React.PropTypes.string,
-  closePageModal: React.PropTypes.func
+  closeIframe: React.PropTypes.func
 };
 
 const mapStateToProps = (state) => {
   return {
-    iframe: state.iframeUrl,
-    pageModal: state.pageModalMarkup
+    iframe: state.iframeUrl
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    closeIframe: () => dispatch(iframeUrl(null)),
-    closePageModal: () => dispatch(pageModalMarkup(null))
+    closeIframe: () => dispatch(iframeUrl(null))
   };
 };
 
