@@ -38,6 +38,20 @@ const getEventsForCategory = (events, categoryId) => {
   ));
 };
 
+const getRelatedEvents = (events, mainEvent) => {
+
+  const relatedEvents = events.filter(event => {
+    return mainEvent.id !== event.id && event.categories.reduce((catArray, cat) => {
+      if (mainEvent.categories.find(c => c.id === cat.id)) {
+        catArray.push(cat);
+      }
+      return catArray;
+    }, []).length;
+  });
+  console.log(relatedEvents);
+  return relatedEvents;
+};
+
 export class EventsPage extends Component {
   constructor(props) {
     super(props);
@@ -62,8 +76,13 @@ export class EventsPage extends Component {
 
   changeOverlayEvent(eventSlug) {
     const event = this.props.events.find(e => e.slug === eventSlug);
+    const relatedEvents = event ? getRelatedEvents(
+      this.props.events,
+      event
+    ) : null;
     this.setState({
-      visibleOverlayEvent: event ? event.slug : null
+      visibleOverlayEvent: event ? event.slug : null,
+      relatedEvents: relatedEvents
     });
   }
 
@@ -153,6 +172,8 @@ export class EventsPage extends Component {
                 event={this.props.events.find(e => e.slug === this.state.visibleOverlayEvent)}
                 handleShowDirections={this.showDirections.bind(this)}
                 handleClose={() => this.changeOverlayEvent(null)}
+                relatedEvents={this.state.relatedEvents}
+                changeOverlayEvent={this.changeOverlayEvent.bind(this)}
               />
             }
           </ReactCSSTransitionGroup>

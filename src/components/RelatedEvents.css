@@ -1,0 +1,29 @@
+.RelatedEvents {
+  width: calc(100vw - 325px - 24vw);
+  max-width: 700px;
+  max-height: calc( 100vh - 4.6875rem - 1.25rem);
+  background: #fff;
+  border-radius: 3px;
+  padding: 2rem;
+  position: relative;
+}
+
+.RelatedEvents-wrapper{
+  height: 49.158375rem;
+}
+
+.RelatedEvents h3 {
+  margin-top: 0;
+}
+
+.RelatedEvents-eventWrapper {
+  height: 20vh;
+  margin-left: -1.25rem;
+  white-space: nowrap;
+}
+
+.RelatedEvents-heading {
+  font-weight: bold;
+  font-size: 1rem;
+  display: block;
+}

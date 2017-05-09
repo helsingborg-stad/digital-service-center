@@ -52,3 +52,39 @@
   display: block;
   color: #F6A402;
 }
+
+.Event-compareWrapper {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: white;
+
+}
+
+.Event-date.Event-date--compare {
+  display: inline-block;
+  color: #535353;
+}
+
+.Event-compare {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #CB0050;
+  background-color: transparent;
+  border: none;
+  float: right;
+  line-height: 1.388875rem;
+  outline: none;
+}
+
+.Event--compare {
+  height: calc(100% - 1,611125rem);
+}
+
+.Event--compare .Event-img {
+  height: calc(100% - 1.388875rem);
+}
+
+.Event--compare .Event-title {
+  bottom: 1.388875rem;
+}

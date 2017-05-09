@@ -6,6 +6,7 @@ import './EventOverlay.css';
 import ReactPlayer from 'react-player';
 import getUserLocation from '../util/getUserLocation';
 import LoadingButton from './LoadingButton.js';
+import RelatedEvents from './RelatedEvents.js';
 
 const handleNavigationClick = (destinationLat, destinationLng, callback) => {
   getUserLocation().then((location) => {
@@ -80,12 +81,9 @@ const EventDate = ({start, end}) => (
   </div>
 );
 
-const EventOverlay = ({event, handleClose, showVideoButton, onVideoButtonClick, handleShowDirections}) => {
+const EventOverlay = ({event, showVideoButton, onVideoButtonClick, handleShowDirections}) => {
   return (
   <div className='EventOverlay'>
-    <div style={{position: 'absolute', top: '-2.5rem', right: '0'}}>
-      <CloseButton handleClose={handleClose} />
-    </div>
     <img className='EventOverlay-img' src={event.imgUrl} alt={ event.name } />
     <h2 className='EventOverlay-heading'>{ event.name }</h2>
       <div style={{width: '58%', marginRight: '5%', float: 'left'}}>
@@ -104,7 +102,7 @@ const EventOverlay = ({event, handleClose, showVideoButton, onVideoButtonClick, 
     { (event.openingHours && !!event.openingHours.length) &&
     <div className='EventOverlay-metaBox'>
       <h3>Date and time</h3>
-      { event.openingHours.map(date => <span>{date}<br /></span>)
+      { event.openingHours.map(date => <span key={date}>{date}<br /></span>)
       }
     </div>
     }
@@ -175,9 +173,8 @@ const EventOverlay = ({event, handleClose, showVideoButton, onVideoButtonClick, 
 };
 
 EventOverlay.propTypes = {
-  handleClose: PropTypes.func,
   event: PropTypes.object, // todo
-  handleShowDirections: PropTypes.func
+  handleShowDirections: PropTypes.func,
 };
 
 export default class extends Component {
@@ -185,8 +182,15 @@ export default class extends Component {
     super(props);
     this.state = {
       showVideo: false,
-      videoUrl: props.event.youtubeUrl || props.event.vimeoUrl || null
+      videoUrl: props.event.youtubeUrl || props.event.vimeoUrl || null,
+      eventToCompare: null
     };
+  }
+
+  handleCompareEvent(event) {
+    this.setState({
+      eventToCompare: event
+    })
   }
 
   static propTypes = {
@@ -199,12 +203,33 @@ export default class extends Component {
       <EventOverlayBackdrop>
         { !this.state.showVideo
         ?
-        <EventOverlay
-          event={this.props.event}
-          handleClose={this.props.handleClose}
-          handleShowDirections={this.props.handleShowDirections}
-          onVideoButtonClick={this.handlePlayVideo.bind(this, true)}
-          showVideoButton={this.state.videoUrl} />
+        <div className='EventOverlay-wrapper'>
+          <div style={{position: 'absolute', top: '-2.5rem', right: '0'}}>
+            <CloseButton handleClose={this.props.handleClose} />
+          </div>
+          <EventOverlay
+            event={this.props.event}
+            handleClose={this.props.handleClose}
+            handleShowDirections={this.props.handleShowDirections}
+            onVideoButtonClick={this.handlePlayVideo.bind(this, true)}
+            showVideoButton={this.state.videoUrl} />
+            {this.state.eventToCompare &&
+            <EventOverlay
+              event={this.state.eventToCompare}
+              handleClose={this.props.handleClose}
+              handleShowDirections={this.props.handleShowDirections}
+              onVideoButtonClick={this.handlePlayVideo.bind(this, true)}
+              showVideoButton={this.state.eventToCompare.youtubeUrl || this.state.eventToCompare.vimeoUrl || null} />
+            }
+          {this.props.relatedEvents && this.props.relatedEvents.length &&
+            <RelatedEvents
+              relatedEvents={this.props.relatedEvents}
+              event={this.props.event}
+              changeOverlayEvent={this.props.changeOverlayEvent}
+              handleCompareEvent={this.handleCompareEvent.bind(this)}
+              comparedEvent={this.state.eventToCompare}
+              />}
+        </div>
         :
         <div className='EventOverlay-videoWrapper'>
           <CloseButton handleClose={this.handlePlayVideo.bind(this, false)} />

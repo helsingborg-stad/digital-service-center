@@ -21,6 +21,17 @@ import { eventsFetchData } from '../actions/events';
 
 import './LandingPage.css';
 
+const getRelatedEvents = (events, mainEvent) => {
+  return events.filter(event => {
+    return mainEvent.id !== event.id && event.categories.reduce((catArray, cat) => {
+      if (mainEvent.categories.find(c => c.id === cat.id)) {
+        catArray.push(cat);
+      }
+      return catArray;
+    }, []).length;
+  });
+};
+
 const selectedEventsWithCoordinates = (events, activeCategories, eventCategories) => {
   const getActiveColorForEvent = (event) => {
     const firstActiveCat = event.categories.map(c => c.id).find(c => activeCategories.includes(c));
@@ -95,8 +106,13 @@ export class LandingPage extends Component {
 
   changeOverlayEvent(eventSlug) {
     const event = this.props.events.find(e => e.slug === eventSlug);
+    const relatedEvents = event ? getRelatedEvents(
+      this.props.events,
+      event
+    ) : null;
     this.setState({
-      visibleOverlayEvent: event ? event.slug : null
+      visibleOverlayEvent: event ? event.slug : null,
+      relatedEvents: relatedEvents
     });
   }
 
@@ -225,6 +241,8 @@ export class LandingPage extends Component {
                 event={this.props.events.find(e => e.slug === this.state.visibleOverlayEvent)}
                 handleClose={() => this.changeOverlayEvent(null)}
                 handleShowDirections={this.showDirections.bind(this)}
+                relatedEvents={this.state.relatedEvents}
+                changeOverlayEvent={this.changeOverlayEvent.bind(this)}
               />
             }
           </ReactCSSTransitionGroup>
