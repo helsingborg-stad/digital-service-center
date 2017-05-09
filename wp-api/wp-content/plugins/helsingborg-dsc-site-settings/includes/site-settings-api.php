@@ -21,7 +21,7 @@ function helsingborg_dsc_site_settings_response() {
 
 function get_languages_in_use() {
   if(!function_exists('icl_get_languages')) {
-    return [ shortName => 'sv', isDefault => true ];
+    return [[ shortName => 'sv', isDefault => true ]];
   }
   global $sitepress;
   $default_lang = $sitepress->get_default_language();
