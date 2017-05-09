@@ -16,14 +16,14 @@ export class VergicChatButton extends Component {
     this.setState({
       chatIsAvailable: isChatOpen()
     });
-    if (window && !window.__vergicChatHasLeaveEventListener) {
+    if (typeof window !== 'undefined' && !window.__vergicChatHasLeaveEventListener) {
       subscribeToLeavingChat().then(() => setTimeout(() => location.reload(), 1500));
       window.__vergicChatHasLeaveEventListener = true;
     }
   }
   shouldShowButton() {
     return this.props.buttonText &&
-      (window && !window.__isVergicChatOpen) &&
+      (typeof window !== 'undefined' && !window.__isVergicChatOpen) &&
       !this.state.chatIsInitiated;
   }
   joinChat(pageName) {

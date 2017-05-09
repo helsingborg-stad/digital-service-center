@@ -36,6 +36,7 @@ const Provider = reactRedux.Provider;
 
 const store = require('../src/store/configureStore').default();
 const routes = require('../src/routes').default();
+const { activeLanguage } = require('../src/actions/activeLanguage');
 
 const app = express();
 app.server = http.createServer(app);
@@ -82,6 +83,10 @@ app.get('*', (req, res) => {
         } else if (redirect) {
           res.redirect(302, redirect.pathname + redirect.search);
         } else if (renderProps) {
+          // Set `activeLanguage` store property based requested URL
+          const langFromUrl = req.params[0].replace(/\//g, '');
+          store.dispatch(activeLanguage(langFromUrl));
+
           const components = renderProps.components;
 
           const Comp = components[components.length - 1].WrappedComponent;

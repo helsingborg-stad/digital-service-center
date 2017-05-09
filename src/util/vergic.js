@@ -2,6 +2,9 @@
 /* eslint-disable no-console */
 
 export function isChatOpen() {
+  if (typeof window === 'undefined') {
+    return false;
+  }
   if (!window.vngage) {
     console.warn('vngage not loaded in call to isChatOpen');
     return false;
