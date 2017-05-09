@@ -7,26 +7,17 @@ import SearchField from './SearchField';
 import { connect } from 'react-redux';
 import { startpageFetchData } from '../actions/startpage';
 import { searchFetchData } from '../actions/search';
+import LanguageFlags from './LanguageFlags';
 import StartpageLoading from './StartpageLoading.js';
 import StartpageError from './StartpageError.js';
-import EnFlag from './icons-flags/en-flag';
-import SvFlag from './icons-flags/sv-flag';
+import VergicChatButton from './VergicChatButton';
 
 import './Startpage.css';
-
-class VergicMountPoint extends Component {
-  shouldComponentUpdate() {
-    return false;
-  }
-  render() {
-    return <div id='vergic' />;
-  }
-}
 
 export class Startpage extends Component {
   static fetchData({ store }) {
     return store.dispatch(
-      startpageFetchData('/api/startpage')
+      startpageFetchData('/api/startpage', store.getState().activeLanguage)
     );
   }
 
@@ -37,20 +28,20 @@ export class Startpage extends Component {
   }
 
   componentDidMount() {
-    const dataIsEmpty = !Object.keys(this.props.data).length;
+    const dataIsEmpty = !this.props.data || !Object.keys(this.props.data).length;
     if (dataIsEmpty) {
-      this.props.fetchData('/api/startpage');
+      this.props.fetchData('/api/startpage', this.props.activeLanguage);
     }
   }
 
   render() {
     if (this.props.hasErrored) {
       return (
-       <StartpageError reloadPage={() => this.props.fetchData('/api/startpage')} />
+       <StartpageError reloadPage={() => this.props.fetchData('/api/startpage', this.props.activeLanguage)} />
       );
     }
 
-    const dataIsEmpty = !Object.keys(this.props.data).length;
+    const dataIsEmpty = !this.props.data || !Object.keys(this.props.data).length;
     if (this.props.isLoading || dataIsEmpty) {
       return <StartpageLoading />;
     }
@@ -71,7 +62,7 @@ export class Startpage extends Component {
               <Column>
                 <SectionCard
                   section={this.props.data.visitorHeading}
-                  link={'/visitor'}
+                  link={this.props.data.visitorHeadingLink}
                   bgColor='#c90e52'
                   tags={this.props.data.visitorTags}
                   posts={this.props.data.visitorPosts} />
@@ -79,7 +70,7 @@ export class Startpage extends Component {
               <Column>
                 <SectionCard
                   section={this.props.data.localHeading}
-                  link={'/local'}
+                  link={this.props.data.localHeadingLink}
                   bgColor='#eb6421'
                   tags={this.props.data.localTags}
                   posts={this.props.data.localPosts} />
@@ -87,10 +78,10 @@ export class Startpage extends Component {
               <Column>
                 <SectionCard
                   section={this.props.data.eventsHeading}
-                  link={'/events'}
+                  link={this.props.data.eventsHeadingLink}
                   bgColor='#f4a428'
                   tags={this.props.data.eventsTags}
-                  showTimeSpanButtons="true"
+                  showTimeSpanButtons={true}
                   posts={this.props.data.eventsPosts} />
               </Column>
             </Row>
@@ -99,11 +90,10 @@ export class Startpage extends Component {
               { this.props.data.topLinks.map(link => (
                 <BottomBarLink key={link.href + link.name} link={link} />
               ))}
+              <VergicChatButton className='BottomBarLink' />
               <div className='Startpage-langWrapper'>
-                <SvFlag className='flags' />
-                <EnFlag className='flags' />
+                <LanguageFlags />
               </div>
-              <VergicMountPoint />
             </BottomBar>
           </MultimediaBackground>
         </div>
@@ -113,29 +103,36 @@ export class Startpage extends Component {
 
 Startpage.propTypes = {
   fetchData: PropTypes.func.isRequired,
+  activeLanguage: PropTypes.string.isRequired,
   data: PropTypes.shape({
     backgroundUrl: PropTypes.string,
     heading: PropTypes.string,
     topLinks: PropTypes.array,
     visitorHeading: PropTypes.string,
+    visitorHeadingLink: PropTypes.string,
     visitorTags: PropTypes.array,
     visitorPosts: PropTypes.array,
     localHeading: PropTypes.string,
+    localHeadingLink: PropTypes.string,
     localTags: PropTypes.array,
     localPosts: PropTypes.array,
     eventsHeading: PropTypes.string,
+    eventsHeadingLink: PropTypes.string,
     eventsTags: PropTypes.array,
     eventsPosts: PropTypes.array
-  }).isRequired,
+  }),
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = (state) => {
   return {
-    data: state.startpage,
-    hasErrored: state.startpageHasErrored,
-    isLoading: state.startpageIsLoading,
+    data: state.startpage[state.activeLanguage],
+    activeLanguage: state.activeLanguage,
+    hasErrored: (state.activeLanguage in state.startpageHasErrored)
+      ? state.startpageHasErrored[state.activeLanguage] : false,
+    isLoading: (state.activeLanguage in state.startpageIsLoading)
+      ? state.startpageIsLoading[state.activeLanguage] : false,
     searchResults: state.searchResults,
     searchIsLoading: state.searchIsLoading,
     searchHasErrored: state.searchHasErrored
@@ -144,7 +141,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: (url) => dispatch(startpageFetchData(url)),
+    fetchData: (url, lang) => dispatch(startpageFetchData(url, lang)),
     fetchSearchResults: (url) => dispatch(searchFetchData(url))
   };
 };

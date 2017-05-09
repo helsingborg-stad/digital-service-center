@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Lipping from './Lipping';
 import SiteHeader from './SiteHeader';
 import { SiteFooter, SiteFooterLink } from './SiteFooter';
+import VergicChatButton from './VergicChatButton';
 import { Event } from './EventShowcase';
 import Scrollbars from 'react-custom-scrollbars';
 import LandingPageLoading from './LandingPageLoading';
@@ -37,6 +38,20 @@ const getEventsForCategory = (events, categoryId) => {
   ));
 };
 
+const getRelatedEvents = (events, mainEvent) => {
+
+  const relatedEvents = events.filter(event => {
+    return mainEvent.id !== event.id && event.categories.reduce((catArray, cat) => {
+      if (mainEvent.categories.find(c => c.id === cat.id)) {
+        catArray.push(cat);
+      }
+      return catArray;
+    }, []).length;
+  });
+  console.log(relatedEvents);
+  return relatedEvents;
+};
+
 export class EventsPage extends Component {
   constructor(props) {
     super(props);
@@ -49,7 +64,7 @@ export class EventsPage extends Component {
 
   static fetchData({ store }) {
     return store.dispatch(
-      eventsFetchData('/api/events')
+      eventsFetchData('/api/events', store.getState().activeLanguage)
     );
   }
 
@@ -61,8 +76,13 @@ export class EventsPage extends Component {
 
   changeOverlayEvent(eventSlug) {
     const event = this.props.events.find(e => e.slug === eventSlug);
+    const relatedEvents = event ? getRelatedEvents(
+      this.props.events,
+      event
+    ) : null;
     this.setState({
-      visibleOverlayEvent: event ? event.slug : null
+      visibleOverlayEvent: event ? event.slug : null,
+      relatedEvents: relatedEvents
     });
   }
 
@@ -73,18 +93,18 @@ export class EventsPage extends Component {
   }
 
   componentDidMount() {
-    const dataIsEmpty = !Object.keys(this.props.events).length;
+    const dataIsEmpty = !this.props.events || !Object.keys(this.props.events).length;
     if (dataIsEmpty) {
-      this.props.fetchData('/api/events');
+      this.props.fetchData('/api/events', this.props.activeLanguage);
     }
   }
 
   render() {
     if (this.props.hasErrored) {
-      return <LandingPageError reloadPage={() => this.props.fetchData('/api/events')} />;
+      return <LandingPageError reloadPage={() => this.props.fetchData('/api/events', this.props.activeLanguage)} />;
     }
 
-    const dataIsEmpty = !Object.keys(this.props.events).length;
+    const dataIsEmpty = !this.props.events || !Object.keys(this.props.events).length;
     if (this.props.isLoading || dataIsEmpty) {
       return <LandingPageLoading bgColor='#f4a428' />;
     }
@@ -133,10 +153,11 @@ export class EventsPage extends Component {
                 />
               </div>
           }
-          <SiteFooter color='#f4a428'>
-            { pageData.bottomLinks.map(({name, url}) => (
-              <SiteFooterLink name={name} href={url} key={url} />))
+          <SiteFooter color='#f4a428' backToStartPath={`/${this.props.activeLanguage}/`}>
+            { pageData.bottomLinks.map((link) => (
+              <SiteFooterLink key={link.href + link.name} link={link} />))
             }
+            <VergicChatButton className='SiteFooterLink' pageName={pageData.heading} />
           </SiteFooter>
          <ReactCSSTransitionGroup
             transitionName="EventOverlay-transitionGroup"
@@ -151,6 +172,8 @@ export class EventsPage extends Component {
                 event={this.props.events.find(e => e.slug === this.state.visibleOverlayEvent)}
                 handleShowDirections={this.showDirections.bind(this)}
                 handleClose={() => this.changeOverlayEvent(null)}
+                relatedEvents={this.state.relatedEvents}
+                changeOverlayEvent={this.changeOverlayEvent.bind(this)}
               />
             }
           </ReactCSSTransitionGroup>
@@ -160,6 +183,7 @@ export class EventsPage extends Component {
             <Calendar
               themeCssClass='#f4a428'
               handleSelectedDates={this.handleSelectedDates.bind(this)}
+              selectedTimeSpan={this.props.selectedTimeSpan}
             />
             <Scrollbars autoHeight autoHeightMax='100vh - 3.25rem - 4.6875rem - 400px - 2rem'>
               <EventsDateList
@@ -178,25 +202,30 @@ export class EventsPage extends Component {
 EventsPage.propTypes = {
   bgColor: PropTypes.string,
   fetchData: PropTypes.func.isRequired,
+  activeLanguage: PropTypes.string.isRequired,
   events: PropTypes.any, // TODO
   landingPages: PropTypes.any, // TODO
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
-  activeEvent: PropTypes.string
+  activeEvent: PropTypes.string,
+  selectedTimeSpan: PropTypes.string
 };
 
 const mapStateToProps = (state) => {
   return {
-    events: state.events,
+    events: state.events[state.activeLanguage],
+    activeLanguage: state.activeLanguage,
     landingPages: state.landingPages,
-    hasErrored: state.eventsHasErrored,
-    isLoading: state.eventsAreLoading
+    hasErrored: (state.activeLanguage in state.eventsHasErrored)
+      ? state.eventsHasErrored[state.activeLanguage] : false,
+    isLoading: (state.activeLanguage in state.eventsAreLoading)
+      ? state.eventsAreLoading[state.activeLanguage] : false
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: (url) => dispatch(eventsFetchData(url))
+    fetchData: (url, lang) => dispatch(eventsFetchData(url, lang))
   };
 };
 

@@ -11,6 +11,8 @@ add_action('admin_init', function() {
   register_setting( 'hdsc-landing-settings', 'hdsc-landing-settings-bottom-links-visitor');
   register_setting( 'hdsc-landing-settings', 'hdsc-landing-settings-heading-local');
   register_setting( 'hdsc-landing-settings', 'hdsc-landing-settings-bottom-links-local');
+  register_setting( 'hdsc-landing-settings', 'hdsc-landing-settings-heading-events');
+  register_setting( 'hdsc-landing-settings', 'hdsc-landing-settings-bottom-links-events');
   register_setting( 'hdsc-landing-settings', 'hdsc-landing-settings-free-wifi-page');
 });
 

@@ -1,13 +1,10 @@
 body {
   margin: 0;
-  padding: 0;
+  padding: 1rem;
   font-family: Roboto, sans-serif;
   color: #232323;
   -webkit-font-smoothing: antialiased;
-}
-
-*, *::before, *::after {
-  box-sizing: border-box;
+  background: #fff;
 }
 
 a {
@@ -18,4 +15,11 @@ a {
 button {
   font-family: Roboto, sans-serif;
   cursor: pointer;
+}
+
+header.page-header {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 10px;
+  box-sizing: border-box;
 }

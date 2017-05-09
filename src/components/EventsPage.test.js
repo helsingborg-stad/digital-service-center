@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { Startpage } from './Startpage';
+import { EventsPage } from './EventsPage';
 import configureStore from '../store/configureStore';
 
 it('renders without crashing', () => {
@@ -9,7 +9,7 @@ it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
   <Provider store={store}>
-    <Startpage
+    <EventsPage
       activeLanguage='sv'
       fetchData={() => {}}
       hasErrored={false}
@@ -23,7 +23,7 @@ it('renders loading state without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
   <Provider store={store}>
-    <Startpage
+    <EventsPage
       activeLanguage='sv'
       fetchData={() => {}}
       hasErrored={false}
@@ -37,7 +37,7 @@ it('renders error state without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
   <Provider store={store}>
-    <Startpage
+    <EventsPage
       activeLanguage='sv'
       fetchData={() => {}}
       hasErrored={true}

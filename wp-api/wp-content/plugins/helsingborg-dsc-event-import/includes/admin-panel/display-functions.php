@@ -4,15 +4,12 @@
 *************************************/
 
 function import_and_update_events_form() {
-?> 
+?>
 
 <h1>Event hantering</h1>
 <h2>Importera och uppdatera event<h2>
 <form action="<?php get_site_url() ?>admin-post.php" method="post">
     <input type="hidden" name="action" value="manually_create_and_update_events">
-    <p>Ange antal att importera (10 om inget anges)</p>
-    <input type="number" name="manual_number_of_events">
-    <br><br>
     <input type="submit" value="Importera">
 </form>
 
@@ -36,7 +33,7 @@ function import_update_and_delete_outdated_events_form() {
     <hr>
     <h2>Schemalägg hämtning och rensning<h2>
     <form action="options.php" method="post">
-        <?php settings_fields( 'scheduled-event-import-settings-group' ); ?>    
+        <?php settings_fields( 'scheduled-event-import-settings-group' ); ?>
         <?php do_settings_sections( 'scheduled-event-import-settings-group' ); ?>
         <p>Ange antal att importera (10 om inget anges)</p>
         <input type="number" name="scheduled_number_of_events" value="<?php echo get_option('scheduled_number_of_events'); ?>" />

@@ -13,7 +13,7 @@ function helsingborg_dsc_events_response() {
   $response = [];
   $imported_events = get_posts([ post_type => 'imported_event', 'suppress_filters' => false, numberposts => -1, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
   $editable_events = get_posts([ post_type => 'editable_event', 'suppress_filters' => false, numberposts => -1, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
-  
+
   $imported_events_parsed = parse_imported_events($imported_events);
   $editable_events_parsed = parse_editable_events($editable_events);
   $google_places_parsed = parse_google_places();
@@ -97,6 +97,7 @@ function get_landing_page_categories($option, $categories_to_include) {
   if(!is_array($mapped_categories)) {
     $mapped_categories = [];
   }
+  $main_cats = array_map(function($map) { return $map['main_category']; }, $mapped_categories);
   // Remove mapped categories with no matched events
   foreach ($mapped_categories as $idx=>$mapped_cat) {
     $main_cat = $mapped_cat['main_category'];
@@ -107,12 +108,10 @@ function get_landing_page_categories($option, $categories_to_include) {
     if (!$main_category_included && count($included_sub_categories_count) == 0) {
       unset($mapped_categories[$idx]);
     }
-    // Remove any unmapped sub-categories
-    else if (count($included_sub_categories_count) < count($sub_cats)) {
-      foreach($sub_cats as $sub_cat_idx=>$sub_cat) {
-        if (!in_array($sub_cat, $categories_to_include)) {
-          unset($mapped_categories[$idx]['sub_categories'][$sub_cat_idx]);
-        }
+    // Remove any unmapped sub-categories or sub-categories already existing as main-categories
+    foreach($sub_cats as $sub_cat_idx=>$sub_cat) {
+      if (!in_array($sub_cat, $categories_to_include) || in_array($sub_cat, $main_cats)) {
+        unset($mapped_categories[$idx]['sub_categories'][$sub_cat_idx]);
       }
     }
   }
@@ -129,8 +128,11 @@ function get_landing_page_categories($option, $categories_to_include) {
 
   $res = [];
   foreach ($mapped_categories as $idx=>$cat_map) {
-    $res[] = parse_category_to_landing_page_format($cat_map['main_category'], $colors[$idx], 'Bed', $cat_map['sub_categories']);
+    $res[] = parse_category_to_landing_page_format($cat_map['main_category'], $colors[$idx], $cat_map['icon_name'], $cat_map['sub_categories']);
   }
+  usort($res, function ($a, $b) {
+    return $a['name'] <=> $b['name'];
+  });
   return $res;
 }
 
@@ -142,13 +144,17 @@ function parse_category_to_landing_page_format($cat_id, $color, $icon_name, $sub
     activeColor => $color,
     iconName => $icon_name,
   ];
-  $response['subCategories'] = array_map(function($sub_cat_id) {
+  $response['subCategories'] = array_map(function($sub_cat_id) use ($color) {
     $sub_cat = get_category($sub_cat_id);
     return [
       id => $sub_cat->cat_ID,
-      name => html_entity_decode($sub_cat->cat_name)
+      name => html_entity_decode($sub_cat->cat_name),
+      activeColor => $color
     ];
   }, $sub_category_ids);
+  usort($response['subCategories'], function ($a, $b) {
+    return $a['name'] <=> $b['name'];
+  });
   return $response;
 }
 
@@ -159,7 +165,7 @@ function get_links_for_option($option) {
         return;
       }
       $iframeMeta = get_post_meta($page->ID, 'event_iframe', false)[0];
-      if ($iframeMeta['active'] == 'on') {
+      if ($iframeMeta['active'] == 'on' && strlen($iframeMeta['src'])) {
         return [
           type => 'iframe',
           name => $page->post_title,
@@ -174,7 +180,7 @@ function get_links_for_option($option) {
         return [
           type => 'page',
           name => $page->post_title,
-          content => $page->post_content
+          url =>  wp_make_link_relative(get_permalink($page)) . '?wordpress'
         ];
       }
     }, get_option($option, [])
@@ -182,7 +188,7 @@ function get_links_for_option($option) {
   foreach($posts as $key => $value) {
     if(empty($value)) {
       unset($posts[$key]);
-    }          
+    }
   }
   return $posts;
 }
@@ -190,7 +196,7 @@ function get_links_for_option($option) {
 function get_short_content($post_content) {
   $contains_more_html_comment = preg_match('/<!--more-->/', $post_content);
   if ($contains_more_html_comment) {
-    $post_content = substr($post_content, 0, strpos($post_content, "<!--more-->"));
+    $post_content = substr($post_content, 0, strpos($post_content, '<!--more-->'));
     $post_content = preg_replace('/<p>/', '', $post_content);
   }
   $decoded = html_entity_decode($post_content);

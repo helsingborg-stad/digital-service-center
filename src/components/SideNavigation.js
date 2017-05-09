@@ -16,32 +16,55 @@ SideNavigation.propTypes = {
   ])
 };
 
-const SideNavigationLink = ({selected, activeColor, handleClick, name, children, icon}) => (
+const SideNavigationLink =
+  ({id, activeCategories, activeColor, handleClick, name, subCategories, icon}) => (
+
   <li
-    className={cn('SideNavigationLink', {'SideNavigationLink--selected': selected})}
-    style={{ background: selected ? activeColor : '#fff'}}
-    onClick={handleClick
-  }>
+    className={cn('SideNavigationLink', {'SideNavigationLink--selected': activeCategories.includes(id), 'SideNavigationLink--has-children': subCategories && subCategories.length && activeCategories.includes(id) })}
+    style={{ background: activeCategories.includes(id) ? activeColor : '#fff'}}
+    onClick={() => handleClick({id: id, subCategories: subCategories, parentId: null})}
+  >
+    { icon &&
     <span className='SideNavigationLink__icon'>
-      {Icons[`${icon}Icon`]({color: selected ? '#fff' : activeColor, className: 'foo'})}
+      {Icons[`${icon}Icon`]({color: activeCategories.includes(id)
+        ? '#fff' : activeColor, className: 'foo'})}
     </span>
+    }
     {name}
-    {selected && children && !!children.length &&
+    {activeCategories.includes(id) && subCategories && !!subCategories.length &&
     <ul>
-      {children}
+      {subCategories.map(sub => (
+        <li
+          className={cn('SideNavigationLink',
+            {'SideNavigationLink--selected': activeCategories.includes(sub.id)}
+          )}
+          style={{ background: activeCategories.includes(sub.id) ? sub.activeColor: '#fff'}}
+          onClick={
+            (e) => {
+              e.stopPropagation();
+              handleClick({id: sub.id, subCategories: subCategories, parentId: id});
+            }
+          }
+          key={sub.id}
+        >
+          {sub.name}
+        </li>
+      ))}
     </ul>
     }
   </li>
 );
 
 SideNavigationLink.propTypes = {
-  selected: PropTypes.bool,
+  id: PropTypes.number.isRequired,
+  activeCategories: PropTypes.array,
   activeColor: PropTypes.string,
   handleClick: PropTypes.func,
   name: PropTypes.string,
-  children: PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.node)
-  ])
+  subCategories: PropTypes.oneOfType([
+    React.PropTypes.arrayOf(React.PropTypes.object)
+  ]),
+  icon: PropTypes.string
 };
 
 export { SideNavigation, SideNavigationLink };

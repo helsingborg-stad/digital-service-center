@@ -1,13 +1,13 @@
 
-.EventOverlay-transitionGroup-enter .EventOverlay,
-.EventOverlay-transitionGroup-leave .EventOverlay {
-  transform: scale(0.7);
+.EventOverlay-transitionGroup-enter .EventOverlay-wrapper,
+.EventOverlay-transitionGroup-leave .EventOverlay-wrapper {
+  transform: translateX(-50%), scale(0.7);
   opacity: 0;
   transition: transform 0.3s, opacity 0.3s;
 }
 
-.EventOverlay-transitionGroup-enter-active .EventOverlay {
-  transform: scale(1);
+.EventOverlay-transitionGroup-enter-active .EventOverlay-wrapper {
+  transform: translateX(-50%), scale(1);
   opacity: 1;
 }
 
@@ -31,16 +31,22 @@
   z-index: 100;
 }
 
-.EventOverlay {
+.EventOverlay-wrapper {
   position: fixed;
+  display: flex;
   bottom: 3.6875rem;
-  left: 13vw;
-  width: calc(100% - 325px - 24vw);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.EventOverlay {
+  width: calc(100vw - 325px - 24vw);
   max-width: 700px;
   max-height: calc( 100vh - 4.6875rem - 1.25rem);
   background: #fff;
   border-radius: 3px;
   padding: 2rem;
+  position: relative;
 }
 
 .EventOverlay-img {

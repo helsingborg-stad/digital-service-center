@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Lipping from './Lipping';
 import SiteHeader from './SiteHeader';
 import { SiteFooter, SiteFooterLink } from './SiteFooter';
+import VergicChatButton from './VergicChatButton';
 import { SideNavigation, SideNavigationLink } from './SideNavigation';
 import SearchField from './SearchField';
 import GoogleMaps from './GoogleMaps';
@@ -20,10 +21,40 @@ import { eventsFetchData } from '../actions/events';
 
 import './LandingPage.css';
 
+const getRelatedEvents = (events, mainEvent) => {
+  return events.filter(event => {
+    return mainEvent.id !== event.id && event.categories.reduce((catArray, cat) => {
+      if (mainEvent.categories.find(c => c.id === cat.id)) {
+        catArray.push(cat);
+      }
+      return catArray;
+    }, []).length;
+  });
+};
+
 const selectedEventsWithCoordinates = (events, activeCategories, eventCategories) => {
   const getActiveColorForEvent = (event) => {
     const firstActiveCat = event.categories.map(c => c.id).find(c => activeCategories.includes(c));
-    return eventCategories.find(c => c.id === firstActiveCat).activeColor;
+    let foundCategory = eventCategories.find(c => c.id === firstActiveCat);
+
+    //
+    // Category not found, search in subcategories
+    //
+    if (!foundCategory) {
+      const foundSubCategories = eventCategories.filter(cat => {
+        return cat.subCategories && cat.subCategories.length;
+      }).map(cat => cat.subCategories)
+      .reduce((acc, cat) => acc.concat(cat), []);
+
+      foundSubCategories.forEach(item => {
+        if (item.id === firstActiveCat) {
+          foundCategory = item;
+          return;
+        }
+      });
+    }
+
+    return foundCategory ? foundCategory.activeColor : null;
   };
 
   const selectedEvents = !activeCategories.length
@@ -57,11 +88,12 @@ export class LandingPage extends Component {
       directions: null,
       selectedDates: null
     };
+
   }
 
   static fetchData({ store }) {
     return store.dispatch(
-      eventsFetchData('/api/events')
+      eventsFetchData('/api/events', store.getState().activeLanguage)
     );
   }
 
@@ -74,15 +106,20 @@ export class LandingPage extends Component {
 
   changeOverlayEvent(eventSlug) {
     const event = this.props.events.find(e => e.slug === eventSlug);
+    const relatedEvents = event ? getRelatedEvents(
+      this.props.events,
+      event
+    ) : null;
     this.setState({
-      visibleOverlayEvent: event ? event.slug : null
+      visibleOverlayEvent: event ? event.slug : null,
+      relatedEvents: relatedEvents
     });
   }
 
   componentDidMount() {
-    const dataIsEmpty = !Object.keys(this.props.events).length;
+    const dataIsEmpty = !this.props.events || !Object.keys(this.props.events).length;
     if (dataIsEmpty) {
-      this.props.fetchData('/api/events');
+      this.props.fetchData('/api/events', this.props.activeLanguage);
     }
   }
 
@@ -98,19 +135,32 @@ export class LandingPage extends Component {
     });
   }
 
-  handleSideNavClick(id) {
+  handleSideNavClick({id, subCategories, parentId}) {
+
     const { activeCategories } = this.state;
+    let categoryIds = !parentId && subCategories && subCategories.length
+      ? subCategories.map(sub => (sub.id)) : [];
+
+    categoryIds = categoryIds.concat([id]);
+    if (parentId && activeCategories
+      .filter(x => x !== id)
+      .every(activeId => {
+        return subCategories.map(sub => (sub.id)).indexOf(activeId) === -1;
+      })) {
+      categoryIds = categoryIds.concat([parentId]);
+    }
+
     this.setState(activeCategories.includes(id)
-      ? {activeCategories: activeCategories.filter(x => x !== id)}
-      : {activeCategories: activeCategories.concat([id])});
+      ? {activeCategories: activeCategories.filter(x => !categoryIds.includes(x))}
+      : {activeCategories: activeCategories.concat(categoryIds)});
   }
 
   render() {
     if (this.props.hasErrored) {
-      return <LandingPageError reloadPage={() => this.props.fetchData('/api/events')} />;
+      return <LandingPageError reloadPage={() => this.props.fetchData('/api/events', this.props.activeLanguage)} />;
     }
 
-    const dataIsEmpty = !Object.keys(this.props.events).length;
+    const dataIsEmpty = !this.props.events || !Object.keys(this.props.events).length;
     if (this.props.isLoading || dataIsEmpty) {
       return <LandingPageLoading bgColor={this.props.bgColor} />;
     }
@@ -130,12 +180,14 @@ export class LandingPage extends Component {
         <SideNavigation>
           {pageData.categories && !!pageData.categories.length && pageData.categories.map(cat =>
             <SideNavigationLink
+              id={cat.id}
               key={cat.id}
               name={cat.name}
-              selected={this.state.activeCategories.includes(cat.id)}
+              activeCategories={this.state.activeCategories}
               activeColor={cat.activeColor}
-              handleClick={() => this.handleSideNavClick(cat.id)}
-              icon='Bed'
+              handleClick={this.handleSideNavClick.bind(this)}
+              icon={cat.iconName}
+              subCategories={cat.subCategories}
             />)
           }
         </SideNavigation>
@@ -170,10 +222,11 @@ export class LandingPage extends Component {
               onClick={this.changeOverlayEvent.bind(this)} />
             ))}
           </EventShowcase>
-          <SiteFooter color={this.props.bgColor}>
-            { pageData.bottomLinks.map(({name, url}) => (
-              <SiteFooterLink name={name} href={url} key={url} />))
+          <SiteFooter color={this.props.bgColor} backToStartPath={`/${this.props.activeLanguage}/`}>
+            { pageData.bottomLinks.map((link) => (
+              <SiteFooterLink key={link.href + link.name} link={link} />))
             }
+            <VergicChatButton className='SiteFooterLink' pageName={pageData.heading} />
           </SiteFooter>
          <ReactCSSTransitionGroup
             transitionName="EventOverlay-transitionGroup"
@@ -188,6 +241,8 @@ export class LandingPage extends Component {
                 event={this.props.events.find(e => e.slug === this.state.visibleOverlayEvent)}
                 handleClose={() => this.changeOverlayEvent(null)}
                 handleShowDirections={this.showDirections.bind(this)}
+                relatedEvents={this.state.relatedEvents}
+                changeOverlayEvent={this.changeOverlayEvent.bind(this)}
               />
             }
           </ReactCSSTransitionGroup>
@@ -216,6 +271,7 @@ LandingPage.propTypes = {
   type: PropTypes.oneOf(['visitor', 'local']),
   bgColor: PropTypes.string,
   fetchData: PropTypes.func.isRequired,
+  activeLanguage: PropTypes.string.isRequired,
   events: PropTypes.any, // TODO
   categories: PropTypes.array,
   landingPages: PropTypes.any, // TODO
@@ -237,17 +293,20 @@ LandingPage.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    events: state.events,
+    events: state.events[state.activeLanguage],
+    activeLanguage: state.activeLanguage,
     landingPages: state.landingPages,
-    hasErrored: state.eventsHasErrored,
-    isLoading: state.eventsAreLoading,
+    hasErrored: (state.activeLanguage in state.eventsHasErrored)
+      ? state.eventsHasErrored[state.activeLanguage] : false,
+    isLoading: (state.activeLanguage in state.eventsAreLoading)
+      ? state.eventsAreLoading[state.activeLanguage] : false,
     googleMapsApiKey: state.siteSettings.googleMapsApiKey
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: (url) => dispatch(eventsFetchData(url))
+    fetchData: (url, lang) => dispatch(eventsFetchData(url, lang))
   };
 };
 

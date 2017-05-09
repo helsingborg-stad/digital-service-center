@@ -14,10 +14,10 @@ const LeftArrow = ({...props}) => (
   </svg>
 )
 
-export const SiteFooter = ({children, color}) => {
+export const SiteFooter = ({children, color, backToStartPath}) => {
   return (
     <div className='SiteFooter' style={{background: color}}>
-      <Link className='SiteFooter-back-to-start' to='/'>
+      <Link className='SiteFooter-back-to-start' to={backToStartPath}>
         <LeftArrow style={{width: '25px', transform: 'translateY(-2px)', marginRight: '0.6rem', marginBottom: '-0.7em'}} />
         Tillbaka till start
       </Link>
@@ -36,11 +36,21 @@ SiteFooter.propTypes = {
   color: React.PropTypes.string
 };
 
-export const SiteFooterLink = ({name, href}) => {
-  return <Link className='SiteFooterLink' iframe={{url: href}}>{name}</Link>;
-};
-
-SiteFooterLink.propTypes = {
-  href: React.PropTypes.string.isRequired,
-  name: React.PropTypes.string.isRequired
+export const SiteFooterLink = ({link}) => {
+  switch (link.type) {
+  case 'iframe':
+    return (
+    <Link className='SiteFooterLink' iframe={link}>
+      {link.name}
+    </Link>
+    );
+  case 'page':
+    return (
+    <Link className='SiteFooterLink' page={link}>
+      {link.name}
+    </Link>
+    );
+  default:
+    return null;
+  }
 };

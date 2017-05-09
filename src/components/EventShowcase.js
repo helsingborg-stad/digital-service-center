@@ -3,6 +3,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import { Ripple } from './react-ripple-effect';
 import './EventShowcase.css';
 import Moment from 'moment';
+import cn from 'classnames';
 
 export class EventShowcase extends Component {
   render() {
@@ -35,14 +36,14 @@ export class Event extends Component {
     return (
       <span
         role='button'
-        className='Event'
+        className={cn('Event', {'Event--compare': this.props.canCompare})}
         style={{position: 'relative', overflow: 'hidden', cursor: 'pointer'}}
         onClick={() => this.props.onClick(this.props.slug)}
         onMouseUp={ this.handleClick.bind(this) }
       >
         <img className='Event-img' src={this.props.imgUrl} alt='' />
         <span className='Event-title'>
-          {this.props.occasions && this.props.occasions.length &&
+          {!this.props.canCompare && this.props.occasions && this.props.occasions.length &&
             <span className='Event-date'>
               {Moment(this.props.occasions.reduce((closestDate, occ) => {
                 if (!closestDate.occasions || closestDate.startDate >= occ.startDate) {
@@ -55,6 +56,24 @@ export class Event extends Component {
           {this.props.name}
         </span>
         <Ripple cursorPos={ this.state.cursorPos } />
+        {this.props.canCompare &&
+        <div className='Event-compareWrapper'>
+          {this.props.canCompare && this.props.occasions && this.props.occasions.length &&
+              <span className='Event-date Event-date--compare'>
+                {Moment(this.props.occasions.reduce((closestDate, occ) => {
+                  if (!closestDate.occasions || closestDate.startDate >= occ.startDate) {
+                    return occ;
+                  }
+                  return closestDate;
+                }).startDate).format('YYYY-MM-DD')}
+              </span>
+          }
+          <button className='Event-compare' onClick={(e) => {
+            e.stopPropagation();
+            this.props.handleCompareEvent(this.props);
+          }}>Jämför</button>
+        </div>
+        }
       </span>
     );
   }
@@ -75,5 +94,7 @@ Event.propTypes = {
   slug: React.PropTypes.string,
   name: React.PropTypes.string.isRequired,
   imgUrl: React.PropTypes.string,
-  occasions: React.PropTypes.array
+  occasions: React.PropTypes.array,
+  canCompare: React.PropTypes.bool,
+  handleCompareEvent: React.PropTypes.func
 };

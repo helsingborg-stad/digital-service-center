@@ -10,6 +10,7 @@ add_action('admin_init', function() {
   register_setting( 'hdsc-site-settings', 'hdsc-site-setting-google-analytics' );
   register_setting( 'hdsc-site-settings', 'hdsc-site-setting-google-maps-api-key' );
   register_setting( 'hdsc-site-settings', 'hdsc-site-setting-idle-timeout' );
+  register_setting( 'hdsc-site-settings', 'hdsc-site-setting-chat-button-text' );
 });
 
 function helsingborg_dsc_site_settings_menu_callback() {
@@ -49,6 +50,10 @@ function helsingborg_dsc_site_settings_menu_callback() {
       <tr>
         <th><label for="sitesettingsform-idle-timeout">Inactive timeout (in seconds)</label></th>
         <td><input id="sitesettingsform-idle-timeout" type="number" class="regular-text" name="hdsc-site-setting-idle-timeout" value="<?php echo get_option('hdsc-site-setting-idle-timeout'); ?>" /><p class="description">Gör så sidan laddas om till start efter användaren <br />varit inaktiv i X sekunder. Lämna blank för att inaktivera.</p></td>
+      </tr>
+      <tr>
+        <th><label for="sitesettingsform-chat-button-text">Chattknapptext</label></th>
+        <td><input id="sitesettingsform-chat-button-text" type="text" class="regular-text" name="hdsc-site-setting-chat-button-text" value="<?php echo get_option('hdsc-site-setting-chat-button-text'); ?>" /><p class="description">Lämna blank för att inte visa chatta med oss-knapp</p></td>
       </tr>
       </tbody></table>
       <?php submit_button(); ?>

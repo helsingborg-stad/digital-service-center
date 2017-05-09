@@ -57,7 +57,7 @@ function post_mapping_helper($post, $type) {
   $response = [
     heading  => html_entity_decode($post->post_title),
     preamble => get_preamble($post->post_content),
-    href     => '/' . $type . '/' . $post->post_name,
+    href     => get_link_language_prefix() . $type . '/' . $post->post_name,
   ];
   $thumbnail_url = get_the_post_thumbnail_url($post->ID);
   if ($thumbnail_url) {
@@ -86,7 +86,7 @@ function get_visitor_or_local_tags($type) {
     $category = get_category($mapped_cat['main_category']);
     $response[] = [
       name => html_entity_decode($category->name),
-      href => '/' . $type . '/category/' . $category->slug
+      href => get_link_language_prefix() . $type . '/category/' . $category->slug
     ];
   }
   return $response;
@@ -98,6 +98,15 @@ if(!function_exists('get_post_id_translated')) {
   }
 }
 
+function get_link_language_prefix() {
+  if(!function_exists('icl_get_languages')) {
+    return '/';
+  }
+  global $sitepress;
+  $lang = $_REQUEST['lang'] ?? $sitepress->get_default_language();
+
+    return '/' . $lang . '/';
+}
 
 function get_top_links($pages) {
   $posts = array_map(function($pageId) {
@@ -113,7 +122,7 @@ function get_top_links($pages) {
       return;
     }
     $iframeMeta = get_post_meta($page->ID, 'event_iframe', false)[0];
-    if($iframeMeta['active'] == 'on') {
+    if($iframeMeta['active'] == 'on' && strlen($iframeMeta['src'])) {
       return [
         type => 'iframe',
         name => $page->post_title,
@@ -123,19 +132,19 @@ function get_top_links($pages) {
         offsetTop => intval($iframeMeta['top_offset'] ?? 0),
         offsetLeft => intval($iframeMeta['left_offset'] ?? 0)
       ];
-    }
-    else {
+    } else {
       return [
         type => 'page',
         name => $page->post_title,
-        content => $page->post_content
+        url => wp_make_link_relative(get_permalink($page)) . '?wordpress'
       ];
     }
   }, $pages);
-  foreach($pages as $key => $value) {
-    if(empty($value)) {
+
+  foreach($posts as $key => $value) {
+    if(!$value) {
       unset($posts[$key]);
-    }          
+    }
   }
   return $posts;
 }
@@ -146,14 +155,17 @@ function helsingborg_dsc_startpage_response() {
       heading => get_option('hdsc-startpage-setting-heading', 'Digital Service Center'),
       topLinks => get_top_links(get_option('hdsc-startpage-setting-top-links', [])),
       visitorHeading => get_option('hdsc-startpage-setting-visitor-heading', 'Visitor'),
+      visitorHeadingLink => get_link_language_prefix() . 'visitor',
       visitorTags => get_visitor_or_local_tags('visitor'),
       visitorPosts => get_visitor_or_local_posts('visitor'),
 
       localHeading => get_option('hdsc-startpage-setting-local-heading', 'Local'),
+      localHeadingLink => get_link_language_prefix() . 'local',
       localTags => get_visitor_or_local_tags('local'),
       localPosts => get_visitor_or_local_posts('local'),
 
       eventsHeading => get_option('hdsc-startpage-setting-events-heading', 'Events'),
+      eventsHeadingLink => get_link_language_prefix() . 'events',
       eventsTags => array_map(function($category_id) {
         $category = get_category($category_id);
         return [

@@ -42,13 +42,29 @@ class Link extends React.Component {
       );
     } else if (this.props.iframe) {
       return (
-        // TODO: Break out into own component (like IFrameLink)
-        // TODO: Change to `button`
         <button
           className={classNames('Link', this.props.className)}
           style={{position: 'relative', overflow: 'hidden'}}
-          href=''
           onClick={() => this.props.openIframe(this.props.iframe)}
+          onMouseUp={ this.handleClick.bind(this) }
+        >
+          {this.props.children}
+          <Ripple cursorPos={ this.state.cursorPos } />
+        </button>
+      );
+    } else if (this.props.page) {
+      let { url } = this.props.page;
+      // Add absolute path to helsingborg-dsc.local when in development mode
+      // In production mode, a reverse-proxy should pass this to the WordPress back-end,
+      // instead of to the React front-end
+      if (process.env.NODE_ENV === 'development') {
+        url = `//helsingborg-dsc.local/${url}`;
+      }
+      return (
+        <button
+          className={classNames('Link', this.props.className)}
+          style={{position: 'relative', overflow: 'hidden'}}
+          onClick={() => this.props.openIframe({url})}
           onMouseUp={ this.handleClick.bind(this) }
         >
           {this.props.children}
@@ -76,10 +92,14 @@ Link.propTypes = {
   iframe: PropTypes.shape({
     url: PropTypes.string
   }),
+  page: PropTypes.shape({
+    content: PropTypes.string
+  }),
   children: React.PropTypes.oneOfType([
     React.PropTypes.arrayOf(React.PropTypes.node),
     React.PropTypes.node
-  ])
+  ]),
+  openIframe: React.PropTypes.func
 };
 
 const mapDispatchToProps = (dispatch) => {

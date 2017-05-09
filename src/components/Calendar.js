@@ -28,8 +28,8 @@ CalendarButton.propTypes = {
 };
 
 export default class Calendar extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       startDate: null,
       endDate: null,
@@ -37,6 +37,30 @@ export default class Calendar extends React.Component {
       selectedMonth: Moment()
     };
   }
+
+  presetSelectedDate(selectedTimeSpan) {
+    switch (selectedTimeSpan) {
+    case 'today':
+      this.handleSetDateToday();
+      break;
+    case 'tomorrow':
+      this.handleSetDateTomorrow();
+      break;
+    case 'weekend':
+      this.handleSetDateWeekend();
+      break;
+    case 'all':
+    default:
+      this.handleResetDate();
+      break;
+
+    }
+  }
+
+  componentDidMount() {
+    this.presetSelectedDate(this.props.selectedTimeSpan);
+  }
+
   handleSetDateToday() {
     const today = Moment();
     this.setState({startDate: today, endDate: today });
@@ -151,5 +175,6 @@ Calendar.defaultProps = {
 
 Calendar.propTypes = {
   themeCssClass: React.PropTypes.string,
-  handleSelectedDates: React.PropTypes.func
+  handleSelectedDates: React.PropTypes.func,
+  selectedTimeSpan: React.PropTypes.string
 };

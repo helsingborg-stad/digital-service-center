@@ -14,32 +14,25 @@ function helsingborg_dsc_site_settings_response() {
     googleAnalyticsId => get_option('hdsc-site-setting-google-analytics', null),
     googleMapsApiKey => get_option('hdsc-site-setting-google-maps-api-key', null),
     idleTimeout => intval(get_option('hdsc-site-setting-idle-timeout', 0)),
+    chatButtonText => get_option('hdsc-site-setting-chat-button-text', null),
     languages => get_languages_in_use()
   ];
 }
 
 function get_languages_in_use() {
   if(!function_exists('icl_get_languages')) {
-    return [];
+    return [[ shortName => 'sv', isDefault => true ]];
   }
   global $sitepress;
   $default_lang = $sitepress->get_default_language();
   $languages = icl_get_languages('skip_missing=0&orderby=KEY&order=DIR&link_empty_to=str');
 
-  $response = array_map(function($lang) use ($default_lang) {    
-    if(trim($lang['code']) == trim($default_lang)) {
-      return [
-        shortName => $lang['code'],
-        isDefault => true 
-      ];
-    }
-    else {
-      return [
-        shortName => $lang['code'],
-        isDefault => false
-      ];
-    }
+  $response = array_map(function($lang) use ($default_lang) {
+    return [
+      shortName => $lang['code'],
+      isDefault => trim($lang['code']) == trim($default_lang)
+    ];
   }, $languages);
 
-  return $response;
+  return array_values($response);
 }
