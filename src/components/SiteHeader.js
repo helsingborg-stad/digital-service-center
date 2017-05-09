@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './SiteHeader.css';
 import Link from './Link';
 import Logo from './Logo';
-import { Link as RouterLink } from 'react-router';
 import ReactInterval from 'react-interval';
 
 function getCurrentTime() {
