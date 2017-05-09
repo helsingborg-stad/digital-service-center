@@ -180,7 +180,7 @@ function get_links_for_option($option) {
         return [
           type => 'page',
           name => $page->post_title,
-          url => '/page' . wp_make_link_relative(get_permalink($page))
+          url =>  wp_make_link_relative(get_permalink($page)) . '?wordpress'
         ];
       }
     }, get_option($option, [])

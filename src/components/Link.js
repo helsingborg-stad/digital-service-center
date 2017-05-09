@@ -58,8 +58,7 @@ class Link extends React.Component {
       // In production mode, a reverse-proxy should pass this to the WordPress back-end,
       // instead of to the React front-end
       if (process.env.NODE_ENV === 'development') {
-        // Change format from `/page/my-page/` to `//helsingborg-dsc.local/my-page`
-        url = `//helsingborg-dsc.local/${url.slice('/page/'.length)}`;
+        url = `//helsingborg-dsc.local/${url}`;
       }
       return (
         <button
