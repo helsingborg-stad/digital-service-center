@@ -128,8 +128,8 @@ function fetch_google_places() {
         ?>
             <tr>
                 <th><input type="checkbox" name="saved_google_place_types_checkbox[]" value="<?php echo $saved_google_place_type['event_category_id']; ?>" /></th>
-                <td><a href="<?php echo $place_details['data']['result']['url']; ?>" target="_blank"><?php echo $place_details['data']['result']['name']; ?></a></td>
-                <td><?php echo $place_details['data']['result']['place_id']; ?></td>
+                <td><a href="<?php echo $place_details['sv']['data']['result']['url']; ?>" target="_blank"><?php echo $place_details['sv']['data']['result']['name']; ?></a></td>
+                <td><?php echo $place_details['sv']['data']['result']['place_id']; ?></td>
             </tr>
         <?php
         }

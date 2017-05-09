@@ -320,8 +320,19 @@ function parse_editable_events($events) {
 }
 
 function parse_google_places() {
-  $places = array_map(function($place) {
-    $place_data = $place['data']['result'];
+  $lang = $_REQUEST['lang'];
+  switch($lang) {
+    case 'sv':
+      $lang = 'sv';
+      break;
+    case 'en';
+      $lang = 'en';
+      break;
+    default:
+      $lang = 'sv';
+  }
+  $places = array_map(function($place) use ($lang) {
+    $place_data = $place[$lang]['data']['result'];
     return [
       id => $place_data['place_id'],
       slug => sanitize_title($place_data['name']),
