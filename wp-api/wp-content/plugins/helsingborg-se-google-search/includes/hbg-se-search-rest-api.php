@@ -14,7 +14,7 @@ function helsingborg_dsc_google_search_response() {
         return 'https://www.googleapis.com/customsearch/v1?key=' . $google_api_key . '&cx=' . $cx_id . '&q=' . $search_term . '&start=' . $page;
     }
 
-    $google_api_key = get_option('hdsc-site-setting-google-maps-api-key', null);
+    $google_api_key = get_option('hdsc-site-setting-google-api-key', null);
     $cx_id = get_option('hdsc-site-setting-google-cx-id', null);
 
     $search_term = $_REQUEST['term'] ?? '';
