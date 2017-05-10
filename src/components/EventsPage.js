@@ -16,6 +16,7 @@ import { eventsFetchData } from '../actions/events';
 import EventsDateList from './EventsDateList.js';
 import './EventsPage.css';
 import GoogleMapsDirections from './GoogleMapsDirections';
+import LanguageFlags from './LanguageFlags';
 
 const getDistinctEventCategories = (events, excludedCategories) => {
   const distinctCategories = events.reduce((acc, event) => {
@@ -39,7 +40,6 @@ const getEventsForCategory = (events, categoryId) => {
 };
 
 const getRelatedEvents = (events, mainEvent) => {
-
   const relatedEvents = events.filter(event => {
     return mainEvent.id !== event.id && event.categories.reduce((catArray, cat) => {
       if (mainEvent.categories.find(c => c.id === cat.id)) {
@@ -48,7 +48,6 @@ const getRelatedEvents = (events, mainEvent) => {
       return catArray;
     }, []).length;
   });
-  console.log(relatedEvents);
   return relatedEvents;
 };
 
@@ -121,7 +120,7 @@ export class EventsPage extends Component {
         <main>
           {!this.state.directions
             ? <div className='EventsPage-eventsWrapper'>
-              <Scrollbars style={{ width: 'calc(100% - 0.5rem)' }}>
+              <Scrollbars style={{ width: 'calc(100% - 1.5rem)', marginRight: '-1.5rem' }}>
                 <div className='EventsPage-innerScrollWrapper'>
                 { getDistinctEventCategories(this.props.events, pageData.excludedCategoryIds)
                   .map(c => (
@@ -131,6 +130,7 @@ export class EventsPage extends Component {
                         dangerouslySetInnerHTML={{__html: c.name}}
                       />
                       <div className='EventsPage-eventWrapper'>
+                        <Scrollbars style={{ width: 'calc(100% - 0.5rem)', height: 'calc(100% - 0.7rem)' }}>
                         { getEventsForCategory(this.props.events, c.id).map(event => (
                           <Event
                             key={event.id}
@@ -138,6 +138,7 @@ export class EventsPage extends Component {
                             onClick={this.changeOverlayEvent.bind(this)} />
                           ))
                         }
+                        </Scrollbars>
                       </div>
                     </div>
                   ))
@@ -158,6 +159,9 @@ export class EventsPage extends Component {
               <SiteFooterLink key={link.href + link.name} link={link} />))
             }
             <VergicChatButton className='SiteFooterLink' pageName={pageData.heading} />
+            <div className='Startpage-langWrapper'>
+              <LanguageFlags activeLanguage={this.props.activeLanguage} />
+            </div>
           </SiteFooter>
          <ReactCSSTransitionGroup
             transitionName="EventOverlay-transitionGroup"

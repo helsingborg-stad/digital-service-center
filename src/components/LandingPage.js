@@ -18,6 +18,7 @@ import Scrollbars from 'react-custom-scrollbars';
 import EventsDateList from './EventsDateList.js';
 import { connect } from 'react-redux';
 import { eventsFetchData } from '../actions/events';
+import LanguageFlags from './LanguageFlags';
 
 import './LandingPage.css';
 
@@ -88,7 +89,6 @@ export class LandingPage extends Component {
       directions: null,
       selectedDates: null
     };
-
   }
 
   static fetchData({ store }) {
@@ -136,7 +136,6 @@ export class LandingPage extends Component {
   }
 
   handleSideNavClick({id, subCategories, parentId}) {
-
     const { activeCategories } = this.state;
     let categoryIds = !parentId && subCategories && subCategories.length
       ? subCategories.map(sub => (sub.id)) : [];
@@ -227,6 +226,9 @@ export class LandingPage extends Component {
               <SiteFooterLink key={link.href + link.name} link={link} />))
             }
             <VergicChatButton className='SiteFooterLink' pageName={pageData.heading} />
+              <div className='Startpage-langWrapper'>
+                <LanguageFlags activeLanguage={this.props.activeLanguage}/>
+              </div>
           </SiteFooter>
          <ReactCSSTransitionGroup
             transitionName="EventOverlay-transitionGroup"
@@ -262,7 +264,7 @@ export class LandingPage extends Component {
             </Scrollbars>
           </AsideMenu>
         </aside>
-      </div>
+        </div>
     );
   }
 }

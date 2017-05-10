@@ -92,7 +92,7 @@ export class Startpage extends Component {
               ))}
               <VergicChatButton className='BottomBarLink' />
               <div className='Startpage-langWrapper'>
-                <LanguageFlags />
+                <LanguageFlags activeLanguage={this.props.activeLanguage} />
               </div>
             </BottomBar>
           </MultimediaBackground>
