@@ -5,6 +5,7 @@ import { SiteFooter, SiteFooterLink } from './SiteFooter';
 import VergicChatButton from './VergicChatButton';
 import { SideNavigation, SideNavigationLink } from './SideNavigation';
 import SearchField from './SearchField';
+import SearchResultOverlay from './SearchResultOverlay';
 import GoogleMaps from './GoogleMaps';
 import GoogleMapsDirections from './GoogleMapsDirections';
 import { EventShowcase, Event } from './EventShowcase';
@@ -19,6 +20,7 @@ import EventsDateList from './EventsDateList.js';
 import { connect } from 'react-redux';
 import { eventsFetchData } from '../actions/events';
 import LanguageFlags from './LanguageFlags';
+import Sifter from 'sifter';
 
 import './LandingPage.css';
 
@@ -157,6 +159,23 @@ export class LandingPage extends Component {
       : {activeCategories: activeCategories.concat(categoryIds)});
   }
 
+  searchEvents(searchTerm, events) {
+    const sifter = new Sifter(events);
+    const result = sifter.search(searchTerm, {
+      fields: ['name', 'content'],
+      sort: [{field: 'name', direction: 'asc'}],
+      limit: 10
+    });
+
+    const resultEvents = events.filter((event, index) => {
+      return result.items.some(item => item.id === index);
+    });
+
+    this.setState({
+      searchResults: resultEvents.map(e => e.name + '')
+    });
+  }
+
   render() {
     if (this.props.hasErrored) {
       return <LandingPageError reloadPage={() => this.props.fetchData('/api/events', this.props.activeLanguage)} />;
@@ -176,7 +195,8 @@ export class LandingPage extends Component {
           freeWifiLink={this.props.landingPages.shared.freeWifi}
         />
         <div className='LandingPage-searchWrapper'>
-          <SearchField inline />
+            <SearchField inline onSearchChange={(val) => this.searchEvents(val, this.props.events).bind(this)} />
+            <SearchResultOverlay searchResults={this.state.searchResults} />
         </div>
         {!this.state.directions &&
         <SideNavigation>

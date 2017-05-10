@@ -4,12 +4,17 @@ import Link from './Link';
 import closeCrossSvg from '../media/close-cross.svg';
 import './SearchResultOverlay.css';
 
-const SearchResultOverlay = () => {
-    return (
+const SearchResultOverlay = ({searchResults}) => {
+  return searchResults && !!searchResults.length ? (
     <div className='SearchResultOverlay'>
-        Test
+        {searchResults.map(res => <div>{res}</div>)}
     </div>
-  );
+  )
+  : null;
 };
 
-export default SearchResultOverlay
+SearchResultOverlay.propTypes = {
+  searchResults: PropTypes.array
+};
+
+export default SearchResultOverlay;
