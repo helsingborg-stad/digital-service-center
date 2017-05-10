@@ -47,7 +47,7 @@ export class VergicChatButton extends Component {
 VergicChatButton.propTypes = {
   className: PropTypes.string,
   pageName: PropTypes.string,
-  buttonText: PropTypes.string.isRequired
+  buttonText: PropTypes.string
 };
 
 VergicChatButton.defaultProps = {

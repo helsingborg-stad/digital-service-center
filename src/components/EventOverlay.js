@@ -183,13 +183,13 @@ export default class extends Component {
     this.state = {
       showVideo: false,
       videoUrl: props.event.youtubeUrl || props.event.vimeoUrl || null,
-      eventToCompare: null
+      comparedEvent: null
     };
   }
 
   handleCompareEvent(event) {
     this.setState({
-      eventToCompare: event
+      comparedEvent: event
     })
   }
 
@@ -213,21 +213,21 @@ export default class extends Component {
             handleShowDirections={this.props.handleShowDirections}
             onVideoButtonClick={this.handlePlayVideo.bind(this, true)}
             showVideoButton={this.state.videoUrl} />
-            {this.state.eventToCompare &&
+            {this.state.comparedEvent &&
             <EventOverlay
-              event={this.state.eventToCompare}
+              event={this.state.comparedEvent}
               handleClose={this.props.handleClose}
               handleShowDirections={this.props.handleShowDirections}
               onVideoButtonClick={this.handlePlayVideo.bind(this, true)}
-              showVideoButton={this.state.eventToCompare.youtubeUrl || this.state.eventToCompare.vimeoUrl || null} />
+              showVideoButton={this.state.comparedEvent.youtubeUrl || this.state.comparedEvent.vimeoUrl || null} />
             }
-          {this.props.relatedEvents && this.props.relatedEvents.length &&
+          {this.props.relatedEvents && !!this.props.relatedEvents.length &&
             <RelatedEvents
               relatedEvents={this.props.relatedEvents}
               event={this.props.event}
               changeOverlayEvent={this.props.changeOverlayEvent}
               handleCompareEvent={this.handleCompareEvent.bind(this)}
-              comparedEvent={this.state.eventToCompare}
+              comparedEvent={this.state.comparedEvent}
               />}
         </div>
         :

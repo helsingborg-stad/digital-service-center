@@ -20,7 +20,11 @@ const SideNavigationLink =
   ({id, activeCategories, activeColor, handleClick, name, subCategories, icon}) => (
 
   <li
-    className={cn('SideNavigationLink', {'SideNavigationLink--selected': activeCategories.includes(id), 'SideNavigationLink--has-children': subCategories && subCategories.length && activeCategories.includes(id) })}
+    className={cn('SideNavigationLink',
+      {'SideNavigationLink--selected': activeCategories.includes(id),
+        'SideNavigationLink--has-children': subCategories
+        && subCategories.length && activeCategories.includes(id)
+      })}
     style={{ background: activeCategories.includes(id) ? activeColor : '#fff'}}
     onClick={() => handleClick({id: id, subCategories: subCategories, parentId: null})}
   >
