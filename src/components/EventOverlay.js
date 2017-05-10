@@ -86,7 +86,9 @@ const EventDate = ({start, end}) => (
 const EventOverlay = ({event, showVideoButton, onVideoButtonClick, handleShowDirections, translatables}) => {
   return (
   <div className='EventOverlay'>
-    <img className='EventOverlay-img' src={event.imgUrl} alt={ event.name } />
+    <div className='EventOverlay-imgWrapper'>
+      <img className='EventOverlay-img' src={event.imgUrl} alt={ event.name } />
+    </div>
     <h2 className='EventOverlay-heading'>{ event.name }</h2>
       <div style={{width: '58%', marginRight: '5%', float: 'left'}}>
         {!!event.rating &&
@@ -94,12 +96,14 @@ const EventOverlay = ({event, showVideoButton, onVideoButtonClick, handleShowDir
         }
         <Scrollbars style={{ marginTop: '1rem', width: 'calc(100% + 1rem)' }} autoHeight autoHeightMax='100vh - 4.6875rem - 1.25rem - (550px)'>
           { event.content &&
+          <div style={{height: '25rem'}}>
           <span className='EventOverlay-content-scrollWrapper'>
             <span
               className='EventOverlay-content'
               dangerouslySetInnerHTML={{ __html: event.content.replace(/\r\n/g, '<br />') }}
             />
           </span>
+          </div>
           }
           { !!event.rating &&
             <div style={{height: '25rem'}}>

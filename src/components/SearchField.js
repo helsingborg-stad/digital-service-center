@@ -8,6 +8,7 @@ const SearchField = ({ inline, onSearchChange }) => {
       <input
         type='search'
         onChange={(ev) => onSearchChange(ev.target.value)}
+        onFocus={(ev) => onSearchChange(ev.target.value)}
         className={classnames(
           'SearchField-input',
           inline && 'SearchField-input--inline'

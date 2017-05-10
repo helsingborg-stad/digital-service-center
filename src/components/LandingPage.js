@@ -6,6 +6,8 @@ import VergicChatButton from './VergicChatButton';
 import { SideNavigation, SideNavigationLink } from './SideNavigation';
 import SearchField from './SearchField';
 import SearchResultOverlay from './SearchResultOverlay';
+import Sifter from 'sifter';
+import cn from 'classnames';
 import GoogleMaps from './GoogleMaps';
 import GoogleMapsDirections from './GoogleMapsDirections';
 import { EventShowcase, Event } from './EventShowcase';
@@ -20,7 +22,7 @@ import EventsDateList from './EventsDateList.js';
 import { connect } from 'react-redux';
 import { eventsFetchData } from '../actions/events';
 import LanguageFlags from './LanguageFlags';
-import Sifter from 'sifter';
+
 
 import './LandingPage.css';
 
@@ -96,6 +98,11 @@ export class LandingPage extends Component {
       eventsFetchData('/api/events', store.getState().activeLanguage)
     );
   }
+  handleHideSearchResult() {
+    this.setState({
+      searchResults: null
+    });
+  }
 
   toggleModalVisibility(modalId) {
     const { visibleModals } = this.state;
@@ -112,7 +119,8 @@ export class LandingPage extends Component {
     ) : null;
     this.setState({
       visibleOverlayEvent: event ? event.slug : null,
-      relatedEvents: relatedEvents
+      relatedEvents: relatedEvents,
+      searchResults: null
     });
   }
 
@@ -170,7 +178,7 @@ export class LandingPage extends Component {
     });
 
     this.setState({
-      searchResults: resultEvents.map(e => e.name + '')
+      searchResults: resultEvents
     });
   }
 
@@ -192,10 +200,20 @@ export class LandingPage extends Component {
           bgColor={this.props.bgColor}
           freeWifiLink={this.props.landingPages.shared.freeWifi}
         />
-        <div className='LandingPage-searchWrapper'>
-            <SearchField inline onSearchChange={(val) => this.searchEvents(val, this.props.events).bind(this)} />
-            <SearchResultOverlay searchResults={this.state.searchResults} />
+        <div className={cn('LandingPage-searchWrapper',
+          {'LandingPage-searchWrapper--top':
+          this.state.searchResults && this.state.searchResults.length})}>
+            <SearchField
+              inline
+              onSearchChange={(val) => this.searchEvents(val, this.props.events)}
+            />
         </div>
+        <SearchResultOverlay
+          searchResults={this.state.searchResults}
+          changeOverlayEvent={this.changeOverlayEvent.bind(this)}
+          pageType={this.props.type}
+          handleHideSearchResult={this.handleHideSearchResult.bind(this)}
+        />
         {!this.state.directions &&
         <SideNavigation>
           {pageData.categories && !!pageData.categories.length && pageData.categories.map(cat =>

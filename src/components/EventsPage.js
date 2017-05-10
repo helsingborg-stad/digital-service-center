@@ -17,6 +17,10 @@ import EventsDateList from './EventsDateList.js';
 import './EventsPage.css';
 import GoogleMapsDirections from './GoogleMapsDirections';
 import LanguageFlags from './LanguageFlags';
+import SearchField from './SearchField';
+import SearchResultOverlay from './SearchResultOverlay';
+import Sifter from 'sifter';
+import cn from 'classnames';
 
 const getDistinctEventCategories = (events, excludedCategories) => {
   const distinctCategories = events.reduce((acc, event) => {
@@ -67,9 +71,32 @@ export class EventsPage extends Component {
     );
   }
 
+  handleHideSearchResult() {
+    this.setState({
+      searchResults: null
+    });
+  }
+
   showDirections(directions) {
     this.setState({
       directions: directions
+    });
+  }
+
+  searchEvents(searchTerm, events) {
+    const sifter = new Sifter(events);
+    const result = sifter.search(searchTerm, {
+      fields: ['name', 'content'],
+      sort: [{field: 'name', direction: 'asc'}],
+      limit: 10
+    });
+
+    const resultEvents = events.filter((event, index) => {
+      return result.items.some(item => item.id === index);
+    });
+
+    this.setState({
+      searchResults: resultEvents
     });
   }
 
@@ -81,7 +108,8 @@ export class EventsPage extends Component {
     ) : null;
     this.setState({
       visibleOverlayEvent: event ? event.slug : null,
-      relatedEvents: relatedEvents
+      relatedEvents: relatedEvents,
+      searchResults: null
     });
   }
 
@@ -119,6 +147,20 @@ export class EventsPage extends Component {
           heading={pageData.heading}
           bgColor='#f4a428'
           freeWifiLink={this.props.landingPages.shared.freeWifi}
+        />
+        <div className={cn('EventsPage-searchWrapper',
+          {'EventsPage-searchWrapper--top':
+          this.state.searchResults && this.state.searchResults.length})}>
+            <SearchField
+              inline
+              onSearchChange={(val) => this.searchEvents(val, this.props.events)}
+            />
+        </div>
+        <SearchResultOverlay
+          searchResults={this.state.searchResults}
+          changeOverlayEvent={this.changeOverlayEvent.bind(this)}
+          pageType={pageData.heading}
+          handleHideSearchResult={this.handleHideSearchResult.bind(this)}
         />
         <main>
           {!this.state.directions

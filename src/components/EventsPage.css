@@ -7,6 +7,23 @@
   background: #f0f1f2;
 }
 
+.EventsPage-searchWrapper {
+  position: absolute;
+  z-index: 9;
+  left: calc(50% - 300px);
+  bottom: calc(3.25rem + 1rem);
+  width: 350px
+}
+
+.EventsPage-searchWrapper--top {
+  position: fixed;
+  top: 1rem;
+  left: calc(50% - 175px);
+  bottom: auto;
+  width: 350px;
+  z-index: 101;
+}
+
 .EventsPage-eventsHeading {
   font-size: 1.25rem;
   margin: 0;

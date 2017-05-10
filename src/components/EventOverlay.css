@@ -47,13 +47,23 @@
   border-radius: 3px;
   padding: 2rem;
   position: relative;
+  min-height: calc( 100vh - 4.6875rem - 1.25rem);
 }
-
-.EventOverlay-img {
+.EventOverlay-imgWrapper{
   width: calc(100% + 4rem);
+  height: 24.3125rem;
+  overflow: hidden;
+  position: relative;
   margin-top: -2rem;
   margin-left: -2rem;
-  border-radius: 3px 3px 0 0;
+    border-radius: 3px 3px 0 0;
+}
+.EventOverlay-img {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 100%;
+  transform: translateX(-50%);
 }
 
 .EventOverlay-heading {
@@ -68,6 +78,8 @@
 
 .EventOverlay-content {
   font-size: 0.9375rem;
+  display: block;
+  margin-bottom: 1.5rem;
   color: #535353;
 }
 
