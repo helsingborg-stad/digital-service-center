@@ -58,7 +58,7 @@ export class Event extends Component {
         <Ripple cursorPos={ this.state.cursorPos } />
         {this.props.canCompare &&
         <div className='Event-compareWrapper'>
-          {this.props.canCompare && this.props.occasions && this.props.occasions.length &&
+          {this.props.canCompare && this.props.occasions && !!this.props.occasions.length &&
               <span className='Event-date Event-date--compare'>
                 {Moment(this.props.occasions.reduce((closestDate, occ) => {
                   if (!closestDate.occasions || closestDate.startDate >= occ.startDate) {
