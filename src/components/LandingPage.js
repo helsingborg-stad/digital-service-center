@@ -215,7 +215,7 @@ export class LandingPage extends Component {
             }
           </div>
           <EventShowcase>
-            {this.props.events.map(event => (
+            {this.props.events.slice(0, 10).map(event => (
             <Event
               key={event.id}
               {...event}
