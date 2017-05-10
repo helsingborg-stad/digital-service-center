@@ -221,7 +221,7 @@ export default class extends Component {
               onVideoButtonClick={this.handlePlayVideo.bind(this, true)}
               showVideoButton={this.state.eventToCompare.youtubeUrl || this.state.eventToCompare.vimeoUrl || null} />
             }
-          {this.props.relatedEvents && this.props.relatedEvents.length &&
+          {this.props.relatedEvents && !!this.props.relatedEvents.length &&
             <RelatedEvents
               relatedEvents={this.props.relatedEvents}
               event={this.props.event}
