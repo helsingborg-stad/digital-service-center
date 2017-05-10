@@ -43,7 +43,7 @@ export class Event extends Component {
       >
         <img className='Event-img' src={this.props.imgUrl} alt='' />
         <span className='Event-title'>
-          {!this.props.canCompare && this.props.occasions && this.props.occasions.length &&
+          {!this.props.canCompare && this.props.occasions && !!this.props.occasions.length &&
             <span className='Event-date'>
               {Moment(this.props.occasions.reduce((closestDate, occ) => {
                 if (!closestDate.occasions || closestDate.startDate >= occ.startDate) {
