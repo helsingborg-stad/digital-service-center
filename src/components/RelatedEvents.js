@@ -4,7 +4,6 @@ import { Event } from './EventShowcase';
 import Scrollbars from 'react-custom-scrollbars';
 
 const getRelatedEventsByCategory = (relatedEvents, categoryId, comparedEvent) => {
-  console.log(comparedEvent);
   return relatedEvents.filter(event => {
     return (!comparedEvent || event.id !== comparedEvent.id) && event.categories.find(c => c.id === categoryId);
   });
@@ -26,7 +25,6 @@ export default class RelatedEvents extends React.Component {
 
   }
   render() {
-    console.log(this.props.relatedEvents);
     return (
       <div className='RelatedEvents'>
         <h3>Relaterade events</h3>

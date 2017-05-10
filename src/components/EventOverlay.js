@@ -7,6 +7,7 @@ import ReactPlayer from 'react-player';
 import getUserLocation from '../util/getUserLocation';
 import LoadingButton from './LoadingButton.js';
 import RelatedEvents from './RelatedEvents.js';
+import Star from './icons/StarIcon';
 
 const handleNavigationClick = (destinationLat, destinationLng, callback) => {
   getUserLocation().then((location) => {
@@ -87,6 +88,9 @@ const EventOverlay = ({event, showVideoButton, onVideoButtonClick, handleShowDir
     <img className='EventOverlay-img' src={event.imgUrl} alt={ event.name } />
     <h2 className='EventOverlay-heading'>{ event.name }</h2>
       <div style={{width: '58%', marginRight: '5%', float: 'left'}}>
+        {!!event.rating &&
+           <h3 className='EventOverlay-ratingHeading'>{`Rating: ${event.rating}/5`}</h3>
+        }
         <Scrollbars style={{ marginTop: '1rem', width: 'calc(100% + 1rem)' }} autoHeight autoHeightMax='100vh - 4.6875rem - 1.25rem - (550px)'>
           { event.content &&
           <span className='EventOverlay-content-scrollWrapper'>
@@ -95,6 +99,34 @@ const EventOverlay = ({event, showVideoButton, onVideoButtonClick, handleShowDir
               dangerouslySetInnerHTML={{ __html: event.content.replace(/\r\n/g, '<br />') }}
             />
           </span>
+          }
+          { !!event.rating &&
+            <div style={{height: '25rem'}}>
+              <div className='EventOverlay-ratingWrapper'>
+              {event.reviews && !!event.reviews.length &&
+                event.reviews.map(review => (
+                  <div>
+                    <span className='EventOverlay-ratingName' key={review.author_name}>
+                      {review.author_name}
+                    </span>
+                    <span className='EventOverlay-ratingStarWrapper'>
+                      {
+                        Array(review.rating).fill().map((_, index) => (
+                          <Star key={index} color='#CB0050' strokeColor='#CB0050' strokeSize='3' className='EventOverlay-reviewStar EventOverlay-reviewStar--filled' />
+                      ))}
+                      {
+                        Array(5 - review.rating).fill().map((_, index) => (
+                          <Star key={index} color='#fff' strokeColor='#CB0050' strokeSize='3' className='EventOverlay-reviewStar EventOverlay-reviewStar--hollow' />
+                      ))}
+
+                    </span>
+                    <p className='EventOverlay-ratingText'>{review.text}</p>
+
+                  </div>
+                ))
+              }
+              </div>
+            </div>
           }
         </Scrollbars>
       </div>
