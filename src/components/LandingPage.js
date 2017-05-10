@@ -133,6 +133,9 @@ export class LandingPage extends Component {
     this.setState({
       selectedDates: selectedDates
     });
+    if (this.refs.eventsDateListScroll) {
+      this.refs.eventsDateListScroll.scrollToTop();
+    }
   }
 
   handleSideNavClick({id, subCategories, parentId}) {
@@ -255,7 +258,11 @@ export class LandingPage extends Component {
               themeCssClass={this.props.type}
               handleSelectedDates={this.handleSelectedDates.bind(this)}
             />
-            <Scrollbars autoHeight autoHeightMax='80vh - 3.25rem - 4.6875rem - 400px - 2rem'>
+            <Scrollbars
+              ref='eventsDateListScroll'
+              autoHeight
+              autoHeightMax='80vh - 3.25rem - 4.6875rem - 400px - 2rem'
+            >
               <EventsDateList
                 events={this.props.events}
                 selectedDates={this.state.selectedDates}

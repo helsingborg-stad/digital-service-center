@@ -89,6 +89,9 @@ export class EventsPage extends Component {
     this.setState({
       selectedDates: selectedDates
     });
+    if (this.refs.eventsDateListScroll) {
+      this.refs.eventsDateListScroll.scrollToTop();
+    }
   }
 
   componentDidMount() {
@@ -189,7 +192,11 @@ export class EventsPage extends Component {
               handleSelectedDates={this.handleSelectedDates.bind(this)}
               selectedTimeSpan={this.props.selectedTimeSpan}
             />
-            <Scrollbars autoHeight autoHeightMax='100vh - 3.25rem - 4.6875rem - 400px - 2rem'>
+            <Scrollbars
+              ref='eventsDateListScroll'
+              autoHeight
+              autoHeightMax='100vh - 3.25rem - 4.6875rem - 400px - 2rem'
+            >
               <EventsDateList
                 events={this.props.events}
                 selectedDates={this.state.selectedDates}
