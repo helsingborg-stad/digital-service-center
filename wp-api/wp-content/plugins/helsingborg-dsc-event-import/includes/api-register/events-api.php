@@ -333,6 +333,10 @@ function parse_google_places() {
   }
   $places = array_map(function($place) use ($lang) {
     $place_data = $place[$lang]['data']['result'];
+    $reviews = $place_data['reviews'] ?? [];
+    $reviews = array_filter($reviews, function($review) use($lang) {
+      return $review['language'] == $lang;
+    });
     return [
       id => $place_data['place_id'],
       slug => sanitize_title($place_data['name']),
@@ -346,7 +350,9 @@ function parse_google_places() {
         longitude => $place_data['geometry']['location']['lng']
       ],
       openingHours => $place_data['opening_hours']['weekday_text'],
-      contactPhone => $place_data['formatted_phone_number']
+      contactPhone => $place_data['formatted_phone_number'],
+      rating => $place_data['rating'],
+      reviews => $reviews
     ];
   }, get_option('saved_google_places_details', []));
   return array_values($places);
