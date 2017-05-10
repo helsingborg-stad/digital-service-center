@@ -34,7 +34,7 @@ const GoogleMapsModal = ({
         <img className='GoogleMapsModal-img' src={eventData.imgUrl} role='presentation' />
         <h4 className='GoogleMapsModal-heading'>{eventData.name}</h4>
         <div className='GoogleMapsModal-preamble'>
-          <p>{eventData.shortContent}</p>
+          <p dangerouslySetInnerHTML={{ __html: eventData.shortContent }} />
         </div>
       </div>
       <div className='GoogleMapsModal-buttonWrapper'>
