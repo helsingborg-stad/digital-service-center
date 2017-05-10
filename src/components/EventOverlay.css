@@ -196,3 +196,30 @@
   left: calc(50% - 320px);
   max-width: 640px;
 }
+
+.EventOverlay-ratingHeading {
+  margin-bottom: 0;
+  font-size: 1rem;
+}
+
+.EventOverlay-ratingWrapper {
+  padding-right: 1rem;
+  height: 100%;
+  margin-bottom: -2rem;
+}
+
+.EventOverlay-ratingName {
+  font-size: 0.8125rem;
+  font-weight: bold;
+  display: inline-block;
+  margin-right: 0.75rem;
+}
+.EventOverlay-reviewStar {
+  max-width: 0.75rem;
+  max-height: 0.75rem;
+  margin-right: 0.1rem;
+}
+
+.EventOverlay-ratingText {
+  font-size: 0.75rem;
+}
