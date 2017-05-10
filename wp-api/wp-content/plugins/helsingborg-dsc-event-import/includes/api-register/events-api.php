@@ -32,12 +32,14 @@ function helsingborg_dsc_events_response() {
   $response['landingPages']['visitor'] = [
     heading => get_option('hdsc-landing-settings-heading-visitor', 'Explore Helsingborg'),
     bottomLinks => get_links_for_option('hdsc-landing-settings-bottom-links-visitor'),
-    categories => get_landing_page_categories('hdsc-landing-visitor-categories', $categories_to_show_on_map)
+    categories => get_landing_page_categories('hdsc-landing-visitor-categories', $categories_to_show_on_map),
+    pages => get_pages_for_visitor_local('visitor')
   ];
   $response['landingPages']['local'] = [
     heading => get_option('hdsc-landing-settings-heading-local', 'Explore Helsingborg'),
     bottomLinks => get_links_for_option('hdsc-landing-settings-bottom-links-local'),
-    categories => get_landing_page_categories('hdsc-landing-local-categories', $categories_to_show_on_map)
+    categories => get_landing_page_categories('hdsc-landing-local-categories', $categories_to_show_on_map),
+    pages => get_pages_for_visitor_local('local')
   ];
 
   $response['landingPages']['events'] = [
@@ -70,6 +72,112 @@ function helsingborg_dsc_events_response() {
   }
 
   return rest_ensure_response($response);
+}
+
+function get_pages_for_visitor_local($section) {
+  $args = [
+    'post_type' => [
+      'page',
+      'editable_event'
+    ],
+    'meta_query' => [
+      [
+      'key' => 'focus_visitor_local',
+      'value' => $section,
+      'compare' => 'LIKE'
+      ]
+    ]
+  ];
+  
+  $posts = get_posts($args);
+
+  $filtered_posts = array_map(function($post) {
+      $page = get_current_post_language($post->ID);
+      if(!isset($page)) {
+        return;
+      }
+      $iframeMeta = get_post_meta($page->ID, 'event_iframe', false)[0];
+      if ($iframeMeta['active'] == 'on' && strlen($iframeMeta['src'])) {
+        return [
+          type => 'iframe',
+          name => $page->post_title,
+          url => $iframeMeta['src'],
+          width => intval($iframeMeta['width'] ?? 0),
+          height => intval($iframeMeta['height'] ?? 0),
+          offsetTop => intval($iframeMeta['top_offset'] ?? 0),
+          offsetLeft => intval($iframeMeta['left_offset'] ?? 0)
+        ];
+      }
+      else if($page->post_type == 'editable_event') {
+        $response = [
+          id         => $page->ID,
+          slug       => $page->post_name,
+          name       => html_entity_decode($page->post_title),
+          type       => 'event',
+          content    => $page->post_content,
+          categories => array_map(function($category) {
+            return [
+              id   => $category->cat_ID,
+              name => $category->name,
+              slug => $category->slug
+            ];
+          }, get_the_category($page->ID)),
+        ];
+
+        $thumbnail_url = get_the_post_thumbnail_url($page->ID);
+        if ($thumbnail_url) {
+          $response['imgUrl'] = $thumbnail_url;
+        }
+
+        $booking_link = get_post_meta($page->ID, 'booking_link', true);
+        if ($booking_link) {
+          $response['bookingLink'] = $booking_link;
+        }
+
+        $occasion = get_post_meta($page->ID, 'occasions', true);
+        if (strlen($occasion['start_date']) && strlen($occasion['end_date']) && strlen($occasion['door_time'])) {
+          $response['occasions'] = [[
+            startDate => str_replace('T', ' ', $occasion['start_date']),
+            endDate => str_replace('T', ' ', $occasion['end_date']),
+            doorTime => str_replace('T', ' ', $occasion['door_time'])
+          ]];
+        }
+
+        $location = get_post_meta($page->ID, 'location', true);
+        $response['location'] = [
+          streetAddress => $location['street_address'],
+          postalCode => $location['postal_code'],
+          latitude => floatval($location['latitude']),
+          longitude => floatval($location['longitude'])
+        ];
+
+        $youtubeUrl = get_post_meta($page->ID, 'youtube', true);
+        if ($youtubeUrl) {
+          $response['youtubeUrl'] = $youtubeUrl;
+        }
+
+        $vimeoUrl = get_post_meta($page->ID, 'vimeo', true);
+        if ($vimeoUrl) {
+          $response['vimeoUrl'] = $vimeoUrl;
+        }
+
+        return $response;
+      }
+      else {
+        return [
+          type => 'page',
+          name => $page->post_title,
+          url =>  wp_make_link_relative(get_permalink($page)) . '?wordpress'
+        ];
+      }
+    }, $posts);
+
+  foreach($filtered_posts as $key => $value) {
+    if(empty($value)) {
+      unset($filtered_posts[$key]);
+    }
+  }
+  return $filtered_posts;
 }
 
 if(!function_exists('get_post_id_translated')) {

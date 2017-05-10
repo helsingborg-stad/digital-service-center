@@ -34,7 +34,7 @@ function editable_event_post_type() {
     add_theme_support('post-thumbnails');
 
     function add_place_and_contact_metaboxes() {
-        //add_meta_box('test_iframe', 'Iframe', 'test_iframe', 'editable_event', 'advanced', 'default');
+        add_meta_box('visitor_local_menu', 'Visa på start och landningssida', 'visitor_local_menu', 'editable_event', 'normal', 'high');
         add_meta_box('event_iframe', 'Iframe', 'event_iframe', 'editable_event', 'normal', 'high');
         add_meta_box('event_occasions', 'Tidpunkter', 'event_occasions', 'editable_event', 'normal', 'high');
         add_meta_box('event_location', 'Platsinformation', 'event_location', 'editable_event', 'normal', 'high');
@@ -43,6 +43,24 @@ function editable_event_post_type() {
         add_meta_box('event_social_media', 'Sociala medier länkar', 'event_social_media', 'editable_event', 'normal', 'high');
         add_meta_box('event_media', 'Relaterad media länkar', 'event_media', 'editable_event', 'normal', 'high');
 
+    }
+
+    function visitor_local_menu() {
+        global $post;
+        echo '<input type="hidden" name="visitor_local_menu_meta_noncename" id="visitor_local_menu_meta_noncename" value="' .
+        wp_create_nonce( plugin_basename(__FILE__) ) . '" />';
+        $focus_visitor_local = get_post_meta($post->ID, 'focus_visitor_local', false);
+        ?>
+        <div style="width: 200px; display: inline-block;">
+            <p>Lista på start och landningssidor</p>
+            <p>Visitor</p>
+            <input type="radio" value="visitor" name="focus_visitor_local" <?php checked( 'visitor', $focus_visitor_local[0] ); ?>  />
+            <p>Local</p>
+            <input type="radio" value="local" name="focus_visitor_local" <?php checked( 'local', $focus_visitor_local[0] ); ?> />
+            <p>Ingen</p>
+            <input type="radio" value="none" name="focus_visitor_local" <?php checked( 'none', $focus_visitor_local[0] ); ?> />
+        </div>
+        <?php
     }
 
     function event_iframe() {
@@ -231,6 +249,16 @@ function editable_event_post_type() {
         echo '<input type="text" name="event-youtube" value="' . $youtube  . '" class="widefat" />';
         echo '<p>Vimeo</p>';
         echo '<input type="text" name="event-vimeo" value="' . $vimeo  . '" class="widefat" />';
+    }
+
+    add_action('save_post', 'save_visitor_local_menu_meta', 1, 2);
+
+    function save_visitor_local_menu_meta($post_id, $post) {
+        $focus_visitor_local = $_POST['focus_visitor_local'];
+
+        $event_meta['focus_visitor_local'] = $focus_visitor_local;
+
+        save_event($post_id, $post, $event_meta, 'visitor_local_menu_meta_noncename');
     }
 
     add_action('save_post', 'save_event_iframe_meta', 1, 2);
