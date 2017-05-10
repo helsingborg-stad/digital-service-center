@@ -31,7 +31,7 @@ const SideNavigationLink =
     { icon &&
     <span className='SideNavigationLink__icon'>
       {Icons[`${icon}Icon`]({color: activeCategories.includes(id)
-        ? '#fff' : activeColor, className: 'foo'})}
+        ? '#fff' : '#c70d53'})}
     </span>
     }
     {name}

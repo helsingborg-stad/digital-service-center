@@ -46,20 +46,21 @@
 }
 
 .SideNavigationLink__icon {
-    display: block;
-    position: absolute;
-    top: 0.75rem;
-    left: 0.75rem;
-    width: 1.625rem;
+  display: block;
+  position: absolute;
+  top: 0.6rem;
+  left: 0.9rem;
+  width: 1.625rem;
 }
 
 .SideNavigationLink:first-child .SideNavigationLink__icon {
   top: 1rem;
 }
 
-.SideNavigationLink__icon svg{
-    max-width: 1.625rem;
-    display: inline-block;
+.SideNavigationLink__icon svg {
+  display: inline-block;
+  max-width: 1.4rem;
+  max-height: 1.4rem;
 }
 .SideNavigation ul {
   position: relative;

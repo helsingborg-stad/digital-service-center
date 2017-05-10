@@ -123,7 +123,13 @@ function get_landing_page_categories($option, $categories_to_include) {
     '#4db4e7',
     '#76b828',
     '#0095db',
-    '#d35098'
+    '#d35098',
+    '#f7a600',
+    '#e3000f',
+    '#a84c98',
+    '#4db4e7',
+    '#76b828',
+    '#0095db'
   ];
 
   $res = [];
