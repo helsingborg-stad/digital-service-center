@@ -11,6 +11,10 @@ add_action('admin_init', function() {
   register_setting( 'hdsc-site-settings', 'hdsc-site-setting-google-maps-api-key' );
   register_setting( 'hdsc-site-settings', 'hdsc-site-setting-idle-timeout' );
   register_setting( 'hdsc-site-settings', 'hdsc-site-setting-chat-button-text' );
+  foreach(hdsc_translatables() as $translatable) {
+    $option_name = 'hdsc-translatable-' . $translatable[1];
+    register_setting( 'hdsc-site-settings', $option_name );
+  }
 });
 
 function helsingborg_dsc_site_settings_menu_callback() {
@@ -61,29 +65,8 @@ function helsingborg_dsc_site_settings_menu_callback() {
 
       <table class="form-table"><tbody>
       <?php
-        $translatables = [
-          ['Sök', 'search'],
-          ['Helsingborg Free Wifi', 'helsingborg-free-wifi'],
-          ['Tillbaka till start', 'back-to-start'],
-          ['Välj datum', 'select-dates'],
-          ['Idag', 'today'],
-          ['Imorgon', 'tomorrow'],
-          ['Helg', 'weekend'],
-          ['Allt', 'all'],
-          ['Navigera', 'navigate'],
-          ['Mer info', 'more-info'],
-          ['Relaterat', 'related'],
-          ['Jämför', 'compare'],
-          ['Ta mig dit', 'take-me-there'],
-          ['Plats', 'location'],
-          ['Datum och tid', 'date-and-time'],
-          ['Öppettider', 'opening-hours'],
-          ['Kontakt', 'contact'],
-          ['Biljetter', 'tickets'],
-          ['Betyg', 'rating']
-        ];
 
-        foreach($translatables as $translatable) {
+        foreach(hdsc_translatables() as $translatable) {
           $translatable_name = $translatable[0];
           $option_name = 'hdsc-translatable-' . $translatable[1];
           ?>

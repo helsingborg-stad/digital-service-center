@@ -10,13 +10,33 @@ function helsing_dsc_site_settings_register_routes() {
 }
 
 function helsingborg_dsc_site_settings_response() {
-  return [
+  return rest_ensure_response([
     googleAnalyticsId => get_option('hdsc-site-setting-google-analytics', null),
     googleMapsApiKey => get_option('hdsc-site-setting-google-maps-api-key', null),
     idleTimeout => intval(get_option('hdsc-site-setting-idle-timeout', 0)),
     chatButtonText => get_option('hdsc-site-setting-chat-button-text', null),
-    languages => get_languages_in_use()
-  ];
+    languages => get_languages_in_use(),
+    translatables => hdsc_get_translatables()
+  ]);
+}
+
+function hdsc_get_translatables() {
+  function camelcasify($str) {
+    $arr = explode("-", $str);
+    $arr = array_map("ucfirst", $arr);
+    $ret = implode("", $arr);
+    return lcfirst($ret);
+  }
+
+  return array_map(function($translatable) {
+    $key = camelcasify($translatable[1]);
+    $fallback = $translatable[0];
+    $value = get_option('hdsc-translatable-' .$translatable[1], $fallback);
+    if (!strlen($value)) {
+      $value = $fallback;
+    }
+    return [$key => $value];
+  }, hdsc_translatables());
 }
 
 function get_languages_in_use() {
