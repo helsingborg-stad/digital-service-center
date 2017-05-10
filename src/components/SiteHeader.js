@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import './SiteHeader.css';
 import Link from './Link';
 import Logo from './Logo';
@@ -11,7 +12,7 @@ function getCurrentTime() {
   return `${date.getHours()}:${minutes}`;
 }
 
-export default class SiteHeader extends Component {
+export class SiteHeader extends Component {
   constructor() {
     super();
     this.state = {
@@ -24,12 +25,12 @@ export default class SiteHeader extends Component {
         <h1 className='SiteHeader-heading'>{this.props.heading}</h1>
         <div style={{float: 'right', paddingRight: '2rem'}}>
           <div style={{float: 'left', paddingRight: '2.5rem'}}>
-            <Logo className='SiteSubHeader-logo' color='#fbfbfb' style={{width: '125px', paddingTop: '1.23rem'}} />
+            <Logo className='SiteHeader-logo' color='#fbfbfb' style={{width: '125px', paddingTop: '1.23rem'}} />
           </div>
           <div style={{float: 'left', paddingRight: '2.5rem'}}>
             { this.props.freeWifiLink &&
             <Link iframe={this.props.freeWifiLink} className='SiteHeader-wifi'>
-              Helsingborg Free Wifi
+              {this.props.translatables.helsingborgFreeWifi}
             </Link>
             }
           </div>
@@ -53,19 +54,30 @@ export default class SiteHeader extends Component {
 }
 
 SiteHeader.propTypes = {
-  heading: React.PropTypes.string,
-  bgColor: React.PropTypes.string,
-  freeWifiLink: React.PropTypes.object,
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.node),
-    React.PropTypes.node
-  ])
+  heading: PropTypes.string,
+  bgColor: PropTypes.string,
+  freeWifiLink: PropTypes.object,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+  ]),
+  translatables: PropTypes.shape({
+    helsingborgFreeWifi: PropTypes.string.isRequired
+  }).isRequired
 };
 
 SiteHeader.defaultProps = {
   heading: '',
   bgColor: '#333'
 };
+
+const mapStateToProps = (state) => {
+  return {
+    translatables: state.siteSettings.translatables
+  };
+};
+
+export default connect(mapStateToProps, null)(SiteHeader);
 
 export class SiteHeaderLink extends Component {
   render() {
@@ -78,6 +90,6 @@ export class SiteHeaderLink extends Component {
 }
 
 SiteHeaderLink.propTypes = {
-  href: React.PropTypes.string.isRequired,
-  name: React.PropTypes.string.isRequired
+  href: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired
 };

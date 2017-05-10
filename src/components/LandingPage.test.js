@@ -3,9 +3,11 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { LandingPage } from './LandingPage';
 import configureStore from '../store/configureStore';
+import initialStateForTests from '../store/initialStateForTests';
+
+const store = configureStore(initialStateForTests);
 
 it('renders without crashing', () => {
-  const store = configureStore({});
   const div = document.createElement('div');
   ReactDOM.render(
   <Provider store={store}>
@@ -19,7 +21,6 @@ it('renders without crashing', () => {
 });
 
 it('renders loading state without crashing', () => {
-  const store = configureStore({});
   const div = document.createElement('div');
   ReactDOM.render(
   <Provider store={store}>
@@ -33,7 +34,6 @@ it('renders loading state without crashing', () => {
 });
 
 it('renders error state without crashing', () => {
-  const store = configureStore({});
   const div = document.createElement('div');
   ReactDOM.render(
   <Provider store={store}>

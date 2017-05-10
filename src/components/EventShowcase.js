@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { Ripple } from './react-ripple-effect';
 import './EventShowcase.css';
@@ -18,13 +19,13 @@ export class EventShowcase extends Component {
 }
 
 EventShowcase.propTypes = {
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.node),
-    React.PropTypes.node
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
   ])
 };
 
-export class Event extends Component {
+class Event extends Component {
   constructor() {
     super();
     this.state = {
@@ -71,7 +72,7 @@ export class Event extends Component {
           <button className='Event-compare' onClick={(e) => {
             e.stopPropagation();
             this.props.handleCompareEvent(this.props);
-          }}>Jämför</button>
+          }}>{this.props.translatables.compare}</button>
         </div>
         }
       </span>
@@ -89,12 +90,27 @@ export class Event extends Component {
 }
 
 Event.propTypes = {
-  onClick: React.PropTypes.func.isRequired,
-  id: React.PropTypes.any,
-  slug: React.PropTypes.string,
-  name: React.PropTypes.string.isRequired,
-  imgUrl: React.PropTypes.string,
-  occasions: React.PropTypes.array,
-  canCompare: React.PropTypes.bool,
-  handleCompareEvent: React.PropTypes.func
+  onClick: PropTypes.func.isRequired,
+  id: PropTypes.any,
+  slug: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  imgUrl: PropTypes.string,
+  occasions: PropTypes.array,
+  canCompare: PropTypes.bool,
+  handleCompareEvent: PropTypes.func,
+  translatables: PropTypes.shape({
+    compare: PropTypes.string.isRequired
+  }).isRequired
+};
+
+const mapStateToProps = (state) => {
+  return {
+    translatables: state.siteSettings.translatables
+  };
+};
+
+const EventConnected = connect(mapStateToProps, null)(Event);
+
+export {
+   EventConnected as Event
 };

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { DayPickerRangeController } from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
 import Moment from 'moment';
@@ -27,7 +28,7 @@ CalendarButton.propTypes = {
   text: React.PropTypes.string.isRequired
 };
 
-export default class Calendar extends React.Component {
+export class Calendar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -132,7 +133,7 @@ export default class Calendar extends React.Component {
     return (
       <div className={`Calendar Calendar--${this.props.themeCssClass}`}>
         <CalendarHeader
-          text="Välj datum"
+          text={this.props.translatables.selectDates}
         />
         <DayPickerRangeController
           startDate={this.state.startDate}
@@ -149,19 +150,19 @@ export default class Calendar extends React.Component {
         <div className="Calendar-button-wrapper">
           <CalendarButton
             onClick={this.handleSetDateToday.bind(this)}
-            text="Idag"
+            text={this.props.translatables.today}
           />
           <CalendarButton
             onClick={this.handleSetDateTomorrow.bind(this)}
-            text="Imorgon"
+            text={this.props.translatables.tomorrow}
           />
           <CalendarButton
             onClick={this.handleSetDateWeekend.bind(this)}
-            text="Helg"
+            text={this.props.translatables.weekend}
           />
           <CalendarButton
             onClick={this.handleResetDate.bind(this)}
-            text="Allt"
+            text={this.props.translatables.all}
           />
         </div>
       </div>
@@ -174,7 +175,22 @@ Calendar.defaultProps = {
 };
 
 Calendar.propTypes = {
-  themeCssClass: React.PropTypes.string,
-  handleSelectedDates: React.PropTypes.func,
-  selectedTimeSpan: React.PropTypes.string
+  themeCssClass: PropTypes.string,
+  handleSelectedDates: PropTypes.func,
+  selectedTimeSpan: PropTypes.string,
+  translatables: PropTypes.shape({
+    selectDates: PropTypes.string.isRequired,
+    today: PropTypes.string.isRequired,
+    tomorrow: PropTypes.string.isRequired,
+    weekend: PropTypes.string.isRequired,
+    all: PropTypes.string.isRequired
+  }).isRequired
 };
+
+const mapStateToProps = (state) => {
+  return {
+    translatables: state.siteSettings.translatables
+  };
+};
+
+export default connect(mapStateToProps, null)(Calendar);

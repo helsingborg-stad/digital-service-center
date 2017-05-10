@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import Scrollbars from 'react-custom-scrollbars';
 import Link from './Link';
 import closeCrossSvg from '../media/close-cross.svg';
@@ -82,7 +83,7 @@ const EventDate = ({start, end}) => (
   </div>
 );
 
-const EventOverlay = ({event, showVideoButton, onVideoButtonClick, handleShowDirections}) => {
+const EventOverlay = ({event, showVideoButton, onVideoButtonClick, handleShowDirections, translatables}) => {
   return (
   <div className='EventOverlay'>
     <img className='EventOverlay-img' src={event.imgUrl} alt={ event.name } />
@@ -133,14 +134,14 @@ const EventOverlay = ({event, showVideoButton, onVideoButtonClick, handleShowDir
     <div style={{width: '37%', float: 'right'}}>
     { (event.openingHours && !!event.openingHours.length) &&
     <div className='EventOverlay-metaBox'>
-      <h3>Date and time</h3>
+      <h3>{translatables.openingHours}</h3>
       { event.openingHours.map(date => <span key={date}>{date}<br /></span>)
       }
     </div>
     }
     { (event.occasions && !!event.occasions.length) &&
     <div className='EventOverlay-metaBox'>
-      <h3>Date and time</h3>
+      <h3>{translatables.dateAndTime}</h3>
       { event.occasions.map(occ => <EventDate
                                       start={getDateFormatted(occ.startDate)}
                                       end={getDateFormatted(occ.endDate)}
@@ -150,13 +151,13 @@ const EventOverlay = ({event, showVideoButton, onVideoButtonClick, handleShowDir
     }
     { getLocation(event) &&
     <div className='EventOverlay-metaBox'>
-      <h3>Location</h3>
+      <h3>{translatables.location}</h3>
       { getLocation(event) }
     </div>
     }
     { (event.contactEmail || event.contactPhone) &&
     <div className='EventOverlay-metaBox'>
-      <h3>Contact</h3>
+      <h3>{translatables.contact}</h3>
       { event.contactEmail &&
       <div><a href={`mailto:${event.contactEmail}`}>{event.contactEmail}</a></div>
       }
@@ -190,12 +191,12 @@ const EventOverlay = ({event, showVideoButton, onVideoButtonClick, handleShowDir
           onClick={() =>
             handleNavigationClick(event.location.latitude, event.location.longitude, handleShowDirections)}
           cssClassName='EventOverlay-button'
-          text='Take me there'
+          text={translatables.takeMeThere}
         />
       }
       { event.bookingLink &&
       <Link iframe={{url:event.bookingLink}} className='EventOverlay-button'>
-        Tickets
+        {translatables.tickets}
       </Link>
       }
     </div>
@@ -207,7 +208,24 @@ const EventOverlay = ({event, showVideoButton, onVideoButtonClick, handleShowDir
 EventOverlay.propTypes = {
   event: PropTypes.object, // todo
   handleShowDirections: PropTypes.func,
+  translatables: PropTypes.shape({
+    openingHours: PropTypes.string.isRequired,
+    dateAndTime: PropTypes.string.isRequired,
+    location: PropTypes.string.isRequired,
+    contact: PropTypes.string.isRequired,
+    takeMeThere: PropTypes.string.isRequired,
+    tickets: PropTypes.string.isRequired
+  }).isRequired
 };
+
+
+const mapStateToProps = (state) => {
+  return {
+    translatables: state.siteSettings.translatables
+  };
+};
+
+const EventOverlayConnected = connect(mapStateToProps, null)(EventOverlay);
 
 export default class extends Component {
   constructor(props) {
@@ -239,14 +257,14 @@ export default class extends Component {
           <div style={{position: 'absolute', top: '-2.5rem', right: '0'}}>
             <CloseButton handleClose={this.props.handleClose} />
           </div>
-          <EventOverlay
+          <EventOverlayConnected
             event={this.props.event}
             handleClose={this.props.handleClose}
             handleShowDirections={this.props.handleShowDirections}
             onVideoButtonClick={this.handlePlayVideo.bind(this, true)}
             showVideoButton={this.state.videoUrl} />
             {this.state.comparedEvent &&
-            <EventOverlay
+            <EventOverlayConnected
               event={this.state.comparedEvent}
               handleClose={this.props.handleClose}
               handleShowDirections={this.props.handleShowDirections}

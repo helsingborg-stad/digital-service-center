@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import { connect } from 'react-redux';
 import LoadingButton from './LoadingButton.js';
 import { RippleButton } from './react-ripple-effect';
 import classnames from 'classnames';
@@ -21,7 +22,8 @@ const GoogleMapsModal = ({
   eventData,
   handleShowDirections,
   lat,
-  lng}) => {
+  lng,
+  translatables}) => {
   return (
     <div
       className={classnames(
@@ -41,7 +43,7 @@ const GoogleMapsModal = ({
         <LoadingButton
           onClick={() => handleNavigationClick(lat, lng, handleShowDirections)}
           cssClassName='GoogleMapsModal-button GoogleMapsModal-button--emphasized'
-          text='Navigate'
+          text={translatables.navigate}
           style={{padding: '0.5rem 1rem', fontSize: '0.8125rem', background: '#c70d53'}}
           />
 
@@ -49,35 +51,13 @@ const GoogleMapsModal = ({
           onClick={() => handleShowMoreInfo(eventData.slug)}
           className='GoogleMapsModal-button GoogleMapsModal-button--alignRight'
         >
-          More info
+          {translatables.moreInfo}
         </RippleButton>
 
       </div>
     </div>
   );
 };
-
-/*GoogleMapsModal.propTypes = {
-  onShowMoreInfo: PropTypes.func,
-  visible: PropTypes.bool,
-  eventData: PropTypes.shape({
-    name: PropTypes.string,
-    content: PropTypes.string
-  })
-};
-
-export default class GoogleMapsModal extends Component {
-  render() {
-    return (
-      <Modal
-        key={this.props.id}
-        onShowMoreInfo={this.props.handleShowMoreInfo}
-        visible={this.props.visible}
-        eventData={this.props.eventData}
-      />
-    );
-  }
-}*/
 
 GoogleMapsModal.propTypes = {
   lat: PropTypes.number.isRequired,
@@ -89,7 +69,17 @@ GoogleMapsModal.propTypes = {
     name: PropTypes.string,
     content: PropTypes.string
   }),
-  handleShowDirections: PropTypes.func.isRequired
+  handleShowDirections: PropTypes.func.isRequired,
+  translatables: PropTypes.shape({
+    navigate: PropTypes.string.isRequired,
+    moreInfo: PropTypes.string.isRequired
+  }).isRequired
 };
 
-export default GoogleMapsModal;
+const mapStateToProps = (state) => {
+  return {
+    translatables: state.siteSettings.translatables
+  };
+};
+
+export default connect(mapStateToProps, null)(GoogleMapsModal);

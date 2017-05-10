@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import './SectionCard.css';
 import Link from './Link';
 import { Scrollbars } from 'react-custom-scrollbars';
 
-export default class SectionCard extends Component {
+export class SectionCard extends Component {
   render() {
     return (
       <div className='SectionCard' style={{backgroundColor: this.props.bgColor}}>
@@ -19,16 +20,16 @@ export default class SectionCard extends Component {
         {this.props.showTimeSpanButtons &&
           <span>
             <Link className='SectionCard-tag' to='/sv/events?selectedTimeSpan=today'>
-            Idag
+            {this.props.translatables.today}
             </Link>
             <Link className='SectionCard-tag' to='/sv/events?selectedTimeSpan=tomorrow'>
-              Imorgon
+            {this.props.translatables.tomorrow}
             </Link>
             <Link className='SectionCard-tag' to='/sv/events?selectedTimeSpan=weekend'>
-              Helg
+            {this.props.translatables.weekend}
             </Link>
             <Link className='SectionCard-tag' to='/sv/events?selectedTimeSpan=all'>
-              Alla
+            {this.props.translatables.all}
             </Link>
           </span>
         }
@@ -69,7 +70,13 @@ SectionCard.propTypes = {
     heading: PropTypes.string,
     preamble: PropTypes.string
   })),
-  showTimeSpanButtons: PropTypes.bool
+  showTimeSpanButtons: PropTypes.bool,
+  translatables: PropTypes.shape({
+    today: PropTypes.string.isRequired,
+    tomorrow: PropTypes.string.isRequired,
+    weekend: PropTypes.string.isRequired,
+    all: PropTypes.string.isRequired
+  }).isRequired
 };
 
 SectionCard.defaultProps = {
@@ -77,3 +84,11 @@ SectionCard.defaultProps = {
   tags: [],
   bgColor: '#dedddd'
 };
+
+const mapStateToProps = (state) => {
+  return {
+    translatables: state.siteSettings.translatables
+  };
+};
+
+export default connect(mapStateToProps, null)(SectionCard);

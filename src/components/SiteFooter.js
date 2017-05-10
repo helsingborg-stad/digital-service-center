@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import Link from './Link';
 import './SiteFooter.css';
 
@@ -14,12 +15,12 @@ const LeftArrow = ({...props}) => (
   </svg>
 )
 
-export const SiteFooter = ({children, color, backToStartPath}) => {
+const SiteFooter = ({children, color, backToStartPath, translatables}) => {
   return (
     <div className='SiteFooter' style={{background: color}}>
       <Link className='SiteFooter-back-to-start' to={backToStartPath}>
         <LeftArrow style={{width: '25px', transform: 'translateY(-2px)', marginRight: '0.6rem', marginBottom: '-0.7em'}} />
-        Tillbaka till start
+        {translatables.backToStart}
       </Link>
       <span className='SiteFooterLink-wrapper'>
       {children}
@@ -29,12 +30,25 @@ export const SiteFooter = ({children, color, backToStartPath}) => {
 };
 
 SiteFooter.propTypes = {
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.node),
-    React.PropTypes.node
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
   ]),
-  color: React.PropTypes.string
+  color: PropTypes.string,
+  translatables: PropTypes.shape({
+    backToStart: PropTypes.string.isRequired
+  }).isRequired
 };
+
+const mapStateToProps = (state) => {
+  return {
+    translatables: state.siteSettings.translatables
+  };
+};
+
+const SiteFooterConnected = connect(mapStateToProps, null)(SiteFooter)
+
+export { SiteFooterConnected as SiteFooter };
 
 export const SiteFooterLink = ({link}) => {
   switch (link.type) {

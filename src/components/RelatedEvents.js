@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import './RelatedEvents.css';
 import { Event } from './EventShowcase';
 import Scrollbars from 'react-custom-scrollbars';
@@ -9,7 +10,7 @@ const getRelatedEventsByCategory = (relatedEvents, categoryId, comparedEvent) =>
   });
 };
 
-export default class RelatedEvents extends React.Component {
+export class RelatedEvents extends React.Component {
   constructor({event}) {
     super();
     this.state = {
@@ -17,17 +18,19 @@ export default class RelatedEvents extends React.Component {
     }
   }
   static propTypes = {
-    relatedEvents: React.PropTypes.array,
-    event: React.PropTypes.object,
-    comparedEvent: React.PropTypes.object,
-    changeOverlayEvent: React.PropTypes.func,
-    handleCompareEvent: React.PropTypes.func
-
+    relatedEvents: PropTypes.array,
+    event: PropTypes.object,
+    comparedEvent: PropTypes.object,
+    changeOverlayEvent: PropTypes.func,
+    handleCompareEvent: PropTypes.func,
+    translatables: PropTypes.shape({
+      related: PropTypes.string.isRequired
+    }).isRequired
   }
   render() {
     return (
       <div className='RelatedEvents'>
-        <h3>Relaterade events</h3>
+        <h3>{this.props.translatables.related}</h3>
         <div className='RelatedEvents-wrapper'>
           <Scrollbars
             style={{height: '50rem'}}
@@ -63,3 +66,11 @@ export default class RelatedEvents extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    translatables: state.siteSettings.translatables
+  };
+};
+
+export default connect(mapStateToProps, null)(RelatedEvents);

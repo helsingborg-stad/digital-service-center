@@ -40,9 +40,7 @@ const selectedEventsWithCoordinates = (events, activeCategories, eventCategories
     const firstActiveCat = event.categories.map(c => c.id).find(c => activeCategories.includes(c));
     let foundCategory = eventCategories.find(c => c.id === firstActiveCat);
 
-    //
     // Category not found, search in subcategories
-    //
     if (!foundCategory) {
       const foundSubCategories = eventCategories.filter(cat => {
         return cat.subCategories && cat.subCategories.length;

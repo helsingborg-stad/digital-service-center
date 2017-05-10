@@ -28,15 +28,16 @@ function hdsc_get_translatables() {
     return lcfirst($ret);
   }
 
-  return array_map(function($translatable) {
+  return array_reduce(hdsc_translatables(), function($acc, $translatable) {
     $key = camelcasify($translatable[1]);
     $fallback = $translatable[0];
     $value = get_option('hdsc-translatable-' .$translatable[1], $fallback);
     if (!strlen($value)) {
       $value = $fallback;
     }
-    return [$key => $value];
-  }, hdsc_translatables());
+    $acc[$key] = $value;
+    return $acc;
+  }, []);
 }
 
 function get_languages_in_use() {
