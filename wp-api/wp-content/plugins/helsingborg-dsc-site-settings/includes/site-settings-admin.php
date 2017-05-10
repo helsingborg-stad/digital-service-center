@@ -56,6 +56,45 @@ function helsingborg_dsc_site_settings_menu_callback() {
         <td><input id="sitesettingsform-chat-button-text" type="text" class="regular-text" name="hdsc-site-setting-chat-button-text" value="<?php echo get_option('hdsc-site-setting-chat-button-text'); ?>" /><p class="description">Lämna blank för att inte visa chatta med oss-knapp</p></td>
       </tr>
       </tbody></table>
+
+      <div class="wrap"><h2>Translatables</h2></div>
+
+      <table class="form-table"><tbody>
+      <?php
+        $translatables = [
+          ['Sök', 'search'],
+          ['Helsingborg Free Wifi', 'helsingborg-free-wifi'],
+          ['Tillbaka till start', 'back-to-start'],
+          ['Välj datum', 'select-dates'],
+          ['Idag', 'today'],
+          ['Imorgon', 'tomorrow'],
+          ['Helg', 'weekend'],
+          ['Allt', 'all'],
+          ['Navigera', 'navigate'],
+          ['Mer info', 'more-info'],
+          ['Relaterat', 'related'],
+          ['Jämför', 'compare'],
+          ['Ta mig dit', 'take-me-there'],
+          ['Plats', 'location'],
+          ['Datum och tid', 'date-and-time'],
+          ['Öppettider', 'opening-hours'],
+          ['Kontakt', 'contact'],
+          ['Biljetter', 'tickets'],
+          ['Betyg', 'rating']
+        ];
+
+        foreach($translatables as $translatable) {
+          $translatable_name = $translatable[0];
+          $option_name = 'hdsc-translatable-' . $translatable[1];
+          ?>
+          <tr>
+            <th><label for="<?php echo $option_name ?>"><?php echo $translatable_name ?></label></th>
+            <td><input id="<?php echo $option_name ?>" type="text" class="regular-text" name="<?php echo $option_name ?>" value="<?php echo get_option($option_name); ?>" /></td>
+          </tr>
+          <?php
+        }
+      ?>
+      </tbody></table>
       <?php submit_button(); ?>
     </form>
   </div>
