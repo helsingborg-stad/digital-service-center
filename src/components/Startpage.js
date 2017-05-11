@@ -41,12 +41,10 @@ export class Startpage extends Component {
     }
 
     if (typeof window !== 'undefined') {
-      this.props.fetchEventsData('/api/events', this.props.activeLanguage)
+      if (this.props.shouldFetchEvents) {
+        this.props.fetchEventsData('/api/events', this.props.activeLanguage);
+      }
     }
-  }
-
-  handleSearchEventClick(event) {
-    console.log("type", event);
   }
 
   render() {
@@ -73,7 +71,6 @@ export class Startpage extends Component {
           {this.props.events && !!this.props.events.length &&
           <Search
             events={this.props.events}
-            changeOverlayEvent={this.handleSearchEventClick.bind(this)}
             pageType='Startpage'
             inputWrapperStyle={{bottom: '6.5rem', transform: 'translateX(-50%)', left: '50%'}}
             activeLanguage={this.props.activeLanguage}
@@ -161,7 +158,8 @@ const mapStateToProps = (state) => {
       ? state.startpageIsLoading[state.activeLanguage] : false,
     searchResults: state.searchResults,
     searchIsLoading: state.searchIsLoading,
-    searchHasErrored: state.searchHasErrored
+    searchHasErrored: state.searchHasErrored,
+    shouldFetchEvents: !(state.activeLanguage in state.events)
   };
 };
 
