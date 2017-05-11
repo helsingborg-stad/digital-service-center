@@ -18,7 +18,9 @@ import Scrollbars from 'react-custom-scrollbars';
 import EventsDateList from './EventsDateList.js';
 import { connect } from 'react-redux';
 import { eventsFetchData } from '../actions/events';
+import { iframeUrl } from '../actions/iframeUrl';
 import LanguageFlags from './LanguageFlags';
+import formatRelativeUrl from '../util/formatRelativeUrl';
 
 
 import './LandingPage.css';
@@ -221,12 +223,33 @@ export class LandingPage extends Component {
             }
           </div>
           <EventShowcase>
-            {this.props.events.slice(0, 10).map(event => (
-            <Event
-              key={event.id}
-              {...event}
-              onClick={this.changeOverlayEvent.bind(this)} />
-            ))}
+            {pageData.pages.map(event => {
+              switch (event.type) {
+              case 'iframe':
+                return (
+                  <Event
+                    key={event.id}
+                    {...event}
+                    onClick={(url) => this.props.setIframeUrl(url)} />
+                  );
+              case 'page':
+                return (
+                  <Event
+                    key={event.id}
+                    {...event}
+                    onClick={(url) => this.props.setIframeUrl({url: formatRelativeUrl(url)})} />
+                  );
+              case 'event':
+                return (
+                  <Event
+                    key={event.id}
+                    {...event}
+                    onClick={this.changeOverlayEvent.bind(this)} />
+                );
+              default:
+                return null;
+              }})
+            }
           </EventShowcase>
           <SiteFooter color={this.props.bgColor} backToStartPath={`/${this.props.activeLanguage}/`}>
             { pageData.bottomLinks.map((link) => (
@@ -301,7 +324,8 @@ LandingPage.propTypes = {
       lat: PropTypes.number.isRequired,
       lng: PropTypes.number.isRequired
     }).isRequired
-  })
+  }),
+  setIframeUrl: PropTypes.func
 };
 
 const mapStateToProps = (state) => {
@@ -319,7 +343,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: (url, lang) => dispatch(eventsFetchData(url, lang))
+    fetchData: (url, lang) => dispatch(eventsFetchData(url, lang)),
+    setIframeUrl: (url) => dispatch(iframeUrl(url))
   };
 };
 

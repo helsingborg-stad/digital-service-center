@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import './SectionCard.css';
 import Link from './Link';
 import { Scrollbars } from 'react-custom-scrollbars';
+import { iframeUrl } from '../actions/iframeUrl';
+import formatRelativeUrl from '../util/formatRelativeUrl';
 
 export class SectionCard extends Component {
   render() {
@@ -38,16 +40,39 @@ export class SectionCard extends Component {
           <Scrollbars style={{ width: '100%', height: '40vh' }}>
             <div className='SectionCard-postWrapper'>
             {this.props.posts.map(post => {
-              return (
-                <Link key={Math.random()} className='SectionCard-post' to={post.href}>
+              switch (post.type) {
+              case 'iframe':
+                return (
+                  <Link to={`/${this.props.activeLanguage}/${this.props.section}/`} onClick={() => this.props.setIframeUrl(post)} key={Math.random()}>
+                    { post.imgUrl &&
+                      <img className='SectionCard-postImage' src={post.imgUrl} role='presentation' />
+                    }
+                    <h3 className='SectionCard-postHeading'>{post.heading}</h3>
+                    <p className='SectionCard-postPreamble'>{post.preamble}</p>
+                  </Link>
+                );
+              case 'page':
+                return (
+                  <Link to={`/${this.props.activeLanguage}/${this.props.section}/`} onClick={(url) => this.props.setIframeUrl({url: formatRelativeUrl(url)})} key={Math.random()}>
+                    { post.imgUrl &&
+                      <img className='SectionCard-postImage' src={post.imgUrl} role='presentation' />
+                    }
+                    <h3 className='SectionCard-postHeading'>{post.heading}</h3>
+                    <p className='SectionCard-postPreamble'>{post.preamble}</p>
+                  </Link>
+                );
+              case 'event':
+                return (
+                  <Link key={Math.random()} className='SectionCard-post' to={post.href}>
                   { post.imgUrl &&
                     <img className='SectionCard-postImage' src={post.imgUrl} role='presentation' />
                   }
                   <h3 className='SectionCard-postHeading'>{post.heading}</h3>
                   <p className='SectionCard-postPreamble'>{post.preamble}</p>
-                </Link>
-              );
-            })}
+                </Link>);
+              default:
+                return null;
+              }})}
             </div>
           </Scrollbars>
         </div>
@@ -76,7 +101,9 @@ SectionCard.propTypes = {
     tomorrow: PropTypes.string.isRequired,
     weekend: PropTypes.string.isRequired,
     all: PropTypes.string.isRequired
-  }).isRequired
+  }).isRequired,
+  activeLanguage: PropTypes.string,
+  setIframeUrl: PropTypes.func
 };
 
 SectionCard.defaultProps = {
@@ -87,8 +114,15 @@ SectionCard.defaultProps = {
 
 const mapStateToProps = (state) => {
   return {
-    translatables: state.siteSettings.translatables
+    translatables: state.siteSettings.translatables,
+    activeLanguage: state.activeLanguage
   };
 };
 
-export default connect(mapStateToProps, null)(SectionCard);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setIframeUrl: (url) => dispatch(iframeUrl(url))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SectionCard);

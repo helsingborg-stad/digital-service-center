@@ -4,6 +4,7 @@ import { Link as RouterLink } from 'react-router';
 import { connect } from 'react-redux';
 import { iframeUrl } from '../actions/iframeUrl';
 import classNames from 'classnames';
+import formatRelativeUrl from '../util/formatRelativeUrl';
 
 import './Link.css';
 
@@ -22,6 +23,7 @@ class Link extends React.Component {
           to={this.props.to}
           style={{position: 'relative', overflow: 'hidden'}}
           className={this.props.className}
+          onClick={this.props.onClick}
           onMouseUp={ this.handleClick.bind(this) }
         >
           {this.props.children}
@@ -53,18 +55,13 @@ class Link extends React.Component {
         </button>
       );
     } else if (this.props.page) {
-      let { url } = this.props.page;
-      // Add absolute path to helsingborg-dsc.local when in development mode
-      // In production mode, a reverse-proxy should pass this to the WordPress back-end,
-      // instead of to the React front-end
-      if (process.env.NODE_ENV === 'development') {
-        url = `//helsingborg-dsc.local/${url}`;
-      }
+      const { url } = this.props.page;
+      const formattedUrl = formatRelativeUrl(url);
       return (
         <button
           className={classNames('Link', this.props.className)}
           style={{position: 'relative', overflow: 'hidden'}}
-          onClick={() => this.props.openIframe({url})}
+          onClick={() => this.props.openIframe({url: formattedUrl})}
           onMouseUp={ this.handleClick.bind(this) }
         >
           {this.props.children}
@@ -99,7 +96,12 @@ Link.propTypes = {
     React.PropTypes.arrayOf(React.PropTypes.node),
     React.PropTypes.node
   ]),
-  openIframe: React.PropTypes.func
+  openIframe: React.PropTypes.func,
+  onClick: React.PropTypes.func
+};
+
+Link.defaultProps = {
+  onClick: () => {}
 };
 
 const mapDispatchToProps = (dispatch) => {
