@@ -4,10 +4,7 @@ import SiteHeader from './SiteHeader';
 import { SiteFooter, SiteFooterLink } from './SiteFooter';
 import VergicChatButton from './VergicChatButton';
 import { SideNavigation, SideNavigationLink } from './SideNavigation';
-import SearchField from './SearchField';
-import SearchResultOverlay from './SearchResultOverlay';
-import Sifter from 'sifter';
-import cn from 'classnames';
+import Search from './Search';
 import GoogleMaps from './GoogleMaps';
 import GoogleMapsDirections from './GoogleMapsDirections';
 import { EventShowcase, Event } from './EventShowcase';
@@ -98,11 +95,6 @@ export class LandingPage extends Component {
       eventsFetchData('/api/events', store.getState().activeLanguage)
     );
   }
-  handleHideSearchResult() {
-    this.setState({
-      searchResults: null
-    });
-  }
 
   toggleModalVisibility(modalId) {
     const { visibleModals } = this.state;
@@ -111,16 +103,15 @@ export class LandingPage extends Component {
       : {visibleModals: visibleModals.concat([modalId])});
   }
 
-  changeOverlayEvent(eventSlug) {
-    const event = this.props.events.find(e => e.slug === eventSlug);
-    const relatedEvents = event ? getRelatedEvents(
+  changeOverlayEvent(event) {
+    const eventToShow = this.props.events.find(e => e.slug === event.slug);
+    const relatedEvents = eventToShow ? getRelatedEvents(
       this.props.events,
-      event
+      eventToShow
     ) : null;
     this.setState({
-      visibleOverlayEvent: event ? event.slug : null,
-      relatedEvents: relatedEvents,
-      searchResults: null
+      visibleOverlayEvent: eventToShow ? eventToShow.slug : null,
+      relatedEvents: relatedEvents
     });
   }
 
@@ -165,23 +156,6 @@ export class LandingPage extends Component {
       : {activeCategories: activeCategories.concat(categoryIds)});
   }
 
-  searchEvents(searchTerm, events) {
-    const sifter = new Sifter(events);
-    const result = sifter.search(searchTerm, {
-      fields: ['name', 'content'],
-      sort: [{field: 'name', direction: 'asc'}],
-      limit: 10
-    });
-
-    const resultEvents = events.filter((event, index) => {
-      return result.items.some(item => item.id === index);
-    });
-
-    this.setState({
-      searchResults: resultEvents
-    });
-  }
-
   render() {
     if (this.props.hasErrored) {
       return <LandingPageError reloadPage={() => this.props.fetchData('/api/events', this.props.activeLanguage)} />;
@@ -200,19 +174,11 @@ export class LandingPage extends Component {
           bgColor={this.props.bgColor}
           freeWifiLink={this.props.landingPages.shared.freeWifi}
         />
-        <div className={cn('LandingPage-searchWrapper',
-          {'LandingPage-searchWrapper--top':
-          this.state.searchResults && this.state.searchResults.length})}>
-            <SearchField
-              inline
-              onSearchChange={(val) => this.searchEvents(val, this.props.events)}
-            />
-        </div>
-        <SearchResultOverlay
-          searchResults={this.state.searchResults}
+
+        <Search
+          events={this.props.events}
           changeOverlayEvent={this.changeOverlayEvent.bind(this)}
           pageType={this.props.type}
-          handleHideSearchResult={this.handleHideSearchResult.bind(this)}
         />
         {!this.state.directions &&
         <SideNavigation>

@@ -81,10 +81,6 @@
   height: calc(100% - 1,611125rem);
 }
 
-.Event--compare .Event-img {
-  height: calc(100% - 1.388875rem);
-}
-
 .Event--compare .Event-title {
   bottom: 1.388875rem;
 }

@@ -17,10 +17,7 @@ import EventsDateList from './EventsDateList.js';
 import './EventsPage.css';
 import GoogleMapsDirections from './GoogleMapsDirections';
 import LanguageFlags from './LanguageFlags';
-import SearchField from './SearchField';
-import SearchResultOverlay from './SearchResultOverlay';
-import Sifter from 'sifter';
-import cn from 'classnames';
+import Search from './Search';
 
 const getDistinctEventCategories = (events, excludedCategories) => {
   const distinctCategories = events.reduce((acc, event) => {
@@ -71,45 +68,21 @@ export class EventsPage extends Component {
     );
   }
 
-  handleHideSearchResult() {
-    this.setState({
-      searchResults: null
-    });
-  }
-
   showDirections(directions) {
     this.setState({
       directions: directions
     });
   }
 
-  searchEvents(searchTerm, events) {
-    const sifter = new Sifter(events);
-    const result = sifter.search(searchTerm, {
-      fields: ['name', 'content'],
-      sort: [{field: 'name', direction: 'asc'}],
-      limit: 10
-    });
-
-    const resultEvents = events.filter((event, index) => {
-      return result.items.some(item => item.id === index);
-    });
-
-    this.setState({
-      searchResults: resultEvents
-    });
-  }
-
-  changeOverlayEvent(eventSlug) {
-    const event = this.props.events.find(e => e.slug === eventSlug);
-    const relatedEvents = event ? getRelatedEvents(
+  changeOverlayEvent(event) {
+    const eventToShow = this.props.events.find(e => e.slug === event.slug);
+    const relatedEvents = eventToShow ? getRelatedEvents(
       this.props.events,
-      event
+      eventToShow
     ) : null;
     this.setState({
-      visibleOverlayEvent: event ? event.slug : null,
-      relatedEvents: relatedEvents,
-      searchResults: null
+      visibleOverlayEvent: eventToShow ? eventToShow.slug : null,
+      relatedEvents: relatedEvents
     });
   }
 
@@ -148,19 +121,11 @@ export class EventsPage extends Component {
           bgColor='#f4a428'
           freeWifiLink={this.props.landingPages.shared.freeWifi}
         />
-        <div className={cn('EventsPage-searchWrapper',
-          {'EventsPage-searchWrapper--top':
-          this.state.searchResults && this.state.searchResults.length})}>
-            <SearchField
-              inline
-              onSearchChange={(val) => this.searchEvents(val, this.props.events)}
-            />
-        </div>
-        <SearchResultOverlay
-          searchResults={this.state.searchResults}
+        <Search
+          events={this.props.events}
           changeOverlayEvent={this.changeOverlayEvent.bind(this)}
-          pageType={pageData.heading}
-          handleHideSearchResult={this.handleHideSearchResult.bind(this)}
+          pageType={pageData.pageName}
+          inputWrapperStyle={{bottom: '4.25rem'}}
         />
         <main>
           {!this.state.directions
@@ -175,7 +140,7 @@ export class EventsPage extends Component {
                         dangerouslySetInnerHTML={{__html: c.name}}
                       />
                       <div className='EventsPage-eventWrapper'>
-                        <Scrollbars style={{ width: 'calc(100% - 0.5rem)', height: 'calc(100% - 0.7rem)' }}>
+                        <Scrollbars style={{ width: 'calc(100% - 1rem)', height: 'calc(100% - 1.6rem)' }}>
                         { getEventsForCategory(this.props.events, c.id).map(event => (
                           <Event
                             key={event.id}

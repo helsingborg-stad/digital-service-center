@@ -3,9 +3,10 @@ import Lipping from './Lipping';
 import MultimediaBackground from './MultimediaBackground';
 import BottomBar, { BottomBarLink } from './BottomBar';
 import SectionCard from './SectionCard';
-import SearchField from './SearchField';
+import Search from './Search';
 import { connect } from 'react-redux';
 import { startpageFetchData } from '../actions/startpage';
+import { eventsFetchData } from '../actions/events';
 import { searchFetchData } from '../actions/search';
 import LanguageFlags from './LanguageFlags';
 import StartpageLoading from './StartpageLoading.js';
@@ -21,6 +22,12 @@ export class Startpage extends Component {
     );
   }
 
+  static fetchEventsData({ store }) {
+    return store.dispatch(
+      eventsFetchData('/api/events', store.getState().activeLanguage)
+    );
+  }
+
   static fetchSearchResults({ store }) {
     return store.dispatch(
       searchFetchData('/api/search')
@@ -32,6 +39,14 @@ export class Startpage extends Component {
     if (dataIsEmpty) {
       this.props.fetchData('/api/startpage', this.props.activeLanguage);
     }
+
+    if (typeof window !== 'undefined') {
+      this.props.fetchEventsData('/api/events', this.props.activeLanguage)
+    }
+  }
+
+  handleSearchEventClick(event) {
+    console.log("type", event);
   }
 
   render() {
@@ -55,6 +70,14 @@ export class Startpage extends Component {
 
     return (
         <div className='Startpage'>
+          {this.props.events && !!this.props.events.length &&
+          <Search
+            events={this.props.events}
+            changeOverlayEvent={this.handleSearchEventClick.bind(this)}
+            pageType='Startpage'
+            inputWrapperStyle={{bottom: '6.5rem', transform: 'translateX(-50%)', left: '50%'}}
+          />
+          }
           <Lipping />
           <MultimediaBackground backgroundUrl={this.props.data.backgroundUrl}>
             <h1 className='Startpage-heading' onClick={() => location.reload()}>{this.props.data.heading}</h1>
@@ -85,7 +108,6 @@ export class Startpage extends Component {
                   posts={this.props.data.eventsPosts} />
               </Column>
             </Row>
-            <SearchField onSearchChange={(val) => console.log('search', val)} />
             <BottomBar>
               { this.props.data.topLinks.map(link => (
                 <BottomBarLink key={link.href + link.name} link={link} />
@@ -103,7 +125,9 @@ export class Startpage extends Component {
 
 Startpage.propTypes = {
   fetchData: PropTypes.func.isRequired,
+  fetchEventsData: PropTypes.func.isRequired,
   activeLanguage: PropTypes.string.isRequired,
+  events: PropTypes.any, // TODO
   data: PropTypes.shape({
     backgroundUrl: PropTypes.string,
     heading: PropTypes.string,
@@ -127,6 +151,7 @@ Startpage.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
+    events: state.events[state.activeLanguage],
     data: state.startpage[state.activeLanguage],
     activeLanguage: state.activeLanguage,
     hasErrored: (state.activeLanguage in state.startpageHasErrored)
@@ -142,6 +167,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchData: (url, lang) => dispatch(startpageFetchData(url, lang)),
+    fetchEventsData: (url, lang) => dispatch(eventsFetchData(url, lang)),
     fetchSearchResults: (url) => dispatch(searchFetchData(url))
   };
 };

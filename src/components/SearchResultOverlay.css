@@ -57,7 +57,7 @@
 }
 
 .SearchResultOverlay-listWrapper {
-    height: calc(100% - 4.75rem);
+    height: calc(100% + 4rem);
     margin-bottom: 1.5rem;
 }
 
@@ -96,6 +96,7 @@
 .SearchResultOverlay-contentWrapper {
     width: calc(100% - 8.125rem - 1.25rem);
     display: inline-block;
+    padding-right: 1rem;
 }
 .SearchResultOverlay-contentWrapper p {
     margin: 0;

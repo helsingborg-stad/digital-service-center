@@ -21,7 +21,7 @@ SearchResultOverlayBackdrop.propTypes = {
 
 const SearchResultOverlay =
 ({searchResults, changeOverlayEvent, pageType, handleHideSearchResult}) => {
-  return searchResults && !!searchResults.length ? (
+  return searchResults !== null ? (
     <SearchResultOverlayBackdrop onClick={handleHideSearchResult}>
       <div className='SearchResultOverlay'>
           <div className='SearchResultOverlay-typeWrapper'>
@@ -30,16 +30,18 @@ const SearchResultOverlay =
             <span className='SearchResultOverlay-typeHeading'>{pageType}</span>
             <Scrollbars>
               <ul className='SearchResultOverlay-list'>
-              {searchResults.map(res =>
+              {searchResults.length ? searchResults.map(res =>
                 <li
                   key={res.id}
                   onClick={(e) => {
                     e.stopPropagation();
-                    changeOverlayEvent(res.slug)
+                    changeOverlayEvent(res)
                   }}>
-                  <div className='SearchResultOverlay-imgWrapper'>
+                  {res.imgUrl &&
+                    <div className='SearchResultOverlay-imgWrapper'>
                     <img className='SearchResultOverlay-img' src={res.imgUrl} alt={res.name} />
                   </div>
+                  }
                   <div className='SearchResultOverlay-contentWrapper'>
                     <span className='SearchResultOverlay-contentHeading'>{res.name}</span>
                     {res.content &&
@@ -49,7 +51,7 @@ const SearchResultOverlay =
                     }
                   </div>
                 </li>
-              )}
+              ) : <li>Hittade inga matchande resultat för din sökning</li>}
               </ul>
             </Scrollbars>
           </div>
