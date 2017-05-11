@@ -2,7 +2,6 @@
 
 function helsingborg_dsc_startpage_get_upcoming_events() {
   $imported_posts = get_posts([ post_type => 'imported_event', 'suppress_filters' => false, numberposts => -1]);
-  $editable_posts = get_posts([ post_type => 'editable_event', 'suppress_filters' => false, numberposts => -1]);
   $imported_upcoming = array_filter($imported_posts, function($post) {
     $post_meta = get_post_meta($post->ID, 'imported_event_data', true);
     $door_times = array_map(function($occasion) {
