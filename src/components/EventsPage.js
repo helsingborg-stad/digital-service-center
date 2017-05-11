@@ -75,7 +75,8 @@ export class EventsPage extends Component {
   }
 
   changeOverlayEvent(event) {
-    const eventToShow = this.props.events.find(e => e.slug === event.slug);
+    const eventSlug = event ? event.slug : null;
+    const eventToShow = this.props.events.find(e => e.slug === eventSlug);
     const relatedEvents = eventToShow ? getRelatedEvents(
       this.props.events,
       eventToShow
@@ -126,6 +127,7 @@ export class EventsPage extends Component {
           changeOverlayEvent={this.changeOverlayEvent.bind(this)}
           pageType={pageData.pageName}
           inputWrapperStyle={{bottom: '4.25rem'}}
+          activeLanguage={this.props.activeLanguage}
         />
         <main>
           {!this.state.directions

@@ -75,6 +75,10 @@
     cursor: pointer;
 }
 
+.SearchResultOverlay-list li a {
+    color: #000;
+}
+
 .SearchResultOverlay-imgWrapper {
     width: 8.125rem;
     height: 5.9375rem;

@@ -76,6 +76,7 @@ export class Startpage extends Component {
             changeOverlayEvent={this.handleSearchEventClick.bind(this)}
             pageType='Startpage'
             inputWrapperStyle={{bottom: '6.5rem', transform: 'translateX(-50%)', left: '50%'}}
+            activeLanguage={this.props.activeLanguage}
           />
           }
           <Lipping />

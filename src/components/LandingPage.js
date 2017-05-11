@@ -104,7 +104,8 @@ export class LandingPage extends Component {
   }
 
   changeOverlayEvent(event) {
-    const eventToShow = this.props.events.find(e => e.slug === event.slug);
+    const eventSlug = event ? event.slug : null;
+    const eventToShow = this.props.events.find(e => e.slug === eventSlug);
     const relatedEvents = eventToShow ? getRelatedEvents(
       this.props.events,
       eventToShow
@@ -179,6 +180,7 @@ export class LandingPage extends Component {
           events={this.props.events}
           changeOverlayEvent={this.changeOverlayEvent.bind(this)}
           pageType={this.props.type}
+          activeLanguage={this.props.activeLanguage}
         />
         {!this.state.directions &&
         <SideNavigation>

@@ -56,7 +56,7 @@ const EventsDateList = ({events, selectedDates, handleOverlayEvent}) => {
   return (
     <ul className='EventDateList'>
       { clonedEvents && clonedEvents.map(event => (
-        <li key={event.id} onClick={() => handleOverlayEvent(event.slug)}>
+        <li key={event.id} onClick={() => handleOverlayEvent(event)}>
           <div className='EventDateList-contentWrapper'>
             <img className='EventDateList-img' src={event.imgUrl} alt={event.name} />
           </div>

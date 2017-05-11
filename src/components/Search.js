@@ -55,6 +55,7 @@ export default class Search extends Component {
         changeOverlayEvent={this.changeOverlay.bind(this)}
         pageType={this.props.pageType}
         handleHideSearchResult={this.handleHideSearchResult.bind(this)}
+        activeLanguage={this.props.activeLanguage}
       />
   </div>
     );
@@ -65,5 +66,6 @@ Search.propTypes = {
   pageType: PropTypes.string,
   changeOverlayEvent: PropTypes.func,
   events: PropTypes.array,
-  inputWrapperStyle: PropTypes.object
+  inputWrapperStyle: PropTypes.object,
+  activeLanguage: PropTypes.string
 };
