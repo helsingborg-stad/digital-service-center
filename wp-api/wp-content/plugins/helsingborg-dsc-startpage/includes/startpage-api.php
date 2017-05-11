@@ -141,7 +141,7 @@ function get_visitor_or_local_tags($type) {
     $category = get_category($mapped_cat['main_category']);
     $response[] = [
       name => html_entity_decode($category->name),
-      href => get_link_language_prefix() . $type . '/category/' . $category->slug
+      href => get_link_language_prefix() . $type . '?category=' . $mapped_cat['main_category']
     ];
   }
   return $response;
@@ -225,7 +225,7 @@ function helsingborg_dsc_startpage_response() {
         $category = get_category($category_id);
         return [
           name => html_entity_decode($category->name),
-          href => '/events/category/' . $category->slug
+          href => '/events?category=' . $category_id
         ];
       }, get_categories_for_posts(helsingborg_dsc_startpage_get_upcoming_events())),
       eventsPosts => array_map(function($post) {

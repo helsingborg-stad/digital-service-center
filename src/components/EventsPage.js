@@ -81,10 +81,20 @@ export class EventsPage extends Component {
       this.props.events,
       eventToShow
     ) : null;
+
+    this.changeUrl(event ? event.slug : this.state.visibleOverlayEvent, event !== null);
+
     this.setState({
       visibleOverlayEvent: eventToShow ? eventToShow.slug : null,
       relatedEvents: relatedEvents
     });
+  }
+
+  changeUrl(param, addParam) {
+    const newUrl = addParam
+      ? `${window.location.pathname}/${param}`
+      : window.location.pathname.replace(`/${param}`, '');
+    window.history.pushState({ path: window.location.pathname }, '', newUrl);
   }
 
   handleSelectedDates(selectedDates) {
@@ -100,6 +110,16 @@ export class EventsPage extends Component {
     const dataIsEmpty = !this.props.events || !Object.keys(this.props.events).length;
     if (dataIsEmpty) {
       this.props.fetchData('/api/events', this.props.activeLanguage);
+    }
+
+    const params = new window.URL(location.href).searchParams;
+    const categoryIds = params.get("category");
+    if (categoryIds) {
+      categoryIds.split(',').map(id => {
+        this.setState({
+          activeCategories: this.state.activeCategories.concat(parseInt(id))
+        });
+      });
     }
   }
 

@@ -1,3 +1,25 @@
+.SearchResultOverlay-transitionGroup-enter .SearchResultOverlay,
+.SearchResultOverlay-transitionGroup-leave .SearchResultOverlay {
+  transform: translate(-50%, -50%) scale(0.7);
+  opacity: 0;
+  transition: transform 0.3s opacity 0.3s;
+}
+
+.SearchResultOverlay-transitionGroup-enter-active .SearchResultOverlay {
+  transform: translate(-50%, -50%), scale(1);
+  opacity: 1;
+}
+
+.SearchResultOverlay-transitionGroup-enter.SearchResultOverlayBackdrop,
+.SearchResultOverlay-transitionGroup-leave.SearchResultOverlayBackdrop {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.SearchResultOverlay-transitionGroup-enter-active.SearchResultOverlayBackdrop {
+  opacity: 1;
+}
+
 .SearchResultOverlayBackdrop {
   position: fixed;
   width: 100%;

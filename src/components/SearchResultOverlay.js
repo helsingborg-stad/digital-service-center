@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import Scrollbars from 'react-custom-scrollbars';
 import './SearchResultOverlay.css';
 import Link from './Link';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 const stripHtml = (html) => {
   const tmp = document.createElement('div');
@@ -12,30 +13,31 @@ const stripHtml = (html) => {
 const truncate = (string) => (string.length > 130) ? string.substring(0, 127) + '...' : string;
 
 const SearchResultOverlayBackdrop = ({children, onClick}) => (
-  <div className='SearchResultOverlayBackdrop' onClick={() => onClick()}>{children}</div>
+    <div className='SearchResultOverlayBackdrop' onClick={() => onClick()}>
+          {children}
+    </div>
 );
 
 const getEventUrl = (event, activeLanguage) => {
 
   let slugForUrl = event.type === 'event' ? event.type : 'local';
 
-  if (event.categories.length) {
-    slugForUrl = event.categories.length ? event.categories.reduce((slug, cat) => {
-      if (slug === 'event') {
-        switch (cat.slug) {
-        case 'visitor':
-        case 'local':
-          slug = cat.slug;
-          break;
-        default:
-          slug = 'event';
-          break;
+  slugForUrl = event.categories.length ? event.categories.reduce((slug, cat) => {
+    if (slug === 'event') {
+      switch (cat.slug) {
+      case 'visitor':
+      case 'local':
+        slug = cat.slug;
+        break;
+      default:
+        slug = 'event';
+        break;
 
-        }
       }
-      return slug;
-    }, 'event') : 'local';
-  }
+    }
+    return slug;
+  }, 'event') : 'local';
+
 
   return `/${activeLanguage}/${slugForUrl}/${event.slug}`;
 };
@@ -47,7 +49,15 @@ SearchResultOverlayBackdrop.propTypes = {
 
 const SearchResultOverlay =
 ({searchResults, changeOverlayEvent, pageType, handleHideSearchResult, activeLanguage}) => {
-  return searchResults !== null ? (
+  return (
+    <ReactCSSTransitionGroup
+      transitionName="SearchResultOverlay-transitionGroup"
+      transitionEnterTimeout={300}
+      transitionLeaveTimeout={300}
+      transitionEnter={true}
+      transitionLeave={true}
+      >
+    {searchResults !== null ? (
     <SearchResultOverlayBackdrop onClick={handleHideSearchResult}>
       <div className='SearchResultOverlay'>
           <div className='SearchResultOverlay-typeWrapper'>
@@ -89,7 +99,9 @@ const SearchResultOverlay =
       </div>
     </SearchResultOverlayBackdrop>
   )
-  : null;
+  : null}
+  </ReactCSSTransitionGroup>
+  );
 };
 
 SearchResultOverlay.propTypes = {
