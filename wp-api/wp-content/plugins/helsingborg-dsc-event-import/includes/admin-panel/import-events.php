@@ -14,30 +14,35 @@ function create_and_update_events() {
 
   import_event_categories();
 
-  $events_per_page = 25;
-  $page = 1;
-  $events = [];
+  $start_date = date('Y-m-d');
+  $end_date = date('Y-m-d', strtotime('+3 months', strtotime($start_date)));
+  $events = get_event_json($start_date, $end_date);
 
-  $just_imported_events = null;
+  $event_ids_to_keep = array_map(function ($event) { return (string)$event->id; }, $events);
 
-  do {
-    $just_imported_events = get_event_json($events_per_page, $page);
-    if ($just_imported_events != null) {
-      $events = array_merge($events, $just_imported_events);
-    }
-    $page++;
-  } while ($just_imported_events != null && count($just_imported_events));
+  $already_imported_events_to_remove = get_posts([
+    post_type => 'imported_event',
+    numberposts => -1,
+    meta_query => [[
+      key => 'event_id',
+      value => $event_ids_to_keep,
+      compare => 'NOT IN'
+    ]]
+  ]);
+
+  foreach ($already_imported_events_to_remove as $event_to_remove) {
+    wp_trash_post($event_to_remove->ID);
+  }
 
   foreach($events as $event) {
-    $stored_events = compare_event($event);
-    if($stored_events != null){
+    if(does_event_already_exist($event)){
       foreach($stored_events as $stored_event) {
         update_event($event, $stored_event, $stored_event->ID);
         insert_event_category($stored_event->ID, $event);
       }
     } else {
       $post_id = insert_event_post_type($event);
-        insert_event_category($post_id, $event);
+      insert_event_category($post_id, $event);
       if($event->featured_media->source_url != null) {
         insert_event_featured_image($post_id, $event);
       }
@@ -50,10 +55,8 @@ function create_and_update_events() {
   wp_redirect(admin_url('admin.php?page=helsingborg-dsc-event-import'));
 }
 
-function get_event_json($number_of_events, $page) {
-  $json = file_get_contents('https://api.helsingborg.se/event/json/wp/v2/event/?per_page=' . $number_of_events . '&page=' . $page);
-
-  return json_decode($json);
+function get_event_json($start_date, $end_date) {
+  return json_decode(file_get_contents('https://api.helsingborg.se/event/json/wp/v2/event/time?start=' . $start_date . '&end=' . $end_date));
 }
 
 function insert_event_post_type($event) {
@@ -145,7 +148,7 @@ function update_event($event, $stored_event, $post_id) {
   }
 }
 
-function compare_event($event) {
+function does_event_already_exist($event) {
   $args = array(
     'post_type' => 'imported_event',
     'meta_query' => array(
@@ -157,7 +160,7 @@ function compare_event($event) {
   );
   $event_query = get_posts($args);
 
-  return $event_query;
+  return $event_query != null;
 }
 
 function get_event_category_json(){
