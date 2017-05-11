@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import SearchField from './SearchField';
 import SearchResultOverlay from './SearchResultOverlay';
 import Sifter from 'sifter';
-import cn from 'classnames';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import './Search.css';
 
 export default class Search extends Component {
@@ -40,16 +40,33 @@ export default class Search extends Component {
   render() {
     return (
     <div className='Search-wrapper'>
-      <div
-        style={ this.props.inputWrapperStyle }
-        className={cn('Search-inputWrapper',
-        {'Search-inputWrapper--top':
-        this.state.searchResults !== null})}>
-          <SearchField
-            inline
-            onSearchChange={(val) => this.searchEvents(val, this.props.events)}
-          />
-      </div>
+      <ReactCSSTransitionGroup
+        transitionName="Search-wrapper-transitionGroup"
+        transitionEnterTimeout={300}
+        transitionLeaveTimeout={300}
+        transitionEnter={true}
+        transitionLeave={true}
+      >
+        { this.state.searchResults === null ?
+        <div
+          style={ this.props.inputWrapperStyle }
+          className='Search-inputWrapper'>
+            <SearchField
+              inline
+              onSearchChange={(val) => this.searchEvents(val, this.props.events)}
+            />
+        </div>
+        :
+          <div
+            style={ this.props.inputWrapperStyle }
+            className='Search-inputWrapper--top'>
+              <SearchField
+                inline
+                onSearchChange={(val) => this.searchEvents(val, this.props.events)}
+              />
+          </div>
+        }
+      </ReactCSSTransitionGroup>
       <SearchResultOverlay
         searchResults={this.state.searchResults}
         changeOverlayEvent={this.changeOverlay.bind(this)}

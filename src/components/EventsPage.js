@@ -114,11 +114,13 @@ export class EventsPage extends Component {
 
     const params = new window.URL(location.href).searchParams;
     const categoryIds = params.get("category");
-    categoryIds.split(',').map(id => {
-      this.setState({
-        activeCategories: this.state.activeCategories.concat(parseInt(id))
+    if (categoryIds) {
+      categoryIds.split(',').map(id => {
+        this.setState({
+          activeCategories: this.state.activeCategories.concat(parseInt(id))
+        });
       });
-    });
+    }
   }
 
   render() {
