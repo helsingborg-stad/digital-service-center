@@ -57,7 +57,7 @@ export class Startpage extends Component {
         <div className='Startpage'>
           <Lipping />
           <MultimediaBackground backgroundUrl={this.props.data.backgroundUrl}>
-            <h1 className='Startpage-heading'>{this.props.data.heading}</h1>
+            <h1 className='Startpage-heading' onClick={() => location.reload()}>{this.props.data.heading}</h1>
             <Row>
               <Column>
                 <SectionCard
