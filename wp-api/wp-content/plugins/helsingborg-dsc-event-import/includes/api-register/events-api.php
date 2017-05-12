@@ -86,7 +86,8 @@ function get_pages_for_visitor_local($section) {
       'value' => $section,
       'compare' => 'LIKE'
       ]
-    ]
+    ],
+    'posts_per_page' => -1
   ];
   
   $posts = get_posts($args);
@@ -473,6 +474,9 @@ function parse_google_places() {
 }
 
 function get_google_place_categories($place_types) {
+  if(!is_array(!$place_type)){
+    $place_types = [];
+  }
   return $distinct_place_types = array_reduce(
       get_option('saved_google_place_types', []),
       function($acc, $p) use ($place_types) {
