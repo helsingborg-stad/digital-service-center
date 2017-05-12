@@ -482,7 +482,8 @@ function parse_google_places() {
       openingHours => $place_data['opening_hours']['weekday_text'],
       contactPhone => $place_data['formatted_phone_number'],
       rating => $place_data['rating'],
-      reviews => $reviews
+      reviews => $reviews,
+      image => $place['photo']
     ];
   }, get_option('saved_google_places_details', []));
   return array_values($places);

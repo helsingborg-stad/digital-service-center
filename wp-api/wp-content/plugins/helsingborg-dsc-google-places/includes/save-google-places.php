@@ -174,6 +174,8 @@ function fetch_google_places_based_on_selected_place_types() {
     }
 
     $saved_google_places = get_option('saved_google_places', []);
+    $saved_google_places_details = get_option('saved_google_places_details', []);
+    $new_place_ids = [];
 
     foreach ($distinct_place_types as $place_type) {
         $ch = curl_init();
@@ -183,9 +185,18 @@ function fetch_google_places_based_on_selected_place_types() {
         $response = json_decode(curl_exec($ch), true);
         foreach ($response['results'] as $result) {
             $place_id = $result['place_id'];
+            $new_place_ids[] = $place_id;
             if (!in_array($place_id, $saved_google_places)) {
                 $saved_google_places[] = $place_id;
-            }
+            }         
+        }
+    }
+    
+    foreach ($saved_google_places as $key => $saved_google_place) {
+        if (!in_array((string)$saved_google_place, $new_place_ids)) {
+            unset($saved_google_places[$key]);
+            wp_delete_attachment($saved_google_places_details[$saved_google_place]['photo']['attachId'], true);
+            unset($saved_google_places_details[$saved_google_place]);
         }
     }
 
@@ -195,31 +206,89 @@ function fetch_google_places_based_on_selected_place_types() {
         return 'https://maps.googleapis.com/maps/api/place/details/json?placeid=' . $place_id . '&language=' . $lang . '&key=' . get_option('hdsc-site-setting-google-maps-api-key');
     }
 
-    $saved_google_places_details = get_option('saved_google_places_details', []);
+    function get_api_url_photo($photo_reference) {
+        return 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=700&maxheight=395' . '&photoreference=' . $photo_reference . '&key=' . get_option('hdsc-site-setting-google-maps-api-key');
+    }
+
+    function get_response_code($url) {
+        @file_get_contents($url);
+        list($version, $status, $text) = explode(' ', $http_response_header[0], 3);
+        return $status;
+    }
 
     $langs = [
         'sv',
         'en'
     ];
 
-    foreach($langs as $lang) {
+    foreach ($langs as $lang) {
         foreach ($saved_google_places as $place_id) {
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
             curl_setopt($ch, CURLOPT_URL, get_api_url_for_place_details($place_id, $lang));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            $response = json_decode(curl_exec($ch), true);
+            $response = json_decode(curl_exec($ch), true);        
             $saved_google_places_details[$place_id][$lang] = [
                 data => $response,
                 updated => date('Y-m-d H:i:s')
-            ];
+            ];            
         }
     }
 
+    foreach($saved_google_places as $place_id) {
+        $photo = [];
+        $photo_reference = $saved_google_places_details[$place_id][$langs[0]]['data']['result']['photos'][0]['photo_reference'];
+        if($photo_reference != null && !isset($saved_google_places_details[$place_id]['photo']['attachId'])) {
+            $api_url_photo = get_api_url_photo($photo_reference);
+            $url_status = get_response_code($api_url_photo);
+            if($url_status != '403') {
+                $photo = get_and_save_place_photos($photo_reference, get_api_url_photo($photo_reference));
+            }            
+        }
+        $saved_google_places_details[$place_id]['photo'] = $photo;
+    }
 
     update_option('saved_google_places_details', $saved_google_places_details);
 
     return wp_redirect(admin_url('admin.php?page=helsingborg-dsc-google-places'));
+}
+
+function get_and_save_place_photos($photo_reference, $photo_url){
+    $image_url        = $photo_url;
+    $image_name       = basename($photo_reference);
+    $upload_dir       = wp_upload_dir();
+    $image_data       = file_get_contents($image_url);
+    $unique_file_name = wp_unique_filename( $upload_dir['path'], $image_name );
+    $filename         = basename( $unique_file_name );
+
+    if( wp_mkdir_p( $upload_dir['path'] ) ) {
+        $file = $upload_dir['path'] . '/' . $filename;
+    } else {
+        $file = $upload_dir['basedir'] . '/' . $filename;
+    }
+    
+    file_put_contents( $file, $image_data );
+
+    $wp_filetype = wp_check_filetype( $filename, null );
+    
+    $attachment = array(
+        'post_mime_type' => $wp_filetype['type'],
+        'post_title'     => sanitize_file_name( $filename ),
+        'post_content'   => '',
+        'post_status'    => 'inherit'
+    );
+
+    $attach_id = wp_insert_attachment( $attachment, $file);
+    $test = wp_get_attachment_metadata($attach_id);
+    require_once(ABSPATH . 'wp-admin/includes/image.php');
+    $attach_data = wp_generate_attachment_metadata( $attach_id, $file );
+    wp_update_attachment_metadata( $attach_id, $attach_data );
+
+    return [
+        attachId => $attach_id,
+        imgUrl => wp_get_attachment_url($attach_id),
+        photoReference => $photo_reference
+    ];
 }
 
 ?>
