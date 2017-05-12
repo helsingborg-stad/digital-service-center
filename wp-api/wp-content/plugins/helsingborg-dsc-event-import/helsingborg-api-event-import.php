@@ -30,7 +30,6 @@ include('includes/api-register/api-meta-callbacks.php');
 include('includes/api-register/register-meta-api.php');
 include('includes/api-register/events-api.php');
 
-include('includes/admin-panel/delete-events.php');
 include('includes/admin-panel/import-events.php');
 include('includes/admin-panel/scheduled-import.php');
 include('includes/admin-panel/display-functions.php');
