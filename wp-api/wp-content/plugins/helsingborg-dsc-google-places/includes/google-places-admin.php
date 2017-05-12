@@ -10,6 +10,11 @@ function helsingborg_dsc_google_places_admin_menu() {
 }
 
 function helsingborg_dsc_google_places_admin_init() {
+    $api_key_status_ok = get_option('api_key_limited_status');
+    if(!$api_key_status_ok){
+        echo "<script>alert('Googles API nyckel har överskridit antal tillåtna anrop, försök igen senare.');</script>";
+        update_option('api_key_limited_status', true);
+    }  
 ?>
     <style>
         .form-table select {

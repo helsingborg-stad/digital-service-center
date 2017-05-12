@@ -157,6 +157,8 @@ function all_google_place_types() {
 add_action('admin_post_fetch_google_places_based_on_selected_place_types', fetch_google_places_based_on_selected_place_types);
 
 function fetch_google_places_based_on_selected_place_types() {
+    update_option('api_key_limited_status', true);
+   
     $distinct_place_types = array_reduce(
         get_option('saved_google_place_types', []),
         function($acc, $p) {
@@ -183,6 +185,10 @@ function fetch_google_places_based_on_selected_place_types() {
         curl_setopt($ch, CURLOPT_URL, get_api_url_for_place_type($place_type));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $response = json_decode(curl_exec($ch), true);
+        if($response['status'] == 'OVER_QUERY_LIMIT' || isset($response['status'])){
+            update_option('api_key_limited_status', false);
+            return wp_redirect(admin_url('admin.php?page=helsingborg-dsc-google-places'));
+        }
         foreach ($response['results'] as $result) {
             $place_id = $result['place_id'];
             $new_place_ids[] = $place_id;
@@ -227,7 +233,11 @@ function fetch_google_places_based_on_selected_place_types() {
             curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
             curl_setopt($ch, CURLOPT_URL, get_api_url_for_place_details($place_id, $lang));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            $response = json_decode(curl_exec($ch), true);        
+            $response = json_decode(curl_exec($ch), true);
+            if($response['status'] == 'OVER_QUERY_LIMIT' || isset($response['status'])){
+                update_option('api_key_limited_status', false);
+                return wp_redirect(admin_url('admin.php?page=helsingborg-dsc-google-places'));
+            }        
             $saved_google_places_details[$place_id][$lang] = [
                 data => $response,
                 updated => date('Y-m-d H:i:s')
