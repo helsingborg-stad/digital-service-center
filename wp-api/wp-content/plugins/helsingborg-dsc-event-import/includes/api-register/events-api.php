@@ -490,7 +490,7 @@ function parse_google_places() {
 }
 
 function get_google_place_categories($place_types) {
-  if(!is_array(!$place_type)){
+  if(!is_array($place_types)){
     $place_types = [];
   }
   return $distinct_place_types = array_reduce(
