@@ -115,7 +115,8 @@ function get_visitor_or_local_posts($type) {
       'value' => $type,
       'compare' => 'LIKE'
       ]
-    ]
+    ],
+    'posts_per_page' => -1
   ];
 
   $posts = get_posts($args);
