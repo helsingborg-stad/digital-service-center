@@ -4,10 +4,7 @@ import SiteHeader from './SiteHeader';
 import { SiteFooter, SiteFooterLink } from './SiteFooter';
 import VergicChatButton from './VergicChatButton';
 import { SideNavigation, SideNavigationLink } from './SideNavigation';
-import SearchField from './SearchField';
-import SearchResultOverlay from './SearchResultOverlay';
-import Sifter from 'sifter';
-import cn from 'classnames';
+import Search from './Search';
 import GoogleMaps from './GoogleMaps';
 import GoogleMapsDirections from './GoogleMapsDirections';
 import { EventShowcase, Event } from './EventShowcase';
@@ -21,7 +18,9 @@ import Scrollbars from 'react-custom-scrollbars';
 import EventsDateList from './EventsDateList.js';
 import { connect } from 'react-redux';
 import { eventsFetchData } from '../actions/events';
+import { iframeUrl } from '../actions/iframeUrl';
 import LanguageFlags from './LanguageFlags';
+import formatRelativeUrl from '../util/formatRelativeUrl';
 
 
 import './LandingPage.css';
@@ -98,11 +97,6 @@ export class LandingPage extends Component {
       eventsFetchData('/api/events', store.getState().activeLanguage)
     );
   }
-  handleHideSearchResult() {
-    this.setState({
-      searchResults: null
-    });
-  }
 
   toggleModalVisibility(modalId) {
     const { visibleModals } = this.state;
@@ -111,23 +105,43 @@ export class LandingPage extends Component {
       : {visibleModals: visibleModals.concat([modalId])});
   }
 
-  changeOverlayEvent(eventSlug) {
-    const event = this.props.events.find(e => e.slug === eventSlug);
-    const relatedEvents = event ? getRelatedEvents(
+  changeOverlayEvent(event) {
+    const eventSlug = event ? event.slug : null;
+    const eventToShow = this.props.events.find(e => e.slug === eventSlug);
+    const relatedEvents = eventToShow ? getRelatedEvents(
       this.props.events,
-      event
+      eventToShow
     ) : null;
+
+    this.changeUrl(event ? event.slug : this.state.visibleOverlayEvent, event !== null);
+
     this.setState({
-      visibleOverlayEvent: event ? event.slug : null,
-      relatedEvents: relatedEvents,
-      searchResults: null
+      visibleOverlayEvent: eventToShow ? eventToShow.slug : null,
+      relatedEvents: relatedEvents
     });
+  }
+
+  changeUrl(param, addParam) {
+    const newUrl = addParam
+      ? `${window.location.pathname}/${param}`
+      : window.location.pathname.replace(`/${param}`, '');
+    window.history.pushState({ path: window.location.pathname }, '', newUrl);
   }
 
   componentDidMount() {
     const dataIsEmpty = !this.props.events || !Object.keys(this.props.events).length;
     if (dataIsEmpty) {
       this.props.fetchData('/api/events', this.props.activeLanguage);
+    }
+
+    const params = new window.URL(location.href).searchParams;
+    const categoryIds = params.get("category");
+    if (categoryIds) {
+      categoryIds.split(',').map(id => {
+        this.setState({
+          activeCategories: this.state.activeCategories.concat(parseInt(id))
+        });
+      });
     }
   }
 
@@ -165,23 +179,6 @@ export class LandingPage extends Component {
       : {activeCategories: activeCategories.concat(categoryIds)});
   }
 
-  searchEvents(searchTerm, events) {
-    const sifter = new Sifter(events);
-    const result = sifter.search(searchTerm, {
-      fields: ['name', 'content'],
-      sort: [{field: 'name', direction: 'asc'}],
-      limit: 10
-    });
-
-    const resultEvents = events.filter((event, index) => {
-      return result.items.some(item => item.id === index);
-    });
-
-    this.setState({
-      searchResults: resultEvents
-    });
-  }
-
   render() {
     if (this.props.hasErrored) {
       return <LandingPageError reloadPage={() => this.props.fetchData('/api/events', this.props.activeLanguage)} />;
@@ -200,19 +197,12 @@ export class LandingPage extends Component {
           bgColor={this.props.bgColor}
           freeWifiLink={this.props.landingPages.shared.freeWifi}
         />
-        <div className={cn('LandingPage-searchWrapper',
-          {'LandingPage-searchWrapper--top':
-          this.state.searchResults && this.state.searchResults.length})}>
-            <SearchField
-              inline
-              onSearchChange={(val) => this.searchEvents(val, this.props.events)}
-            />
-        </div>
-        <SearchResultOverlay
-          searchResults={this.state.searchResults}
+
+        <Search
+          events={this.props.events}
           changeOverlayEvent={this.changeOverlayEvent.bind(this)}
           pageType={this.props.type}
-          handleHideSearchResult={this.handleHideSearchResult.bind(this)}
+          activeLanguage={this.props.activeLanguage}
         />
         {!this.state.directions &&
         <SideNavigation>
@@ -253,12 +243,33 @@ export class LandingPage extends Component {
             }
           </div>
           <EventShowcase>
-            {this.props.events.slice(0, 10).map(event => (
-            <Event
-              key={event.id}
-              {...event}
-              onClick={this.changeOverlayEvent.bind(this)} />
-            ))}
+            {pageData.pages.map(event => {
+              switch (event.type) {
+              case 'iframe':
+                return (
+                  <Event
+                    key={event.id}
+                    {...event}
+                    onClick={(url) => this.props.setIframeUrl(url)} />
+                  );
+              case 'page':
+                return (
+                  <Event
+                    key={event.id}
+                    {...event}
+                    onClick={(url) => this.props.setIframeUrl({url: formatRelativeUrl(url)})} />
+                  );
+              case 'event':
+                return (
+                  <Event
+                    key={event.id}
+                    {...event}
+                    onClick={this.changeOverlayEvent.bind(this)} />
+                );
+              default:
+                return null;
+              }})
+            }
           </EventShowcase>
           <SiteFooter color={this.props.bgColor} backToStartPath={`/${this.props.activeLanguage}/`}>
             { pageData.bottomLinks.map((link) => (
@@ -333,7 +344,8 @@ LandingPage.propTypes = {
       lat: PropTypes.number.isRequired,
       lng: PropTypes.number.isRequired
     }).isRequired
-  })
+  }),
+  setIframeUrl: PropTypes.func
 };
 
 const mapStateToProps = (state) => {
@@ -351,7 +363,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: (url, lang) => dispatch(eventsFetchData(url, lang))
+    fetchData: (url, lang) => dispatch(eventsFetchData(url, lang)),
+    setIframeUrl: (url) => dispatch(iframeUrl(url))
   };
 };
 

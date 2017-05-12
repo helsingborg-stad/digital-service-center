@@ -3,23 +3,6 @@
   background: #e5e3df;
 }
 
-.LandingPage-searchWrapper {
-  position: absolute;
-  z-index: 9;
-  left: calc(50% - 300px);
-  bottom: calc(23vh + 1.4rem);
-  width: 350px
-}
-
-.LandingPage-searchWrapper--top {
-  position: fixed;
-  top: 1rem;
-  left: calc(50% - 175px);
-  bottom: auto;
-  width: 350px;
-  z-index: 101;
-}
-
 .LandingPage-mapWrapper {
   position: relative;
   width: calc(100% - 325px - 0.85rem);

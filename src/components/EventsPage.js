@@ -17,10 +17,7 @@ import EventsDateList from './EventsDateList.js';
 import './EventsPage.css';
 import GoogleMapsDirections from './GoogleMapsDirections';
 import LanguageFlags from './LanguageFlags';
-import SearchField from './SearchField';
-import SearchResultOverlay from './SearchResultOverlay';
-import Sifter from 'sifter';
-import cn from 'classnames';
+import Search from './Search';
 
 const getDistinctEventCategories = (events, excludedCategories) => {
   const distinctCategories = events.reduce((acc, event) => {
@@ -71,46 +68,33 @@ export class EventsPage extends Component {
     );
   }
 
-  handleHideSearchResult() {
-    this.setState({
-      searchResults: null
-    });
-  }
-
   showDirections(directions) {
     this.setState({
       directions: directions
     });
   }
 
-  searchEvents(searchTerm, events) {
-    const sifter = new Sifter(events);
-    const result = sifter.search(searchTerm, {
-      fields: ['name', 'content'],
-      sort: [{field: 'name', direction: 'asc'}],
-      limit: 10
-    });
+  changeOverlayEvent(event) {
+    const eventSlug = event ? event.slug : null;
+    const eventToShow = this.props.events.find(e => e.slug === eventSlug);
+    const relatedEvents = eventToShow ? getRelatedEvents(
+      this.props.events,
+      eventToShow
+    ) : null;
 
-    const resultEvents = events.filter((event, index) => {
-      return result.items.some(item => item.id === index);
-    });
+    this.changeUrl(event ? event.slug : this.state.visibleOverlayEvent, event !== null);
 
     this.setState({
-      searchResults: resultEvents
+      visibleOverlayEvent: eventToShow ? eventToShow.slug : null,
+      relatedEvents: relatedEvents
     });
   }
 
-  changeOverlayEvent(eventSlug) {
-    const event = this.props.events.find(e => e.slug === eventSlug);
-    const relatedEvents = event ? getRelatedEvents(
-      this.props.events,
-      event
-    ) : null;
-    this.setState({
-      visibleOverlayEvent: event ? event.slug : null,
-      relatedEvents: relatedEvents,
-      searchResults: null
-    });
+  changeUrl(param, addParam) {
+    const newUrl = addParam
+      ? `${window.location.pathname}/${param}`
+      : window.location.pathname.replace(`/${param}`, '');
+    window.history.pushState({ path: window.location.pathname }, '', newUrl);
   }
 
   handleSelectedDates(selectedDates) {
@@ -126,6 +110,16 @@ export class EventsPage extends Component {
     const dataIsEmpty = !this.props.events || !Object.keys(this.props.events).length;
     if (dataIsEmpty) {
       this.props.fetchData('/api/events', this.props.activeLanguage);
+    }
+
+    const params = new window.URL(location.href).searchParams;
+    const categoryIds = params.get("category");
+    if (categoryIds) {
+      categoryIds.split(',').map(id => {
+        this.setState({
+          activeCategories: this.state.activeCategories.concat(parseInt(id))
+        });
+      });
     }
   }
 
@@ -148,19 +142,12 @@ export class EventsPage extends Component {
           bgColor='#f4a428'
           freeWifiLink={this.props.landingPages.shared.freeWifi}
         />
-        <div className={cn('EventsPage-searchWrapper',
-          {'EventsPage-searchWrapper--top':
-          this.state.searchResults && this.state.searchResults.length})}>
-            <SearchField
-              inline
-              onSearchChange={(val) => this.searchEvents(val, this.props.events)}
-            />
-        </div>
-        <SearchResultOverlay
-          searchResults={this.state.searchResults}
+        <Search
+          events={this.props.events}
           changeOverlayEvent={this.changeOverlayEvent.bind(this)}
-          pageType={pageData.heading}
-          handleHideSearchResult={this.handleHideSearchResult.bind(this)}
+          pageType={pageData.pageName}
+          inputWrapperStyle={{bottom: '4.25rem'}}
+          activeLanguage={this.props.activeLanguage}
         />
         <main>
           {!this.state.directions
@@ -175,7 +162,7 @@ export class EventsPage extends Component {
                         dangerouslySetInnerHTML={{__html: c.name}}
                       />
                       <div className='EventsPage-eventWrapper'>
-                        <Scrollbars style={{ width: 'calc(100% - 0.5rem)', height: 'calc(100% - 0.7rem)' }}>
+                        <Scrollbars style={{ width: 'calc(100% - 1rem)', height: 'calc(100% - 1.6rem)' }}>
                         { getEventsForCategory(this.props.events, c.id).map(event => (
                           <Event
                             key={event.id}

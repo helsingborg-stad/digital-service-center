@@ -1,0 +1,16 @@
+.Search-inputWrapper {
+  position: absolute;
+  z-index: 9;
+  left: calc(50% - 300px);
+  bottom: calc(23vh + 1.4rem);
+  width: 350px
+}
+
+.Search-inputWrapper--top {
+  position: fixed;
+  top: 1rem;
+  left: calc(50% - 175px);
+  bottom: auto!important;
+  width: 350px;
+  z-index: 101;
+}

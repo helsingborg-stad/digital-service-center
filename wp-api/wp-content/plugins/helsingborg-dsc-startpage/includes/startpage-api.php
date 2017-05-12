@@ -2,7 +2,6 @@
 
 function helsingborg_dsc_startpage_get_upcoming_events() {
   $imported_posts = get_posts([ post_type => 'imported_event', 'suppress_filters' => false, numberposts => -1]);
-  $editable_posts = get_posts([ post_type => 'editable_event', 'suppress_filters' => false, numberposts => -1]);
   $imported_upcoming = array_filter($imported_posts, function($post) {
     $post_meta = get_post_meta($post->ID, 'imported_event_data', true);
     $door_times = array_map(function($occasion) {
@@ -53,27 +52,83 @@ function get_preamble($post_content) {
 }
 
 // Helper function to map the posts to the correct format for the API response
+// TODO: make code more tidy and remove duplication in events-api's `get_pages_for_visitor_local`
 function post_mapping_helper($post, $type) {
-  $response = [
-    heading  => html_entity_decode($post->post_title),
-    preamble => get_preamble($post->post_content),
-    href     => get_link_language_prefix() . $type . '/' . $post->post_name,
-  ];
-  $thumbnail_url = get_the_post_thumbnail_url($post->ID);
-  if ($thumbnail_url) {
-    $response['imgUrl'] = $thumbnail_url;
+  $page = get_current_post_language($post->ID);
+  if(!isset($page)) {
+    return;
   }
-  return $response;
+  $iframeMeta = get_post_meta($page->ID, 'event_iframe', false)[0];
+  if ($iframeMeta['active'] == 'on' && strlen($iframeMeta['src'])) {
+    $response = [
+      type => 'iframe',
+      heading  => html_entity_decode($page->post_title),
+      preamble => get_preamble($page->post_content),
+      url => $iframeMeta['src'],
+      width => intval($iframeMeta['width'] ?? 0),
+      height => intval($iframeMeta['height'] ?? 0),
+      offsetTop => intval($iframeMeta['top_offset'] ?? 0),
+      offsetLeft => intval($iframeMeta['left_offset'] ?? 0)
+    ];
+    $thumbnail_url = get_the_post_thumbnail_url($page->ID);
+    if ($thumbnail_url) {
+      $response['imgUrl'] = $thumbnail_url;
+    }
+    return $response;
+  } else if ($page->post_type == 'editable_event' || $page->post_type == 'imported_event') {
+    $response = [
+      type => 'event',
+      heading  => html_entity_decode($page->post_title),
+      preamble => get_preamble($page->post_content),
+      href     => get_link_language_prefix() . $type . '/' . $page->post_name,
+    ];
+    $thumbnail_url = get_the_post_thumbnail_url($page->ID);
+    if ($thumbnail_url) {
+      $response['imgUrl'] = $thumbnail_url;
+    }
+    return $response;
+  } else {
+    $response = [
+      type => 'page',
+      heading  => html_entity_decode($page->post_title),
+      preamble => get_preamble($page->post_content),
+      url =>  wp_make_link_relative(get_permalink($page)) . '?wordpress'
+    ];
+    $thumbnail_url = get_the_post_thumbnail_url($page->ID);
+    if ($thumbnail_url) {
+      $response['imgUrl'] = $thumbnail_url;
+    }
+    return $response;
+  }
 }
 
 // Gets imported and editable events for either 'visitor' or 'local' category, and returns a merged array
 function get_visitor_or_local_posts($type) {
-  $imported_posts = get_posts([ post_type => 'imported_event', 'suppress_filters' => false, posts_per_page => 10, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
-  $editable_posts = get_posts([ post_type => 'editable_event', 'suppress_filters' => false, posts_per_page => 10, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
-  $all_posts = array_merge($imported_posts, $editable_posts);
+  $args = [
+    'post_type' => [
+      'page',
+      'editable_event'
+    ],
+    'meta_query' => [
+      [
+      'key' => 'focus_visitor_local',
+      'value' => $type,
+      'compare' => 'LIKE'
+      ]
+    ]
+  ];
+
+  $posts = get_posts($args);
+
+  foreach($posts as $key => $value) {
+    if(empty($value)) {
+      unset($posts[$key]);
+    }
+  }
+
   return array_map(function($post) use ($type) {
     return post_mapping_helper($post, $type);
-  }, $all_posts);
+  }, $posts);
 }
 
 function get_visitor_or_local_tags($type) {
@@ -86,7 +141,7 @@ function get_visitor_or_local_tags($type) {
     $category = get_category($mapped_cat['main_category']);
     $response[] = [
       name => html_entity_decode($category->name),
-      href => get_link_language_prefix() . $type . '/category/' . $category->slug
+      href => get_link_language_prefix() . $type . '?category=' . $mapped_cat['main_category']
     ];
   }
   return $response;
@@ -170,7 +225,7 @@ function helsingborg_dsc_startpage_response() {
         $category = get_category($category_id);
         return [
           name => html_entity_decode($category->name),
-          href => '/events/category/' . $category->slug
+          href => '/events?category=' . $category_id
         ];
       }, get_categories_for_posts(helsingborg_dsc_startpage_get_upcoming_events())),
       eventsPosts => array_map(function($post) {

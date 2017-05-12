@@ -1,3 +1,25 @@
+.SearchResultOverlay-transitionGroup-enter .SearchResultOverlay,
+.SearchResultOverlay-transitionGroup-leave .SearchResultOverlay {
+  transform: translate(-50%, -50%) scale(0.7);
+  opacity: 0;
+  transition: transform 0.3s opacity 0.3s;
+}
+
+.SearchResultOverlay-transitionGroup-enter-active .SearchResultOverlay {
+  transform: translate(-50%, -50%), scale(1);
+  opacity: 1;
+}
+
+.SearchResultOverlay-transitionGroup-enter.SearchResultOverlayBackdrop,
+.SearchResultOverlay-transitionGroup-leave.SearchResultOverlayBackdrop {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.SearchResultOverlay-transitionGroup-enter-active.SearchResultOverlayBackdrop {
+  opacity: 1;
+}
+
 .SearchResultOverlayBackdrop {
   position: fixed;
   width: 100%;
@@ -57,7 +79,7 @@
 }
 
 .SearchResultOverlay-listWrapper {
-    height: calc(100% - 4.75rem);
+    height: calc(100% + 4rem);
     margin-bottom: 1.5rem;
 }
 
@@ -73,6 +95,10 @@
     border-bottom: 1px solid #EFEFEF;
     padding-bottom: 1rem;
     cursor: pointer;
+}
+
+.SearchResultOverlay-list li a {
+    color: #000;
 }
 
 .SearchResultOverlay-imgWrapper {
@@ -96,6 +122,7 @@
 .SearchResultOverlay-contentWrapper {
     width: calc(100% - 8.125rem - 1.25rem);
     display: inline-block;
+    padding-right: 1rem;
 }
 .SearchResultOverlay-contentWrapper p {
     margin: 0;

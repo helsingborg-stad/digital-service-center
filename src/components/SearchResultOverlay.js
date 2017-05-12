@@ -1,18 +1,46 @@
 import React, { PropTypes } from 'react';
 import Scrollbars from 'react-custom-scrollbars';
 import './SearchResultOverlay.css';
+import Link from './Link';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 const stripHtml = (html) => {
   const tmp = document.createElement('div');
   tmp.innerHTML = html;
   return tmp.textContent || tmp.innerText || '';
-}
+};
 
 const truncate = (string) => (string.length > 130) ? string.substring(0, 127) + '...' : string;
 
 const SearchResultOverlayBackdrop = ({children, onClick}) => (
-  <div className='SearchResultOverlayBackdrop' onClick={() => onClick()}>{children}</div>
+    <div className='SearchResultOverlayBackdrop' onClick={() => onClick()}>
+          {children}
+    </div>
 );
+
+const getEventUrl = (event, activeLanguage) => {
+
+  let slugForUrl = event.type === 'event' ? event.type : 'local';
+
+  slugForUrl = event.categories.length ? event.categories.reduce((slug, cat) => {
+    if (slug === 'event') {
+      switch (cat.slug) {
+      case 'visitor':
+      case 'local':
+        slug = cat.slug;
+        break;
+      default:
+        slug = 'event';
+        break;
+
+      }
+    }
+    return slug;
+  }, 'event') : 'local';
+
+
+  return `/${activeLanguage}/${slugForUrl}/${event.slug}`;
+};
 
 SearchResultOverlayBackdrop.propTypes = {
   children: PropTypes.element.isRequired,
@@ -20,8 +48,16 @@ SearchResultOverlayBackdrop.propTypes = {
 };
 
 const SearchResultOverlay =
-({searchResults, changeOverlayEvent, pageType, handleHideSearchResult}) => {
-  return searchResults && !!searchResults.length ? (
+({searchResults, changeOverlayEvent, pageType, handleHideSearchResult, activeLanguage}) => {
+  return (
+    <ReactCSSTransitionGroup
+      transitionName="SearchResultOverlay-transitionGroup"
+      transitionEnterTimeout={300}
+      transitionLeaveTimeout={300}
+      transitionEnter={true}
+      transitionLeave={true}
+      >
+    {searchResults !== null ? (
     <SearchResultOverlayBackdrop onClick={handleHideSearchResult}>
       <div className='SearchResultOverlay'>
           <div className='SearchResultOverlay-typeWrapper'>
@@ -30,26 +66,32 @@ const SearchResultOverlay =
             <span className='SearchResultOverlay-typeHeading'>{pageType}</span>
             <Scrollbars>
               <ul className='SearchResultOverlay-list'>
-              {searchResults.map(res =>
-                <li
-                  key={res.id}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    changeOverlayEvent(res.slug)
-                  }}>
-                  <div className='SearchResultOverlay-imgWrapper'>
-                    <img className='SearchResultOverlay-img' src={res.imgUrl} alt={res.name} />
-                  </div>
-                  <div className='SearchResultOverlay-contentWrapper'>
-                    <span className='SearchResultOverlay-contentHeading'>{res.name}</span>
-                    {res.content &&
-                      <p>
-                        {truncate(stripHtml(res.content))}
-                      </p>
+              {searchResults.length ? searchResults.map(res =>
+                <li key={res.id}>
+                  <Link to={getEventUrl(res, activeLanguage)} onMouseUp={(e) => {
+                    if (window.location.indexOf(res.type) > -1) {
+                      e.stopPropagation();
+                      changeOverlayEvent(res);
                     }
-                  </div>
+                  }}>
+                    <div style={{display: 'flex'}}>
+                      {res.imgUrl &&
+                        <div className='SearchResultOverlay-imgWrapper'>
+                        <img className='SearchResultOverlay-img' src={res.imgUrl} alt={res.name} />
+                      </div>
+                      }
+                      <div className='SearchResultOverlay-contentWrapper'>
+                        <span className='SearchResultOverlay-contentHeading'>{res.name}</span>
+                        {res.content &&
+                          <p>
+                            {truncate(stripHtml(res.content))}
+                          </p>
+                        }
+                      </div>
+                    </div>
+                  </Link>
                 </li>
-              )}
+              ) : <li>Hittade inga matchande resultat för din sökning</li>}
               </ul>
             </Scrollbars>
           </div>
@@ -57,14 +99,17 @@ const SearchResultOverlay =
       </div>
     </SearchResultOverlayBackdrop>
   )
-  : null;
+  : null}
+  </ReactCSSTransitionGroup>
+  );
 };
 
 SearchResultOverlay.propTypes = {
   searchResults: PropTypes.array,
   changeOverlayEvent: PropTypes.func,
   pageType: PropTypes.string,
-  handleHideSearchResult: PropTypes.func
+  handleHideSearchResult: PropTypes.func,
+  activeLanguage: PropTypes.string
 };
 
 export default SearchResultOverlay;

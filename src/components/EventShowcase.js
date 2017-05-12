@@ -39,7 +39,7 @@ class Event extends Component {
         role='button'
         className={cn('Event', {'Event--compare': this.props.canCompare})}
         style={{position: 'relative', overflow: 'hidden', cursor: 'pointer'}}
-        onClick={() => this.props.onClick(this.props.slug)}
+        onClick={() => this.props.onClick(this.props)}
         onMouseUp={ this.handleClick.bind(this) }
       >
         <img className='Event-img' src={this.props.imgUrl} alt='' />

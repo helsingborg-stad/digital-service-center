@@ -74,6 +74,7 @@ function helsingborg_dsc_events_response() {
   return rest_ensure_response($response);
 }
 
+// TODO: make code more tidy and remove duplication in startpage-api's `post_mapping_helper`
 function get_pages_for_visitor_local($section) {
   $args = [
     'post_type' => [
@@ -89,7 +90,7 @@ function get_pages_for_visitor_local($section) {
     ],
     'posts_per_page' => -1
   ];
-  
+
   $posts = get_posts($args);
 
   $filtered_posts = array_map(function($post) {
@@ -99,7 +100,7 @@ function get_pages_for_visitor_local($section) {
       }
       $iframeMeta = get_post_meta($page->ID, 'event_iframe', false)[0];
       if ($iframeMeta['active'] == 'on' && strlen($iframeMeta['src'])) {
-        return [
+        $response = [
           type => 'iframe',
           name => $page->post_title,
           url => $iframeMeta['src'],
@@ -108,6 +109,13 @@ function get_pages_for_visitor_local($section) {
           offsetTop => intval($iframeMeta['top_offset'] ?? 0),
           offsetLeft => intval($iframeMeta['left_offset'] ?? 0)
         ];
+
+        $thumbnail_url = get_the_post_thumbnail_url($page->ID);
+        if ($thumbnail_url) {
+          $response['imgUrl'] = $thumbnail_url;
+        }
+
+        return $response;
       }
       else if($page->post_type == 'editable_event') {
         $response = [
@@ -165,11 +173,18 @@ function get_pages_for_visitor_local($section) {
         return $response;
       }
       else {
-        return [
+        $response = [
           type => 'page',
           name => $page->post_title,
           url =>  wp_make_link_relative(get_permalink($page)) . '?wordpress'
         ];
+
+        $thumbnail_url = get_the_post_thumbnail_url($page->ID);
+        if ($thumbnail_url) {
+          $response['imgUrl'] = $thumbnail_url;
+        }
+
+        return $response;
       }
     }, $posts);
 
