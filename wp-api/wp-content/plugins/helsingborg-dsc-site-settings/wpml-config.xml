@@ -1,0 +1,23 @@
+<wpml-config>
+	<admin-texts>
+		<key name="hdsc-translatable-search"/>
+		<key name="hdsc-translatable-helsingborg-free-wifi"/>
+		<key name="hdsc-translatable-back-to-start"/>
+		<key name="hdsc-translatable-select-dates"/>
+		<key name="hdsc-translatable-today"/>
+		<key name="hdsc-translatable-tomorrow"/>
+		<key name="hdsc-translatable-weekend"/>
+		<key name="hdsc-translatable-all"/>
+		<key name="hdsc-translatable-navigate"/>
+		<key name="hdsc-translatable-more-info"/>
+		<key name="hdsc-translatable-related"/>
+		<key name="hdsc-translatable-compare"/>
+		<key name="hdsc-translatable-take-me-there"/>
+		<key name="hdsc-translatable-location"/>
+		<key name="hdsc-translatable-date-and-time"/>
+		<key name="hdsc-translatable-opening-hours"/>
+		<key name="hdsc-translatable-contact"/>
+		<key name="hdsc-translatable-tickets"/>
+		<key name="hdsc-translatable-rating"/>
+	</admin-texts>
+</wpml-config>

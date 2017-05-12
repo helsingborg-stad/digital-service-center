@@ -12,6 +12,7 @@ function helsingborg_dsc_startpage_get_upcoming_events() {
     }));
     return $is_today_or_later;
   });
+  $editable_posts = get_posts([ post_type => 'editable_event', 'suppress_filters' => false, numberposts => -1]);
   $editable_upcoming = array_filter($editable_posts, function($post) {
     $occasions = get_post_meta($post->ID, 'occasions', false);
     $door_time = $occasions[0]['door_time'];
@@ -165,6 +166,9 @@ function get_link_language_prefix() {
 }
 
 function get_top_links($pages) {
+  if(!is_array($pages)) {
+    $pages = [];
+  }
   $posts = array_map(function($pageId) {
     $page;
     $lang = $_REQUEST['lang'];
