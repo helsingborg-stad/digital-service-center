@@ -1,10 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 import Scrollbars from 'react-custom-scrollbars';
 import Link from './Link';
 import closeCrossSvg from '../media/close-cross.svg';
 import './EventOverlay.css';
 import ReactPlayer from 'react-player';
+import getElementPosition from '../util/getElementPosition';
 import getUserLocation from '../util/getUserLocation';
 import LoadingButton from './LoadingButton.js';
 import RelatedEvents from './RelatedEvents.js';
@@ -19,13 +21,28 @@ const handleNavigationClick = (destinationLat, destinationLng, callback) => {
   });
 };
 
-const EventOverlayBackdrop = ({children}) => (
-  <div className='EventOverlayBackdrop'>{children}</div>
-);
+class EventOverlayBackdrop extends Component {
+  render() {
+    return <div {...this.props} className='EventOverlayBackdrop'>{this.props.children}</div>
+  }
+}
 
 EventOverlayBackdrop.propTypes = {
   children: PropTypes.element.isRequired
 };
+
+class EventOverlayConfirmClose extends Component {
+  render() {
+    return <div ref='wrapper' className={classNames(
+      'EventOverlayConfirmClose',
+      {'EventOverlayConfirmClose--hidden': this.props.isHidden})
+    } onClick={ev => ev.stopPropagation()}>
+      Stäng rutan?
+      <button onClick={this.props.onCloseModal}>Ja</button>
+      <button onClick={this.props.onDismissClose}>Nej</button>
+    </div>
+  }
+}
 
 const getLocation = (event) => {
   return event.location && event.location.streetAddress && event.location.postalCode
@@ -85,7 +102,7 @@ const EventDate = ({start, end}) => (
 
 const EventOverlay = ({event, showVideoButton, onVideoButtonClick, handleShowDirections, translatables}) => {
   return (
-  <div className='EventOverlay'>
+  <div className='EventOverlay' onClick={ev => ev.stopPropagation()}>
     <div className='EventOverlay-imgWrapper'>
       <img className='EventOverlay-img' src={event.imgUrl} alt={ event.name } />
     </div>
@@ -237,7 +254,8 @@ export default class extends Component {
     this.state = {
       showVideo: false,
       videoUrl: props.event.youtubeUrl || props.event.vimeoUrl || null,
-      comparedEvent: null
+      comparedEvent: null,
+      showConfirmClose: false
     };
   }
 
@@ -247,6 +265,26 @@ export default class extends Component {
     })
   }
 
+  onBackDropClick(e) {
+    this.setState({showConfirmClose: !this.state.showConfirmClose});
+
+    const closeConfirmEl = this.refs.closeconfirm.refs.wrapper;
+    const parentPosition = getElementPosition(e.currentTarget);
+    let xPosition = e.clientX - parentPosition.x - (closeConfirmEl.clientWidth / 2);
+    if (xPosition < 120) {
+      xPosition = 120;
+    }
+    if (xPosition > 1805) {
+      xPosition = 1805;
+    }
+    let yPosition = e.clientY - parentPosition.y - (closeConfirmEl.clientHeight / 2);
+    if (yPosition > 1010) {
+      yPosition = 1010;
+    }
+    closeConfirmEl.style.left = xPosition + "px";
+    closeConfirmEl.style.top = yPosition + "px";
+  }
+
   static propTypes = {
     event: PropTypes.object,
     handleClose: PropTypes.func
@@ -254,7 +292,11 @@ export default class extends Component {
 
   render() {
     return (
-      <EventOverlayBackdrop>
+      <EventOverlayBackdrop onClick={this.onBackDropClick.bind(this)}>
+        <EventOverlayConfirmClose ref='closeconfirm'
+          onCloseModal={this.props.handleClose} isHidden={!this.state.showConfirmClose}
+          onDismissClose={() => this.setState({showConfirmClose: false})}
+        />
         { !this.state.showVideo
         ?
         <div className='EventOverlay-wrapper'>
