@@ -43,7 +43,12 @@ export class SectionCard extends Component {
               switch (post.type) {
               case 'iframe':
                 return (
-                  <Link to={`/${this.props.activeLanguage}/${this.props.section}/`} onClick={() => this.props.setIframeUrl(post)} key={Math.random()}>
+                  <Link
+                    key={Math.random()}
+                    className='SectionCard-post'
+                    to={`/${this.props.activeLanguage}/${this.props.section}/`}
+                    onClick={() => this.props.setIframeUrl(post)}
+                  >
                     { post.imgUrl &&
                       <img className='SectionCard-postImage' src={post.imgUrl} role='presentation' />
                     }
@@ -53,7 +58,12 @@ export class SectionCard extends Component {
                 );
               case 'page':
                 return (
-                  <Link to={`/${this.props.activeLanguage}/${this.props.section}/`} onClick={(url) => this.props.setIframeUrl({url: formatRelativeUrl(url)})} key={Math.random()}>
+                  <Link
+                    key={Math.random()}
+                    className='SectionCard-post'
+                    to={`/${this.props.activeLanguage}/${this.props.section}/`}
+                    onClick={(url) => this.props.setIframeUrl({url: formatRelativeUrl(url)})}
+                  >
                     { post.imgUrl &&
                       <img className='SectionCard-postImage' src={post.imgUrl} role='presentation' />
                     }
@@ -63,7 +73,11 @@ export class SectionCard extends Component {
                 );
               case 'event':
                 return (
-                  <Link key={Math.random()} className='SectionCard-post' to={post.href}>
+                  <Link
+                    key={Math.random()}
+                    className='SectionCard-post'
+                    to={post.href}
+                  >
                   { post.imgUrl &&
                     <img className='SectionCard-postImage' src={post.imgUrl} role='presentation' />
                   }
