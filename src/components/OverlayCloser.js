@@ -1,21 +1,22 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 import classNames from 'classnames';
 import getElementPosition from '../util/getElementPosition';
 
 import './OverlayCloser.css';
 
-export default class OverlayCloser extends Component {
+export class OverlayCloser extends Component {
   render() {
-    const { isHidden, onCloseModal, onDismissClose } = this.props;
+    const { isHidden, onCloseModal, onDismissClose, translatables } = this.props;
     return (
       <div
         ref='wrapper'
         className={classNames('OverlayCloser', {'OverlayCloser--hidden': isHidden})}
         onClick={ev => ev.stopPropagation()}
       >
-        Stäng rutan?
-        <button onClick={onCloseModal}>Ja</button>
-        <button onClick={onDismissClose}>Nej</button>
+        { translatables.closePopup }
+        <button onClick={onCloseModal}>{translatables.yes}</button>
+        <button onClick={onDismissClose}>{translatables.no}</button>
       </div>
     );
   }
@@ -24,7 +25,12 @@ export default class OverlayCloser extends Component {
 OverlayCloser.propTypes = {
   isHidden: PropTypes.string,
   onCloseModal: PropTypes.func,
-  onDismissClose: PropTypes.func
+  onDismissClose: PropTypes.func,
+  translatables: PropTypes.shape({
+    closePopup: PropTypes.string.isRequired,
+    yes: PropTypes.string.isRequired,
+    no: PropTypes.string.isRequired
+  }).isRequired
 };
 
 export function setOverlayCloserPosition(backdropEl, overlayCloserEl) {
@@ -43,3 +49,11 @@ export function setOverlayCloserPosition(backdropEl, overlayCloserEl) {
   overlayCloserEl.style.left = xPosition + 'px';
   overlayCloserEl.style.top = yPosition + 'px';
 }
+
+const mapStateToProps = (state) => {
+  return {
+    translatables: state.siteSettings.translatables
+  };
+};
+
+export default connect(mapStateToProps, null, null, { withRef: true })(OverlayCloser);

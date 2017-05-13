@@ -256,7 +256,7 @@ export default class extends Component {
 
   onBackDropClick(e) {
     this.setState({showConfirmClose: !this.state.showConfirmClose});
-    const closeConfirmEl = this.refs.closeconfirm.refs.wrapper;
+    const closeConfirmEl = this.refs.closeconfirm.wrappedInstance.refs.wrapper;
     setOverlayCloserPosition(e, closeConfirmEl);
   }
 
