@@ -7,8 +7,8 @@ function helsingborg_dsc_event_landingpages_categories() {
 }
 
 add_action('admin_init', function() {
-    register_setting( 'hdsc-landing-settings', 'hdsc-landing-visitor-categories');
-    register_setting( 'hdsc-landing-settings', 'hdsc-landing-local-categories');
+    register_setting( 'hdsc-landing-settings-categories', 'hdsc-landing-visitor-categories');
+    register_setting( 'hdsc-landing-settings-categories', 'hdsc-landing-local-categories');
 });
 
 function landingpages_categories() {

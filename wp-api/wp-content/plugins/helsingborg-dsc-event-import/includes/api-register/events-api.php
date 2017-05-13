@@ -289,6 +289,10 @@ function parse_category_to_landing_page_format($cat_id, $color, $icon_name, $sub
 }
 
 function get_links_for_option($option) {
+  $saved_posts = get_option($option, []);
+  if(!is_array($saved_posts)){
+    $saved_posts = [];
+  }
   $posts = array_map(function($pageId) {
       $page = get_current_post_language($pageId);
       if(!isset($page)) {
@@ -313,7 +317,7 @@ function get_links_for_option($option) {
           url =>  wp_make_link_relative(get_permalink($page)) . '?wordpress'
         ];
       }
-    }, get_option($option, [])
+    }, $saved_posts
   );
   foreach($posts as $key => $value) {
     if(empty($value)) {
