@@ -55,8 +55,9 @@
 
 .Event-compareWrapper {
   position: absolute;
-  bottom: 0;
+  bottom: -1.6875rem;
   width: 100%;
+  height: 1.6875rem;
   background-color: white;
 
 }
@@ -64,6 +65,7 @@
 .Event-date.Event-date--compare {
   display: inline-block;
   color: #535353;
+  padding-top: 0.4rem;
 }
 
 .Event-compare {
@@ -78,9 +80,11 @@
 }
 
 .Event--compare {
+  overflow: visible !important;
   height: calc(100% - 1,611125rem);
+  border-bottom: 0.5rem solid #fff;
 }
 
-.Event--compare .Event-title {
-  bottom: 1.388875rem;
+.Event--compare:first-of-type {
+  margin-left: 0;
 }

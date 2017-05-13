@@ -33,17 +33,17 @@ export class RelatedEvents extends React.Component {
         <h3>{this.props.translatables.related}</h3>
         <div className='RelatedEvents-wrapper'>
           <Scrollbars
-            style={{height: 'calc(100% - 1rem)'}}
+            style={{height: 'calc(100% - 5.8rem)'}}
             renderTrackHorizontal={props => <div {...props} className='track-horizontal' style={{display: 'none'}}/>}
             renderThumbHorizontal={props => <div {...props} className='thumb-horizontal' style={{display: 'none'}}/>}>
-          <div style={{margin: '1rem 1.5rem 1rem 0'}}>
+          <div style={{margin: '1rem 0'}}>
           {this.state.event.categories.map(cat => (
-              <span key={cat.id}>
-                {!!getRelatedEventsByCategory(this.props.relatedEvents, cat.id, this.props.comparedEvent).length &&
-                <div>
+            <span key={cat.id}>
+              {!!getRelatedEventsByCategory(this.props.relatedEvents, cat.id, this.props.comparedEvent).length &&
+              <div>
                 <span className='RelatedEvents-heading'>{cat.name}</span>
                 <div className='RelatedEvents-eventWrapper'>
-                <Scrollbars style={{width: '100%', height: 'calc(100% - 1rem)'}}>
+                <Scrollbars style={{width: '100%', height: '100%'}}>
                   {getRelatedEventsByCategory(this.props.relatedEvents, cat.id, this.props.comparedEvent).map(event => (
                     <Event
                       key={event.id}
@@ -54,7 +54,7 @@ export class RelatedEvents extends React.Component {
                   ))}
                 </Scrollbars>
                 </div>
-                 </div>
+              </div>
                 }
               </span>
 

@@ -13,6 +13,7 @@
 .Calendar .DayPicker.DayPicker--horizontal {
   margin: 0 auto;
   box-shadow: none;
+  height: 318px;
 }
 
 .Calendar .DayPicker.DayPicker--horizontal .DayPicker__focus-region .DayPickerNavigation__prev,
