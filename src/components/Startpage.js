@@ -82,6 +82,7 @@ export class Startpage extends Component {
             <Row>
               <Column>
                 <SectionCard
+                  type='visitor'
                   section={this.props.data.visitorHeading}
                   link={this.props.data.visitorHeadingLink}
                   bgColor='#c90e52'
@@ -90,6 +91,7 @@ export class Startpage extends Component {
               </Column>
               <Column>
                 <SectionCard
+                  type='local'
                   section={this.props.data.localHeading}
                   link={this.props.data.localHeadingLink}
                   bgColor='#eb6421'
@@ -98,6 +100,7 @@ export class Startpage extends Component {
               </Column>
               <Column>
                 <SectionCard
+                  type='events'
                   section={this.props.data.eventsHeading}
                   link={this.props.data.eventsHeadingLink}
                   bgColor='#f4a428'

@@ -257,7 +257,7 @@ export class LandingPage extends Component {
                   <Event
                     key={event.id}
                     {...event}
-                    onClick={(url) => this.props.setIframeUrl({url: formatRelativeUrl(url)})} />
+                    onClick={() => this.props.setIframeUrl({url: formatRelativeUrl(event.url)})} />
                   );
               case 'event':
                 return (
