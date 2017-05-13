@@ -33,7 +33,9 @@ const GoogleMapsModal = ({
     >
       <div className='GoogleMapsModal-triangle' />
       <div>
+        { eventData.imgUrl &&
         <img className='GoogleMapsModal-img' src={eventData.imgUrl} role='presentation' />
+        }
         <h4 className='GoogleMapsModal-heading'>{eventData.name}</h4>
         <div className='GoogleMapsModal-preamble'>
           <p dangerouslySetInnerHTML={{ __html: eventData.shortContent }} />
@@ -48,7 +50,7 @@ const GoogleMapsModal = ({
           />
 
         <RippleButton
-          onClick={() => handleShowMoreInfo(eventData.slug)}
+          onClick={() => handleShowMoreInfo(eventData)}
           className='GoogleMapsModal-button GoogleMapsModal-button--alignRight'
         >
           {translatables.moreInfo}

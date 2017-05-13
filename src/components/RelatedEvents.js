@@ -29,7 +29,7 @@ export class RelatedEvents extends React.Component {
   }
   render() {
     return (
-      <div className='RelatedEvents'>
+      <div className='RelatedEvents' onClick={ev => ev.stopPropagation()}>
         <h3>{this.props.translatables.related}</h3>
         <div className='RelatedEvents-wrapper'>
           <Scrollbars

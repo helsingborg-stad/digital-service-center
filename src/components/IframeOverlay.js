@@ -17,7 +17,7 @@ const IframeOverlay = ({url, maxWidth, maxHeight, offsetTop, offsetLeft, handleC
   return (
     <div className='IframeOverlay'>
       <div className='IframeOverlay-closeButton-wrapper'>
-        <button className='IframeOverlay-closeButton' onClick={handleClose}>
+        <button className='IframeOverlay-closeButton' onClick={(ev) => { ev.stopPropagation(); handleClose(ev) }}>
           <img src={closeCrossSvg} alt="Close" />
         </button>
       </div>

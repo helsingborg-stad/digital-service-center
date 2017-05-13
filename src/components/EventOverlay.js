@@ -52,7 +52,7 @@ const getDateFormatted = (dateStr) => {
 
 const CloseButton = ({handleClose}) => (
 <div className='EventOverlay-closeButton-wrapper'>
-  <button className='EventOverlay-closeButton' onClick={handleClose}>
+  <button className='EventOverlay-closeButton' onClick={(ev) => { ev.stopPropagation(); handleClose(ev) }}>
     <img src={closeCrossSvg} alt="Close" />
   </button>
 </div>
@@ -92,9 +92,11 @@ const EventDate = ({start, end}) => (
 const EventOverlay = ({event, showVideoButton, onVideoButtonClick, handleShowDirections, translatables}) => {
   return (
   <div className='EventOverlay' onClick={ev => ev.stopPropagation()}>
+    { event.imgUrl &&
     <div className='EventOverlay-imgWrapper'>
       <img className='EventOverlay-img' src={event.imgUrl} alt={ event.name } />
     </div>
+    }
     <h2 className='EventOverlay-heading'>{ event.name }</h2>
       <div style={{width: '58%', marginRight: '5%', float: 'left'}}>
         {!!event.rating &&
