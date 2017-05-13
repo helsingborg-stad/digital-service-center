@@ -46,7 +46,7 @@ export class SectionCard extends Component {
                   <Link
                     key={Math.random()}
                     className='SectionCard-post'
-                    to={`/${this.props.activeLanguage}/${this.props.section}/`}
+                    to={`/${this.props.activeLanguage}/${this.props.type}/`}
                     onClick={() => this.props.setIframeUrl(post)}
                   >
                     { post.imgUrl &&
@@ -61,8 +61,8 @@ export class SectionCard extends Component {
                   <Link
                     key={Math.random()}
                     className='SectionCard-post'
-                    to={`/${this.props.activeLanguage}/${this.props.section}/`}
-                    onClick={(url) => this.props.setIframeUrl({url: formatRelativeUrl(url)})}
+                    to={`/${this.props.activeLanguage}/${this.props.type}/`}
+                    onClick={() => this.props.setIframeUrl({url: formatRelativeUrl(post.url)})}
                   >
                     { post.imgUrl &&
                       <img className='SectionCard-postImage' src={post.imgUrl} role='presentation' />
@@ -96,6 +96,7 @@ export class SectionCard extends Component {
 }
 
 SectionCard.propTypes = {
+  type: PropTypes.oneOf(['visitor', 'local', 'events']),
   section: PropTypes.string,
   link: PropTypes.string,
   bgColor: PropTypes.string,
