@@ -122,15 +122,16 @@ function get_visitor_or_local_posts($type) {
 
   $posts = get_posts($args);
 
-  foreach($posts as $key => $value) {
-    if(empty($value)) {
-      unset($posts[$key]);
-    }
-  }
-
-  return array_map(function($post) use ($type) {
+  $filtered_posts = array_map(function($post) use ($type) {
     return post_mapping_helper($post, $type);
   }, $posts);
+
+  foreach($filtered_posts as $key => $value) {
+    if(empty($value)) {
+      unset($filtered_posts[$key]);
+    }
+  }
+  return $filtered_posts;
 }
 
 function get_visitor_or_local_tags($type) {
@@ -202,7 +203,7 @@ function get_top_links($pages) {
   }, $pages);
 
   foreach($posts as $key => $value) {
-    if(!$value) {
+    if(!$value || $value == null) {
       unset($posts[$key]);
     }
   }
