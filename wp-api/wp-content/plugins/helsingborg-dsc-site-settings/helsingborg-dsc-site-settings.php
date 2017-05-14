@@ -32,7 +32,10 @@ function hdsc_translatables() {
     ['Öppettider', 'opening-hours'],
     ['Kontakt', 'contact'],
     ['Biljetter', 'tickets'],
-    ['Betyg', 'rating']
+    ['Betyg', 'rating'],
+    ['Stäng rutan?', 'close-popup'],
+    ['Ja', 'yes'],
+    ['Nej', 'no']
   ];
 }
 

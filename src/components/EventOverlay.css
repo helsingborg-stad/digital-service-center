@@ -49,9 +49,9 @@
   position: relative;
   min-height: calc( 100vh - 7.5rem - 1.25rem);
 }
-.EventOverlay-imgWrapper{
+.EventOverlay-imgWrapper {
   width: calc(100% + 4rem);
-  height: 24.3125rem;
+  height: 19.2rem;
   overflow: hidden;
   position: relative;
   margin-top: -2rem;
@@ -68,7 +68,7 @@
 
 .EventOverlay-heading {
   font-size: 1.875rem;
-  margin: 0.35rem 0 -0.5rem;
+  margin: 1rem 0 0;
 }
 
 .EventOverlay-content-scrollWrapper {

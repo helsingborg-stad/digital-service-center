@@ -9,6 +9,7 @@ import getUserLocation from '../util/getUserLocation';
 import LoadingButton from './LoadingButton.js';
 import RelatedEvents from './RelatedEvents.js';
 import Star from './icons/StarIcon';
+import OverlayCloser, { setOverlayCloserPosition } from './OverlayCloser';
 
 const handleNavigationClick = (destinationLat, destinationLng, callback) => {
   getUserLocation().then((location) => {
@@ -19,12 +20,17 @@ const handleNavigationClick = (destinationLat, destinationLng, callback) => {
   });
 };
 
-const EventOverlayBackdrop = ({children}) => (
-  <div className='EventOverlayBackdrop'>{children}</div>
-);
+class EventOverlayBackdrop extends Component {
+  render() {
+    return <div {...this.props} className='EventOverlayBackdrop'>{this.props.children}</div>
+  }
+}
 
 EventOverlayBackdrop.propTypes = {
-  children: PropTypes.element.isRequired
+  children: React.PropTypes.oneOfType([
+    React.PropTypes.arrayOf(React.PropTypes.node),
+    React.PropTypes.node
+  ])
 };
 
 const getLocation = (event) => {
@@ -46,7 +52,7 @@ const getDateFormatted = (dateStr) => {
 
 const CloseButton = ({handleClose}) => (
 <div className='EventOverlay-closeButton-wrapper'>
-  <button className='EventOverlay-closeButton' onClick={handleClose}>
+  <button className='EventOverlay-closeButton' onClick={(ev) => { ev.stopPropagation(); handleClose(ev) }}>
     <img src={closeCrossSvg} alt="Close" />
   </button>
 </div>
@@ -85,10 +91,12 @@ const EventDate = ({start, end}) => (
 
 const EventOverlay = ({event, showVideoButton, onVideoButtonClick, handleShowDirections, translatables}) => {
   return (
-  <div className='EventOverlay'>
+  <div className='EventOverlay' onClick={ev => ev.stopPropagation()}>
+    { event.imgUrl &&
     <div className='EventOverlay-imgWrapper'>
       <img className='EventOverlay-img' src={event.imgUrl} alt={ event.name } />
     </div>
+    }
     <h2 className='EventOverlay-heading'>{ event.name }</h2>
       <div style={{width: '58%', marginRight: '5%', float: 'left'}}>
         {!!event.rating &&
@@ -237,7 +245,8 @@ export default class extends Component {
     this.state = {
       showVideo: false,
       videoUrl: props.event.youtubeUrl || props.event.vimeoUrl || null,
-      comparedEvent: null
+      comparedEvent: null,
+      showConfirmClose: false
     };
   }
 
@@ -247,6 +256,12 @@ export default class extends Component {
     })
   }
 
+  onBackDropClick(e) {
+    this.setState({showConfirmClose: !this.state.showConfirmClose});
+    const closeConfirmEl = this.refs.closeconfirm.wrappedInstance.refs.wrapper;
+    setOverlayCloserPosition(e, closeConfirmEl);
+  }
+
   static propTypes = {
     event: PropTypes.object,
     handleClose: PropTypes.func
@@ -254,7 +269,11 @@ export default class extends Component {
 
   render() {
     return (
-      <EventOverlayBackdrop>
+      <EventOverlayBackdrop onClick={this.onBackDropClick.bind(this)}>
+        <OverlayCloser ref='closeconfirm'
+          onCloseModal={this.props.handleClose} isHidden={!this.state.showConfirmClose}
+          onDismissClose={() => this.setState({showConfirmClose: false})}
+        />
         { !this.state.showVideo
         ?
         <div className='EventOverlay-wrapper'>
