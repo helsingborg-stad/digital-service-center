@@ -10,12 +10,12 @@ const stripHtml = (html) => {
   return tmp.textContent || tmp.innerText || '';
 };
 
-const truncate = (string) => (string.length > 130) ? string.substring(0, 127) + '...' : string;
+const truncate = (string, maxLength = 130) => (string.length > maxLength) ? string.substring(0, maxLength - 3) + '...' : string;
 
 const SearchResultOverlayBackdrop = ({children, onClick}) => (
-    <div className='SearchResultOverlayBackdrop' onClick={() => onClick()}>
-          {children}
-    </div>
+  <div className='SearchResultOverlayBackdrop' onClick={() => onClick()}>
+    {children}
+  </div>
 );
 
 const getEventUrl = (event, activeLanguage) => {
@@ -48,7 +48,8 @@ SearchResultOverlayBackdrop.propTypes = {
 };
 
 const SearchResultOverlay =
-({searchResults,
+({eventsSearchResults,
+  hbgSeSearchResults,
   changeOverlayEvent,
   pageType,
   handleHideSearchResult,
@@ -61,25 +62,25 @@ const SearchResultOverlay =
       transitionLeaveTimeout={300}
       transitionEnter={true}
       transitionLeave={true}
-      >
-    {(searchResults !== null || searchInputOnTop) ? (
+    >
+    {(eventsSearchResults !== null || searchInputOnTop) ? (
     <SearchResultOverlayBackdrop onClick={handleHideSearchResult}>
-          <ReactCSSTransitionGroup
-      transitionName="SearchResultOverlay-transitionGroup"
-      transitionEnterTimeout={300}
-      transitionLeaveTimeout={300}
-      transitionEnter={true}
-      transitionLeave={true}
+      <ReactCSSTransitionGroup
+        transitionName="SearchResultOverlay-transitionGroup"
+        transitionEnterTimeout={300}
+        transitionLeaveTimeout={300}
+        transitionEnter={true}
+        transitionLeave={true}
       >
-      {searchResults !== null && (
-          <div className='SearchResultOverlay'>
-          <div className='SearchResultOverlay-typeWrapper'>
-          <span className='SearchResultOverlay-heading'>Detta hittade vi</span>
+      <div className='SearchResultOverlay' onClick={ev => ev.stopPropagation()}>
+        <span className='SearchResultOverlay-heading'>Detta hittade vi</span>
+        <div className='SearchResultOverlay-typeWrapper'>
+          {eventsSearchResults !== null && (
           <div className='SearchResultOverlay-listWrapper SearchResultOverlay-listWrapper--type'>
             <span className='SearchResultOverlay-typeHeading'>{pageType}</span>
             <Scrollbars>
               <ul className='SearchResultOverlay-list'>
-              {searchResults.length ? searchResults.map(res =>
+              {eventsSearchResults.length ? eventsSearchResults.map(res =>
                 <li key={res.id}>
                   <Link to={getEventUrl(res, activeLanguage)} onMouseUp={(e) => {
                     if (window.location.indexOf(res.type) > -1) {
@@ -105,13 +106,48 @@ const SearchResultOverlay =
                   </Link>
                 </li>
               ) : <li>Hittade inga matchande resultat för din sökning</li>}
-              </ul>
-            </Scrollbars>
+            </ul>
+          </Scrollbars>
+        </div>
+        )}
+
+        { hbgSeSearchResults && !!hbgSeSearchResults.length &&
+        <div className='SearchResultOverlay-listWrapper SearchResultOverlay-listWrapper--type'>
+          <span className='SearchResultOverlay-typeHeading'>Fråga Kundcenter</span>
+              <Scrollbars>
+                <ul className='SearchResultOverlay-list'>
+                  <li>Här kommer CRM-frågor dyka upp</li>
+                </ul>
+              </Scrollbars>
+            </div>
+        }
+
+        { hbgSeSearchResults && !!hbgSeSearchResults.length &&
+        <div className='SearchResultOverlay-listWrapper SearchResultOverlay-listWrapper--type'>
+          <span className='SearchResultOverlay-typeHeading'>Helsingborg.se</span>
+              <Scrollbars>
+                <ul className='SearchResultOverlay-list'>
+                {hbgSeSearchResults.length ? hbgSeSearchResults.map(res =>
+                  <li key={Math.random()}>
+                    <Link style={{textAlign: 'left'}} iframe={{url: res.link}}>
+                      <div className='SearchResultOverlay-contentWrapper'>
+                        <span className='SearchResultOverlay-contentHeading'>{res.title.split('|')[0]}</span>
+                        <p>
+                          {truncate(res.description)}
+                        </p>
+                        <span className='SearchResultOverlay-link'>{truncate(res.link, 50)}</span>
+                      </div>
+                    </Link>
+                  </li>
+                  ) : <li>Hittade inga matchande resultat för din sökning</li>}
+                </ul>
+              </Scrollbars>
+            </div>
+        }
+
           </div>
         </div>
-      </div>
-      )}
-        </ReactCSSTransitionGroup>
+      </ReactCSSTransitionGroup>
     </SearchResultOverlayBackdrop>
   )
   : null}
@@ -120,7 +156,8 @@ const SearchResultOverlay =
 };
 
 SearchResultOverlay.propTypes = {
-  searchResults: PropTypes.array,
+  eventsSearchResults: PropTypes.array,
+  hbgSeSearchResults: PropTypes.array,
   changeOverlayEvent: PropTypes.func,
   pageType: PropTypes.string,
   handleHideSearchResult: PropTypes.func,
