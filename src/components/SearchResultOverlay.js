@@ -36,7 +36,7 @@ const getEventUrl = (event, activeLanguage) => {
       }
     }
     return slug;
-  }, 'event') : 'local';
+  }, 'local') : 'local';
 
 
   return `/${activeLanguage}/${slugForUrl}/${event.slug}`;

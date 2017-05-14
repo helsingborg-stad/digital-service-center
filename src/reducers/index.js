@@ -8,6 +8,7 @@ import { iframeUrl } from './iframeUrl';
 import { siteSettings } from './siteSettings';
 import { search } from './search';
 import { previousUrl } from './previousUrl';
+import { crm } from './crm';
 
 export default combineReducers({
   activeLanguage,
@@ -21,6 +22,7 @@ export default combineReducers({
   iframeUrl,
   siteSettings,
   search,
-  routing: routerReducer,
-  previousUrl: previousUrl
+  previousUrl,
+  crm,
+  routing: routerReducer
 });

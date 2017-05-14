@@ -1,4 +1,6 @@
 
+/* eslint-disable operator-assignment */
+
 // Helper function to get an element's exact position
 export default function getElementPosition(el) {
   let xPos = 0;
@@ -10,12 +12,12 @@ export default function getElementPosition(el) {
       const xScroll = el.scrollLeft || document.documentElement.scrollLeft;
       const yScroll = el.scrollTop || document.documentElement.scrollTop;
 
-      xPos = xPos + (el.offsetLeft - xScroll + el.clientLeft);
-      yPos = yPos + (el.offsetTop - yScroll + el.clientTop);
+      xPos += (el.offsetLeft - xScroll + el.clientLeft);
+      yPos += (el.offsetTop - yScroll + el.clientTop);
     } else {
       // for all other non-BODY elements
-      xPos = xPos + (el.offsetLeft - el.scrollLeft + el.clientLeft);
-      yPos = yPos + (el.offsetTop - el.scrollTop + el.clientTop);
+      xPos += (el.offsetLeft - el.scrollLeft + el.clientLeft);
+      yPos += (el.offsetTop - el.scrollTop + el.clientTop);
     }
 
     // eslint-disable-next-line no-param-reassign
