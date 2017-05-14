@@ -131,7 +131,7 @@ function get_visitor_or_local_posts($type) {
       unset($filtered_posts[$key]);
     }
   }
-  return $filtered_posts;
+  return array_values($filtered_posts);
 }
 
 function get_visitor_or_local_tags($type) {

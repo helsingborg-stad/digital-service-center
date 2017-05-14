@@ -185,7 +185,7 @@ function fetch_google_places_based_on_selected_place_types() {
         curl_setopt($ch, CURLOPT_URL, get_api_url_for_place_type($place_type));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $response = json_decode(curl_exec($ch), true);
-        if($response['status'] == 'OVER_QUERY_LIMIT' || isset($response['status'])){
+        if($response['status'] == 'OVER_QUERY_LIMIT' || !isset($response)){
             update_option('api_key_limited_status', false);
             return wp_redirect(admin_url('admin.php?page=helsingborg-dsc-google-places'));
         }
@@ -205,8 +205,6 @@ function fetch_google_places_based_on_selected_place_types() {
             unset($saved_google_places_details[$saved_google_place]);
         }
     }
-
-    update_option('saved_google_places', $saved_google_places);
 
     function get_api_url_for_place_details($place_id, $lang) {
         return 'https://maps.googleapis.com/maps/api/place/details/json?placeid=' . $place_id . '&language=' . $lang . '&key=' . get_option('hdsc-site-setting-google-maps-api-key');
@@ -234,7 +232,7 @@ function fetch_google_places_based_on_selected_place_types() {
             curl_setopt($ch, CURLOPT_URL, get_api_url_for_place_details($place_id, $lang));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             $response = json_decode(curl_exec($ch), true);
-            if($response['status'] == 'OVER_QUERY_LIMIT' || isset($response['status'])){
+            if($response['status'] == 'OVER_QUERY_LIMIT' || !isset($response)){
                 update_option('api_key_limited_status', false);
                 return wp_redirect(admin_url('admin.php?page=helsingborg-dsc-google-places'));
             }        
@@ -258,6 +256,7 @@ function fetch_google_places_based_on_selected_place_types() {
         $saved_google_places_details[$place_id]['photo'] = $photo;
     }
 
+    update_option('saved_google_places', $saved_google_places);
     update_option('saved_google_places_details', $saved_google_places_details);
 
     return wp_redirect(admin_url('admin.php?page=helsingborg-dsc-google-places'));
