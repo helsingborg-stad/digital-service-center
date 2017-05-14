@@ -7,6 +7,7 @@ import { landingPages } from './landingPages';
 import { iframeUrl } from './iframeUrl';
 import { siteSettings } from './siteSettings';
 import { search } from './search';
+import { previousUrl } from './previousUrl';
 
 export default combineReducers({
   activeLanguage,
@@ -20,5 +21,6 @@ export default combineReducers({
   iframeUrl,
   siteSettings,
   search,
-  routing: routerReducer
+  routing: routerReducer,
+  previousUrl: previousUrl
 });

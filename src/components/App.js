@@ -4,13 +4,23 @@ import IframeOverlay from './IframeOverlay';
 import { connect } from 'react-redux';
 import { iframeUrl } from '../actions/iframeUrl';
 
-const App = ({ children, location, iframe, closeIframe }) => (
+
+const enableTransition = (prevUrl) => {
+  // removes /{2chars}/ from string. Example: /sv/ or /en/
+  const rxp = /(\/[\w]{2}[\w]?)/;
+  return prevUrl.replace(rxp, '') !== window.location.pathname.replace(rxp, '');
+};
+
+const App = ({ children, location, iframe, closeIframe, previousUrl}) => (
+
   <div>
     <ReactCSSTransitionGroup
       component='div'
       transitionName='pageChange'
       transitionEnterTimeout={600}
       transitionLeaveTimeout={600}
+      transitionEnter={enableTransition(previousUrl)}
+      transitionLeave={enableTransition(previousUrl)}
     >
       {React.cloneElement(children, {
         key: location.pathname
@@ -38,12 +48,14 @@ App.propTypes = {
   ]),
   location: React.PropTypes.object,
   iframe: React.PropTypes.object,
-  closeIframe: React.PropTypes.func
+  closeIframe: React.PropTypes.func,
+  previousUrl: React.PropTypes.string
 };
 
 const mapStateToProps = (state) => {
   return {
-    iframe: state.iframeUrl
+    iframe: state.iframeUrl,
+    previousUrl: state.previousUrl
   };
 };
 
