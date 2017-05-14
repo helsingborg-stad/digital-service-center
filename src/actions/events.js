@@ -47,7 +47,7 @@ export function eventsFetchData(url, lang) {
       })
       .then((response) => response.json())
       .then((data) => {
-        dispatch(landingPagesFetchDataSuccess(data.landingPages));
+        dispatch(landingPagesFetchDataSuccess(data.landingPages, lang));
         dispatch(eventsFetchDataSuccess(data.events, lang));
       })
       .catch((e) => {

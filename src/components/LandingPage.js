@@ -352,7 +352,7 @@ const mapStateToProps = (state) => {
   return {
     events: state.events[state.activeLanguage],
     activeLanguage: state.activeLanguage,
-    landingPages: state.landingPages,
+    landingPages: state.landingPages[state.activeLanguage],
     hasErrored: (state.activeLanguage in state.eventsHasErrored)
       ? state.eventsHasErrored[state.activeLanguage] : false,
     isLoading: (state.activeLanguage in state.eventsAreLoading)
