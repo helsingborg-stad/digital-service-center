@@ -12,7 +12,8 @@ export class Search extends Component {
     super();
     this.state = {
       searchResults: null,
-      searchInputOnTop: false
+      searchInputOnTop: false,
+      searchTerm: null
     };
   }
 
@@ -22,19 +23,20 @@ export class Search extends Component {
     );
   }
 
-  searchEvents(searchTerm, events) {
-    const sifter = new Sifter(events);
+  handleSearchChange(searchTerm) {
+    const sifter = new Sifter(this.props.events);
     const result = sifter.search(searchTerm, {
       fields: ['name', 'content'],
       sort: [{field: 'name', direction: 'asc'}],
       limit: 10
     });
 
-    const resultEvents = events.filter((event, index) => {
+    const resultEvents = this.props.events.filter((event, index) => {
       return result.items.some(item => item.id === index);
     });
 
     this.setState({
+      searchTerm,
       searchResults: searchTerm ? resultEvents : null
     });
 
@@ -42,9 +44,9 @@ export class Search extends Component {
     this.props.fetchData('/api/hbg-se-search', searchTerm);
   }
 
-  handleSearchInputPosition(searchTerm, events) {
+  handleSearchInputPosition(searchTerm) {
     if (searchTerm) {
-      this.searchEvents(searchTerm, events);
+      this.handleSearchChange(searchTerm);
     }
 
     this.setState({
@@ -74,37 +76,40 @@ export class Search extends Component {
       >
         { !this.state.searchInputOnTop ?
         <div
-          key='searchInputOnTop'
+          key='searchInputOnBottom'
           style={ this.props.inputWrapperStyle }
           className='Search-inputWrapper'>
             <SearchField
               inline
               autoFocus={false}
-              onSearchChange={(val) => this.searchEvents(val, this.props.events)}
+              value={this.state.searchTerm || ''}
+              onSearchChange={(val) => this.handleSearchChange(val)}
               handleSearchInputPosition={(val) => this.handleSearchInputPosition(val, this.props.events)}
             />
         </div>
         :
           <div
+            key='searchInputOnTop'
             style={ this.props.inputWrapperStyle }
             className='Search-inputWrapper--top'>
               <SearchField
                 inline
                 autoFocus={true}
-                onSearchChange={(val) => this.searchEvents(val, this.props.events)}
+                value={this.state.searchTerm || ''}
+                onSearchChange={(val) => this.handleSearchChange(val)}
               />
           </div>
         }
       </ReactCSSTransitionGroup>
       <SearchResultOverlay
-        searchResults={this.state.searchResults}
+        eventsSearchResults={this.state.searchResults}
+        hbgSeSearchResults={(this.state.searchTerm && (this.state.searchTerm in this.props.hbgSearch)) ? this.props.hbgSearch[this.state.searchTerm] : []}
         changeOverlayEvent={this.changeOverlay.bind(this)}
         pageType={this.props.pageType}
         handleHideSearchResult={this.handleHideSearchResult.bind(this)}
         activeLanguage={this.props.activeLanguage}
         searchInputOnTop={this.state.searchInputOnTop}
       />
-      { JSON.stringify(this.props.hgbSearch, null, 2)}
   </div>
     );
   }
@@ -117,7 +122,7 @@ Search.propTypes = {
   inputWrapperStyle: PropTypes.object,
   activeLanguage: PropTypes.string,
   fetchData: PropTypes.func.isRequired,
-  hgbSearch: PropTypes.any
+  hbgSearch: PropTypes.any
 };
 
 
@@ -125,7 +130,7 @@ const mapStateToProps = (state) => {
   return {
     searchResults: state.searchResults,
     searchInputOnTop: state.searchInputOnTop,
-    hgbSearch: state.search
+    hbgSearch: state.search
   };
 };
 
