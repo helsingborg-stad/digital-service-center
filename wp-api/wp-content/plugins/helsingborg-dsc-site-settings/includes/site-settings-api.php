@@ -28,16 +28,29 @@ function hdsc_get_translatables() {
     return lcfirst($ret);
   }
 
-  return array_reduce(hdsc_translatables(), function($acc, $translatable) {
-    $key = camelcasify($translatable[1]);
-    $fallback = $translatable[0];
-    $value = get_option('hdsc-translatable-' .$translatable[1], $fallback);
-    if (!strlen($value)) {
-      $value = $fallback;
-    }
-    $acc[$key] = $value;
-    return $acc;
-  }, []);
+  global $sitepress;
+  $curr_lang = $sitepress->get_current_language();
+
+  $translatables = [];
+  foreach(get_languages_in_use() as $language) {
+    $lang_code = $language['shortName'];
+    global $sitepress;
+    $sitepress->switch_lang($lang_code);
+    $translatables[$lang_code] = array_reduce(hdsc_translatables(), function($acc, $translatable) {
+      $key = camelcasify($translatable[1]);
+      $fallback = $translatable[0];
+      $value = get_option('hdsc-translatable-' .$translatable[1], $fallback);
+      if (!strlen($value)) {
+        $value = $fallback;
+      }
+      $acc[$key] = $value;
+      return $acc;
+    }, []);
+  }
+
+  $sitepress->switch_lang($lang_code);
+
+  return $translatables;
 }
 
 function get_languages_in_use() {
