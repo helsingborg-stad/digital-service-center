@@ -11,7 +11,8 @@ export class Search extends Component {
   constructor() {
     super();
     this.state = {
-      searchResults: null,
+      eventsSearchResults: null,
+      crmSearchResults: null,
       searchInputOnTop: false,
       searchTerm: null
     };
@@ -24,24 +25,36 @@ export class Search extends Component {
   }
 
   handleSearchChange(searchTerm) {
-    const sifter = new Sifter(this.props.events);
-    const result = sifter.search(searchTerm, {
+    // TODO: debounce
+    this.props.fetchData('/api/hbg-se-search', searchTerm);
+
+    const eventsSifter = new Sifter(this.props.events);
+    const eventsSifterResult = eventsSifter.search(searchTerm, {
       fields: ['name', 'content'],
       sort: [{field: 'name', direction: 'asc'}],
       limit: 10
     });
 
     const resultEvents = this.props.events.filter((event, index) => {
-      return result.items.some(item => item.id === index);
+      return eventsSifterResult.items.some(item => item.id === index);
+    });
+
+    const crmSifter = new Sifter(this.props.crm);
+    const crmSifterResult = crmSifter.search(searchTerm, {
+      fields: ['question', 'answer'],
+      sort: [{field: 'question', direction: 'asc'}],
+      limit: 10
+    });
+
+    const resultCrm = this.props.crm.filter((crmEntry, index) => {
+      return crmSifterResult.items.some(item => item.id === index);
     });
 
     this.setState({
       searchTerm,
-      searchResults: searchTerm ? resultEvents : null
+      eventsSearchResults: searchTerm ? resultEvents : null,
+      crmSearchResults: searchTerm ? resultCrm : null
     });
-
-    // TODO: debounce
-    this.props.fetchData('/api/hbg-se-search', searchTerm);
   }
 
   handleSearchInputPosition(searchTerm) {
@@ -56,7 +69,7 @@ export class Search extends Component {
 
   handleHideSearchResult() {
     this.setState({
-      searchResults: null,
+      eventsSearchResults: null,
       searchInputOnTop: false
     });
   }
@@ -102,8 +115,9 @@ export class Search extends Component {
         }
       </ReactCSSTransitionGroup>
       <SearchResultOverlay
-        eventsSearchResults={this.state.searchResults}
+        eventsSearchResults={this.state.eventsSearchResults}
         hbgSeSearchResults={(this.state.searchTerm && (this.state.searchTerm in this.props.hbgSearch)) ? this.props.hbgSearch[this.state.searchTerm] : []}
+        crmSearchResults={this.state.crmSearchResults}
         changeOverlayEvent={this.changeOverlay.bind(this)}
         pageType={this.props.pageType}
         handleHideSearchResult={this.handleHideSearchResult.bind(this)}
@@ -128,9 +142,9 @@ Search.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    searchResults: state.searchResults,
     searchInputOnTop: state.searchInputOnTop,
-    hbgSearch: state.search
+    hbgSearch: state.search,
+    crm: state.crm
   };
 };
 

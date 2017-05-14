@@ -18,7 +18,7 @@ export function eventsAreLoading(state = false, action) {
   }
 }
 
-export function crm(state = {}, action) {
+export function crm(state = [], action) {
   switch (action.type) {
   case 'CRM_FETCH_DATA_SUCCESS':
     return action.crm;

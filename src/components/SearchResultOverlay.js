@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import Scrollbars from 'react-custom-scrollbars';
 import './SearchResultOverlay.css';
 import Link from './Link';
@@ -49,12 +50,13 @@ SearchResultOverlayBackdrop.propTypes = {
 
 const SearchResultOverlay =
 ({eventsSearchResults,
+  crmSearchResults,
   hbgSeSearchResults,
   changeOverlayEvent,
-  pageType,
   handleHideSearchResult,
   activeLanguage,
-  searchInputOnTop}) => {
+  searchInputOnTop,
+  translatables}) => {
   return (
     <ReactCSSTransitionGroup
       transitionName="SearchResultOverlay-transitionGroup"
@@ -73,11 +75,11 @@ const SearchResultOverlay =
         transitionLeave={true}
       >
       <div className='SearchResultOverlay' onClick={ev => ev.stopPropagation()}>
-        <span className='SearchResultOverlay-heading'>Detta hittade vi</span>
+        <span className='SearchResultOverlay-heading'>{translatables.weFoundThis}</span>
         <div className='SearchResultOverlay-typeWrapper'>
           {eventsSearchResults !== null && (
           <div className='SearchResultOverlay-listWrapper SearchResultOverlay-listWrapper--type'>
-            <span className='SearchResultOverlay-typeHeading'>{pageType}</span>
+            <span className='SearchResultOverlay-typeHeading'>{translatables.seeAndDiscover}</span>
             <Scrollbars>
               <ul className='SearchResultOverlay-list'>
               {eventsSearchResults.length ? eventsSearchResults.map(res =>
@@ -105,18 +107,27 @@ const SearchResultOverlay =
                     </div>
                   </Link>
                 </li>
-              ) : <li>Hittade inga matchande resultat för din sökning</li>}
+              ) : <li>{translatables.noResultsFound}</li>}
             </ul>
           </Scrollbars>
         </div>
         )}
 
-        { hbgSeSearchResults && !!hbgSeSearchResults.length &&
+        { crmSearchResults && !!crmSearchResults.length &&
         <div className='SearchResultOverlay-listWrapper SearchResultOverlay-listWrapper--type'>
-          <span className='SearchResultOverlay-typeHeading'>Fråga Kundcenter</span>
+          <span className='SearchResultOverlay-typeHeading'>{translatables.askCustomerCenter}</span>
               <Scrollbars>
                 <ul className='SearchResultOverlay-list'>
-                  <li>Här kommer CRM-frågor dyka upp</li>
+                {crmSearchResults.length ? crmSearchResults.map(res =>
+                  <li key={Math.random()}>
+                    <div className='SearchResultOverlay-contentWrapper'>
+                      <span className='SearchResultOverlay-contentHeading'>{res.question}</span>
+                      <p>
+                        {stripHtml(res.answer)}
+                      </p>
+                    </div>
+                  </li>
+                  ) : <li>{translatables.noResultsFound}</li>}
                 </ul>
               </Scrollbars>
             </div>
@@ -139,7 +150,7 @@ const SearchResultOverlay =
                       </div>
                     </Link>
                   </li>
-                  ) : <li>Hittade inga matchande resultat för din sökning</li>}
+                  ) : <li>{translatables.noResultsFound}</li>}
                 </ul>
               </Scrollbars>
             </div>
@@ -157,12 +168,24 @@ const SearchResultOverlay =
 
 SearchResultOverlay.propTypes = {
   eventsSearchResults: PropTypes.array,
+  crmSearchResults: PropTypes.array,
   hbgSeSearchResults: PropTypes.array,
   changeOverlayEvent: PropTypes.func,
-  pageType: PropTypes.string,
   handleHideSearchResult: PropTypes.func,
   activeLanguage: PropTypes.string,
-  searchInputOnTop: PropTypes.bool
+  searchInputOnTop: PropTypes.bool,
+  translatables: PropTypes.shape({
+    weFoundThis: PropTypes.string.isRequired,
+    seeAndDiscover: PropTypes.string.isRequired,
+    noResultsFound: PropTypes.string.isRequired,
+    askCustomerCenter: PropTypes.string.isRequired
+  }).isRequired
 };
 
-export default SearchResultOverlay;
+const mapStateToProps = (state) => {
+  return {
+    translatables: state.siteSettings.translatables[state.activeLanguage]
+  };
+};
+
+export default connect(mapStateToProps, null)(SearchResultOverlay);

@@ -36,7 +36,11 @@ function hdsc_translatables() {
     ['Stäng rutan?', 'close-popup'],
     ['Ja', 'yes'],
     ['Nej', 'no'],
-    ['Chatta med oss', 'chat-with-us']
+    ['Chatta med oss', 'chat-with-us'],
+    ['Detta hittade vi', 'we-found-this'],
+    ['Se och upplev', 'see-and-discover'],
+    ['Hittade inga matchande resultat för din sökning', 'no-results-found'],
+    ['Fråga kontaktcenter', 'ask-customer-center']
   ];
 }
 
