@@ -19,5 +19,9 @@
 		<key name="hdsc-translatable-contact"/>
 		<key name="hdsc-translatable-tickets"/>
 		<key name="hdsc-translatable-rating"/>
+        <key name="hdsc-translatable-close-popup"/>
+		<key name="hdsc-translatable-yes"/>
+		<key name="hdsc-translatable-no"/>
+		<key name="hdsc-translatable-chat-with-us"/>
 	</admin-texts>
 </wpml-config>
