@@ -61,7 +61,7 @@ app.get('/api/*', (req, res) => {
   fetch(url).then(response => response.json()).then(x => res.status(200).send(x));
 });
 
-app.get('*', (req, res) => {
+app.get('*', (req, res, next) => {
   const error = () => res.status(404).send('404');
   const htmlFilePath = path.join(__dirname, '../build', 'index.html');
 
@@ -84,7 +84,13 @@ app.get('*', (req, res) => {
           res.redirect(302, redirect.pathname + redirect.search);
         } else if (renderProps) {
           // Set `activeLanguage` store property based requested URL
-          const langFromUrl = req.params[0].replace(/\//g, '');
+          let langFromUrl = req.params[0].replace(/\//g, '');
+          const validLanguages = ['sv', 'en']; // TODO: make dynamic
+          if (!validLanguages.includes(langFromUrl)) {
+            res.redirect(302, '/');
+            next();
+            return;
+          }
           store.dispatch(activeLanguage(langFromUrl));
 
           const components = renderProps.components;
