@@ -195,7 +195,7 @@ function get_pages_for_visitor_local($section) {
       unset($filtered_posts[$key]);
     }
   }
-  return $filtered_posts;
+  return array_values($filtered_posts);
 }
 
 if(!function_exists('get_post_id_translated')) {
