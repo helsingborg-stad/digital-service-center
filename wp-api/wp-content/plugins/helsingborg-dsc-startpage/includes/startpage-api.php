@@ -92,9 +92,14 @@ function post_mapping_helper($post, $type) {
     $response = [
       type => 'page',
       heading  => html_entity_decode($page->post_title),
-      preamble => get_preamble($page->post_content),
-      url =>  wp_make_link_relative(get_permalink($page)) . '?wordpress'
+      preamble => get_preamble($page->post_content)
     ];
+    if(strpos(wp_make_link_relative(get_permalink($page)), '?') !== false) {
+      $response['url'] = wp_make_link_relative(get_permalink($page)) . '&wordpress';
+    }
+    else {
+      $response['url'] = wp_make_link_relative(get_permalink($page)) . '?wordpress';
+    }
     $thumbnail_url = get_the_post_thumbnail_url($page->ID);
     if ($thumbnail_url) {
       $response['imgUrl'] = $thumbnail_url;
@@ -194,11 +199,17 @@ function get_top_links($pages) {
         offsetLeft => intval($iframeMeta['left_offset'] ?? 0)
       ];
     } else {
-      return [
+      $response = [
         type => 'page',
-        name => $page->post_title,
-        url => wp_make_link_relative(get_permalink($page)) . '?wordpress'
+        name => $page->post_title
       ];
+      if(strpos(wp_make_link_relative(get_permalink($page)), '?') !== false) {
+        $response['url'] = wp_make_link_relative(get_permalink($page)) . '&wordpress';
+      }
+      else {
+        $response['url'] = wp_make_link_relative(get_permalink($page)) . '?wordpress';
+      }
+      return $response;
     }
   }, $pages);
 

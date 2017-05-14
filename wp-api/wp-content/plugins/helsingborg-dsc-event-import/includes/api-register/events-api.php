@@ -175,19 +175,17 @@ function get_pages_for_visitor_local($section) {
       else {
         $response = [
           type => 'page',
-          name => $page->post_title,
-          url =>  wp_make_link_relative(get_permalink($page)) . '?wordpress'
+          name => $page->post_title
         ];
-
-        if(strpos($response['url'], '?lang=') !== false) {
-          $response['url'] = wp_make_link_relative(get_permalink($page)) . '&wordpress';
+        if(strpos(wp_make_link_relative(get_permalink($page)), '?') !== false) {
+        $response['url'] = wp_make_link_relative(get_permalink($page)) . '&wordpress';
+        } else {
+        $response['url'] = wp_make_link_relative(get_permalink($page)) . '?wordpress';
         }
-
         $thumbnail_url = get_the_post_thumbnail_url($page->ID);
         if ($thumbnail_url) {
           $response['imgUrl'] = $thumbnail_url;
         }
-
         return $response;
       }
     }, $posts);
@@ -315,11 +313,16 @@ function get_links_for_option($option) {
         ];
       }
       else {
-        return [
+        $response = [
           type => 'page',
-          name => $page->post_title,
-          url =>  wp_make_link_relative(get_permalink($page)) . '?wordpress'
+          name => $page->post_title
         ];
+        if(strpos(wp_make_link_relative(get_permalink($page)), '?') !== false) {
+          $response['url'] = wp_make_link_relative(get_permalink($page)) . '&wordpress';
+        } else {
+          $response['url'] = wp_make_link_relative(get_permalink($page)) . '?wordpress';
+        }
+        return $response;
       }
     }, $saved_posts
   );
@@ -328,7 +331,7 @@ function get_links_for_option($option) {
       unset($posts[$key]);
     }
   }
-  return $posts;
+  return array_values($posts);
 }
 
 function get_short_content($post_content) {
@@ -480,7 +483,7 @@ function parse_google_places() {
       slug => sanitize_title($place_data['name']),
       name => $place_data['name'],
       type => 'place',
-      imgUrl => $place['photo'],
+      imgUrl => $place['photo']['imgUrl'] ?? "",
       categories => get_google_place_categories($place_data['types']),
       location => [
         formattedAddress => $place_data['formatted_address'],
