@@ -35,7 +35,8 @@ function hdsc_translatables() {
     ['Betyg', 'rating'],
     ['Stäng rutan?', 'close-popup'],
     ['Ja', 'yes'],
-    ['Nej', 'no']
+    ['Nej', 'no'],
+    ['Chatta med oss', 'chat-with-us']
   ];
 }
 

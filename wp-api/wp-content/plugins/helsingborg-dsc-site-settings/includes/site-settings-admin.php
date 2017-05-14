@@ -10,7 +10,7 @@ add_action('admin_init', function() {
   register_setting( 'hdsc-site-settings', 'hdsc-site-setting-google-analytics' );
   register_setting( 'hdsc-site-settings', 'hdsc-site-setting-google-maps-api-key' );
   register_setting( 'hdsc-site-settings', 'hdsc-site-setting-idle-timeout' );
-  register_setting( 'hdsc-site-settings', 'hdsc-site-setting-chat-button-text' );
+  register_setting( 'hdsc-site-settings', 'hdsc-site-setting-show-chat' );
   foreach(hdsc_translatables() as $translatable) {
     $option_name = 'hdsc-translatable-' . $translatable[1];
     register_setting( 'hdsc-site-settings', $option_name );
@@ -56,8 +56,8 @@ function helsingborg_dsc_site_settings_menu_callback() {
         <td><input id="sitesettingsform-idle-timeout" type="number" class="regular-text" name="hdsc-site-setting-idle-timeout" value="<?php echo get_option('hdsc-site-setting-idle-timeout'); ?>" /><p class="description">Gör så sidan laddas om till start efter användaren <br />varit inaktiv i X sekunder. Lämna blank för att inaktivera.</p></td>
       </tr>
       <tr>
-        <th><label for="sitesettingsform-chat-button-text">Chattknapptext</label></th>
-        <td><input id="sitesettingsform-chat-button-text" type="text" class="regular-text" name="hdsc-site-setting-chat-button-text" value="<?php echo get_option('hdsc-site-setting-chat-button-text'); ?>" /><p class="description">Lämna blank för att inte visa chatta med oss-knapp</p></td>
+        <th><label for="sitesettingsform-show-chat">Aktivera Vergic chatt</label></th>
+        <td><input id="sitesettingsform-show-chat" type="checkbox" class="regular-text" name="hdsc-site-setting-show-chat" <?php checked( 'on', get_option( 'hdsc-site-setting-show-chat' ) ); ?>  /></td>
       </tr>
       </tbody></table>
 

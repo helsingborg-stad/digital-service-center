@@ -22,7 +22,7 @@ export class VergicChatButton extends Component {
     }
   }
   shouldShowButton() {
-    return this.props.buttonText &&
+    return this.props.showChat &&
       (typeof window !== 'undefined' && !window.__isVergicChatOpen) &&
       !this.state.chatIsInitiated;
   }
@@ -39,7 +39,7 @@ export class VergicChatButton extends Component {
     return this.shouldShowButton()
       ? <button
         className={this.props.className}
-        onClick={this.joinChat.bind(this, this.props.pageName)}>{this.props.buttonText}</button>
+        onClick={this.joinChat.bind(this, this.props.pageName)}>{this.props.translatables.chatWithUs}</button>
       : null;
   }
 }
@@ -47,7 +47,10 @@ export class VergicChatButton extends Component {
 VergicChatButton.propTypes = {
   className: PropTypes.string,
   pageName: PropTypes.string,
-  buttonText: PropTypes.string
+  showChat: PropTypes.bool,
+  translatables: PropTypes.shape({
+    chatWithUs: PropTypes.string.isRequired
+  }).isRequired
 };
 
 VergicChatButton.defaultProps = {
@@ -57,7 +60,8 @@ VergicChatButton.defaultProps = {
 
 const mapStateToProps = (state) => {
   return {
-    buttonText: state.siteSettings.chatButtonText
+    showChat: state.siteSettings.showChat,
+    translatables: state.siteSettings.translatables[state.activeLanguage]
   };
 };
 
