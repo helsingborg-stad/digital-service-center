@@ -430,7 +430,7 @@ function parse_editable_events($events) {
     }
 
     $occasion = get_post_meta($event->ID, 'occasions', true);
-    if (strlen($occasion['start_date']) && strlen($occasion['end_date']) && strlen($occasion['door_time'])) {
+    if ((isset($occasion['start_date']) && strlen($occasion['start_date'])) && (isset($occasion['end_date']) && strlen($occasion['end_date'])) && (isset($occasion['door_time']) && strlen($occasion['door_time']))) {
       $response['occasions'] = [[
         startDate => str_replace('T', ' ', $occasion['start_date']),
         endDate => str_replace('T', ' ', $occasion['end_date']),
@@ -440,10 +440,10 @@ function parse_editable_events($events) {
 
     $location = get_post_meta($event->ID, 'location', true);
     $response['location'] = [
-      streetAddress => $location['street_address'],
-      postalCode => $location['postal_code'],
-      latitude => floatval($location['latitude']),
-      longitude => floatval($location['longitude'])
+      streetAddress => isset($location['street_address']) ? $location['street_address'] : "",
+      postalCode => isset($location['postal_code']) ? $location['postal_code'] : "",
+      latitude => isset($location['latitude']) ? floatval($location['latitude']) : "",
+      longitude => isset($location['longitude']) ? floatval($location['longitude']) : ""
     ];
 
     $youtubeUrl = get_post_meta($event->ID, 'youtube', true);

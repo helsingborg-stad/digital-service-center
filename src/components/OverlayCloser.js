@@ -52,7 +52,7 @@ export function setOverlayCloserPosition(backdropEl, overlayCloserEl) {
 
 const mapStateToProps = (state) => {
   return {
-    translatables: state.siteSettings.translatables
+    translatables: state.siteSettings.translatables[state.activeLanguage]
   };
 };
 

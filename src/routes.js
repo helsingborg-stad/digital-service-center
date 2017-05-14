@@ -3,6 +3,7 @@ import { Router, Route, browserHistory, IndexRedirect, IndexRoute } from 'react-
 import { syncHistoryWithStore } from 'react-router-redux';
 
 import { activeLanguage } from './actions/activeLanguage';
+import { previousUrl } from './actions/previousUrl';
 
 import App from './components/App';
 import Startpage from './components/Startpage';
@@ -16,6 +17,12 @@ const setLanguageAndRedirectIfNecessary = (nextState, replace, store, defaultLan
   }
   if (store) {
     store.dispatch(activeLanguage(nextState.params.lang));
+  }
+};
+
+const setPreviousUrl = (nextState, store) => {
+  if (store) {
+    store.dispatch(previousUrl(nextState.location.pathname));
   }
 };
 
@@ -33,6 +40,9 @@ const Routes = (props = {}) => {
     <Router history={history} onUpdate={props.onUpdate}>
       <Route path='/:lang' component={App} onEnter={(nextState, replace) => {
         setLanguageAndRedirectIfNecessary(nextState, replace, props.store, defaultLanguage);
+      }}
+      onLeave={(nextState) => {
+        setPreviousUrl(nextState, props.store);
       }}>
         <IndexRoute component={Startpage} />
         <Route
