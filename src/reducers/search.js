@@ -1,8 +1,8 @@
 
-export function searchHasErrored(state = false, action) {
+export function searchHasErrored(state = {}, action) {
   switch (action.type) {
   case 'SEARCH_HAS_ERRORED':
-    return action.hasErrored;
+    return Object.assign({}, state, { [action.term]: action.hasErrored });
 
   default:
     return state;
@@ -12,7 +12,7 @@ export function searchHasErrored(state = false, action) {
 export function searchIsLoading(state = false, action) {
   switch (action.type) {
   case 'SEARCH_IS_LOADING':
-    return action.isLoading;
+    return Object.assign({}, state, { [action.term]: action.isLoading });
 
   default:
     return state;
@@ -22,7 +22,7 @@ export function searchIsLoading(state = false, action) {
 export function search(state = {}, action) {
   switch (action.type) {
   case 'SEARCH_FETCH_DATA_SUCCESS':
-    return action.searchResults;
+    return Object.assign({}, state, { [action.term]: action.results });
 
   default:
     return state;

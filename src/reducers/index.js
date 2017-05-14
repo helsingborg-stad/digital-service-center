@@ -6,6 +6,7 @@ import { events, eventsHasErrored, eventsAreLoading } from './events';
 import { landingPages } from './landingPages';
 import { iframeUrl } from './iframeUrl';
 import { siteSettings } from './siteSettings';
+import { search } from './search';
 
 export default combineReducers({
   activeLanguage,
@@ -18,5 +19,6 @@ export default combineReducers({
   landingPages,
   iframeUrl,
   siteSettings,
+  search,
   routing: routerReducer
 });

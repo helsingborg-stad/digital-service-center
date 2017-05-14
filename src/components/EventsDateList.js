@@ -30,22 +30,14 @@ const getEventsBySelectedDates = (events, selectedDates) => {
     return getDistinctEventOrderedByStartDate({events: selectedEvents});
   }
 
-  const MOMENT_BETWEEN_INCLUSIVE_SYMBOL = '[]';
   return getDistinctEventOrderedByStartDate({events: selectedEvents.map(event => {
     return Object.assign(event, { occasions: event.occasions
       .filter(occ => {
-        return (
-          (occ.startDate && Moment(selectedDates.startDate).isBetween(
-            occ.startDate,
-            occ.endDate,
-            'days',
-            MOMENT_BETWEEN_INCLUSIVE_SYMBOL))
-          || (occ.endDate && Moment(selectedDates.endDate).isBetween(
-            occ.startDate,
-            occ.endDate,
-            'days',
-            MOMENT_BETWEEN_INCLUSIVE_SYMBOL))
-        );
+        if (!occ || !occ.startDate || !occ.endDate) {
+          return false;
+        }
+        return selectedDates.startDate.isSameOrBefore(occ.startDate, 'days')
+            && selectedDates.endDate.isSameOrAfter(occ.endDate, 'days');
       })
     });
   }).filter(event => event.occasions.length)});

@@ -1,3 +1,24 @@
+.Search-wrapper-transitionGroup-enter.Search-inputWrapper,
+.Search-wrapper-transitionGroup-leave.Search-inputWrapper {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.Search-wrapper-transitionGroup-enter.Search-inputWrapper--top,
+.Search-wrapper-transitionGroup-leave.Search-inputWrapper--top
+ {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.Search-wrapper-transitionGroup-enter-active.Search-inputWrapper--top {
+  opacity: 1;
+}
+
+.Search-wrapper-transitionGroup-enter-active.Search-inputWrapper {
+  opacity: 1;
+}
+
 .Search-inputWrapper {
   position: absolute;
   z-index: 9;
