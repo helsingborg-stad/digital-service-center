@@ -6,6 +6,9 @@ import { iframeUrl } from '../actions/iframeUrl';
 
 
 const enableTransition = (prevUrl) => {
+  if (typeof window === 'undefined') {
+    return false;
+  }
   // removes /{2chars}/ from string. Example: /sv/ or /en/
   const rxp = /(\/[\w]{2}[\w]?)/;
   return prevUrl.replace(rxp, '') !== window.location.pathname.replace(rxp, '');
