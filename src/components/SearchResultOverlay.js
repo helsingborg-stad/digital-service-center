@@ -48,7 +48,12 @@ SearchResultOverlayBackdrop.propTypes = {
 };
 
 const SearchResultOverlay =
-({searchResults, changeOverlayEvent, pageType, handleHideSearchResult, activeLanguage}) => {
+({searchResults,
+  changeOverlayEvent,
+  pageType,
+  handleHideSearchResult,
+  activeLanguage,
+  searchInputOnTop}) => {
   return (
     <ReactCSSTransitionGroup
       transitionName="SearchResultOverlay-transitionGroup"
@@ -57,9 +62,17 @@ const SearchResultOverlay =
       transitionEnter={true}
       transitionLeave={true}
       >
-    {searchResults !== null ? (
+    {(searchResults !== null || searchInputOnTop) ? (
     <SearchResultOverlayBackdrop onClick={handleHideSearchResult}>
-      <div className='SearchResultOverlay'>
+          <ReactCSSTransitionGroup
+      transitionName="SearchResultOverlay-transitionGroup"
+      transitionEnterTimeout={300}
+      transitionLeaveTimeout={300}
+      transitionEnter={true}
+      transitionLeave={true}
+      >
+      {searchResults !== null && (
+          <div className='SearchResultOverlay'>
           <div className='SearchResultOverlay-typeWrapper'>
           <span className='SearchResultOverlay-heading'>Detta hittade vi</span>
           <div className='SearchResultOverlay-listWrapper SearchResultOverlay-listWrapper--type'>
@@ -97,6 +110,8 @@ const SearchResultOverlay =
           </div>
         </div>
       </div>
+      )}
+        </ReactCSSTransitionGroup>
     </SearchResultOverlayBackdrop>
   )
   : null}
@@ -109,7 +124,8 @@ SearchResultOverlay.propTypes = {
   changeOverlayEvent: PropTypes.func,
   pageType: PropTypes.string,
   handleHideSearchResult: PropTypes.func,
-  activeLanguage: PropTypes.string
+  activeLanguage: PropTypes.string,
+  searchInputOnTop: PropTypes.bool
 };
 
 export default SearchResultOverlay;

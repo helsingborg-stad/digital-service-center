@@ -1,17 +1,27 @@
 import React, { PropTypes, Component } from 'react';
 import SearchField from './SearchField';
+import { searchFetchData } from '../actions/search';
 import SearchResultOverlay from './SearchResultOverlay';
 import Sifter from 'sifter';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import { connect } from 'react-redux';
 import './Search.css';
 
-export default class Search extends Component {
+export class Search extends Component {
   constructor() {
     super();
     this.state = {
-      searchResults: null
+      searchResults: null,
+      searchInputOnTop: false
     }
   }
+
+  static fetchData({ store, term }) {
+    return store.dispatch(
+      searchFetchData('/api/hbg-se-search', term)
+    );
+  }
+
   searchEvents(searchTerm, events) {
     const sifter = new Sifter(events);
     const result = sifter.search(searchTerm, {
@@ -25,12 +35,26 @@ export default class Search extends Component {
     });
 
     this.setState({
-      searchResults: resultEvents
+      searchResults: searchTerm ? resultEvents : null
     });
+
+     this.props.fetchData('/api/hbg-se-search', searchTerm)
   }
+
+  handleSearchInputPosition(searchTerm, events) {
+    if (searchTerm) {
+      this.searchEvents(searchTerm, events);
+    }
+
+    this.setState({
+      searchInputOnTop: true
+    })
+  }
+
   handleHideSearchResult() {
     this.setState({
-      searchResults: null
+      searchResults: null,
+      searchInputOnTop: false
     });
   }
   changeOverlay(event) {
@@ -42,18 +66,21 @@ export default class Search extends Component {
     <div className='Search-wrapper'>
       <ReactCSSTransitionGroup
         transitionName="Search-wrapper-transitionGroup"
-        transitionEnterTimeout={300}
-        transitionLeaveTimeout={300}
+        transitionEnterTimeout={1000}
+        transitionLeaveTimeout={1000}
         transitionEnter={true}
         transitionLeave={true}
       >
-        { this.state.searchResults === null ?
+        { !this.state.searchInputOnTop ?
         <div
+          key='searchInputOnTop'
           style={ this.props.inputWrapperStyle }
           className='Search-inputWrapper'>
             <SearchField
               inline
+              autoFocus={false}
               onSearchChange={(val) => this.searchEvents(val, this.props.events)}
+              handleSearchInputPosition={(val) => this.handleSearchInputPosition(val, this.props.events)}
             />
         </div>
         :
@@ -62,6 +89,7 @@ export default class Search extends Component {
             className='Search-inputWrapper--top'>
               <SearchField
                 inline
+                autoFocus={true}
                 onSearchChange={(val) => this.searchEvents(val, this.props.events)}
               />
           </div>
@@ -73,6 +101,7 @@ export default class Search extends Component {
         pageType={this.props.pageType}
         handleHideSearchResult={this.handleHideSearchResult.bind(this)}
         activeLanguage={this.props.activeLanguage}
+        searchInputOnTop={this.state.searchInputOnTop}
       />
   </div>
     );
@@ -84,5 +113,23 @@ Search.propTypes = {
   changeOverlayEvent: PropTypes.func,
   events: PropTypes.array,
   inputWrapperStyle: PropTypes.object,
-  activeLanguage: PropTypes.string
+  activeLanguage: PropTypes.string,
+  fetchData: PropTypes.func.isRequired
 };
+
+
+const mapStateToProps = (state) => {
+  return {
+    searchResults: state.searchResults,
+    searchInputOnTop: state.searchInputOnTop,
+    hgbSearch: state.hgbSearch
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchData: (url, term) => dispatch(searchFetchData(url, term))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Search);

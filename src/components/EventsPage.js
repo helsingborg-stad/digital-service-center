@@ -115,9 +115,9 @@ export class EventsPage extends Component {
     const params = new window.URL(location.href).searchParams;
     const categoryIds = params.get("category");
     if (categoryIds) {
-      categoryIds.split(',').map(id => {
+      categoryIds.split(',').forEach(id => {
         this.setState({
-          activeCategories: this.state.activeCategories.concat(parseInt(id))
+          activeCategories: this.state.activeCategories.concat(parseInt(id, 10))
         });
       });
     }
