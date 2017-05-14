@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import SearchField from './SearchField';
 import { searchFetchData } from '../actions/search';
+import { crmFetchData } from '../actions/crm';
 import SearchResultOverlay from './SearchResultOverlay';
 import Sifter from 'sifter';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
@@ -22,6 +23,12 @@ export class Search extends Component {
     return store.dispatch(
       searchFetchData('/api/hbg-se-search', term)
     );
+  }
+
+  componentDidMount() {
+    if (typeof window !== 'undefined') {
+      this.props.fetchCrm();
+    }
   }
 
   handleSearchChange(searchTerm) {
@@ -136,7 +143,8 @@ Search.propTypes = {
   inputWrapperStyle: PropTypes.object,
   activeLanguage: PropTypes.string,
   fetchData: PropTypes.func.isRequired,
-  hbgSearch: PropTypes.any
+  hbgSearch: PropTypes.any,
+  fetchCrm: PropTypes.func
 };
 
 
@@ -150,7 +158,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: (url, term) => dispatch(searchFetchData(url, term))
+    fetchData: (url, term) => dispatch(searchFetchData(url, term)),
+    fetchCrm: () => dispatch(crmFetchData('/api/temp-crm'))
   };
 };
 
