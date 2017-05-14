@@ -179,6 +179,10 @@ function get_pages_for_visitor_local($section) {
           url =>  wp_make_link_relative(get_permalink($page)) . '?wordpress'
         ];
 
+        if(strpos($response['url'], '?lang=') !== false) {
+          $response['url'] = wp_make_link_relative(get_permalink($page)) . '&wordpress';
+        }
+
         $thumbnail_url = get_the_post_thumbnail_url($page->ID);
         if ($thumbnail_url) {
           $response['imgUrl'] = $thumbnail_url;
