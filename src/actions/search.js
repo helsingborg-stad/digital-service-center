@@ -2,21 +2,24 @@
 export function searchHasErrored(term, bool) {
   return {
     type: 'SEARCH_HAS_ERRORED',
-    hasErrored: { term, bool }
+    term,
+    hasErrored: bool
   };
 }
 
 export function searchIsLoading(term, bool) {
   return {
     type: 'SEARCH_IS_LOADING',
-    isLoading: { term, bool }
+    term,
+    isLoading: bool
   };
 }
 
-export function searchFetchDataSuccess(term, searchResults) {
+export function searchFetchDataSuccess(term, results) {
   return {
     type: 'SEARCH_FETCH_DATA_SUCCESS',
-    result: { term, searchResults }
+    term,
+    results
   };
 }
 

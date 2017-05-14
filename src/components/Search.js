@@ -13,7 +13,7 @@ export class Search extends Component {
     this.state = {
       searchResults: null,
       searchInputOnTop: false
-    }
+    };
   }
 
   static fetchData({ store, term }) {
@@ -38,7 +38,8 @@ export class Search extends Component {
       searchResults: searchTerm ? resultEvents : null
     });
 
-     this.props.fetchData('/api/hbg-se-search', searchTerm)
+    // TODO: debounce
+    this.props.fetchData('/api/hbg-se-search', searchTerm);
   }
 
   handleSearchInputPosition(searchTerm, events) {
@@ -48,7 +49,7 @@ export class Search extends Component {
 
     this.setState({
       searchInputOnTop: true
-    })
+    });
   }
 
   handleHideSearchResult() {
@@ -103,6 +104,7 @@ export class Search extends Component {
         activeLanguage={this.props.activeLanguage}
         searchInputOnTop={this.state.searchInputOnTop}
       />
+      { JSON.stringify(this.props.hgbSearch, null, 2)}
   </div>
     );
   }
@@ -114,7 +116,8 @@ Search.propTypes = {
   events: PropTypes.array,
   inputWrapperStyle: PropTypes.object,
   activeLanguage: PropTypes.string,
-  fetchData: PropTypes.func.isRequired
+  fetchData: PropTypes.func.isRequired,
+  hgbSearch: PropTypes.any
 };
 
 
@@ -122,7 +125,7 @@ const mapStateToProps = (state) => {
   return {
     searchResults: state.searchResults,
     searchInputOnTop: state.searchInputOnTop,
-    hgbSearch: state.hgbSearch
+    hgbSearch: state.search
   };
 };
 

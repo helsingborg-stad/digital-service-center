@@ -30,11 +30,10 @@ function helsingborg_dsc_google_search_response() {
     curl_close($ch);
 
     if(!isset($response['items'])) {
-        $filtered_result['result']['status'] = false;
-        return $filtered_result;
+        return [];
     }
 
-    $filtered_result['items'] = array_map(function($item){       
+    return array_map(function($item){
         $result = [
             title => $item['title'],
             description => $item['snippet'],
@@ -49,12 +48,4 @@ function helsingborg_dsc_google_search_response() {
         }
         return $result;
     }, $response['items']);
-
-    $filtered_result['result']['totalResults'] = intval($response['queries']['request'][0]['totalResults']);
-    $totalPages = intval($filtered_result['result']['totalResults']) / 10;
-    $totalPages = ceil($totalPages);
-    $filtered_result['result']['totalPages'] = $totalPages;
-    $filtered_result['result']['status'] = true;
-
-    return $filtered_result;
 }
