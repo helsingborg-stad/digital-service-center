@@ -23,5 +23,9 @@
 		<key name="hdsc-translatable-yes"/>
 		<key name="hdsc-translatable-no"/>
 		<key name="hdsc-translatable-chat-with-us"/>
+        <key name="hdsc-translatable-we-found-this"/>
+		<key name="hdsc-translatable-see-and-discover"/>
+		<key name="hdsc-translatable-no-results-found"/>
+		<key name="hdsc-translatable-ask-customer-center"/>
 	</admin-texts>
 </wpml-config>
