@@ -131,7 +131,12 @@ function get_visitor_or_local_posts($type) {
     return post_mapping_helper($post, $type);
   }, $posts);
 
+  $post_urls = [];
   foreach($filtered_posts as $key => $value) {
+    if(in_array($value['url'], $post_urls)){
+      unset($filtered_posts[$key]);
+    }
+    $post_urls[] = $value['url'];
     if(empty($value)) {
       unset($filtered_posts[$key]);
     }
