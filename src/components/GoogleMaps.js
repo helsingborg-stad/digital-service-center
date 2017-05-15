@@ -48,6 +48,7 @@ const GoogleMaps = ({center, zoom, apiKey, lang, markers, visibleModals,
               id={marker.id + '-modal'}
               key={marker.id + '-modal'}
               visible={visibleModals.includes(marker.id)}
+              onCloseClick={() => handleToggleModalVisibility(marker.id)}
               eventData={marker.eventData}
               handleShowMoreInfo={handleShowMoreInfo}
               handleShowDirections={handleShowDirections}

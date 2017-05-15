@@ -20,7 +20,6 @@ const SearchResultOverlayBackdrop = ({children, onClick}) => (
 );
 
 const getEventUrl = (event, activeLanguage) => {
-
   let slugForUrl = event.type === 'event' ? event.type : 'local';
 
   slugForUrl = event.categories.length ? event.categories.reduce((slug, cat) => {
@@ -41,6 +40,25 @@ const getEventUrl = (event, activeLanguage) => {
 
 
   return `/${activeLanguage}/${slugForUrl}/${event.slug}`;
+};
+
+const getLinkTarget = (res, activeLanguage, changeOverlayEvent) => {
+  switch (res.type) {
+  case 'iframe':
+    return { iframe: {url: res.url} };
+  case 'page':
+    return { page: {url: res.url} };
+  default:
+    return {
+      to: getEventUrl(res, activeLanguage),
+      onMouseUp: (e) => {
+        if (window.location.indexOf(res.type) > -1) {
+          e.stopPropagation();
+          changeOverlayEvent(res);
+        }
+      }
+    };
+  }
 };
 
 SearchResultOverlayBackdrop.propTypes = {
@@ -83,30 +101,25 @@ const SearchResultOverlay =
             <Scrollbars>
               <ul className='SearchResultOverlay-list'>
               {eventsSearchResults.length ? eventsSearchResults.map(res =>
-                <li key={res.id}>
-                  <Link to={getEventUrl(res, activeLanguage)} onMouseUp={(e) => {
-                    if (window.location.indexOf(res.type) > -1) {
-                      e.stopPropagation();
-                      changeOverlayEvent(res);
-                    }
-                  }}>
-                    <div style={{display: 'flex'}}>
-                      {res.imgUrl &&
-                        <div className='SearchResultOverlay-imgWrapper'>
-                        <img className='SearchResultOverlay-img' src={res.imgUrl} alt={res.name} />
-                      </div>
-                      }
-                      <div className='SearchResultOverlay-contentWrapper'>
-                        <span className='SearchResultOverlay-contentHeading'>{res.name}</span>
-                        {res.content &&
-                          <p>
-                            {truncate(stripHtml(res.content))}
-                          </p>
-                        }
-                      </div>
+                <li key={Math.random()}>
+                <Link {...getLinkTarget(res, activeLanguage, changeOverlayEvent)}>
+                  <div style={{display: 'flex'}}>
+                    {res.imgUrl &&
+                      <div className='SearchResultOverlay-imgWrapper'>
+                      <img className='SearchResultOverlay-img' src={res.imgUrl} alt={res.name} />
                     </div>
-                  </Link>
-                </li>
+                    }
+                    <div className='SearchResultOverlay-contentWrapper'>
+                      <span className='SearchResultOverlay-contentHeading'>{res.name}</span>
+                      {res.content &&
+                        <p>
+                          {truncate(stripHtml(res.content))}
+                        </p>
+                      }
+                    </div>
+                  </div>
+                </Link>
+              </li>
               ) : <li>{translatables.noResultsFound}</li>}
             </ul>
           </Scrollbars>
@@ -120,11 +133,9 @@ const SearchResultOverlay =
                 <ul className='SearchResultOverlay-list'>
                 {crmSearchResults.length ? crmSearchResults.map(res =>
                   <li key={Math.random()}>
-                    <div className='SearchResultOverlay-contentWrapper'>
+                    <div className='SearchResultOverlay-contentWrapper' style={{marginLeft: '3rem'}}>
                       <span className='SearchResultOverlay-contentHeading'>{res.question}</span>
-                      <p>
-                        {stripHtml(res.answer)}
-                      </p>
+                      <p dangerouslySetInnerHTML={{__html: stripHtml(res.answer).replace(']]>', '')}} />
                     </div>
                   </li>
                   ) : <li>{translatables.noResultsFound}</li>}

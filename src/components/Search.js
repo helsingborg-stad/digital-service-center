@@ -15,7 +15,8 @@ export class Search extends Component {
       eventsSearchResults: null,
       crmSearchResults: null,
       searchInputOnTop: false,
-      searchTerm: null
+      searchTerm: null,
+      landingPagePages: null
     };
   }
 
@@ -25,10 +26,18 @@ export class Search extends Component {
     );
   }
 
-  componentDidMount() {
+  componentWillMount() {
     if (typeof window !== 'undefined') {
       this.props.fetchCrm();
     }
+
+    const landingPagePages = [...this.props.landingPages.visitor.pages
+                                 .filter(p => p.type === 'iframe' || p.type === 'page'),
+                              ...this.props.landingPages.local.pages
+                                 .filter(p => p.type === 'iframe' || p.type === 'page')];
+    this.setState({
+      landingPagePages
+    });
   }
 
   handleSearchChange(searchTerm) {
@@ -46,20 +55,32 @@ export class Search extends Component {
       return eventsSifterResult.items.some(item => item.id === index);
     });
 
-    const crmSifter = new Sifter(this.props.crm);
+    const landingPagePagesSifter = new Sifter(this.state.landingPagePages);
+    const landingPagePagesResult = landingPagePagesSifter.search(searchTerm, {
+      fields: ['name'],
+      sort: [{field: 'name', direction: 'asc'}],
+      limit: 10
+    });
+
+    const resultLandingPagePages = this.state.landingPagePages.filter((page, index) => {
+      return landingPagePagesResult.items.some(item => item.id === index);
+    });
+
+    const crmForCurrentLang = this.props.crm.filter(c => c.language === this.props.activeLanguage);
+    const crmSifter = new Sifter(crmForCurrentLang);
     const crmSifterResult = crmSifter.search(searchTerm, {
       fields: ['question', 'answer'],
       sort: [{field: 'question', direction: 'asc'}],
       limit: 10
     });
 
-    const resultCrm = this.props.crm.filter((crmEntry, index) => {
+    const resultCrm = crmForCurrentLang.filter((crmEntry, index) => {
       return crmSifterResult.items.some(item => item.id === index);
     });
 
     this.setState({
       searchTerm,
-      eventsSearchResults: searchTerm ? resultEvents : null,
+      eventsSearchResults: searchTerm ? [...resultEvents, ...resultLandingPagePages] : null,
       crmSearchResults: searchTerm ? resultCrm : null
     });
   }
@@ -126,7 +147,6 @@ export class Search extends Component {
         hbgSeSearchResults={(this.state.searchTerm && (this.state.searchTerm in this.props.hbgSearch)) ? this.props.hbgSearch[this.state.searchTerm] : []}
         crmSearchResults={this.state.crmSearchResults}
         changeOverlayEvent={this.changeOverlay.bind(this)}
-        pageType={this.props.pageType}
         handleHideSearchResult={this.handleHideSearchResult.bind(this)}
         activeLanguage={this.props.activeLanguage}
         searchInputOnTop={this.state.searchInputOnTop}
@@ -137,9 +157,10 @@ export class Search extends Component {
 }
 
 Search.propTypes = {
-  pageType: PropTypes.string,
   changeOverlayEvent: PropTypes.func,
   events: PropTypes.array,
+  crm: PropTypes.array,
+  landingPages: PropTypes.object,
   inputWrapperStyle: PropTypes.object,
   activeLanguage: PropTypes.string,
   fetchData: PropTypes.func.isRequired,
@@ -152,7 +173,8 @@ const mapStateToProps = (state) => {
   return {
     searchInputOnTop: state.searchInputOnTop,
     hbgSearch: state.search,
-    crm: state.crm
+    crm: state.crm,
+    landingPages: state.landingPages[state.activeLanguage]
   };
 };
 
