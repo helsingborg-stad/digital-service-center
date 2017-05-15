@@ -2,6 +2,7 @@ import React from 'react';
 import EnFlag from './icons-flags/en-flag';
 import SvFlag from './icons-flags/sv-flag';
 import { Link } from 'react-router';
+import { connect } from 'react-redux';
 
 import './LanguageFlags.css';
 
@@ -11,8 +12,8 @@ const getLangLink = (activeLang, newLang) => {
     : window.location.pathname.replace(`/${activeLang}/`, `/${newLang}/`);
 };
 
-const LanguageFlags = ({activeLanguage}) => (
-
+const LanguageFlags = ({activeLanguage, showFlags}) => {
+  return showFlags ?
   <div className='LanguageFlags'>
     <Link to={getLangLink(activeLanguage, 'sv')} className='LanguageFlags__link'>
       <SvFlag className='LanguageFlags__flag' />
@@ -21,10 +22,18 @@ const LanguageFlags = ({activeLanguage}) => (
       <EnFlag className='LanguageFlags__flag' />
     </Link>
   </div>
-);
+  : null;
+};
 
-export default LanguageFlags;
+const mapStateToProps = (state) => {
+  return {
+    showFlags: state.siteSettings.showFlags
+  };
+};
+
+export default connect(mapStateToProps, null)(LanguageFlags);
 
 LanguageFlags.propTypes = {
-  activeLanguage: React.PropTypes.string
+  activeLanguage: React.PropTypes.string,
+  showFlags: React.PropTypes.bool
 };

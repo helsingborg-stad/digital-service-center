@@ -11,6 +11,7 @@ add_action('admin_init', function() {
   register_setting( 'hdsc-site-settings', 'hdsc-site-setting-google-maps-api-key' );
   register_setting( 'hdsc-site-settings', 'hdsc-site-setting-idle-timeout' );
   register_setting( 'hdsc-site-settings', 'hdsc-site-setting-show-chat' );
+  register_setting( 'hdsc-site-settings', 'hdsc-site-setting-show-flags' );
   foreach(hdsc_translatables() as $translatable) {
     $option_name = 'hdsc-translatable-' . $translatable[1];
     register_setting( 'hdsc-site-settings', $option_name );
@@ -58,6 +59,10 @@ function helsingborg_dsc_site_settings_menu_callback() {
       <tr>
         <th><label for="sitesettingsform-show-chat">Aktivera Vergic chatt</label></th>
         <td><input id="sitesettingsform-show-chat" type="checkbox" class="regular-text" name="hdsc-site-setting-show-chat" <?php checked( 'on', get_option( 'hdsc-site-setting-show-chat' ) ); ?>  /></td>
+      </tr>
+      <tr>
+        <th><label for="sitesettingsform-show-flags">Visa språkväljare</label></th>
+        <td><input id="sitesettingsform-show-flags" type="checkbox" class="regular-text" name="hdsc-site-setting-show-flags" <?php checked( 'on', get_option( 'hdsc-site-setting-show-flags' ) ); ?>  /></td>
       </tr>
       </tbody></table>
 

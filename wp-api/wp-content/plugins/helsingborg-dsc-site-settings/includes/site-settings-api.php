@@ -15,6 +15,7 @@ function helsingborg_dsc_site_settings_response() {
     googleMapsApiKey => get_option('hdsc-site-setting-google-maps-api-key', null),
     idleTimeout => intval(get_option('hdsc-site-setting-idle-timeout', 0)),
     showChat => get_option('hdsc-site-setting-show-chat', null) == 'on',
+    showFlags => get_option('hdsc-site-setting-show-flags', null) == 'on',
     languages => get_languages_in_use(),
     translatables => hdsc_get_translatables()
   ]);
