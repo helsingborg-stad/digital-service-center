@@ -6,6 +6,7 @@ import classnames from 'classnames';
 import './GoogleMapsModal.css';
 import getUserLocation from '../util/getUserLocation';
 
+import closeCrossSvg from '../media/close-cross.svg';
 
 const handleNavigationClick = (destinationLat, destinationLng, callback) => {
   getUserLocation().then((location) => {
@@ -23,7 +24,8 @@ const GoogleMapsModal = ({
   handleShowDirections,
   lat,
   lng,
-  translatables}) => {
+  translatables,
+  onCloseClick}) => {
   return (
     <div
       className={classnames(
@@ -36,6 +38,9 @@ const GoogleMapsModal = ({
         { eventData.imgUrl &&
         <img className='GoogleMapsModal-img' src={eventData.imgUrl} role='presentation' />
         }
+        <button className='GoogleMapsModal-closeButton' onClick={onCloseClick}>
+          <img src={closeCrossSvg} alt="Close" />
+        </button>
         <h4 className='GoogleMapsModal-heading'>{eventData.name}</h4>
         <div className='GoogleMapsModal-preamble'>
           <p dangerouslySetInnerHTML={{ __html: eventData.shortContent }} />
@@ -72,6 +77,7 @@ GoogleMapsModal.propTypes = {
     content: PropTypes.string
   }),
   handleShowDirections: PropTypes.func.isRequired,
+  onCloseClick: PropTypes.func,
   translatables: PropTypes.shape({
     navigate: PropTypes.string.isRequired,
     moreInfo: PropTypes.string.isRequired
