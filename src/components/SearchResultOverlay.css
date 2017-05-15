@@ -136,6 +136,10 @@
 .SearchResultOverlay-contentWrapper p p {
     margin-bottom: 0.75rem;
 }
+/* Force removal of inline HTML of CRM data */
+.SearchResultOverlay-contentWrapper p div {
+    border: 0 !important;
+}
 .SearchResultOverlay-contentHeading {
     display: block;
     font-weight: bold;
