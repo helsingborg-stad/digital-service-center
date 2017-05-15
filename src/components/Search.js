@@ -66,14 +66,15 @@ export class Search extends Component {
       return landingPagePagesResult.items.some(item => item.id === index);
     });
 
-    const crmSifter = new Sifter(this.props.crm);
+    const crmForCurrentLang = this.props.crm.filter(c => c.language === this.props.activeLanguage);
+    const crmSifter = new Sifter(crmForCurrentLang);
     const crmSifterResult = crmSifter.search(searchTerm, {
       fields: ['question', 'answer'],
       sort: [{field: 'question', direction: 'asc'}],
       limit: 10
     });
 
-    const resultCrm = this.props.crm.filter((crmEntry, index) => {
+    const resultCrm = crmForCurrentLang.filter((crmEntry, index) => {
       return crmSifterResult.items.some(item => item.id === index);
     });
 
