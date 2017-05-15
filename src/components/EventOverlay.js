@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Scrollbars from 'react-custom-scrollbars';
 import Link from './Link';
+import classNames from 'classnames';
 import closeCrossSvg from '../media/close-cross.svg';
 import './EventOverlay.css';
 import ReactPlayer from 'react-player';
@@ -276,7 +277,7 @@ export default class extends Component {
         />
         { !this.state.showVideo
         ?
-        <div className='EventOverlay-wrapper'>
+        <div className={classNames('EventOverlay-wrapper', {'EventOverlay-wrapper--compareView': this.props.relatedEvents && !!this.props.relatedEvents.length})}>
           <div style={{position: 'absolute', top: '-2.5rem', right: '0'}}>
             <CloseButton handleClose={this.props.handleClose} />
           </div>
