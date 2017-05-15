@@ -190,7 +190,17 @@ function get_pages_for_visitor_local($section) {
       }
     }, $posts);
 
+  $post_urls = [];
   foreach($filtered_posts as $key => $value) {
+    if( ($value['href'] && in_array($value['href'], $post_urls)) || ($value['url'] && in_array($value['url'], $post_urls)) ) {
+      unset($filtered_posts[$key]);
+    }
+    if ($value['href']) {
+      $post_urls[] = $value['href'];
+    }
+    else if ($value['url']) {
+      $post_urls[] = $value['url'];
+    }
     if(empty($value)) {
       unset($filtered_posts[$key]);
     }
