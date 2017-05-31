@@ -17,3 +17,8 @@
   width: 12px;
   height: 12px;
 }
+
+/* Disable "view on Google Maps" link */
+.view-link {
+  display:none !important;
+}
