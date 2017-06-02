@@ -4,26 +4,13 @@ import LoadingButton from './LoadingButton.js';
 import { RippleButton } from './react-ripple-effect';
 import classnames from 'classnames';
 import './GoogleMapsModal.css';
-import getUserLocation from '../util/getUserLocation';
 
 import closeCrossSvg from '../media/close-cross.svg';
-
-const handleNavigationClick = (destinationLat, destinationLng, callback) => {
-  getUserLocation().then((location) => {
-    callback({
-      origin: {lat: location.lat, lng: location.lng},
-      destination: {lat: destinationLat, lng: destinationLng}
-    });
-  });
-};
 
 const GoogleMapsModal = ({
   handleShowMoreInfo,
   visible,
   eventData,
-  handleShowDirections,
-  lat,
-  lng,
   translatables,
   onCloseClick}) => {
   return (
@@ -48,7 +35,10 @@ const GoogleMapsModal = ({
       </div>
       <div className='GoogleMapsModal-buttonWrapper'>
         <LoadingButton
-          onClick={() => handleNavigationClick(lat, lng, handleShowDirections)}
+          onClick={() => {
+            onCloseClick();
+            handleShowMoreInfo(eventData, true);
+          }}
           cssClassName='GoogleMapsModal-button GoogleMapsModal-button--emphasized'
           text={translatables.navigate}
           style={{padding: '0.5rem 1rem', fontSize: '0.8125rem', background: '#c70d53'}}

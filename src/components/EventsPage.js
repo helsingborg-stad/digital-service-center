@@ -15,7 +15,6 @@ import { connect } from 'react-redux';
 import { eventsFetchData } from '../actions/events';
 import EventsDateList from './EventsDateList.js';
 import './EventsPage.css';
-import GoogleMapsDirections from './GoogleMapsDirections';
 import LanguageFlags from './LanguageFlags';
 import Search from './Search';
 
@@ -57,8 +56,7 @@ export class EventsPage extends Component {
     super(props);
     this.state = {
       visibleOverlayEvent: props.activeEvent || null,
-      selectedDates: null,
-      directions: null
+      selectedDates: null
     };
   }
 
@@ -66,12 +64,6 @@ export class EventsPage extends Component {
     return store.dispatch(
       eventsFetchData('/api/events', store.getState().activeLanguage)
     );
-  }
-
-  showDirections(directions) {
-    this.setState({
-      directions: directions
-    });
   }
 
   changeOverlayEvent(event) {
@@ -150,8 +142,7 @@ export class EventsPage extends Component {
           activeLanguage={this.props.activeLanguage}
         />
         <main>
-          {!this.state.directions
-            ? <div className='EventsPage-eventsWrapper'>
+          <div className='EventsPage-eventsWrapper'>
               <Scrollbars style={{ width: 'calc(100% - 1.5rem)', marginRight: '-1.5rem' }}>
                 <div className='EventsPage-innerScrollWrapper'>
                 { getDistinctEventCategories(this.props.events, pageData.excludedCategoryIds)
@@ -178,14 +169,6 @@ export class EventsPage extends Component {
                 </div>
               </Scrollbars>
             </div>
-            : <div className='EventsPage-mapWrapper'>
-              <GoogleMapsDirections
-                origin={this.state.directions.origin}
-                destination={this.state.directions.destination}
-                handleClose={this.showDirections.bind(this, null)}
-                />
-              </div>
-          }
           <SiteFooter color='#f4a428' backToStartPath={`/${this.props.activeLanguage}/`}>
             { pageData.bottomLinks.map((link) => (
               <SiteFooterLink key={link.href + link.name} link={link} />))
@@ -202,11 +185,10 @@ export class EventsPage extends Component {
             transitionEnter={true}
             transitionLeave={true}
           >
-            { this.state.visibleOverlayEvent && !this.state.directions &&
+            { this.state.visibleOverlayEvent &&
               <EventOverlay
                 key='event-overlay'
                 event={this.props.events.find(e => e.slug === this.state.visibleOverlayEvent)}
-                handleShowDirections={this.showDirections.bind(this)}
                 handleClose={() => this.changeOverlayEvent(null)}
                 relatedEvents={this.state.relatedEvents}
                 changeOverlayEvent={this.changeOverlayEvent.bind(this)}

@@ -158,7 +158,7 @@ add_action('admin_post_fetch_google_places_based_on_selected_place_types', fetch
 
 function fetch_google_places_based_on_selected_place_types() {
     update_option('api_key_limited_status', true);
-   
+
     $distinct_place_types = array_reduce(
         get_option('saved_google_place_types', []),
         function($acc, $p) {
@@ -199,10 +199,10 @@ function fetch_google_places_based_on_selected_place_types() {
             $new_place_ids[] = $place_id;
             if (!in_array($place_id, $saved_google_places)) {
                 $saved_google_places[] = $place_id;
-            }         
+            }
         }
     }
-    
+
     foreach ($saved_google_places as $key => $saved_google_place) {
         if (!in_array((string)$saved_google_place, $new_place_ids)) {
             unset($saved_google_places[$key]);
@@ -240,11 +240,11 @@ function fetch_google_places_based_on_selected_place_types() {
             if($response['status'] == 'OVER_QUERY_LIMIT' || !isset($response)){
                 update_option('api_key_limited_status', false);
                 return wp_redirect(admin_url('admin.php?page=helsingborg-dsc-google-places'));
-            }        
+            }
             $saved_google_places_details[$place_id][$lang] = [
                 data => $response,
                 updated => date('Y-m-d H:i:s')
-            ];            
+            ];
         }
     }
 
@@ -256,7 +256,7 @@ function fetch_google_places_based_on_selected_place_types() {
             $url_status = get_response_code($api_url_photo);
             if($url_status != '403') {
                 $photo = get_and_save_place_photos($photo_reference, get_api_url_photo($photo_reference));
-            }            
+            }
         }
         $saved_google_places_details[$place_id]['photo'] = $photo;
     }
@@ -280,11 +280,11 @@ function get_and_save_place_photos($photo_reference, $photo_url){
     } else {
         $file = $upload_dir['basedir'] . '/' . $filename;
     }
-    
+
     file_put_contents( $file, $image_data );
 
     $wp_filetype = wp_check_filetype( $filename, null );
-    
+
     $attachment = array(
         'post_mime_type' => $wp_filetype['type'],
         'post_title'     => sanitize_file_name( $filename ),

@@ -21,7 +21,7 @@ Marker.defaultProps = {
 };
 
 const GoogleMaps = ({center, zoom, apiKey, lang, markers, visibleModals,
-                     handleToggleModalVisibility, handleShowMoreInfo, handleShowDirections}) => {
+                     handleToggleModalVisibility, handleShowMoreInfo}) => {
   return (
       <GoogleMap
         defaultCenter={center}
@@ -51,7 +51,6 @@ const GoogleMaps = ({center, zoom, apiKey, lang, markers, visibleModals,
               onCloseClick={() => handleToggleModalVisibility(marker.id)}
               eventData={marker.eventData}
               handleShowMoreInfo={handleShowMoreInfo}
-              handleShowDirections={handleShowDirections}
             />
           );
         }) }
@@ -67,8 +66,7 @@ GoogleMaps.propTypes = {
   apiKey: PropTypes.string,
   lang: PropTypes.string,
   handleToggleModalVisibility: PropTypes.func,
-  handleShowMoreInfo: PropTypes.func,
-  handleShowDirections: PropTypes.func
+  handleShowMoreInfo: PropTypes.func
 };
 
 GoogleMaps.defaultProps = {
@@ -78,8 +76,7 @@ GoogleMaps.defaultProps = {
   apiKey: '',
   lang: 'en',
   handleToggleModalVisibility: () => {},
-  handleShowMoreInfo: () => {},
-  handleShowDirections: () => {}
+  handleShowMoreInfo: () => {}
 };
 
 export default GoogleMaps;

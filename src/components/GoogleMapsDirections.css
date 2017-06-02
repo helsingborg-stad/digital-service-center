@@ -1,21 +1,48 @@
 .GoogleMapsDirections-closeButton {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  border: 0;
-  background: #fff;
-  border-radius: 50%;
-  width: 1.75rem;
-  height: 1.75rem;
-  padding: 0.25rem;
-  line-height: 1.45rem;
+  bottom: 0.5rem;
+  left: 2rem;
+  width: calc(100% - 5rem);
+  text-align: left;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #CB0050;
+  background-color: transparent;
+  border: none;
+  padding: 1rem 0.5rem;
   cursor: pointer;
   z-index: 1;
+  margin-left: 1rem;
+}
+.GoogleMapsDirections-closeButton:after {
+  content: '‹';
+  font-size: 2rem;
+  position: absolute;
+  top: 0;
+  line-height: 2.75rem;
+  left: -1rem;
+  display: block;
+}
+
+.GoogleMapsDirections-closeButton:focus {
+  outline: none;
 }
 
 .GoogleMapsDirections-closeButton > img {
   width: 12px;
   height: 12px;
+}
+
+.GoogleMapsDirections-eventName {
+  position: absolute;
+  top: 2rem;
+  width: calc(100% - 4rem);
+  text-align: center;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  line-height: 1;
 }
 
 /* Disable "view on Google Maps" link */
