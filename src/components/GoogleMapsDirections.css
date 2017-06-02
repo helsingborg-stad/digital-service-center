@@ -20,10 +20,9 @@
   font-size: 2rem;
   position: absolute;
   top: 0;
-  line-height: 3rem;
+  line-height: 2.75rem;
   left: -1rem;
   display: block;
-
 }
 
 .GoogleMapsDirections-closeButton:focus {

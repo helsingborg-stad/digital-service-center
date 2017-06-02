@@ -40,7 +40,8 @@ function hdsc_translatables() {
     ['Detta hittade vi', 'we-found-this'],
     ['Se och upplev', 'see-and-discover'],
     ['Hittade inga matchande resultat för din sökning', 'no-results-found'],
-    ['Fråga kontaktcenter', 'ask-customer-center']
+    ['Fråga kontaktcenter', 'ask-customer-center'],
+    ['Visa information', 'show-information']
   ];
 }
 

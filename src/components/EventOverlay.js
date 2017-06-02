@@ -99,7 +99,6 @@ class EventOverlay extends Component {
     };
   }
   componentDidMount() {
-    console.log(this.props.showDirections);
     if(this.props.showDirections) {
       handleNavigationClick(this.props.event.location.latitude, this.props.event.location.longitude, this.handleShowDirections.bind(this))
     }
@@ -116,7 +115,7 @@ class EventOverlay extends Component {
         destination={this.state.directions.destination}
         handleClose={this.handleShowDirections.bind(this, null)}
         eventName={this.props.event.name}
-        backToStartText={this.props.translatables.backToStart}
+        showInformationText={this.props.translatables.showInformation}
       />
     }
     { !this.state.directions &&

@@ -56,7 +56,7 @@ export default class GoogleMapsDirections extends Component {
     return (
       <div style={{ width: '100%', height: '100%', paddingTop: '2rem' }}>
         <button className='GoogleMapsDirections-closeButton' onClick={this.props.handleClose}>
-          {this.props.backToStartText}
+          {this.props.showInformationText}
         </button>
         <div className='GoogleMapsDirections-eventName'>
           {this.props.eventName}
@@ -88,5 +88,5 @@ GoogleMapsDirections.propTypes = {
   }),
   directions: React.PropTypes.object,
   handleClose: React.PropTypes.func,
-  backToStartText: React.PropTypes.string
+  showInformationText: React.PropTypes.string
 };
