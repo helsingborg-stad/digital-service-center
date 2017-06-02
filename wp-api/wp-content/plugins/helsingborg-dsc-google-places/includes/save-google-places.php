@@ -170,9 +170,14 @@ function fetch_google_places_based_on_selected_place_types() {
         },
         []
     );
+    
+    $latitude = get_option('hdsc-google-places-settings-lat') ?? '56.049665';
+    $longitude = get_option('hdsc-google-places-settings-long') ?? '12.727122';
+    $radius = get_option('hdsc-google-places-settings-long') ?? '2000';
+
 
     function get_api_url_for_place_type($place_type) {
-        return 'https://maps.googleapis.com/maps/api/place/radarsearch/json?location=56.049665,12.727122&radius=2000&types=' . $place_type . '&sensor=false&key=' . get_option('hdsc-site-setting-google-maps-api-key');
+        return 'https://maps.googleapis.com/maps/api/place/radarsearch/json?location=' . $latitude . ',' . $longitude .'&radius=' . $radius . '&types=' . $place_type . '&sensor=false&key=' . get_option('hdsc-site-setting-google-maps-api-key');
     }
 
     $saved_google_places = get_option('saved_google_places', []);

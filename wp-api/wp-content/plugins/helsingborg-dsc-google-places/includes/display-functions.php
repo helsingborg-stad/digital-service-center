@@ -3,6 +3,46 @@
 * display functions
 *******************************/
 
+function google_places_settings(){
+?>
+<form action="options.php" method="post">
+    <?php
+    settings_fields( 'hdsc-google-places-settings' );
+    do_settings_sections( 'hdsc-google-places-settings' );
+    ?>
+    <table class="form-table">
+        <tbody>
+            <tr>
+                <th>
+                    Latitude (default: 56.049665)
+                </th>
+                <td>
+                    <input type="text" name="hdsc-google-places-settings-lat" id="hdsc-google-places-settings-lat" class="regular-text" value="<?php echo get_option('hdsc-google-places-settings-lat'); ?>" />
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Longitutde (defualt: 12.727122)
+                </th>
+                <td>
+                    <input type="text" name="hdsc-google-places-settings-long" id="hdsc-google-places-settings-long" class="regular-text" value="<?php echo get_option('hdsc-google-places-settings-long'); ?>" />
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Radius (default: 2000)
+                </th>
+                <td>
+                    <input type="text" name="hdsc-google-places-settings-radius" id="hdsc-google-places-settings-radius" class="regular-text" value="<?php echo get_option('hdsc-google-places-settings-radius'); ?>" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+     <?php submit_button(); ?>
+</form>
+<?php
+}
+
 function map_google_place_type_form(){
 ?>
 <h2>Koppla kategori mot platstyp från Google</h2>

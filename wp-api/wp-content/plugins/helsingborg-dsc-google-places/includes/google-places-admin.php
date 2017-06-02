@@ -38,4 +38,26 @@ function helsingborg_dsc_google_places_admin_init() {
     </div>
 <?php
 }
+
+add_action('admin_menu', 'helsingborg_dsc_google_places_settings_admin_menu');
+
+function helsingborg_dsc_google_places_settings_admin_menu() {
+    add_submenu_page( 'helsingborg-dsc-google-places', 'helsingborg-dsc-google-places-settings', 'Settings', 'manage_options', 'helsingborg-dsc-google-places-settings', 'helsingborg_dsc_google_places_settings_admin_init' );
+}
+
+add_action('admin_init', function() {
+    register_setting( 'hdsc-google-places-settings', 'hdsc-google-places-settings-long');
+    register_setting( 'hdsc-google-places-settings', 'hdsc-google-places-settings-lat');
+    register_setting( 'hdsc-google-places-settings', 'hdsc-google-places-settings-radius');
+});
+
+function helsingborg_dsc_google_places_settings_admin_init() {
+?>
+    <div class="wrap">
+        <h1>Google places inställningar</h1>
+        <hr>
+        <?php google_places_settings(); ?>
+    </div>
+<?php
+}
 ?>
