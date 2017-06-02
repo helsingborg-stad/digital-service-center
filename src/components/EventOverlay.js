@@ -11,6 +11,7 @@ import LoadingButton from './LoadingButton.js';
 import RelatedEvents from './RelatedEvents.js';
 import Star from './icons/StarIcon';
 import OverlayCloser, { setOverlayCloserPosition } from './OverlayCloser';
+import GoogleMapsDirections from './GoogleMapsDirections';
 
 const handleNavigationClick = (destinationLat, destinationLng, callback) => {
   getUserLocation().then((location) => {
@@ -90,36 +91,63 @@ const EventDate = ({start, end}) => (
   </div>
 );
 
-const EventOverlay = ({event, showVideoButton, onVideoButtonClick, handleShowDirections, translatables}) => {
-  return (
+class EventOverlay extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      directions: null
+    };
+  }
+  componentDidMount() {
+    console.log(this.props.showDirections);
+    if(this.props.showDirections) {
+      handleNavigationClick(this.props.event.location.latitude, this.props.event.location.longitude, this.handleShowDirections.bind(this))
+    }
+  }
+  handleShowDirections(directions) {
+    this.setState({directions: directions})
+  }
+  render() {
+    return(
   <div className='EventOverlay' onClick={ev => ev.stopPropagation()}>
-    { event.imgUrl &&
+    { this.state.directions &&
+      <GoogleMapsDirections
+        origin={this.state.directions.origin}
+        destination={this.state.directions.destination}
+        handleClose={this.handleShowDirections.bind(this, null)}
+        eventName={this.props.event.name}
+        backToStartText={this.props.translatables.backToStart}
+      />
+    }
+    { !this.state.directions &&
+    <div>
+    { this.props.event.imgUrl &&
     <div className='EventOverlay-imgWrapper'>
-      <img className='EventOverlay-img' src={event.imgUrl} alt={ event.name } />
+      <img className='EventOverlay-img' src={this.props.event.imgUrl} alt={ this.props.event.name } />
     </div>
     }
-    <h2 className='EventOverlay-heading'>{ event.name }</h2>
+    <h2 className='EventOverlay-heading'>{ this.props.event.name }</h2>
       <div style={{width: '58%', marginRight: '5%', float: 'left'}}>
-        {!!event.rating &&
-           <h3 className='EventOverlay-ratingHeading'>{`Rating: ${event.rating}/5`}</h3>
+        {!!this.props.event.rating &&
+           <h3 className='EventOverlay-ratingHeading'>{`Rating: ${this.props.event.rating}/5`}</h3>
         }
         <Scrollbars style={{ marginTop: '1rem', width: 'calc(100% + 1rem)' }} autoHeight autoHeightMax='100vh - 4.6875rem - 1.25rem - (550px)'>
-          { event.content &&
+          { this.props.event.content &&
           <div style={{height: '25rem'}}>
           <span className='EventOverlay-content-scrollWrapper'>
             <span
               className='EventOverlay-content'
-              dangerouslySetInnerHTML={{ __html: event.content.replace(/\r\n/g, '<br />') }}
+              dangerouslySetInnerHTML={{ __html: this.props.event.content.replace(/\r\n/g, '<br />') }}
             />
           </span>
           </div>
           }
-          { !!event.rating &&
+          { !!this.props.event.rating &&
             <div style={{height: '25rem'}}>
               <div className='EventOverlay-ratingWrapper'>
-              {event.reviews && !!event.reviews.length &&
-                event.reviews.map(review => (
-                  <div>
+              {this.props.event.reviews && !!this.props.event.reviews.length &&
+                this.props.event.reviews.map(review => (
+                  <div key={review.author_name}>
                     <span className='EventOverlay-ratingName' key={review.author_name}>
                       {review.author_name}
                     </span>
@@ -145,43 +173,43 @@ const EventOverlay = ({event, showVideoButton, onVideoButtonClick, handleShowDir
         </Scrollbars>
       </div>
     <div style={{width: '37%', float: 'right'}}>
-    { (event.openingHours && !!event.openingHours.length) &&
+    { (this.props.event.openingHours && !!this.props.event.openingHours.length) &&
     <div className='EventOverlay-metaBox'>
-      <h3>{translatables.openingHours}</h3>
-      { event.openingHours.map(date => <span key={date}>{date}<br /></span>)
+      <h3>{this.props.translatables.openingHours}</h3>
+      { this.props.event.openingHours.map(date => <span key={date}>{date}<br /></span>)
       }
     </div>
     }
-    { (event.occasions && !!event.occasions.length) &&
+    { (this.props.event.occasions && !!this.props.event.occasions.length) &&
     <div className='EventOverlay-metaBox'>
-      <h3>{translatables.dateAndTime}</h3>
-      { event.occasions.map(occ => <EventDate
+      <h3>{this.props.translatables.dateAndTime}</h3>
+      { this.props.event.occasions.map(occ => <EventDate
                                       start={getDateFormatted(occ.startDate)}
                                       end={getDateFormatted(occ.endDate)}
                                       key={Math.random()} />)
       }
     </div>
     }
-    { getLocation(event) &&
+    { getLocation(this.props.event) &&
     <div className='EventOverlay-metaBox'>
-      <h3>{translatables.location}</h3>
-      { getLocation(event) }
+      <h3>{this.props.translatables.location}</h3>
+      { getLocation(this.props.event) }
     </div>
     }
-    { (event.contactEmail || event.contactPhone) &&
+    { (this.props.event.contactEmail || this.props.event.contactPhone) &&
     <div className='EventOverlay-metaBox'>
-      <h3>{translatables.contact}</h3>
-      { event.contactEmail &&
-      <div><a href={`mailto:${event.contactEmail}`}>{event.contactEmail}</a></div>
+      <h3>{this.props.translatables.contact}</h3>
+      { this.props.event.contactEmail &&
+      <div><a href={`mailto:${this.props.event.contactEmail}`}>{this.props.event.contactEmail}</a></div>
       }
-      { (event.contactEmail && event.contactPhone) && <div style={{height: '0.5rem'}} /> }
+      { (this.props.event.contactEmail && this.props.event.contactPhone) && <div style={{height: '0.5rem'}} /> }
       { event.contactPhone &&
-      <div><a href={`tel:${event.contactPhone}`}>{event.contactPhone}</a></div>
+      <div><a href={`tel:${this.props.event.contactPhone}`}>{this.props.event.contactPhone}</a></div>
       }
     </div>
     }
     {/*TODO: implement moreinformation links from back-end*/}
-    { event.moreInformation &&
+    { this.props.event.moreInformation &&
     <div className='EventOverlay-metaBox'>
       <h3>More information</h3>
       <ul>
@@ -194,29 +222,34 @@ const EventOverlay = ({event, showVideoButton, onVideoButtonClick, handleShowDir
     </div>
     }
     <div className='EventOverlay-buttonWrapper'>
-      { showVideoButton &&
-      <button className='EventOverlay-videoButton' onClick={onVideoButtonClick}>
+      { this.props.showVideoButton &&
+      <button className='EventOverlay-videoButton' onClick={this.props.onVideoButtonClick}>
         Video
       </button>
       }
-      { event.location && !!event.location.latitude && !!event.location.longitude &&
+      { this.props.event.location && !!this.props.event.location.latitude && !!this.props.event.location.longitude &&
         <LoadingButton
           onClick={() =>
-            handleNavigationClick(event.location.latitude, event.location.longitude, handleShowDirections)}
+            handleNavigationClick(this.props.event.location.latitude, this.props.event.location.longitude, this.handleShowDirections.bind(this))}
           cssClassName='EventOverlay-button'
-          text={translatables.takeMeThere}
+          text={this.props.translatables.takeMeThere}
         />
       }
-      { event.bookingLink &&
-      <Link iframe={{url:event.bookingLink}} className='EventOverlay-button'>
-        {translatables.tickets}
+      { this.props.event.bookingLink &&
+      <Link iframe={{url:this.props.event.bookingLink}} className='EventOverlay-button'>
+        {this.props.translatables.tickets}
       </Link>
       }
     </div>
+
     </div>
+    </div>
+    }
   </div>
   );
-};
+  }
+}
+
 
 EventOverlay.propTypes = {
   event: PropTypes.object, // todo
@@ -284,14 +317,13 @@ export default class extends Component {
           <EventOverlayConnected
             event={this.props.event}
             handleClose={this.props.handleClose}
-            handleShowDirections={this.props.handleShowDirections}
             onVideoButtonClick={this.handlePlayVideo.bind(this, true)}
+            showDirections={this.props.showDirections}
             showVideoButton={this.state.videoUrl} />
             {this.state.comparedEvent &&
             <EventOverlayConnected
               event={this.state.comparedEvent}
               handleClose={this.props.handleClose}
-              handleShowDirections={this.props.handleShowDirections}
               onVideoButtonClick={this.handlePlayVideo.bind(this, true)}
               showVideoButton={this.state.comparedEvent.youtubeUrl || this.state.comparedEvent.vimeoUrl || null} />
             }

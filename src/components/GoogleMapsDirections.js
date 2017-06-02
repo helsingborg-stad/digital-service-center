@@ -11,7 +11,6 @@ import {
 } from 'react-google-maps';
 
 import './GoogleMapsDirections.css';
-import closeCrossSvg from '../media/close-cross.svg';
 
 
 const GoogleMapsDirection = withGoogleMap(props => (
@@ -30,7 +29,7 @@ export default class GoogleMapsDirections extends Component {
     this.state ={
       origin: origin,
       destination: destination,
-      travelMode: window.google.maps.DRIVING,
+      travelMode: 'WALKING',
       directions: null
     };
   }
@@ -41,7 +40,7 @@ export default class GoogleMapsDirections extends Component {
     DirectionsService.route({
       origin: this.state.origin,
       destination: this.state.destination,
-      travelMode: google.maps.TravelMode.DRIVING
+      travelMode: this.state.travelMode
     }, (result, status) => {
       if (status === google.maps.DirectionsStatus.OK) {
         this.setState({
@@ -55,10 +54,13 @@ export default class GoogleMapsDirections extends Component {
   }
   render() {
     return (
-      <div style={{ width: '100%', height: '100%' }}>
+      <div style={{ width: '100%', height: '100%', paddingTop: '2rem' }}>
         <button className='GoogleMapsDirections-closeButton' onClick={this.props.handleClose}>
-          <img src={closeCrossSvg} alt="Close" />
+          {this.props.backToStartText}
         </button>
+        <div className='GoogleMapsDirections-eventName'>
+          {this.props.eventName}
+        </div>
         <GoogleMapsDirection
           containerElement={
             <div style={{ width: '100%', height: '100%' }} />
@@ -75,6 +77,7 @@ export default class GoogleMapsDirections extends Component {
 }
 
 GoogleMapsDirections.propTypes = {
+  eventName: React.PropTypes.string.isRequired,
   origin: React.PropTypes.shape({
     lat: React.PropTypes.number.isRequired,
     lng: React.PropTypes.number.isRequired
@@ -84,5 +87,6 @@ GoogleMapsDirections.propTypes = {
     lng: React.PropTypes.number.isRequired
   }),
   directions: React.PropTypes.object,
-  handleClose: React.PropTypes.func
+  handleClose: React.PropTypes.func,
+  backToStartText: React.PropTypes.string
 };

@@ -23,7 +23,7 @@ export class OverlayCloser extends Component {
 }
 
 OverlayCloser.propTypes = {
-  isHidden: PropTypes.string,
+  isHidden: PropTypes.bool,
   onCloseModal: PropTypes.func,
   onDismissClose: PropTypes.func,
   translatables: PropTypes.shape({

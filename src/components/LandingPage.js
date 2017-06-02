@@ -6,7 +6,6 @@ import VergicChatButton from './VergicChatButton';
 import { SideNavigation, SideNavigationLink } from './SideNavigation';
 import Search from './Search';
 import GoogleMaps from './GoogleMaps';
-import GoogleMapsDirections from './GoogleMapsDirections';
 import { EventShowcase, Event } from './EventShowcase';
 import EventOverlay from './EventOverlay';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
@@ -87,7 +86,6 @@ export class LandingPage extends Component {
       visibleModals: [],
       visibleOverlayEvent: props.activeEvent || null,
       activeCategories: [],
-      directions: null,
       selectedDates: null
     };
   }
@@ -105,7 +103,7 @@ export class LandingPage extends Component {
       : {visibleModals: visibleModals.concat([modalId])});
   }
 
-  changeOverlayEvent(event) {
+  changeOverlayEvent(event, showDirections = false) {
     const eventSlug = event ? event.slug : null;
     const eventToShow = this.props.events.find(e => e.slug === eventSlug);
     const relatedEvents = eventToShow ? getRelatedEvents(
@@ -114,10 +112,10 @@ export class LandingPage extends Component {
     ) : null;
 
     this.changeUrl(event ? event.slug : this.state.visibleOverlayEvent, event !== null);
-
     this.setState({
       visibleOverlayEvent: eventToShow ? eventToShow.slug : null,
-      relatedEvents: relatedEvents
+      relatedEvents: relatedEvents,
+      showDirections: showDirections
     });
   }
 
@@ -143,12 +141,6 @@ export class LandingPage extends Component {
         });
       });
     }
-  }
-
-  showDirections(directions) {
-    this.setState({
-      directions: directions
-    });
   }
 
   handleSelectedDates(selectedDates) {
@@ -204,7 +196,7 @@ export class LandingPage extends Component {
           pageType={this.props.type}
           activeLanguage={this.props.activeLanguage}
         />
-        {!this.state.directions &&
+
         <SideNavigation>
           {pageData.categories && !!pageData.categories.length && pageData.categories.map(cat =>
             <SideNavigationLink
@@ -219,11 +211,10 @@ export class LandingPage extends Component {
             />)
           }
         </SideNavigation>
-        }
+
         <main>
           <div className='LandingPage-mapWrapper'>
-            {!this.state.directions
-            ? <GoogleMaps
+           <GoogleMaps
               {...selectedEventsWithCoordinates(
                 this.props.events,
                 this.state.activeCategories,
@@ -233,14 +224,7 @@ export class LandingPage extends Component {
               handleToggleModalVisibility={this.toggleModalVisibility.bind(this)}
               handleShowMoreInfo={this.changeOverlayEvent.bind(this)}
               apiKey={this.props.googleMapsApiKey}
-              handleShowDirections={this.showDirections.bind(this)}
             />
-            : <GoogleMapsDirections
-              origin={this.state.directions.origin}
-              destination={this.state.directions.destination}
-              handleClose={this.showDirections.bind(this, null)}
-            />
-            }
           </div>
           <EventShowcase>
             {pageData.pages.map(event => {
@@ -287,14 +271,14 @@ export class LandingPage extends Component {
             transitionEnter={true}
             transitionLeave={true}
           >
-            { this.state.visibleOverlayEvent && !this.state.directions &&
+            { this.state.visibleOverlayEvent &&
               <EventOverlay
                 key='event-overlay'
                 event={this.props.events.find(e => e.slug === this.state.visibleOverlayEvent)}
                 handleClose={() => this.changeOverlayEvent(null)}
-                handleShowDirections={this.showDirections.bind(this)}
                 relatedEvents={this.state.relatedEvents}
                 changeOverlayEvent={this.changeOverlayEvent.bind(this)}
+                showDirections={this.state.showDirections}
               />
             }
           </ReactCSSTransitionGroup>
