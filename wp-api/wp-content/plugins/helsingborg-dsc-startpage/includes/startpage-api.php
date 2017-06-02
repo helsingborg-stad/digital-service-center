@@ -3,12 +3,15 @@
 function helsingborg_dsc_startpage_get_upcoming_events() {
   $imported_posts = get_posts([ post_type => 'imported_event', 'suppress_filters' => false, numberposts => -1]);
   $imported_upcoming = array_filter($imported_posts, function($post) {
-    $post_meta = get_post_meta($post->ID, 'imported_event_data', true);
+    $post_meta = get_post_meta(get_post_id_original($post->ID, 'imported_event'), 'imported_event_data', true);
     $door_times = array_map(function($occasion) {
-      return $occasion->door_time;
+      return [
+          door_time => $occasion->door_time,
+          end_time => $occasion->end_time
+        ];
     }, $post_meta->occasions ?? []);
     $is_today_or_later = !empty(array_filter($door_times, function($door_time) {
-      return date('Y-m-d', strtotime($door_time)) >= date('Y-m-d');
+      return date('Y-m-d', strtotime($door_time['door_time'])) >= date('Y-m-d') || date('Y-m-d', strtotime($door_time['end_time'])) >= date('Y-m-d');
     }));
     return $is_today_or_later;
   });
@@ -16,7 +19,8 @@ function helsingborg_dsc_startpage_get_upcoming_events() {
   $editable_upcoming = array_filter($editable_posts, function($post) {
     $occasions = get_post_meta($post->ID, 'occasions', false);
     $door_time = $occasions[0]['door_time'];
-    $is_today_or_later = date('Y-m-d', strtotime($door_time)) >= date('Y-m-d');
+    $end_date = $occasions[0]['end_date'];
+    $is_today_or_later = date('Y-m-d', strtotime($door_time)) >= date('Y-m-d') || date('Y-m-d', strtotime($end_date)) >= date('Y-m-d');
     return $is_today_or_later;
   });
   $all_events = array_merge((array)$imported_upcoming, (array)$editable_upcoming);
@@ -168,6 +172,13 @@ function get_visitor_or_local_tags($type) {
 if(!function_exists('get_post_id_translated')) {
   function get_post_id_translated($post_id) {
     return function_exists('icl_object_id') ? icl_object_id($post_id) : $post_id;
+  }
+}
+
+if(!function_exists('get_post_id_original')) {
+  function get_post_id_original($post_id, $post_type) {
+    global $sitepress;
+    return function_exists('icl_object_id') ? icl_object_id($post_id, $post_type, true, $sitepress->get_default_language()) : $post_id;
   }
 }
 
