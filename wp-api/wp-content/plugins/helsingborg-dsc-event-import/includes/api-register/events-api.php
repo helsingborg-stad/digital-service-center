@@ -356,9 +356,16 @@ function get_short_content($post_content) {
     : $decoded;
 }
 
+if(!function_exists('get_post_id_original')) {
+  function get_post_id_original($post_id, $post_type) {
+    global $sitepress;
+    return function_exists('icl_object_id') ? icl_object_id($post_id, $post_type, true, $sitepress->get_default_language()) : $post_id;
+  }
+}
+
 function parse_imported_events($events) {
   return array_map(function($event) {
-    $post_meta = get_post_meta($event->ID, 'imported_event_data', true);
+    $post_meta = get_post_meta(get_post_id_original($event->ID, 'imported_event'), 'imported_event_data', true);
     $response = [
       id         => $event->ID,
       slug       => $event->post_name,
