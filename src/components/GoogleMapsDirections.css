@@ -1,6 +1,6 @@
 .GoogleMapsDirections-closeButton {
   position: absolute;
-  top: 1rem;
+  bottom: 0.5rem;
   left: 2rem;
   width: calc(100% - 5rem);
   text-align: left;

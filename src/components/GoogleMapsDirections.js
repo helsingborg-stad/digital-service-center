@@ -54,10 +54,7 @@ export default class GoogleMapsDirections extends Component {
   }
   render() {
     return (
-      <div style={{ width: '100%', height: '100%', paddingTop: '2rem' }}>
-        <button className='GoogleMapsDirections-closeButton' onClick={this.props.handleClose}>
-          {this.props.showInformationText}
-        </button>
+      <div style={{ width: '100%', height: '100%', paddingTop: '2rem', paddingBottom: '2rem' }}>
         <div className='GoogleMapsDirections-eventName'>
           {this.props.eventName}
         </div>
@@ -71,6 +68,9 @@ export default class GoogleMapsDirections extends Component {
           center={this.state.origin}
           directions={this.state.directions}
         />
+        <button className='GoogleMapsDirections-closeButton' onClick={this.props.handleClose}>
+          {this.props.showInformationText}
+        </button>
       </div>
     );
   }
