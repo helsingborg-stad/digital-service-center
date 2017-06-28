@@ -46,7 +46,6 @@ function editable_place_post_type() {
         echo '<input type="hidden" name="place_google_query_meta_noncename" id="place_google_query_meta_noncename" value="' .
         wp_create_nonce( plugin_basename(__FILE__) ) . '" />';
         $google_query = get_post_meta($post->ID, 'place_google_query', false);
-        var_dump($google_query);
         $check_active;
         if( $google_query[0]['active'] == true) {
             $check_active = 'checked="checked"';
