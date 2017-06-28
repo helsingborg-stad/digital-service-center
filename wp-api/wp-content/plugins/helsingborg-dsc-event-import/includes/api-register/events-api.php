@@ -115,6 +115,21 @@ function get_landing_menu($menu_name){
         $filtered_post['iconName'] = $icon_name;
         return $filtered_post;
       }
+      if($type == 'editable_place') {
+        $post = get_current_post_language($menu_item->object_id);
+        $post_meta = get_post_meta($menu_item->object_id, 'place_google_query', false);
+        if($post_meta[0]['active'] == 'on'){           
+          return [
+            menuId => $menu_item_id,
+            menuParentId => $menu_item->menu_item_parent,
+            type => 'googleQueryPlace',
+            name => $menu_item->title,
+            iconName => $icon_name,
+            iframeUrl => $post_meta[0]['iframe_url']
+          ];
+        }
+        return;
+      }
     }, $menu_items);
   
   foreach($filtered_menu as $key => $value) {
@@ -149,7 +164,7 @@ function get_landing_menu($menu_name){
   foreach($filtered_menu as $menu_item) {
     if($menu_item['menuParentId'] == '0') {
       $ordered_menu[$menu_item['menuId']] = $menu_item;
-      if($ordered_menu[$menu_item['menuId']]['type'] == 'category') {
+      if($ordered_menu[$menu_item['menuId']]['type'] == 'category' || $ordered_menu[$menu_item['menuId']]['type'] == 'googleQueryPlace') {
         $ordered_menu[$menu_item['menuId']]['activeColor'] = $colors[$i];
         $i++;
         if($i == 12) {

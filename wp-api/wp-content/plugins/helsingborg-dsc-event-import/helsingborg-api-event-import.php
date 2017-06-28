@@ -20,6 +20,7 @@ function helsingborg_api_event_import_init() {
   load_plugin_textdomain( 'Helsingborg-API-event-import', false, 'helsingborg-api-event-import-plugin' );
 }
 
+include('includes/post-types/editable-place-post-type.php');
 include('includes/post-types/import-event-post-type.php');
 include('includes/post-types/editable-event-post-type.php');
 include('includes/post-types/imported-taxonomy.php');
