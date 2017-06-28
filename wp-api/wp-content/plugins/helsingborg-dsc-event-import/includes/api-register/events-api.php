@@ -33,13 +33,15 @@ function helsingborg_dsc_events_response() {
     heading => get_option('hdsc-landing-settings-heading-visitor', 'Explore Helsingborg'),
     bottomLinks => get_links_for_option('hdsc-landing-settings-bottom-links-visitor'),
     categories => get_landing_page_categories('hdsc-landing-visitor-categories', $categories_to_show_on_map),
-    pages => get_pages_for_visitor_local('visitor')
+    pages => get_pages_for_visitor_local('visitor'),
+    menu => get_landing_menu('visitor_menu')
   ];
   $response['landingPages']['local'] = [
     heading => get_option('hdsc-landing-settings-heading-local', 'Explore Helsingborg'),
     bottomLinks => get_links_for_option('hdsc-landing-settings-bottom-links-local'),
     categories => get_landing_page_categories('hdsc-landing-local-categories', $categories_to_show_on_map),
-    pages => get_pages_for_visitor_local('local')
+    pages => get_pages_for_visitor_local('local'),
+    menu => get_landing_menu('local_menu')
   ];
 
   $response['landingPages']['events'] = [
@@ -72,6 +74,253 @@ function helsingborg_dsc_events_response() {
   }
 
   return rest_ensure_response($response);
+}
+
+function get_landing_menu($menu_name){
+    $locations = get_nav_menu_locations();
+    $menu_items = wp_get_nav_menu_items($locations[$menu_name]);
+    if($menu_items == NULL) {
+      return null;
+    }
+    $filtered_menu = array_map(function($menu_item){
+      $menu_item_id = $menu_item->ID;
+      $item = get_current_post_language($menu_item_id);
+      if(!isset($item)){
+        return;
+      }
+      $type = $menu_item->object;
+      $icon_name = get_post_meta($menu_item_id, '_custom_icon', true);
+      if($type == 'category') {
+          return [
+            menuId => $menu_item_id,
+            menuParentId => $menu_item->menu_item_parent,
+            type => $type,
+            name => $menu_item->title,
+            iconName => $icon_name
+        ];
+      }
+      if($type == 'editable_event' || $type == 'page'){
+        $post = get_post($menu_item->object_id);
+        $filtered_post = get_editable_event_and_page_values($post);
+        $filtered_post['menuId'] = $menu_item_id;
+        $filtered_post['menuParentId'] = $menu_item->menu_item_parent;
+        $filtered_post['iconName'] = $icon_name;
+        return $filtered_post;
+      }
+      if($type == 'imported_event') {
+        $post = get_post($menu_item->object_id);
+        $filtered_post = get_imported_event_values($post);
+        $filtered_post['menuId'] = $menu_item_id;
+        $filtered_post['menuParentId'] = $menu_item->menu_item_parent;
+        $filtered_post['iconName'] = $icon_name;
+        return $filtered_post;
+      }
+    }, $menu_items);
+  
+  foreach($filtered_menu as $key => $value) {
+    if($value == null) {
+      unset($filtered_menu[$key]);
+    }
+  }
+  
+  if($filtered_menu == NULL || empty(array_values($filtered_menu))) {
+      return null;
+  }
+
+  $ordered_menu = [];
+  $colors = [
+    '#f7a600',
+    '#e3000f',
+    '#a84c98',
+    '#4db4e7',
+    '#76b828',
+    '#0095db',
+    '#d35098',
+    '#f7a600',
+    '#e3000f',
+    '#a84c98',
+    '#4db4e7',
+    '#76b828',
+    '#0095db'
+  ];
+
+  $i = 0;
+  //first level
+  foreach($filtered_menu as $menu_item) {
+    if($menu_item['menuParentId'] == '0') {
+      $ordered_menu[$menu_item['menuId']] = $menu_item;
+      if($ordered_menu[$menu_item['menuId']]['type'] == 'category') {
+        $ordered_menu[$menu_item['menuId']]['activeColor'] = $colors[$i];
+        $i++;
+        if($i == 12) {
+          $i = 0;
+        }
+      }
+    }
+  }
+
+  //second level
+  foreach($filtered_menu as $menu_item) {
+    if($menu_item['menuParentId'] != '0' && $ordered_menu[$menu_item['menuParentId']] != null) {
+      if(!is_array($ordered_menu[$menu_item['menuParentId']]['subItems'])) {
+        $ordered_menu[$menu_item['menuParentId']]['subItems'] = [];
+      }
+      array_push($ordered_menu[$menu_item['menuParentId']]['subItems'], $menu_item);
+    }
+  }
+
+  return array_values($ordered_menu) ?? null;
+}
+
+function get_imported_event_values($event) {
+  $post_meta = get_post_meta(get_post_id_original($event->ID, 'imported_event'), 'imported_event_data', true);
+    $response = [
+      id         => $event->ID,
+      slug       => $event->post_name,
+      name       => html_entity_decode($event->post_title),
+      type       => 'event',
+      content    => $event->post_content,
+      shortContent => get_short_content($event->post_content),
+      categories => array_map(function($category) {
+        return [
+          id   => $category->cat_ID,
+          name => $category->name,
+          slug => $category->slug
+        ];
+      }, get_the_category($event->ID)),
+      occasions => array_map(function($occasion) {
+        return [
+          startDate => $occasion->start_date,
+          endDate => $occasion->end_date,
+          doorTime => $occasion->door_time
+        ];
+      }, $post_meta->occasions ?? []),
+      location => [
+        id => $post_meta->location->id,
+        title => $post_meta->location->title,
+        streetAddress => $post_meta->location->street_address,
+        postalCode => $post_meta->location->postal_code,
+        latitude => floatval($post_meta->location->latitude),
+        longitude => floatval($post_meta->location->longitude)
+      ],
+      youtubeUrl => $post_meta->youtube,
+      vimeoUrl => $post_meta->vimeo
+    ];
+
+    if ($post_meta->booking_link) {
+      $response['bookingLink'] = $post_meta->booking_link;
+    }
+
+    $organizer = $post_meta->organizers && $post_meta->organizers[0] ? $post_meta->organizers[0] : null;
+    if ($organizer && $organizer->contacts && $organizer->contacts[0] && strlen($organizer->contacts[0]->email)) {
+      $response['contactEmail'] = $organizer->contacts[0]->email;
+    }
+    if ($organizer && $organizer->contacts && $organizer->contacts[0] && strlen($organizer->contacts[0]->phone_number)) {
+      $response['contactPhone'] = $organizer->contacts[0]->phone_number;
+    }
+
+    $thumbnail_url = get_the_post_thumbnail_url($event->ID);
+    if ($thumbnail_url) {
+      $response['imgUrl'] = $thumbnail_url;
+    }
+    return $response;
+}
+
+function get_editable_event_and_page_values($post) {
+   $page = get_current_post_language($post->ID);
+      if(!isset($page)) {
+        return;
+      }
+      $iframeMeta = get_post_meta($page->ID, 'event_iframe', false)[0];
+      if ($iframeMeta['active'] == 'on' && strlen($iframeMeta['src'])) {
+        $response = [
+          type => 'iframe',
+          name => $page->post_title,
+          url => $iframeMeta['src'],
+          width => intval($iframeMeta['width'] ?? 0),
+          height => intval($iframeMeta['height'] ?? 0),
+          offsetTop => intval($iframeMeta['top_offset'] ?? 0),
+          offsetLeft => intval($iframeMeta['left_offset'] ?? 0)
+        ];
+
+        $thumbnail_url = get_the_post_thumbnail_url($page->ID);
+        if ($thumbnail_url) {
+          $response['imgUrl'] = $thumbnail_url;
+        }
+
+        return $response;
+      }
+      else if($page->post_type == 'editable_event') {
+        $response = [
+          id         => $page->ID,
+          slug       => $page->post_name,
+          name       => html_entity_decode($page->post_title),
+          type       => 'event',
+          content    => $page->post_content,
+          categories => array_map(function($category) {
+            return [
+              id   => $category->cat_ID,
+              name => $category->name,
+              slug => $category->slug
+            ];
+          }, get_the_category($page->ID)),
+        ];
+
+        $thumbnail_url = get_the_post_thumbnail_url($page->ID);
+        if ($thumbnail_url) {
+          $response['imgUrl'] = $thumbnail_url;
+        }
+
+        $booking_link = get_post_meta($page->ID, 'booking_link', true);
+        if ($booking_link) {
+          $response['bookingLink'] = $booking_link;
+        }
+
+        $occasion = get_post_meta($page->ID, 'occasions', true);
+        if (strlen($occasion['start_date']) && strlen($occasion['end_date']) && strlen($occasion['door_time'])) {
+          $response['occasions'] = [[
+            startDate => str_replace('T', ' ', $occasion['start_date']),
+            endDate => str_replace('T', ' ', $occasion['end_date']),
+            doorTime => str_replace('T', ' ', $occasion['door_time'])
+          ]];
+        }
+
+        $location = get_post_meta($page->ID, 'location', true);
+        $response['location'] = [
+          streetAddress => $location['street_address'],
+          postalCode => $location['postal_code'],
+          latitude => floatval($location['latitude']),
+          longitude => floatval($location['longitude'])
+        ];
+
+        $youtubeUrl = get_post_meta($page->ID, 'youtube', true);
+        if ($youtubeUrl) {
+          $response['youtubeUrl'] = $youtubeUrl;
+        }
+
+        $vimeoUrl = get_post_meta($page->ID, 'vimeo', true);
+        if ($vimeoUrl) {
+          $response['vimeoUrl'] = $vimeoUrl;
+        }
+
+        return $response;
+      }
+      else {
+        $response = [
+          type => 'page',
+          name => $page->post_title
+        ];
+        if(strpos(wp_make_link_relative(get_permalink($page)), '?') !== false) {
+        $response['url'] = wp_make_link_relative(get_permalink($page)) . '&wordpress';
+        } else {
+        $response['url'] = wp_make_link_relative(get_permalink($page)) . '?wordpress';
+        }
+        $thumbnail_url = get_the_post_thumbnail_url($page->ID);
+        if ($thumbnail_url) {
+          $response['imgUrl'] = $thumbnail_url;
+        }
+        return $response;
+      }
 }
 
 // TODO: make code more tidy and remove duplication in startpage-api's `post_mapping_helper`
@@ -363,6 +612,8 @@ if(!function_exists('get_post_id_original')) {
   }
 }
 
+
+//use new get_imported_event_values
 function parse_imported_events($events) {
   return array_map(function($event) {
     $post_meta = get_post_meta(get_post_id_original($event->ID, 'imported_event'), 'imported_event_data', true);
