@@ -43,6 +43,7 @@
 .SideNavigationLink--has-children ul li.SideNavigationLink {
   padding-right: 2rem;
   padding-left: 2rem;
+  margin-left: -2rem;
 }
 
 .SideNavigationLink__icon {

@@ -17,7 +17,7 @@ SideNavigation.propTypes = {
 };
 
 const SideNavigationLink =
-  ({id, activeCategories, activeColor, handleClick, name, subCategories, icon}) => (
+  ({id, activeCategories, activeColor, handleClick, name, subCategories, icon, handleIframeClick, type, iframeUrl}) => (
 
   <li
     className={cn('SideNavigationLink',
@@ -26,7 +26,16 @@ const SideNavigationLink =
         && subCategories.length && activeCategories.includes(id)
       })}
     style={{ background: activeCategories.includes(id) ? activeColor : '#fff'}}
-    onClick={() => handleClick({id: id, subCategories: subCategories, parentId: null})}
+    onClick={
+      (e) => {
+        e.stopPropagation();
+        if (type && type === 'googleQueryPlace') {
+          handleIframeClick(iframeUrl);
+        } else {
+          handleClick({id: id});
+        }
+      }
+    }
   >
     { icon &&
     <span className='SideNavigationLink__icon'>
@@ -40,16 +49,20 @@ const SideNavigationLink =
       {subCategories.map(sub => (
         <li
           className={cn('SideNavigationLink',
-            {'SideNavigationLink--selected': activeCategories.includes(sub.id)}
+            {'SideNavigationLink--selected': activeCategories.includes(sub.id || sub.menuId)}
           )}
-          style={{ background: activeCategories.includes(sub.id) ? sub.activeColor: '#fff'}}
+          style={{ background: activeCategories.includes(sub.id || sub.menuId) ? activeColor : '#fff'}}
           onClick={
             (e) => {
               e.stopPropagation();
-              handleClick({id: sub.id, subCategories: subCategories, parentId: id});
+              if (sub.type && sub.type === 'googleQueryPlace') {
+                handleIframeClick(sub.iframeUrl);
+              } else {
+                handleClick({id: sub.id || sub.menuId});
+              }
             }
           }
-          key={sub.id}
+          key={sub.id || sub.menuId}
         >
           {sub.name}
         </li>
@@ -65,6 +78,9 @@ SideNavigationLink.propTypes = {
   activeColor: PropTypes.string,
   handleClick: PropTypes.func,
   name: PropTypes.string,
+  handleIframeClick: PropTypes.func,
+  type: PropTypes.string,
+  iframeUrl: PropTypes.string,
   subCategories: PropTypes.oneOfType([
     React.PropTypes.arrayOf(React.PropTypes.object)
   ]),

@@ -152,23 +152,16 @@ export class LandingPage extends Component {
     }
   }
 
-  handleSideNavClick({id, subCategories, parentId}) {
+  handleSideNavClick({id}) {
     const { activeCategories } = this.state;
-    let categoryIds = !parentId && subCategories && subCategories.length
-      ? subCategories.map(sub => (sub.id)) : [];
-
-    categoryIds = categoryIds.concat([id]);
-    if (parentId && activeCategories
-      .filter(x => x !== id)
-      .every(activeId => {
-        return subCategories.map(sub => (sub.id)).indexOf(activeId) === -1;
-      })) {
-      categoryIds = categoryIds.concat([parentId]);
-    }
 
     this.setState(activeCategories.includes(id)
-      ? {activeCategories: activeCategories.filter(x => !categoryIds.includes(x))}
-      : {activeCategories: activeCategories.concat(categoryIds)});
+      ? {activeCategories: activeCategories.filter(x => x !== id)}
+      : {activeCategories: activeCategories.concat(id)});
+  }
+
+  handleIframeClick(url) {
+    this.props.setIframeUrl({url});
   }
 
   render() {
@@ -198,7 +191,24 @@ export class LandingPage extends Component {
         />
 
         <SideNavigation>
-          {pageData.categories && !!pageData.categories.length && pageData.categories.map(cat =>
+          {pageData.menu !== null && pageData.menu.map(menu =>
+            <SideNavigationLink
+              id={menu.menuId}
+              key={menu.menuId}
+              name={menu.name}
+              activeCategories={this.state.activeCategories}
+              activeColor={menu.activeColor}
+              handleClick={this.handleSideNavClick.bind(this)}
+              handleIframeClick={this.handleIframeClick.bind(this)}
+              type={menu.type}
+              iframeUrl={menu.iframeUrl}
+              navigationType={menu.type}
+              icon={menu.iconName}
+              subCategories={menu.subItems}
+            />)
+
+          }
+          {pageData.menu === null && pageData.categories && !!pageData.categories.length && pageData.categories.map(cat =>
             <SideNavigationLink
               id={cat.id}
               key={cat.id}
