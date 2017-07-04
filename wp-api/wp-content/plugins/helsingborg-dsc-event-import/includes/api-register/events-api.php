@@ -96,7 +96,8 @@ function get_landing_menu($menu_name){
             menuParentId => $menu_item->menu_item_parent,
             type => $type,
             name => $menu_item->title,
-            iconName => $icon_name
+            iconName => $icon_name,
+            id => $menu_item->object_id
         ];
       }
       if($type == 'editable_event' || $type == 'page'){
