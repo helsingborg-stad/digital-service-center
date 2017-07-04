@@ -17,7 +17,7 @@ SideNavigation.propTypes = {
 };
 
 const SideNavigationLink =
-  ({id, activeCategories, activeColor, handleClick, name, subCategories, icon, handleIframeClick, type, iframeUrl}) => (
+  ({id, activeCategories, activeColor, handleClick, name, subCategories, icon, handleIframeClick, type, iframeUrl, menuItem, changeOverlayEvent}) => (
 
   <li
     className={cn('SideNavigationLink',
@@ -29,8 +29,10 @@ const SideNavigationLink =
     onClick={
       (e) => {
         e.stopPropagation();
-        if (type && type === 'googleQueryPlace') {
-          handleIframeClick(iframeUrl);
+        if (type && (type === 'googleQueryPlace' || type === 'iframe')) {
+          handleIframeClick(type === 'iframe' && menuItem ? menuItem : {url: iframeUrl});
+        } else if (type && type === 'event') {
+          changeOverlayEvent(menuItem);
         } else {
           handleClick({id: id});
         }
@@ -49,20 +51,22 @@ const SideNavigationLink =
       {subCategories.map(sub => (
         <li
           className={cn('SideNavigationLink',
-            {'SideNavigationLink--selected': activeCategories.includes(sub.id || sub.menuId)}
+            {'SideNavigationLink--selected': activeCategories.includes(sub.id)}
           )}
-          style={{ background: activeCategories.includes(sub.id || sub.menuId) ? activeColor : '#fff'}}
+          style={{ background: activeCategories.includes(sub.id) ? activeColor : '#fff'}}
           onClick={
             (e) => {
               e.stopPropagation();
-              if (sub.type && sub.type === 'googleQueryPlace') {
-                handleIframeClick(sub.iframeUrl);
+              if (sub.type && (sub.type === 'googleQueryPlace' || sub.type === 'iframe')) {
+                handleIframeClick(sub.type === 'iframe' ? sub : {url: sub.iframeUrl});
+              } else if (type && type === 'event') {
+                changeOverlayEvent(sub);
               } else {
-                handleClick({id: sub.id || sub.menuId});
+                handleClick({id: sub.id});
               }
             }
           }
-          key={sub.id || sub.menuId}
+          key={sub.id}
         >
           {sub.name}
         </li>
@@ -79,12 +83,14 @@ SideNavigationLink.propTypes = {
   handleClick: PropTypes.func,
   name: PropTypes.string,
   handleIframeClick: PropTypes.func,
+  changeOverlayEvent: PropTypes.func,
   type: PropTypes.string,
   iframeUrl: PropTypes.string,
   subCategories: PropTypes.oneOfType([
     React.PropTypes.arrayOf(React.PropTypes.object)
   ]),
-  icon: PropTypes.string
+  icon: PropTypes.string,
+  menuItem: PropTypes.any
 };
 
 export { SideNavigation, SideNavigationLink };
