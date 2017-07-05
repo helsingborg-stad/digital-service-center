@@ -152,16 +152,21 @@ export class LandingPage extends Component {
     }
   }
 
-  handleSideNavClick({ id }) {
-    const { activeCategories } = this.state;
+  // eslint-disable-next-line no-shadow
+  handleSideNavClick({id, type, menuItem, iframeUrl}) {
+    if (type === 'googleQueryPlace') {
+      this.props.setIframeUrl({url: iframeUrl});
+    } else if (type === 'iframe') {
+      this.props.setIframeUrl(menuItem);
+    } else if (type && type === 'event') {
+      this.changeOverlayEvent(menuItem);
+    } else {
+      const { activeCategories } = this.state;
 
-    this.setState(activeCategories.includes(id)
-      ? { activeCategories: activeCategories.filter(x => x !== id) }
-      : { activeCategories: activeCategories.concat(id) });
-  }
-
-  handleIframeClick(iframe) {
-    this.props.setIframeUrl(iframe);
+      this.setState(activeCategories.includes(id)
+        ? { activeCategories: activeCategories.filter(x => x !== id) }
+        : { activeCategories: activeCategories.concat(id) });
+    }
   }
 
   render() {
@@ -199,14 +204,11 @@ export class LandingPage extends Component {
               activeCategories={this.state.activeCategories}
               activeColor={menu.activeColor}
               handleClick={this.handleSideNavClick.bind(this)}
-              handleIframeClick={this.handleIframeClick.bind(this)}
-              changeOverlayEvent={this.changeOverlayEvent.bind(this)}
               type={menu.type}
               iframeUrl={menu.iframeUrl}
-              navigationType={menu.type}
               icon={menu.iconName}
               subCategories={menu.subItems}
-              menuItem={menu.type === 'iframe' || menu.type === 'event' ? menu : null}
+              menuItem={menu}
             />)
 
           }
@@ -239,31 +241,31 @@ export class LandingPage extends Component {
             />
           </div>
           <EventShowcase>
-            {pageData.pages.map(event => {
+            {pageData.pages.map((event, index) => {
               switch (event.type) {
-                case 'iframe':
-                  return (
-                    <Event
-                      key={event.id}
-                      {...event}
-                      onClick={(url) => this.props.setIframeUrl(url)} />
-                  );
-                case 'page':
-                  return (
-                    <Event
-                      key={event.id}
-                      {...event}
-                      onClick={() => this.props.setIframeUrl({ url: formatRelativeUrl(event.url) })} />
-                  );
-                case 'event':
-                  return (
-                    <Event
-                      key={event.id}
-                      {...event}
-                      onClick={this.changeOverlayEvent.bind(this)} />
-                  );
-                default:
-                  return null;
+              case 'iframe':
+                return (
+                  <Event
+                    key={index}
+                    {...event}
+                    onClick={(url) => this.props.setIframeUrl(url)} />
+                );
+              case 'page':
+                return (
+                  <Event
+                    key={index}
+                    {...event}
+                    onClick={() => this.props.setIframeUrl({ url: formatRelativeUrl(event.url) })} />
+                );
+              case 'event':
+                return (
+                  <Event
+                    key={index}
+                    {...event}
+                    onClick={this.changeOverlayEvent.bind(this)} />
+                );
+              default:
+                return null;
               }
             })
             }
