@@ -29,22 +29,22 @@ function helsingborg_dsc_events_response() {
     return $acc;
   }, []);
   $response['events'] = $all_events;
-  $response['landingPages']['visitor'] = [
+  $response['landing{Pages}']['visitor'] = [
     heading => get_option('hdsc-landing-settings-heading-visitor', 'Explore Helsingborg'),
     bottomLinks => get_links_for_option('hdsc-landing-settings-bottom-links-visitor'),
     categories => get_landing_page_categories('hdsc-landing-visitor-categories', $categories_to_show_on_map),
-    pages => get_pages_for_visitor_local('visitor'),
+    {pages} => get_{pages}_for_visitor_local('visitor'),
     menu => get_landing_menu('visitor_menu')
   ];
-  $response['landingPages']['local'] = [
+  $response['landing{Pages}']['local'] = [
     heading => get_option('hdsc-landing-settings-heading-local', 'Explore Helsingborg'),
     bottomLinks => get_links_for_option('hdsc-landing-settings-bottom-links-local'),
     categories => get_landing_page_categories('hdsc-landing-local-categories', $categories_to_show_on_map),
-    pages => get_pages_for_visitor_local('local'),
+    {pages} => get_{pages}_for_visitor_local('local'),
     menu => get_landing_menu('local_menu')
   ];
 
-  $response['landingPages']['events'] = [
+  $response['landing{Pages}']['events'] = [
     heading => get_option('hdsc-landing-settings-heading-events', 'Events'),
     bottomLinks => get_links_for_option('hdsc-landing-settings-bottom-links-events'),
     excludedCategoryIds => [
@@ -53,7 +53,7 @@ function helsingborg_dsc_events_response() {
     ]
   ];
 
-  $response['landingPages']['shared'] = [];
+  $response['landing{Pages}']['shared'] = [];
   $free_wifi_id = get_option('hdsc-landing-settings-free-wifi-page');
   if(!isset($free_wifi_id)){
     return rest_ensure_response($response);
@@ -64,7 +64,7 @@ function helsingborg_dsc_events_response() {
   }
   $free_wifi = get_post_meta($free_wifi_page->ID, 'event_iframe', true);
   if ($free_wifi) {
-    $response['landingPages']['shared']['freeWifi'] = [
+    $response['landing{Pages}']['shared']['freeWifi'] = [
       url => $free_wifi['src'],
       width => intval($free_wifi['width'] ?? 0),
       height => intval($free_wifi['height'] ?? 0),
@@ -340,7 +340,7 @@ function get_editable_event_and_page_values($post) {
 }
 
 // TODO: make code more tidy and remove duplication in startpage-api's `post_mapping_helper`
-function get_pages_for_visitor_local($section) {
+function get_{pages}_for_visitor_local($section) {
   $args = [
     'post_type' => [
       'page',
@@ -442,6 +442,9 @@ function get_pages_for_visitor_local($section) {
           type => 'page',
           name => $page->post_title
         ];
+        if(strpos($response['url'], '__trashed') !== false) {
+          return;
+        }
         if(strpos(wp_make_link_relative(get_permalink($page)), '?') !== false) {
         $response['url'] = wp_make_link_relative(get_permalink($page)) . '&wordpress';
         } else {
@@ -451,6 +454,7 @@ function get_pages_for_visitor_local($section) {
         if ($thumbnail_url) {
           $response['imgUrl'] = $thumbnail_url;
         }
+
         return $response;
       }
     }, $posts);
