@@ -26,7 +26,8 @@ function delete_google_place_types() {
 
     if ($saved_google_place_types != null && is_array($saved_google_place_types) && $_POST['saved_google_place_types_checkbox'] != null) {
         foreach ($saved_google_place_types as $key => $saved_google_place_type) {
-            if (in_array($saved_google_place_type['event_category_id'], $_POST['saved_google_place_types_checkbox'])){
+            $delete_place = $saved_google_place_type['event_category_id'] . $saved_google_place_type['google_place_type'];
+            if (in_array($delete_place, $_POST['saved_google_place_types_checkbox'])){
                 unset($saved_google_place_types[$key]);
             }
         }

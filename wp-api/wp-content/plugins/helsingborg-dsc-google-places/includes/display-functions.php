@@ -125,7 +125,7 @@ function list_google_place_types_form(){
                 foreach($saved_google_place_types as $saved_google_place_type) {
                     $category_name = get_term( $saved_google_place_type['event_category_id'])->name;
                     echo '<tr>';
-                    echo '<th> <input type="checkbox" name="saved_google_place_types_checkbox[]" value="' . $saved_google_place_type['event_category_id'] . '" /> </th>';
+                    echo '<th> <input type="checkbox" name="saved_google_place_types_checkbox[]" value="' . $saved_google_place_type['event_category_id'] . $saved_google_place_type['google_place_type'] . '" /> </th>';
                     echo '<td>' . $category_name . '</td>';
                     echo '<td>' . $saved_google_place_type['google_place_type'] . '</td>';
                     echo '</tr>';
