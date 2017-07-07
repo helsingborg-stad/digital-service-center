@@ -52,6 +52,8 @@ function editable_place_post_type() {
         }
         $google_api_key = get_option('hdsc-site-setting-google-maps-api-key');
         $google_query_str = str_replace(' ', '+', $google_query[0]['query']);
+        $google_iframe_url = 'https://www.google.com/maps/embed/v1/search?key=' . $google_api_key . '
+                &q='. $google_query_str;
         echo '<div>';
         echo '<p>Sökord för google maps, separera varje sökord med ett mellanslag</p>';
         echo '<input style="width: 800px" type="text" name="google_search_query" id="google_search_query" value="' . $google_query[0]['query'] . '">';
@@ -60,11 +62,13 @@ function editable_place_post_type() {
         echo '<p>Använd google platser</p>';
         echo '<input type="checkbox" min="0" name="google_query_active"' . $check_active . '>';
         echo '</div>';
+        if(ICL_LANGUAGE_CODE == 'en') {
+            $google_iframe_url = $google_iframe_url . '&language=en';
+        }
         echo '<div>
                 <p>Platser som kommer att visas på kartan</p>
                 <iframe id="googleMapsPreRender" width="100%" height="600" frameborder="0" style="border:0"
-                src="https://www.google.com/maps/embed/v1/search?key=' . $google_api_key . '
-                &q='. $google_query_str . '" allowfullscreen>
+                src="' . $google_iframe_url .'" allowfullscreen>
                 </iframe>
               </div>';
     }

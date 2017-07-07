@@ -120,7 +120,7 @@ function get_landing_menu($menu_name){
         $post = get_current_post_language($menu_item->object_id);
         $post_meta = get_post_meta($menu_item->object_id, 'place_google_query', false);
         if($post_meta[0]['active'] == 'on'){           
-          return [
+          $place = [
             menuId => $menu_item_id,
             menuParentId => $menu_item->menu_item_parent,
             type => 'googleQueryPlace',
@@ -128,6 +128,10 @@ function get_landing_menu($menu_name){
             iconName => $icon_name,
             iframeUrl => $post_meta[0]['iframe_url']
           ];
+          if(ICL_LANGUAGE_CODE == 'en') {
+            $place['iframeUrl'] = $post_meta[0]['iframe_url'] . '&language=en';
+          }
+          return $place;
         }
         return;
       }
