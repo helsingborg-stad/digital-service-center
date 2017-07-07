@@ -97,7 +97,7 @@ function get_landing_menu($menu_name){
             type => $type,
             name => $menu_item->title,
             iconName => $icon_name,
-            id => $menu_item->object_id
+            id => intval($menu_item->object_id)
         ];
       }
       if($type == 'editable_event' || $type == 'page'){
@@ -119,7 +119,7 @@ function get_landing_menu($menu_name){
       if($type == 'editable_place') {
         $post = get_current_post_language($menu_item->object_id);
         $post_meta = get_post_meta($menu_item->object_id, 'place_google_query', false);
-        if($post_meta[0]['active'] == 'on'){           
+        if($post_meta[0]['active'] == 'on'){
           $place = [
             menuId => $menu_item_id,
             menuParentId => $menu_item->menu_item_parent,
@@ -136,13 +136,13 @@ function get_landing_menu($menu_name){
         return;
       }
     }, $menu_items);
-  
+
   foreach($filtered_menu as $key => $value) {
     if($value == null) {
       unset($filtered_menu[$key]);
     }
   }
-  
+
   if($filtered_menu == NULL || empty(array_values($filtered_menu))) {
       return null;
   }
@@ -446,6 +446,9 @@ function get_pages_for_visitor_local($section) {
           type => 'page',
           name => $page->post_title
         ];
+        if(strpos($response['url'], '__trashed') !== false) {
+          return;
+        }
         if(strpos(wp_make_link_relative(get_permalink($page)), '?') !== false) {
         $response['url'] = wp_make_link_relative(get_permalink($page)) . '&wordpress';
         } else {
@@ -455,6 +458,7 @@ function get_pages_for_visitor_local($section) {
         if ($thumbnail_url) {
           $response['imgUrl'] = $thumbnail_url;
         }
+
         return $response;
       }
     }, $posts);

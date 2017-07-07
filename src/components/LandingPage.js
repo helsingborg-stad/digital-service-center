@@ -45,7 +45,7 @@ const selectedEventsWithCoordinates = (events, activeCategories, eventCategories
       const foundSubCategories = eventCategories.filter(cat => {
         return cat.subCategories && cat.subCategories.length;
       }).map(cat => cat.subCategories)
-      .reduce((acc, cat) => acc.concat(cat), []);
+        .reduce((acc, cat) => acc.concat(cat), []);
 
       foundSubCategories.forEach(item => {
         if (item.id === firstActiveCat) {
@@ -76,7 +76,7 @@ const selectedEventsWithCoordinates = (events, activeCategories, eventCategories
         activeColor: e.activeColor
       });
       return acc;
-    }, {markers: []});
+    }, { markers: [] });
 };
 
 export class LandingPage extends Component {
@@ -99,8 +99,8 @@ export class LandingPage extends Component {
   toggleModalVisibility(modalId) {
     const { visibleModals } = this.state;
     this.setState(visibleModals.includes(modalId)
-      ? {visibleModals: visibleModals.filter(x => x !== modalId)}
-      : {visibleModals: visibleModals.concat([modalId])});
+      ? { visibleModals: visibleModals.filter(x => x !== modalId) }
+      : { visibleModals: visibleModals.concat([modalId]) });
   }
 
   changeOverlayEvent(event, showDirections = false) {
@@ -152,16 +152,21 @@ export class LandingPage extends Component {
     }
   }
 
-  handleSideNavClick({id}) {
-    const { activeCategories } = this.state;
+  // eslint-disable-next-line no-shadow
+  handleSideNavClick({id, type, menuItem, iframeUrl}) {
+    if (type === 'googleQueryPlace') {
+      this.props.setIframeUrl({url: iframeUrl});
+    } else if (type === 'iframe') {
+      this.props.setIframeUrl(menuItem);
+    } else if (type && type === 'event') {
+      this.changeOverlayEvent(menuItem);
+    } else {
+      const { activeCategories } = this.state;
 
-    this.setState(activeCategories.includes(id)
-      ? {activeCategories: activeCategories.filter(x => x !== id)}
-      : {activeCategories: activeCategories.concat(id)});
-  }
-
-  handleIframeClick(url) {
-    this.props.setIframeUrl({url});
+      this.setState(activeCategories.includes(id)
+        ? { activeCategories: activeCategories.filter(x => x !== id) }
+        : { activeCategories: activeCategories.concat(id) });
+    }
   }
 
   render() {
@@ -193,18 +198,17 @@ export class LandingPage extends Component {
         <SideNavigation>
           {pageData.menu !== null && pageData.menu.map(menu =>
             <SideNavigationLink
-              id={menu.menuId}
-              key={menu.menuId}
+              id={menu.id || menu.menuId}
+              key={menu.id || menu.menuId}
               name={menu.name}
               activeCategories={this.state.activeCategories}
               activeColor={menu.activeColor}
               handleClick={this.handleSideNavClick.bind(this)}
-              handleIframeClick={this.handleIframeClick.bind(this)}
               type={menu.type}
               iframeUrl={menu.iframeUrl}
-              navigationType={menu.type}
               icon={menu.iconName}
               subCategories={menu.subItems}
+              menuItem={menu}
             />)
 
           }
@@ -224,12 +228,12 @@ export class LandingPage extends Component {
 
         <main>
           <div className='LandingPage-mapWrapper'>
-           <GoogleMaps
+            <GoogleMaps
               {...selectedEventsWithCoordinates(
                 this.props.events,
                 this.state.activeCategories,
                 pageData.categories
-              )}
+              ) }
               visibleModals={this.state.visibleModals}
               handleToggleModalVisibility={this.toggleModalVisibility.bind(this)}
               handleShowMoreInfo={this.changeOverlayEvent.bind(this)}
@@ -237,51 +241,52 @@ export class LandingPage extends Component {
             />
           </div>
           <EventShowcase>
-            {pageData.pages.map(event => {
+            {pageData.pages.map((event, index) => {
               switch (event.type) {
               case 'iframe':
                 return (
                   <Event
-                    key={event.id}
+                    key={index}
                     {...event}
                     onClick={(url) => this.props.setIframeUrl(url)} />
-                  );
+                );
               case 'page':
                 return (
                   <Event
-                    key={event.id}
+                    key={index}
                     {...event}
-                    onClick={() => this.props.setIframeUrl({url: formatRelativeUrl(event.url)})} />
-                  );
+                    onClick={() => this.props.setIframeUrl({ url: formatRelativeUrl(event.url) })} />
+                );
               case 'event':
                 return (
                   <Event
-                    key={event.id}
+                    key={index}
                     {...event}
                     onClick={this.changeOverlayEvent.bind(this)} />
                 );
               default:
                 return null;
-              }})
+              }
+            })
             }
           </EventShowcase>
           <SiteFooter color={this.props.bgColor} backToStartPath={`/${this.props.activeLanguage}/`}>
-            { pageData.bottomLinks.map((link) => (
+            {pageData.bottomLinks.map((link) => (
               <SiteFooterLink key={link.href + link.name} link={link} />))
             }
             <VergicChatButton className='SiteFooterLink' pageName={pageData.heading} />
-              <div className='Startpage-langWrapper'>
-                <LanguageFlags activeLanguage={this.props.activeLanguage}/>
-              </div>
+            <div className='Startpage-langWrapper'>
+              <LanguageFlags activeLanguage={this.props.activeLanguage} />
+            </div>
           </SiteFooter>
-         <ReactCSSTransitionGroup
+          <ReactCSSTransitionGroup
             transitionName="EventOverlay-transitionGroup"
             transitionEnterTimeout={300}
             transitionLeaveTimeout={300}
             transitionEnter={true}
             transitionLeave={true}
           >
-            { this.state.visibleOverlayEvent &&
+            {this.state.visibleOverlayEvent &&
               <EventOverlay
                 key='event-overlay'
                 event={this.props.events.find(e => e.slug === this.state.visibleOverlayEvent)}
@@ -312,7 +317,7 @@ export class LandingPage extends Component {
             </Scrollbars>
           </AsideMenu>
         </aside>
-        </div>
+      </div>
     );
   }
 }
