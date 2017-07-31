@@ -36,10 +36,9 @@ function create_and_update_events() {
 
   foreach($events as $event) {
     if(does_event_already_exist($event)){
-      foreach($stored_events as $stored_event) {
+        $stored_event = get_stored_event($event);
         update_event($event, $stored_event, $stored_event->ID);
         insert_event_category($stored_event->ID, $event);
-      }
     } else {
       $post_id = insert_event_post_type($event);
       insert_event_category($post_id, $event);
@@ -161,6 +160,21 @@ function does_event_already_exist($event) {
   $event_query = get_posts($args);
 
   return $event_query != null;
+}
+
+function get_stored_event($event) {
+    $args = array(
+    'post_type' => 'imported_event',
+    'meta_query' => array(
+      array(
+          'key' => 'event_id',
+          'value' => $event->id
+      )
+    )
+  );
+  $event_query = get_posts($args);
+
+  return $event_query[0]; 
 }
 
 function get_event_category_json(){
