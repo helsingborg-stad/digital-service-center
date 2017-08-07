@@ -46,7 +46,8 @@
   margin-left: -2rem;
 }
 
-.SideNavigationLink__icon {
+.SideNavigationLink__icon,
+.fa {
   display: block;
   position: absolute;
   top: 0.6rem;
@@ -54,8 +55,13 @@
   width: 1.625rem;
 }
 
-.SideNavigationLink:first-child .SideNavigationLink__icon {
+.SideNavigationLink:first-child .SideNavigationLink__icon,
+.SideNavigationLink:first-child .fa {
   top: 1rem;
+}
+
+.SideNavigationLink:first-child .fa { 
+  font-size: 25px;
 }
 
 .SideNavigationLink__icon svg {

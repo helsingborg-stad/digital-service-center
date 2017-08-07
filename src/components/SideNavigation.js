@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react';
 import cn from 'classnames';
+import FontAwesome from 'react-fontawesome';
+import './font-awesome/font-awesome.min.css';
 
 import * as Icons from './icons/';
 
@@ -17,10 +19,12 @@ SideNavigation.propTypes = {
 };
 
 const SideNavigationLink = ({id, activeCategories, activeColor, handleClick,
-                             name, subCategories, icon, type, menuItem, iframeUrl}) => {
+                             name, subCategories, icon, type, menuItem, iframeUrl, customClasses}) => {
   const hasChildren = subCategories && subCategories.length && activeCategories.includes(id);
   const isActive = activeCategories.includes(id);
+  const haveCustomClasses = customClasses.length > 0; 
   return (
+    console.log(customClasses),
     <li
       className={cn('SideNavigationLink',
         {'SideNavigationLink--selected': isActive,
@@ -31,7 +35,12 @@ const SideNavigationLink = ({id, activeCategories, activeColor, handleClick,
         handleClick({id, type, menuItem, iframeUrl});
       }}
     >
-      { icon &&
+      { haveCustomClasses && 
+        <FontAwesome
+          name={customClasses}
+        />
+      }
+      { icon && !haveCustomClasses &&
       <span className='SideNavigationLink__icon'>
         {Icons[`${icon}Icon`]({color: isActive ? '#fff' : '#c70d53'})}
       </span>
@@ -71,7 +80,8 @@ SideNavigationLink.propTypes = {
   subCategories: React.PropTypes.arrayOf(React.PropTypes.object),
   icon: PropTypes.string,
   menuItem: PropTypes.any,
-  iframeUrl: PropTypes.string
+  iframeUrl: PropTypes.string,
+  customClasses: PropTypes.array
 };
 
 export { SideNavigation, SideNavigationLink };
