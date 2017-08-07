@@ -158,6 +158,8 @@ export class LandingPage extends Component {
       this.props.setIframeUrl({url: iframeUrl});
     } else if (type === 'iframe') {
       this.props.setIframeUrl(menuItem);
+    } else if (type === 'page') {
+      this.props.setIframeUrl({url: formatRelativeUrl(menuItem.url)});
     } else if (type && type === 'event') {
       this.changeOverlayEvent(menuItem);
     } else {
