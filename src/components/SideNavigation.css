@@ -46,6 +46,20 @@
   margin-left: -2rem;
 }
 
+.SideNavigationLink--has-children ul li.SideNavigationLink .SideNavigationLink__icon,
+.SideNavigationLink--has-children ul li.SideNavigationLink .fa {
+  font-size: 21px;
+  left: 0.15rem;
+}
+
+.SideNavigationLink--has-children ul li.SideNavigationLink .fa {
+  top: 0.8rem;
+}
+
+.SideNavigationLink--has-children ul li.SideNavigationLink .SideNavigationLink__icon {
+  top: 0.6rem;
+}
+
 .SideNavigationLink__icon,
 .fa {
   display: block;
