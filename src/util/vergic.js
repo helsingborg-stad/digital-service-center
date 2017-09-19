@@ -1,7 +1,13 @@
 
 /* eslint-disable no-console */
 
-export function isChatOpen() {
+const TEXT_GROUP_ID = 'BDC68BBE-07CB-4A1B-9373-DE38ACF2B625';
+const VIDEO_GROUP_ID = 'AC3DD344-4FDF-4DBB-9A86-53B3231CC452';
+
+const CASE_TYPE_ID = '230D320E-9507-43CC-BDE8-60DCA4F742FE';
+const BANNER_ID = '43DF29D6-C492-4F91-A479-24323A877BCE';
+
+export function isChatOpen({type}) {
   if (typeof window === 'undefined') {
     return false;
   }
@@ -9,7 +15,8 @@ export function isChatOpen() {
     console.warn('vngage not loaded in call to isChatOpen');
     return false;
   }
-  return window.vngage.get('queuestatus', 'BDC68BBE-07CB-4A1B-9373-DE38ACF2B625') === 'open';
+  const groupId = type === 'video' ? VIDEO_GROUP_ID : TEXT_GROUP_ID;
+  return window.vngage.get('queuestatus', groupId) === 'open';
 }
 
 export function joinTextChat(pageName) {
@@ -18,9 +25,23 @@ export function joinTextChat(pageName) {
     return;
   }
   window.vngage.join('queue', {
-    groupId: 'BDC68BBE-07CB-4A1B-9373-DE38ACF2B625',
-    caseTypeId: '230D320E-9507-43CC-BDE8-60DCA4F742FE',
-    bannerId: '43DF29D6-C492-4F91-A479-24323A877BCE',
+    groupId: TEXT_GROUP_ID,
+    caseTypeId: CASE_TYPE_ID,
+    bannerId: BANNER_ID,
+    category: 'FAQ',
+    message: `DSC ${pageName} (Text)`
+  });
+}
+
+export function joinVideoChat(pageName) {
+  if (!window.vngage) {
+    console.warn('vngage not loaded in call to joinVideoChat');
+    return;
+  }
+  window.vngage.join('queue', {
+    groupId: VIDEO_GROUP_ID,
+    caseTypeId: CASE_TYPE_ID,
+    bannerId: BANNER_ID,
     category: 'FAQ',
     message: `DSC ${pageName} (Text)`
   });

@@ -173,7 +173,7 @@ export class EventsPage extends Component {
             { pageData.bottomLinks.map((link) => (
               <SiteFooterLink key={link.href + link.name} link={link} />))
             }
-            <VergicChatButton className='SiteFooterLink' pageName={pageData.heading} />
+            <VergicChatButton className='SiteFooterLink' pageName={pageData.heading} color='#f4a428' />
             <div className='Startpage-langWrapper'>
               <LanguageFlags activeLanguage={this.props.activeLanguage} />
             </div>

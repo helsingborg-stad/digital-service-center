@@ -42,6 +42,10 @@
   text-transform: uppercase;
 }
 
+.SiteFooterLink:last-of-type {
+  margin-right: 0;
+}
+
 .SiteFooter:last-of-type {
   margin-right: 0;
 }

@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import { isChatOpen, joinTextChat, subscribeToLeavingChat } from '../util/vergic';
+import { isChatOpen, joinVideoChat, joinTextChat, subscribeToLeavingChat } from '../util/vergic';
 import { connect } from 'react-redux';
+import cn from 'classnames';
+
+import './VergicChatButton.css';
 
 /* eslint-disable no-underscore-dangle */
 
@@ -9,12 +12,13 @@ export class VergicChatButton extends Component {
     super();
     this.state = {
       chatIsAvailable: false,
-      chatIsInitiated: false
+      chatIsInitiated: false,
+      chatListIsVisible: false
     };
   }
   componentWillMount() {
     this.setState({
-      chatIsAvailable: isChatOpen()
+      chatIsAvailable: isChatOpen({type: 'video'}) || isChatOpen({type: 'text'})
     });
     setTimeout(() => {
       if (typeof window !== 'undefined' && !window.__vergicChatHasLeaveEventListener) {
@@ -26,9 +30,23 @@ export class VergicChatButton extends Component {
   shouldShowButton() {
     return this.props.showChat &&
       (typeof window !== 'undefined' && !window.__isVergicChatOpen) &&
-      !this.state.chatIsInitiated;
+      !this.state.chatIsInitiated && this.state.chatIsAvailable;
   }
-  joinChat(pageName) {
+  toggleChatOptions() {
+    this.setState({
+      chatListIsVisible: !this.state.chatListIsVisible
+    });
+  }
+  joinChatVideo(pageName) {
+    if (window) {
+      window.__isVergicChatOpen = true;
+    }
+    joinVideoChat(pageName);
+    this.setState({
+      chatIsInitiated: true
+    });
+  }
+  joinChatText(pageName) {
     if (window) {
       window.__isVergicChatOpen = true;
     }
@@ -38,11 +56,28 @@ export class VergicChatButton extends Component {
     });
   }
   render() {
-    return this.shouldShowButton()
-      ? <button
+    if(isChatOpen({type: 'video'}) && isChatOpen({type: 'text'}) && this.shouldShowButton()) {
+      return <div className="VergicChatOptions">
+        <button onClick={this.toggleChatOptions.bind(this)} className={this.props.className}>{this.props.translatables.chatWithUs}</button>
+        <ul {...this.props.color ? {style: {background: this.props.color, color: '#fff'}} : null} className={cn('VergicChatOptionsList', {'VergicChatOptionsList--visible': this.state.chatListIsVisible})}>
+          <li><button {...this.props.color ? {style: {color: '#fff'}} : null} onClick={this.joinChatText.bind(this, this.props.pageName)}>Text</button></li>
+          <li><button {...this.props.color ? {style: {color: '#fff'}} : null} onClick={this.joinChatVideo.bind(this, this.props.pageName)}>Video</button></li>
+        </ul>
+      </div>;
+    }
+    else if(isChatOpen({type: 'text'}) && this.shouldShowButton()) {
+      return <button
         className={this.props.className}
-        onClick={this.joinChat.bind(this, this.props.pageName)}>{this.props.translatables.chatWithUs}</button>
-      : null;
+        onClick={this.joinChatText.bind(this, this.props.pageName)}>{this.props.translatables.chatWithUs}</button>
+    }
+    else if(isChatOpen({type: 'video'}) && this.shouldShowButton()) {
+      return <button
+        className={this.props.className}
+        onClick={this.joinChatVideo.bind(this, this.props.pageName)}>{this.props.translatables.chatWithUs}</button>
+    }
+    else {
+      return null;
+    }
   }
 }
 
