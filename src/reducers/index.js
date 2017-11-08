@@ -9,6 +9,7 @@ import { siteSettings } from './siteSettings';
 import { search } from './search';
 import { previousUrl } from './previousUrl';
 import { crm } from './crm';
+import { isInPortraitMode } from './isInPortraitMode';
 
 export default combineReducers({
   activeLanguage,
@@ -24,5 +25,6 @@ export default combineReducers({
   search,
   previousUrl,
   crm,
+  isInPortraitMode,
   routing: routerReducer
 });

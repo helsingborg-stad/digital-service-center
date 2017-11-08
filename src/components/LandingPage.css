@@ -44,3 +44,9 @@
 .pageChange-enter-active.LandingPage {
   transform: translateX(0);
 }
+
+@media screen and (orientation: portrait) {
+  .LandingPage-mapWrapper {
+    height: calc(86vh - 4.6875rem);
+  }
+}

@@ -13,3 +13,17 @@
   height: calc(100vh - 7.9875rem);
   border-bottom: 0;
 }
+
+@media screen and (orientation: portrait) {
+  .AsideMenu:not(.AsideMenu--fullHeight) {
+    height: calc(86vh - 4.6875rem);
+  }
+
+  /* Flip Calendar and Calendar list when in portrait mode */
+  .AsideMenu {
+    display: flex;
+    flex-flow: column;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+  }
+}

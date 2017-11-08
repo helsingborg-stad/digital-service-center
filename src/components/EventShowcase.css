@@ -88,3 +88,13 @@
 .Event--compare:first-of-type {
   margin-left: 0;
 }
+
+@media screen and (orientation: portrait) {
+  .EventShowcase {
+    height: calc(14vh - 3.25rem);
+  }
+
+  .Event {
+    width: 12.7vh;
+  }
+}

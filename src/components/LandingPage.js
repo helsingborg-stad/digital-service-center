@@ -310,7 +310,7 @@ export class LandingPage extends Component {
             <Scrollbars
               ref='eventsDateListScroll'
               autoHeight
-              autoHeightMax='80vh - 3.25rem - 4.6875rem - 400px - 2rem'
+              autoHeightMax={`${this.props.isInPortraitMode ? '90vh' : '80vh'} - 3.25rem - 4.6875rem - 400px - 2rem`}
             >
               <EventsDateList
                 events={this.props.events}
@@ -347,7 +347,8 @@ LandingPage.propTypes = {
       lng: PropTypes.number.isRequired
     }).isRequired
   }),
-  setIframeUrl: PropTypes.func
+  setIframeUrl: PropTypes.func,
+  isInPortraitMode: PropTypes.bool
 };
 
 const mapStateToProps = (state) => {
@@ -359,7 +360,8 @@ const mapStateToProps = (state) => {
       ? state.eventsHasErrored[state.activeLanguage] : false,
     isLoading: (state.activeLanguage in state.eventsAreLoading)
       ? state.eventsAreLoading[state.activeLanguage] : false,
-    googleMapsApiKey: state.siteSettings.googleMapsApiKey
+    googleMapsApiKey: state.siteSettings.googleMapsApiKey,
+    isInPortraitMode: state.isInPortraitMode
   };
 };
 
