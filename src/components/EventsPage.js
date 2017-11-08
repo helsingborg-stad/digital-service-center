@@ -7,7 +7,7 @@ import { Event } from './EventShowcase';
 import Scrollbars from 'react-custom-scrollbars';
 import LandingPageLoading from './LandingPageLoading';
 import LandingPageError from './LandingPageError';
-import EventOverlay from './EventOverlay';
+import EventOverlay from './EventOverlay/EventOverlay';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import AsideMenu from './AsideMenu';
 import Calendar from './Calendar';

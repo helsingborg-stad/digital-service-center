@@ -7,7 +7,7 @@ import { SideNavigation, SideNavigationLink } from './SideNavigation';
 import Search from './Search';
 import GoogleMaps from './GoogleMaps';
 import { EventShowcase, Event } from './EventShowcase';
-import EventOverlay from './EventOverlay';
+import EventOverlay from './EventOverlay/EventOverlay';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import AsideMenu from './AsideMenu';
 import Calendar from './Calendar';
