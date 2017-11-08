@@ -93,3 +93,11 @@
   margin: 0;
   color: #232323;
 }
+
+
+@media screen and (orientation: portrait) {
+  .SectionCard-tag {
+    min-width: 48%;
+    text-align: center;
+  }
+}

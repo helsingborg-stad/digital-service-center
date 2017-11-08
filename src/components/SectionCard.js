@@ -37,7 +37,7 @@ export class SectionCard extends Component {
         }
         </div>
         <div className='SectionCard-scrollWrapper'>
-          <Scrollbars style={{ width: '100%', height: '40vh' }}>
+          <Scrollbars style={{ width: '100%', height: `${this.props.isInPortraitMode ? '64vh' : '40vh' }`}}>
             <div className='SectionCard-postWrapper'>
             {this.props.posts.map(post => {
               switch (post.type) {
@@ -118,7 +118,8 @@ SectionCard.propTypes = {
     all: PropTypes.string.isRequired
   }).isRequired,
   activeLanguage: PropTypes.string,
-  setIframeUrl: PropTypes.func
+  setIframeUrl: PropTypes.func,
+  isInPortraitMode: PropTypes.bool
 };
 
 SectionCard.defaultProps = {
@@ -130,7 +131,8 @@ SectionCard.defaultProps = {
 const mapStateToProps = (state) => {
   return {
     translatables: state.siteSettings.translatables[state.activeLanguage],
-    activeLanguage: state.activeLanguage
+    activeLanguage: state.activeLanguage,
+    isInPortraitMode: state.isInPortraitMode
   };
 };
 
