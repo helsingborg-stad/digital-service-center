@@ -310,7 +310,7 @@ export class LandingPage extends Component {
             <Scrollbars
               ref='eventsDateListScroll'
               autoHeight
-              autoHeightMax={`${this.props.isInPortraitMode ? '90vh' : '80vh'} - 3.25rem - 4.6875rem - 400px - 2rem`}
+              autoHeightMax={`${this.props.isInPortraitMode ? '90vh - 3.25rem' : '80vh'} - 3.25rem - 4.6875rem - 400px - 2rem`}
             >
               <EventsDateList
                 events={this.props.events}

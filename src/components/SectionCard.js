@@ -37,7 +37,7 @@ export class SectionCard extends Component {
         }
         </div>
         <div className='SectionCard-scrollWrapper'>
-          <Scrollbars style={{ width: '100%', height: `${this.props.isInPortraitMode ? '64vh' : '40vh' }`}}>
+          <Scrollbars style={{ width: '100%', height: `${this.props.isInPortraitMode ? '58vh' : '40vh' }`}}>
             <div className='SectionCard-postWrapper'>
             {this.props.posts.map(post => {
               switch (post.type) {

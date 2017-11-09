@@ -72,7 +72,7 @@ export class Startpage extends Component {
           <Search
             events={this.props.events}
             pageType='Startpage'
-            inputWrapperStyle={{bottom: '6.5rem', transform: 'translateX(-50%)', left: '50%'}}
+            inputWrapperStyle={{bottom: this.props.isInPortraitMode ? '10rem' : '6.5rem', transform: 'translateX(-50%)', left: '50%'}}
             activeLanguage={this.props.activeLanguage}
           />
           }
@@ -146,6 +146,7 @@ Startpage.propTypes = {
     eventsTags: PropTypes.array,
     eventsPosts: PropTypes.array
   }),
+  isInPortraitMode: PropTypes.bool,
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired
 };
@@ -162,7 +163,8 @@ const mapStateToProps = (state) => {
     searchResults: state.searchResults,
     searchIsLoading: state.searchIsLoading,
     searchHasErrored: state.searchHasErrored,
-    shouldFetchEvents: !(state.activeLanguage in state.events)
+    shouldFetchEvents: !(state.activeLanguage in state.events),
+    isInPortraitMode: state.isInPortraitMode
   };
 };
 

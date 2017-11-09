@@ -16,7 +16,11 @@
 
 @media screen and (orientation: portrait) {
   .AsideMenu:not(.AsideMenu--fullHeight) {
-    height: calc(86vh - 4.6875rem);
+    height: calc(86vh - 4.6875rem - 3.25rem);
+  }
+
+  .AsideMenu--fullHeight {
+    height: calc(100vh - 7.9875rem - 3.25rem);
   }
 
   /* Flip Calendar and Calendar list when in portrait mode */

@@ -28,3 +28,11 @@ button.BottomBarLink {
 .BottomBarLink:last-of-type {
     margin-right: 0;
 }
+
+@media screen and (orientation: portrait) {
+    .BottomBar {
+        height: 7.5rem;
+        padding-right: calc(5% + 0.85rem + 80px);
+        padding-left: calc(5% + 0.85rem + 80px);
+    }
+}

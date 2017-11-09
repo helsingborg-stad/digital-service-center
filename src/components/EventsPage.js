@@ -138,7 +138,7 @@ export class EventsPage extends Component {
           events={this.props.events}
           changeOverlayEvent={this.changeOverlayEvent.bind(this)}
           pageType={pageData.pageName}
-          inputWrapperStyle={{bottom: '4.25rem'}}
+          inputWrapperStyle={{bottom: this.props.isInPortraitMode ? '7.5rem' : '4.25rem'}}
           activeLanguage={this.props.activeLanguage}
         />
         <main>
@@ -206,7 +206,7 @@ export class EventsPage extends Component {
             <Scrollbars
               ref='eventsDateListScroll'
               autoHeight
-              autoHeightMax='100vh - 3.25rem - 4.6875rem - 400px - 2rem'
+              autoHeightMax={`100vh - ${this.props.isInPortraitMode ? '6.5rem' : '3.25rem'} - 4.6875rem - 400px - 2rem`}
             >
               <EventsDateList
                 events={this.props.events}
@@ -230,7 +230,8 @@ EventsPage.propTypes = {
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
   activeEvent: PropTypes.string,
-  selectedTimeSpan: PropTypes.string
+  selectedTimeSpan: PropTypes.string,
+  isInPortraitMode: PropTypes.bool
 };
 
 const mapStateToProps = (state) => {
@@ -241,7 +242,8 @@ const mapStateToProps = (state) => {
     hasErrored: (state.activeLanguage in state.eventsHasErrored)
       ? state.eventsHasErrored[state.activeLanguage] : false,
     isLoading: (state.activeLanguage in state.eventsAreLoading)
-      ? state.eventsAreLoading[state.activeLanguage] : false
+      ? state.eventsAreLoading[state.activeLanguage] : false,
+    isInPortraitMode: state.isInPortraitMode
   };
 };
 

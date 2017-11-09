@@ -92,6 +92,7 @@
 @media screen and (orientation: portrait) {
   .EventShowcase {
     height: calc(14vh - 3.25rem);
+    bottom: 6.5rem;
   }
 
   .Event {

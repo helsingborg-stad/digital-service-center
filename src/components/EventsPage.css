@@ -80,3 +80,12 @@
 .pageChange-enter-active.EventsPage {
   transform: translateX(0);
 }
+
+@media screen and (orientation: portrait) {
+  .EventsPage-eventsWrapper {
+    height: calc(100vh - 11.1875rem);
+  }
+  .EventsPage-eventWrapper {
+    height: 12.5vh;
+  }
+}

@@ -55,3 +55,22 @@
   height: 100%;
   margin-left: 3.35rem;
 }
+
+@media screen and (orientation: portrait) {
+  .SiteFooter {
+    height: 6.5rem;
+  }
+
+  .SiteFooter-back-to-start {
+    line-height: 6.5rem;
+  }
+
+  .SiteFooterLink-wrapper {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    width: 69%;
+    height: 6.25rem;
+  }
+}

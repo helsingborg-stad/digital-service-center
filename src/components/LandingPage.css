@@ -47,6 +47,6 @@
 
 @media screen and (orientation: portrait) {
   .LandingPage-mapWrapper {
-    height: calc(86vh - 4.6875rem);
+    height: calc(86vh - 4.6875rem - 3.25rem);
   }
 }
