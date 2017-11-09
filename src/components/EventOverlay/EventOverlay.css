@@ -40,14 +40,13 @@
 }
 
 .EventOverlay {
+  position: relative;
   width: calc(100vw - 325px - 24vw);
   max-width: 700px;
   max-height: calc( 100vh - 7.5rem - 1.25rem);
   background: #fff;
   border-radius: 3px;
   padding: 2rem;
-  position: relative;
-  min-height: calc( 100vh - 7.5rem - 1.25rem);
 }
 .EventOverlay-wrapper--compareView .EventOverlay {
   max-width: 600px;

@@ -60,7 +60,7 @@ export default class GoogleMapsDirections extends Component {
         </div>
         <GoogleMapsDirection
           containerElement={
-            <div style={{ width: '100%', height: '100%' }} />
+            <div style={{ width: '100%', height: '100%', minHeight: '40vh' }} />
           }
           mapElement={
             <div style={{ width: '100%', height: '100%' }} />

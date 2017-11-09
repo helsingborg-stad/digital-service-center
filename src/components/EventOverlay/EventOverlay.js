@@ -72,9 +72,9 @@ class EventOverlay extends Component {
         {!!this.props.event.rating &&
            <h3 className='EventOverlay-ratingHeading'>{`Rating: ${this.props.event.rating}/5`}</h3>
         }
-        <Scrollbars style={{ marginTop: '1rem', width: 'calc(100% + 1rem)' }} autoHeight autoHeightMax='100vh - 4.6875rem - 1.25rem - (550px)'>
+        <Scrollbars style={{ marginTop: '1rem', width: 'calc(100% + 1rem)' }} autoHeight autoHeightMax='80vh - 4.6875rem - 1.25rem - (550px)'>
           { this.props.event.content &&
-          <div style={{height: '25rem'}}>
+          <div>
           <span className='EventOverlay-content-scrollWrapper'>
             <span
               className='EventOverlay-content'

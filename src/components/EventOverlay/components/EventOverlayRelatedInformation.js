@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import EventOverlayDate from './EventOverlayDate';
+import Scrollbars from 'react-custom-scrollbars';
 
 const getLocation = (event) => {
   return event.location && event.location.streetAddress && event.location.postalCode
@@ -24,19 +25,20 @@ export default function EventOverlayRelatedInformation({event, translatables}) {
       { event.openingHours && !!event.openingHours.length &&
       <div className='EventOverlay-metaBox'>
         <h3>{translatables.openingHours}</h3>
-        { event.openingHours.map(date => <span key={date}>{date}<br /></span>)
-        }
+        { event.openingHours.map(date => <span key={date}>{date}<br /></span>) }
       </div>
       }
 
       { event.occasions && !!event.occasions.length &&
       <div className='EventOverlay-metaBox'>
         <h3>{translatables.dateAndTime}</h3>
+        <Scrollbars autoHeight autoHeightMax='185px'>
         { event.occasions.map(occ => <EventOverlayDate
                                         start={getDateFormatted(occ.startDate)}
                                         end={getDateFormatted(occ.endDate)}
                                         key={Math.random()} />)
         }
+        </Scrollbars>
       </div>
       }
       {getLocation(event) &&
