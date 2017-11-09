@@ -97,7 +97,7 @@
 
 @media screen and (orientation: portrait) {
   .SectionCard-tag {
-    min-width: 48%;
+    min-width: 47%;
     text-align: center;
   }
 }
