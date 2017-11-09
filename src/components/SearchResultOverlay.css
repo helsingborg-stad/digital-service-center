@@ -45,7 +45,7 @@
 
 .SearchResultOverlay-typeWrapper {
     display: flex;
-    height: 53rem;
+    height: 71vh;
     padding-top: 2rem;
 }
 
@@ -152,4 +152,10 @@
     font-size: 0.75rem;
     margin-top: 0.15rem;
     color: #d50246;
+}
+
+@media screen and (orientation: portrait) {
+    .SearchResultOverlay-typeWrapper {
+        height: 80vh;
+    }
 }
