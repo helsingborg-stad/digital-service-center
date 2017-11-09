@@ -39,12 +39,12 @@ export function setOverlayCloserPosition(backdropEl, overlayCloserEl) {
   if (xPosition < 120) {
     xPosition = 120;
   }
-  if (xPosition > 1805) {
-    xPosition = 1805;
+  if ((window.innerWidth - xPosition) < 120) {
+    xPosition = window.innerWidth - 120;
   }
   let yPosition = backdropEl.clientY - backdropPosition.y - (overlayCloserEl.clientHeight / 2);
-  if (yPosition > 1010) {
-    yPosition = 1010;
+  if ((window.innerHeight - yPosition) < 70) {
+    yPosition = window.innerHeight - 70;
   }
   overlayCloserEl.style.left = xPosition + 'px';
   overlayCloserEl.style.top = yPosition + 'px';
