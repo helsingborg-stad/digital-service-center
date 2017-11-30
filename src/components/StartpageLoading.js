@@ -7,10 +7,10 @@ import SectionCard from './SectionCard';
 export default class StartpageLoading extends Component {
   render() {
     const Row = ({children}) => (
-      <div style={{display: 'flex', margin: '0 5%'}}>{children}</div>
+      <div className='Startpage-Row'>{children}</div>
     );
     const Column = ({children}) => (
-      <div style={{flex: '1', margin: '0 1%', maxWidth: '33%'}}>{children}</div>
+      <div className='Startpage-Column'>{children}</div>
     );
 
     const randomIntBetween = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;

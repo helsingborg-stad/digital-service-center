@@ -60,10 +60,10 @@ export class Startpage extends Component {
     }
 
     const Row = ({children}) => (
-      <div style={{display: 'flex', margin: '0 5%'}}>{children}</div>
+      <div className='Startpage-Row'>{children}</div>
     );
     const Column = ({children}) => (
-      <div style={{flex: '1', margin: '0 1%', maxWidth: '33%', display: 'flex'}}>{children}</div>
+      <div className='Startpage-Column'>{children}</div>
     );
 
     return (
@@ -147,6 +147,7 @@ Startpage.propTypes = {
     eventsPosts: PropTypes.array
   }),
   isInPortraitMode: PropTypes.bool,
+  shouldFetchEvents: PropTypes.bool,
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired
 };

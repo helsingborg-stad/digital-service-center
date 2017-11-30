@@ -13,6 +13,28 @@
   transform: translateY(-50%);
 }
 
+.Startpage-Row {
+  display: flex;
+  margin: 0 5%;
+}
+
+.Startpage-Column {
+  display: flex;
+  flex: 1;
+  margin: 0 1%;
+  max-width: 33%;
+}
+
+@media screen and (orientation: portrait) {
+  .Startpage-Row {
+    margin: 0 calc(2% - 0.85rem) 0 2%;
+  }
+
+  .Startpage-Column {
+    margin: 0 0.5%;
+  }
+}
+
 /*
  ** Animations
  */
