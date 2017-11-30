@@ -150,6 +150,7 @@ export class Search extends Component {
         handleHideSearchResult={this.handleHideSearchResult.bind(this)}
         activeLanguage={this.props.activeLanguage}
         searchInputOnTop={this.state.searchInputOnTop}
+        searchTerm={this.state.searchTerm}
       />
   </div>
     );

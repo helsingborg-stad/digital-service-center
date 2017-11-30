@@ -27,12 +27,9 @@ const getEventUrl = (event, activeLanguage) => {
       switch (cat.slug) {
       case 'visitor':
       case 'local':
-        slug = cat.slug;
-        break;
+        return cat.slug;
       default:
-        slug = 'event';
-        break;
-
+        return 'event';
       }
     }
     return slug;
@@ -74,7 +71,8 @@ const SearchResultOverlay =
   handleHideSearchResult,
   activeLanguage,
   searchInputOnTop,
-  translatables}) => {
+  translatables,
+  searchTerm}) => {
   return (
     <ReactCSSTransitionGroup
       transitionName="SearchResultOverlay-transitionGroup"
@@ -92,7 +90,11 @@ const SearchResultOverlay =
         transitionEnter={true}
         transitionLeave={true}
       >
-      <div className='SearchResultOverlay' onClick={ev => ev.stopPropagation()}>
+      <div
+        className='SearchResultOverlay'
+        style={{display: !!searchTerm ? 'block' : 'none'}}
+        onClick={ev => ev.stopPropagation()}
+      >
         <span className='SearchResultOverlay-heading'>{translatables.weFoundThis}</span>
         <div className='SearchResultOverlay-typeWrapper'>
           {eventsSearchResults !== null && (
@@ -178,6 +180,7 @@ const SearchResultOverlay =
 };
 
 SearchResultOverlay.propTypes = {
+  searchTerm: PropTypes.string,
   eventsSearchResults: PropTypes.array,
   crmSearchResults: PropTypes.array,
   hbgSeSearchResults: PropTypes.array,
