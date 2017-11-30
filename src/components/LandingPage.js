@@ -106,7 +106,7 @@ export class LandingPage extends Component {
   changeOverlayEvent(event, showDirections = false) {
     const eventSlug = event ? event.slug : null;
     const eventToShow = this.props.events.find(e => e.slug === eventSlug);
-    const relatedEvents = eventToShow ? getRelatedEvents(
+    const relatedEvents = (eventToShow && !this.props.isInPortraitMode) ? getRelatedEvents(
       this.props.events,
       eventToShow
     ) : null;
