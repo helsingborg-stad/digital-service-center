@@ -72,5 +72,6 @@
     align-items: center;
     width: 69%;
     height: 6.25rem;
+    overflow: hidden;
   }
 }
