@@ -237,3 +237,13 @@
 .EventOverlay-ratingText {
   font-size: 0.75rem;
 }
+
+@media screen and (orientation: portrait) {
+  .EventOverlay-wrapper {
+    bottom: 11rem;
+  }
+  .EventOverlay {
+    width: 700px;
+    max-height: calc( 100vh - 7.5rem - 1.25rem - 10rem );
+  }
+}
