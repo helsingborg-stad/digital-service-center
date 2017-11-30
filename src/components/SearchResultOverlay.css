@@ -106,7 +106,7 @@
 }
 
 .SearchResultOverlay-imgWrapper {
-    width: 8.125rem;
+    width: 12.85rem;
     height: 5.9375rem;
     overflow: hidden;
     position: relative;
@@ -124,7 +124,6 @@
 
 }
 .SearchResultOverlay-contentWrapper {
-    width: calc(100% - 8.125rem - 1.25rem);
     display: inline-block;
     padding-right: 1rem;
     text-align: left;

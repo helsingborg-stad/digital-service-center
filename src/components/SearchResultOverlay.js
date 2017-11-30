@@ -133,7 +133,7 @@ const SearchResultOverlay =
                 <ul className='SearchResultOverlay-list'>
                 {crmSearchResults.length ? crmSearchResults.map(res =>
                   <li key={Math.random()}>
-                    <div className='SearchResultOverlay-contentWrapper' style={{marginLeft: '3rem'}}>
+                    <div className='SearchResultOverlay-contentWrapper' style={{marginLeft: '2rem'}}>
                       <span className='SearchResultOverlay-contentHeading'>{res.question}</span>
                       <p dangerouslySetInnerHTML={{__html: stripHtml(res.answer).replace(']]>', '')}} />
                     </div>
