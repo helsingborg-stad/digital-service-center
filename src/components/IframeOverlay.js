@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import closeCrossSvg from '../media/close-cross.svg';
 import './IframeOverlay.css';
 import OverlayCloser, { setOverlayCloserPosition } from './OverlayCloser';
@@ -37,6 +38,7 @@ const IframeOverlay = ({url, maxWidth, maxHeight, offsetTop, offsetLeft, handleC
             marginLeft: -offsetLeft
           }}
           src={url}
+          title={url}
         />
       </div>
     </div>

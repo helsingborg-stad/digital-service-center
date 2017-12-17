@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import cn from 'classnames';
 import FontAwesome from 'react-fontawesome';
 import './font-awesome/font-awesome.min.css';
@@ -12,9 +13,9 @@ const SideNavigation = ({children}) => (
 );
 
 SideNavigation.propTypes = {
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.node),
-    React.PropTypes.node
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
   ])
 };
 
@@ -86,7 +87,7 @@ SideNavigationLink.propTypes = {
   handleClick: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  subCategories: React.PropTypes.arrayOf(React.PropTypes.object),
+  subCategories: PropTypes.arrayOf(PropTypes.object),
   icon: PropTypes.string,
   menuItem: PropTypes.any,
   iframeUrl: PropTypes.string,

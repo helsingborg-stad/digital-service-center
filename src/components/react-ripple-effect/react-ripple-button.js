@@ -7,6 +7,8 @@
 	*
 	*/
 
+import PropTypes from 'prop-types';
+
 import React from 'react';
 
 import { Ripple } from './index.js';
@@ -49,12 +51,12 @@ class RippleButton extends React.Component {
 }
 
 RippleButton.propTypes = {
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.node),
-    React.PropTypes.node
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
   ]),
-  className: React.PropTypes.string,
-  onClick: React.PropTypes.func
+  className: PropTypes.string,
+  onClick: PropTypes.func
 };
 
 export default RippleButton;

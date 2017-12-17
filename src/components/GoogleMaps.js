@@ -1,4 +1,5 @@
-import React, {PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import GoogleMap from 'google-map-react';
 import GoogleMapsModal from './GoogleMapsModal';
 

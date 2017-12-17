@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import EnFlag from './icons-flags/en-flag';
 import SvFlag from './icons-flags/sv-flag';
@@ -34,6 +35,6 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, null)(LanguageFlags);
 
 LanguageFlags.propTypes = {
-  activeLanguage: React.PropTypes.string,
-  showFlags: React.PropTypes.bool
+  activeLanguage: PropTypes.string,
+  showFlags: PropTypes.bool
 };

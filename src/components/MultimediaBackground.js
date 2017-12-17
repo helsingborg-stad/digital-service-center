@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import './MultimediaBackground.css';
 
@@ -25,9 +26,9 @@ const MultimediaBackground = ({ backgroundUrl, children }) => {
 export default MultimediaBackground;
 
 MultimediaBackground.propTypes = {
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.node),
-    React.PropTypes.node
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
   ]),
-  backgroundUrl: React.PropTypes.string
+  backgroundUrl: PropTypes.string
 };

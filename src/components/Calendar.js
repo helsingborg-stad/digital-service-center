@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { connect } from 'react-redux';
 import { DayPickerRangeController } from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
@@ -16,7 +17,7 @@ const CalendarHeader = ({text}) => (
 );
 
 CalendarHeader.propTypes = {
-  text: React.PropTypes.string.isRequired
+  text: PropTypes.string.isRequired
 };
 
 const CalendarButton = ({onClick, text}) => (
@@ -24,8 +25,8 @@ const CalendarButton = ({onClick, text}) => (
 );
 
 CalendarButton.propTypes = {
-  onClick: React.PropTypes.func.isRequired,
-  text: React.PropTypes.string.isRequired
+  onClick: PropTypes.func.isRequired,
+  text: PropTypes.string.isRequired
 };
 
 export class Calendar extends React.Component {

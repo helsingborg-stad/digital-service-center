@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 export default class EventOverlayBackdrop extends Component {
@@ -7,8 +8,8 @@ export default class EventOverlayBackdrop extends Component {
 }
 
 EventOverlayBackdrop.propTypes = {
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.node),
-    React.PropTypes.node
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
   ])
 };

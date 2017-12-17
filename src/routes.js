@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Router, Route, browserHistory, IndexRedirect, IndexRoute } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
@@ -81,8 +82,8 @@ const Routes = (props = {}) => {
 };
 
 Routes.propTypes = {
-  store: React.PropTypes.object,
-  onUpdate: React.PropTypes.func
+  store: PropTypes.object,
+  onUpdate: PropTypes.func
 };
 
 export default Routes;

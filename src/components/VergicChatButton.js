@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { isChatOpen, joinVideoChat, joinTextChat, subscribeToLeavingChat } from '../util/vergic';
 import { connect } from 'react-redux';
 import cn from 'classnames';
@@ -22,7 +23,7 @@ export class VergicChatButton extends Component {
     });
     setTimeout(() => {
       if (typeof window !== 'undefined' && !window.__vergicChatHasLeaveEventListener) {
-        subscribeToLeavingChat().then(() => setTimeout(() => location.reload(), 500));
+        subscribeToLeavingChat().then(() => setTimeout(() => window.location.reload(), 500));
         window.__vergicChatHasLeaveEventListener = true;
       }
     }, 1000);

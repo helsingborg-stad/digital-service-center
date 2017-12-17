@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import IframeOverlay from './IframeOverlay';
@@ -45,14 +46,14 @@ const App = ({ children, location, iframe, closeIframe, previousUrl}) => (
 );
 
 App.propTypes = {
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.node),
-    React.PropTypes.node
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
   ]),
-  location: React.PropTypes.object,
-  iframe: React.PropTypes.object,
-  closeIframe: React.PropTypes.func,
-  previousUrl: React.PropTypes.string
+  location: PropTypes.object,
+  iframe: PropTypes.object,
+  closeIframe: PropTypes.func,
+  previousUrl: PropTypes.string
 };
 
 const mapStateToProps = (state) => {

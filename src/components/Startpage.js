@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import Lipping from './Lipping';
 import MultimediaBackground from './MultimediaBackground';
 import BottomBar, { BottomBarLink } from './BottomBar';
@@ -78,7 +79,7 @@ export class Startpage extends Component {
           }
           <Lipping />
           <MultimediaBackground backgroundUrl={this.props.data.backgroundUrl}>
-            <h1 className='Startpage-heading' onClick={() => location.reload()}>{this.props.data.heading}</h1>
+            <h1 className='Startpage-heading' onClick={() => window.location.reload()}>{this.props.data.heading}</h1>
             <Row>
               <Column>
                 <SectionCard

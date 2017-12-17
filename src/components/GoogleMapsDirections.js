@@ -1,8 +1,7 @@
 /* global google */
-import {
-  default as React,
-  Component
-} from 'react';
+import PropTypes from 'prop-types';
+
+import { default as React, Component } from 'react';
 
 import {
   withGoogleMap,
@@ -77,16 +76,16 @@ export default class GoogleMapsDirections extends Component {
 }
 
 GoogleMapsDirections.propTypes = {
-  eventName: React.PropTypes.string.isRequired,
-  origin: React.PropTypes.shape({
-    lat: React.PropTypes.number.isRequired,
-    lng: React.PropTypes.number.isRequired
+  eventName: PropTypes.string.isRequired,
+  origin: PropTypes.shape({
+    lat: PropTypes.number.isRequired,
+    lng: PropTypes.number.isRequired
   }),
-  destination: React.PropTypes.shape({
-    lat: React.PropTypes.number.isRequired,
-    lng: React.PropTypes.number.isRequired
+  destination: PropTypes.shape({
+    lat: PropTypes.number.isRequired,
+    lng: PropTypes.number.isRequired
   }),
-  directions: React.PropTypes.object,
-  handleClose: React.PropTypes.func,
-  showInformationText: React.PropTypes.string
+  directions: PropTypes.object,
+  handleClose: PropTypes.func,
+  showInformationText: PropTypes.string
 };

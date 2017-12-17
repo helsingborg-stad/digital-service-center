@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { connect } from 'react-redux';
 import LoadingButton from './LoadingButton.js';
 import { RippleButton } from './react-ripple-effect';
@@ -23,7 +24,7 @@ const GoogleMapsModal = ({
       <div className='GoogleMapsModal-triangle' />
       <div>
         { eventData.imgUrl &&
-        <img className='GoogleMapsModal-img' src={eventData.imgUrl} role='presentation' />
+        <img className='GoogleMapsModal-img' src={eventData.imgUrl} alt='' />
         }
         <button className='GoogleMapsModal-closeButton' onClick={onCloseClick}>
           <img src={closeCrossSvg} alt="Close" />

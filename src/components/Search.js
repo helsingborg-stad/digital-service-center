@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import SearchField from './SearchField';
 import { searchFetchData } from '../actions/search';
 import { crmFetchData } from '../actions/crm';

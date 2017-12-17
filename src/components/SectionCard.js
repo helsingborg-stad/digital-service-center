@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './SectionCard.css';
 import Link from './Link';
@@ -50,7 +51,7 @@ export class SectionCard extends Component {
                     onClick={() => this.props.setIframeUrl(post)}
                   >
                     { post.imgUrl &&
-                      <img className='SectionCard-postImage' src={post.imgUrl} role='presentation' />
+                      <img className='SectionCard-postImage' src={post.imgUrl} alt='' />
                     }
                     <h3 className='SectionCard-postHeading'>{post.heading}</h3>
                     <p className='SectionCard-postPreamble'>{post.preamble}</p>
@@ -65,7 +66,7 @@ export class SectionCard extends Component {
                     onClick={() => this.props.setIframeUrl({url: formatRelativeUrl(post.url)})}
                   >
                     { post.imgUrl &&
-                      <img className='SectionCard-postImage' src={post.imgUrl} role='presentation' />
+                      <img className='SectionCard-postImage' src={post.imgUrl} alt='' />
                     }
                     <h3 className='SectionCard-postHeading'>{post.heading}</h3>
                     <p className='SectionCard-postPreamble'>{post.preamble}</p>
@@ -79,7 +80,7 @@ export class SectionCard extends Component {
                     to={post.href}
                   >
                   { post.imgUrl &&
-                    <img className='SectionCard-postImage' src={post.imgUrl} role='presentation' />
+                    <img className='SectionCard-postImage' src={post.imgUrl} alt='' />
                   }
                   <h3 className='SectionCard-postHeading'>{post.heading}</h3>
                   <p className='SectionCard-postPreamble'>{post.preamble}</p>

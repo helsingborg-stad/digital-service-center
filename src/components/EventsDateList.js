@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import './EventsDateList.css';
 import Moment from 'moment';
@@ -26,7 +27,7 @@ const getEventsBySelectedDates = (events, selectedDates) => {
     && event.occasions.length
   );
 
-  if (!selectedDates) {
+  if (!selectedDates || !selectedDates.endDate) {
     return getDistinctEventOrderedByStartDate({events: selectedEvents});
   }
 
@@ -72,9 +73,9 @@ const EventsDateList = ({events, selectedDates, handleOverlayEvent}) => {
 };
 
 EventsDateList.propTypes = {
-  events: React.PropTypes.array,
-  selectedDates: React.PropTypes.object,
-  handleOverlayEvent: React.PropTypes.func
+  events: PropTypes.array,
+  selectedDates: PropTypes.object,
+  handleOverlayEvent: PropTypes.func
 };
 
 export default EventsDateList;

@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import LaddaButton from 'react-ladda';
 import './LoadingButton.css';
@@ -34,17 +35,17 @@ export default class LoadingButton extends React.Component {
 }
 
 LoadingButton.propTypes = {
-  style: React.PropTypes.object,
-  size: React.PropTypes.string,
-  cssClassName: React.PropTypes.string,
-  loading: React.PropTypes.bool,
-  text: React.PropTypes.string.isRequired,
-  onClick: React.PropTypes.func.isRequired,
-  spinnerStyle: React.PropTypes.string,
-  color: React.PropTypes.string,
-  spinnerSize: React.PropTypes.number,
-  spinnerColor: React.PropTypes.string,
-  spinnerLines: React.PropTypes.number
+  style: PropTypes.object,
+  size: PropTypes.string,
+  cssClassName: PropTypes.string,
+  loading: PropTypes.bool,
+  text: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+  spinnerStyle: PropTypes.string,
+  color: PropTypes.string,
+  spinnerSize: PropTypes.number,
+  spinnerColor: PropTypes.string,
+  spinnerLines: PropTypes.number
 };
 
 LoadingButton.defaultProps = {

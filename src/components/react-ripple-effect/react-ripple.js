@@ -8,6 +8,9 @@
 	*/
 
 
+import PropTypes from 'prop-types';
+
+
 import React from 'react';
 
 import './react-ripple.css';
@@ -81,7 +84,7 @@ class Ripple extends React.Component {
 }
 
 Ripple.propTypes = {
-  cursorPos: React.PropTypes.object
+  cursorPos: PropTypes.object
 };
 
 export default Ripple;

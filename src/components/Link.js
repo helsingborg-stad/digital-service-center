@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import { Ripple } from './react-ripple-effect';
 import { Link as RouterLink } from 'react-router';
 import { connect } from 'react-redux';
@@ -92,12 +93,12 @@ Link.propTypes = {
   page: PropTypes.shape({
     content: PropTypes.string
   }),
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.node),
-    React.PropTypes.node
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
   ]),
-  openIframe: React.PropTypes.func,
-  onClick: React.PropTypes.func
+  openIframe: PropTypes.func,
+  onClick: PropTypes.func
 };
 
 Link.defaultProps = {

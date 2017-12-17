@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import './BottomBar.css';
 import Link from './Link';
@@ -13,9 +14,9 @@ export default class BottomBar extends Component {
 }
 
 BottomBar.propTypes = {
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.node),
-    React.PropTypes.node
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
   ])
 };
 
@@ -42,5 +43,5 @@ export class BottomBarLink extends Component {
 }
 
 BottomBarLink.propTypes = {
-  link: React.PropTypes.object.isRequired
+  link: PropTypes.object.isRequired
 };

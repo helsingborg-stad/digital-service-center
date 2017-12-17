@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import './SearchField.css';
 import classnames from 'classnames';
@@ -23,11 +24,11 @@ const SearchField = ({ inline, onSearchChange, handleSearchInputPosition, autoFo
 };
 
 SearchField.propTypes = {
-  inline: React.PropTypes.bool,
-  onSearchChange: React.PropTypes.func,
-  handleSearchInputPosition: React.PropTypes.func,
-  autoFocus: React.PropTypes.bool,
-  value: React.PropTypes.string
+  inline: PropTypes.bool,
+  onSearchChange: PropTypes.func,
+  handleSearchInputPosition: PropTypes.func,
+  autoFocus: PropTypes.bool,
+  value: PropTypes.string
 };
 
 SearchField.defaultProps = {

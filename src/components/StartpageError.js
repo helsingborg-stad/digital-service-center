@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
 import BottomBar from './BottomBar';
@@ -39,5 +40,5 @@ export default class StartpageError extends Component {
 }
 
 StartpageError.propTypes = {
-  reloadPage: React.PropTypes.func.isRequired
+  reloadPage: PropTypes.func.isRequired
 };

@@ -36,7 +36,7 @@ function startApp(store) {
     // eslint-disable-next-line no-new
     new InactivityMonitor({
       timeout: timeoutLength * 1000,
-      idleAction: () => window.location.assign(location.origin)}
+      idleAction: () => window.location.assign(window.location.origin)}
     );
   }
 

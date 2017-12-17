@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import Lipping from './Lipping';
 import SiteHeader from './SiteHeader';
 import { SiteFooter, SiteFooterLink } from './SiteFooter';
@@ -104,7 +105,7 @@ export class EventsPage extends Component {
       this.props.fetchData('/api/events', this.props.activeLanguage);
     }
 
-    const params = new window.URL(location.href).searchParams;
+    const params = new window.URL(window.location.href).searchParams;
     const categoryIds = params.get("category");
     if (categoryIds) {
       categoryIds.split(',').forEach(id => {
