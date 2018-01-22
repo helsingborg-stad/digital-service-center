@@ -28,9 +28,9 @@ export default class LoadingButton extends React.Component {
         data-spinner-lines={this.props.spinnerLines}
         data-spinner-color={this.props.spinnerColor}
       >
-         {this.state.text}
+        {this.state.text}
       </LaddaButton>
-   );
+    );
   }
 }
 

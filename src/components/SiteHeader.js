@@ -26,7 +26,9 @@ export class SiteHeader extends Component {
         <h1 className='SiteHeader-heading'>{this.props.heading}</h1>
         <div style={{float: 'right', paddingRight: '2rem'}}>
           <div style={{float: 'left', paddingRight: '2.5rem'}}>
-            <Logo className='SiteHeader-logo' color='#fbfbfb' style={{width: '125px', paddingTop: '1.23rem'}} />
+            <Logo className='SiteHeader-logo' color='#fbfbfb'
+              style={{width: '125px', paddingTop: '1.23rem'}}
+            />
           </div>
           <div style={{float: 'left', paddingRight: '2.5rem'}}>
             { this.props.freeWifiLink &&

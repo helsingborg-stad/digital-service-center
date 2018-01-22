@@ -1,4 +1,4 @@
-process.env['NODE_ENV'] = 'production';
+process.env.NODE_ENV = 'production';
 
 require('import-export');
 require('babel-core/register')({ presets: ['react-app'] });
@@ -123,7 +123,7 @@ app.get('*', (req, res, next) => {
                 res.status(200).send(RenderedApp);
               });
           })
-          .catch(() => error());
+            .catch(() => error());
         } else {
           error();
         }

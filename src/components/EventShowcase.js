@@ -12,7 +12,7 @@ export class EventShowcase extends Component {
     return (
       <div className='EventShowcase'>
         <Scrollbars style={{ width: '100%', height: '100%' }}>
-        {this.props.children}
+          {this.props.children}
         </Scrollbars>
       </div>
     );
@@ -113,5 +113,5 @@ const mapStateToProps = (state) => {
 const EventConnected = connect(mapStateToProps, null)(Event);
 
 export {
-   EventConnected as Event
+  EventConnected as Event
 };

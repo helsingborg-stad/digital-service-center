@@ -14,7 +14,7 @@ const SearchField = ({ inline, onSearchChange, handleSearchInputPosition, autoFo
         className={classnames(
           'SearchField-input',
           inline && 'SearchField-input--inline'
-          )
+        )
         }
         value={value}
         placeholder='Search'

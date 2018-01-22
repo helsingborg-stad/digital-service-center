@@ -16,7 +16,7 @@ export class RelatedEvents extends React.Component {
     super();
     this.state = {
       event: event
-    }
+    };
   }
   static propTypes = {
     relatedEvents: PropTypes.array,
@@ -37,30 +37,30 @@ export class RelatedEvents extends React.Component {
             style={{height: 'calc(100% - 5.8rem)'}}
             renderTrackHorizontal={props => <div {...props} className='track-horizontal' style={{display: 'none'}}/>}
             renderThumbHorizontal={props => <div {...props} className='thumb-horizontal' style={{display: 'none'}}/>}>
-          <div style={{margin: '1rem 0'}}>
-          {this.state.event.categories.map(cat => (
-            <span key={cat.id}>
-              {!!getRelatedEventsByCategory(this.props.relatedEvents, cat.id, this.props.comparedEvent).length &&
+            <div style={{margin: '1rem 0'}}>
+              {this.state.event.categories.map(cat => (
+                <span key={cat.id}>
+                  {!!getRelatedEventsByCategory(this.props.relatedEvents, cat.id, this.props.comparedEvent).length &&
               <div>
                 <span className='RelatedEvents-heading'>{cat.name}</span>
                 <div className='RelatedEvents-eventWrapper'>
-                <Scrollbars style={{width: '100%', height: '100%'}}>
-                  {getRelatedEventsByCategory(this.props.relatedEvents, cat.id, this.props.comparedEvent).map(event => (
-                    <Event
-                      key={event.id}
-                      {...event}
-                      onClick={this.props.changeOverlayEvent}
-                      handleCompareEvent={this.props.handleCompareEvent}
-                      canCompare={true} />
-                  ))}
-                </Scrollbars>
+                  <Scrollbars style={{width: '100%', height: '100%'}}>
+                    {getRelatedEventsByCategory(this.props.relatedEvents, cat.id, this.props.comparedEvent).map(event => (
+                      <Event
+                        key={event.id}
+                        {...event}
+                        onClick={this.props.changeOverlayEvent}
+                        handleCompareEvent={this.props.handleCompareEvent}
+                        canCompare={true} />
+                    ))}
+                  </Scrollbars>
                 </div>
               </div>
-                }
-              </span>
+                  }
+                </span>
 
-          ))}
-          </div>
+              ))}
+            </div>
           </Scrollbars>
         </div>
       </div>

@@ -12,7 +12,8 @@ const stripHtml = (html) => {
   return tmp.textContent || tmp.innerText || '';
 };
 
-const truncate = (string, maxLength = 130) => (string.length > maxLength) ? string.substring(0, maxLength - 3) + '...' : string;
+const truncate = (string, maxLength = 130) =>
+  (string.length > maxLength) ? string.substring(0, maxLength - 3) + '...' : string;
 
 const SearchResultOverlayBackdrop = ({children, onClick}) => (
   <div className='SearchResultOverlayBackdrop' onClick={() => onClick()}>
@@ -82,101 +83,108 @@ const SearchResultOverlay =
       transitionEnter={true}
       transitionLeave={true}
     >
-    {(eventsSearchResults !== null || searchInputOnTop) ? (
-    <SearchResultOverlayBackdrop onClick={handleHideSearchResult}>
-      <ReactCSSTransitionGroup
-        transitionName="SearchResultOverlay-transitionGroup"
-        transitionEnterTimeout={300}
-        transitionLeaveTimeout={300}
-        transitionEnter={true}
-        transitionLeave={true}
-      >
-      <div
-        className='SearchResultOverlay'
-        style={{display: !!searchTerm ? 'block' : 'none'}}
-        onClick={ev => ev.stopPropagation()}
-      >
-        <span className='SearchResultOverlay-heading'>{translatables.weFoundThis}</span>
-        <div className='SearchResultOverlay-typeWrapper'>
-          {eventsSearchResults !== null && (
-          <div className='SearchResultOverlay-listWrapper SearchResultOverlay-listWrapper--type'>
-            <span className='SearchResultOverlay-typeHeading'>{translatables.seeAndDiscover}</span>
-            <Scrollbars>
-              <ul className='SearchResultOverlay-list'>
-              {eventsSearchResults.length ? eventsSearchResults.map(res =>
-                <li key={Math.random()}>
-                <Link {...getLinkTarget(res, activeLanguage, changeOverlayEvent)}>
-                  <div style={{display: 'flex'}}>
-                    {res.imgUrl &&
-                      <div className='SearchResultOverlay-imgWrapper'>
-                      <img className='SearchResultOverlay-img' src={res.imgUrl} alt={res.name} />
-                    </div>
-                    }
-                    <div className='SearchResultOverlay-contentWrapper'>
-                      <span className='SearchResultOverlay-contentHeading'>{res.name}</span>
-                      {res.content &&
-                        <p>
-                          {truncate(stripHtml(res.content))}
-                        </p>
-                      }
-                    </div>
+      {(eventsSearchResults !== null || searchInputOnTop) ? (
+        <SearchResultOverlayBackdrop onClick={handleHideSearchResult}>
+          <ReactCSSTransitionGroup
+            transitionName="SearchResultOverlay-transitionGroup"
+            transitionEnterTimeout={300}
+            transitionLeaveTimeout={300}
+            transitionEnter={true}
+            transitionLeave={true}
+          >
+            <div
+              className='SearchResultOverlay'
+              style={{display: searchTerm ? 'block' : 'none'}}
+              onClick={ev => ev.stopPropagation()}
+            >
+              <span className='SearchResultOverlay-heading'>{translatables.weFoundThis}</span>
+              <div className='SearchResultOverlay-typeWrapper'>
+                {eventsSearchResults !== null && (
+                  <div className='SearchResultOverlay-listWrapper SearchResultOverlay-listWrapper--type'>
+                    <span className='SearchResultOverlay-typeHeading'>
+                      {translatables.seeAndDiscover}
+                    </span>
+                    <Scrollbars>
+                      <ul className='SearchResultOverlay-list'>
+                        {eventsSearchResults.length ? eventsSearchResults.map(res => (
+                          <li key={Math.random()}>
+                            <Link {...getLinkTarget(res, activeLanguage, changeOverlayEvent)}>
+                              <div style={{display: 'flex'}}>
+                                {res.imgUrl &&
+                                  <div className='SearchResultOverlay-imgWrapper'>
+                                    <img className='SearchResultOverlay-img' src={res.imgUrl} alt={res.name} />
+                                  </div>
+                                }
+                                <div className='SearchResultOverlay-contentWrapper'>
+                                  <span className='SearchResultOverlay-contentHeading'>{res.name}</span>
+                                  {res.content &&
+                                    <p>
+                                      {truncate(stripHtml(res.content))}
+                                    </p>
+                                  }
+                                </div>
+                              </div>
+                            </Link>
+                          </li>)
+                        ) : <li>{translatables.noResultsFound}</li>}
+                      </ul>
+                    </Scrollbars>
                   </div>
-                </Link>
-              </li>
+                )}
+
+                { crmSearchResults && !!crmSearchResults.length &&
+                  <div className='SearchResultOverlay-listWrapper SearchResultOverlay-listWrapper--type'>
+                    <span className='SearchResultOverlay-typeHeading'>
+                      {translatables.askCustomerCenter}
+                    </span>
+                    <Scrollbars>
+                      <ul className='SearchResultOverlay-list'>
+                        {crmSearchResults.length ? crmSearchResults.map(res =>
+                          (<li key={Math.random()}>
+                            <div className='SearchResultOverlay-contentWrapper'>
+                              <span className='SearchResultOverlay-contentHeading'>{res.question}</span>
+                              <p dangerouslySetInnerHTML={
+                                {__html: stripHtml(res.answer).replace(']]>', '')}} />
+                            </div>
+                          </li>)
+                        ) : <li>{translatables.noResultsFound}</li>}
+                      </ul>
+                    </Scrollbars>
+                  </div>
+                }
+
+                { hbgSeSearchResults && !!hbgSeSearchResults.length &&
+        <div className='SearchResultOverlay-listWrapper SearchResultOverlay-listWrapper--type'>
+          <span className='SearchResultOverlay-typeHeading'>Helsingborg.se</span>
+          <Scrollbars>
+            <ul className='SearchResultOverlay-list'>
+              {hbgSeSearchResults.length ? hbgSeSearchResults.map(res =>
+                (<li key={Math.random()}>
+                  <Link style={{textAlign: 'left'}} iframe={{url: res.link}}>
+                    <div className='SearchResultOverlay-contentWrapper'>
+                      <span className='SearchResultOverlay-contentHeading'>
+                        {res.title.split('|')[0]}
+                      </span>
+                      <p>
+                        {truncate(res.description)}
+                      </p>
+                      <span className='SearchResultOverlay-link'>{truncate(res.link, 50)}</span>
+                    </div>
+                  </Link>
+                </li>)
               ) : <li>{translatables.noResultsFound}</li>}
             </ul>
           </Scrollbars>
         </div>
-        )}
+                }
 
-        { crmSearchResults && !!crmSearchResults.length &&
-        <div className='SearchResultOverlay-listWrapper SearchResultOverlay-listWrapper--type'>
-          <span className='SearchResultOverlay-typeHeading'>{translatables.askCustomerCenter}</span>
-              <Scrollbars>
-                <ul className='SearchResultOverlay-list'>
-                {crmSearchResults.length ? crmSearchResults.map(res =>
-                  <li key={Math.random()}>
-                    <div className='SearchResultOverlay-contentWrapper'>
-                      <span className='SearchResultOverlay-contentHeading'>{res.question}</span>
-                      <p dangerouslySetInnerHTML={{__html: stripHtml(res.answer).replace(']]>', '')}} />
-                    </div>
-                  </li>
-                  ) : <li>{translatables.noResultsFound}</li>}
-                </ul>
-              </Scrollbars>
+              </div>
             </div>
-        }
-
-        { hbgSeSearchResults && !!hbgSeSearchResults.length &&
-        <div className='SearchResultOverlay-listWrapper SearchResultOverlay-listWrapper--type'>
-          <span className='SearchResultOverlay-typeHeading'>Helsingborg.se</span>
-              <Scrollbars>
-                <ul className='SearchResultOverlay-list'>
-                {hbgSeSearchResults.length ? hbgSeSearchResults.map(res =>
-                  <li key={Math.random()}>
-                    <Link style={{textAlign: 'left'}} iframe={{url: res.link}}>
-                      <div className='SearchResultOverlay-contentWrapper'>
-                        <span className='SearchResultOverlay-contentHeading'>{res.title.split('|')[0]}</span>
-                        <p>
-                          {truncate(res.description)}
-                        </p>
-                        <span className='SearchResultOverlay-link'>{truncate(res.link, 50)}</span>
-                      </div>
-                    </Link>
-                  </li>
-                  ) : <li>{translatables.noResultsFound}</li>}
-                </ul>
-              </Scrollbars>
-            </div>
-        }
-
-          </div>
-        </div>
-      </ReactCSSTransitionGroup>
-    </SearchResultOverlayBackdrop>
-  )
-  : null}
-  </ReactCSSTransitionGroup>
+          </ReactCSSTransitionGroup>
+        </SearchResultOverlayBackdrop>
+      )
+        : null}
+    </ReactCSSTransitionGroup>
   );
 };
 

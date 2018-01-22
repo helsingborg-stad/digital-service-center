@@ -18,8 +18,8 @@ const MultimediaBackground = ({ backgroundUrl, children }) => {
   }
   return (
     <div className='MultimediaBackground' style={{ backgroundImage: `url(${backgroundUrl})` }}>
-    { children }
-  </div>
+      { children }
+    </div>
   );
 };
 

@@ -15,79 +15,83 @@ export class SectionCard extends Component {
           <h2 className='SectionCard-heading'>{this.props.section}</h2>
         </Link>
         <div className='SectionCard-tagWrapper'>
-        {!this.props.showTimeSpanButtons && this.props.tags.map(tag => {
-          return (<Link key={Math.random()} className='SectionCard-tag' to={tag.href}>
-            {tag.name}
-          </Link>);
-        })}
-        {this.props.showTimeSpanButtons &&
+          {!this.props.showTimeSpanButtons && this.props.tags.map(tag => {
+            return (<Link key={Math.random()} className='SectionCard-tag' to={tag.href}>
+              {tag.name}
+            </Link>);
+          })}
+          {this.props.showTimeSpanButtons &&
           <span>
             <Link className='SectionCard-tag' to='/sv/events?selectedTimeSpan=today'>
-            {this.props.translatables.today}
+              {this.props.translatables.today}
             </Link>
             <Link className='SectionCard-tag' to='/sv/events?selectedTimeSpan=tomorrow'>
-            {this.props.translatables.tomorrow}
+              {this.props.translatables.tomorrow}
             </Link>
             <Link className='SectionCard-tag' to='/sv/events?selectedTimeSpan=weekend'>
-            {this.props.translatables.weekend}
+              {this.props.translatables.weekend}
             </Link>
             <Link className='SectionCard-tag' to='/sv/events?selectedTimeSpan=all'>
-            {this.props.translatables.all}
+              {this.props.translatables.all}
             </Link>
           </span>
-        }
+          }
         </div>
         <div className='SectionCard-scrollWrapper'>
-          <Scrollbars style={{ width: '100%', height: `${this.props.isInPortraitMode ? '58vh' : '40vh' }`}}>
+          <Scrollbars style={{
+            width: '100%',
+            height: `${this.props.isInPortraitMode ? '58vh' : '40vh' }`}
+          }>
             <div className='SectionCard-postWrapper'>
-            {this.props.posts.map(post => {
-              switch (post.type) {
-              case 'iframe':
-                return (
-                  <Link
-                    key={Math.random()}
-                    className='SectionCard-post'
-                    to={`/${this.props.activeLanguage}/${this.props.type}/`}
-                    onClick={() => this.props.setIframeUrl(post)}
-                  >
-                    { post.imgUrl &&
+              {this.props.posts.map(post => {
+                switch (post.type) {
+                case 'iframe':
+                  return (
+                    <Link
+                      key={Math.random()}
+                      className='SectionCard-post'
+                      to={`/${this.props.activeLanguage}/${this.props.type}/`}
+                      onClick={() => this.props.setIframeUrl(post)}
+                    >
+                      { post.imgUrl &&
                       <img className='SectionCard-postImage' src={post.imgUrl} alt='' />
-                    }
-                    <h3 className='SectionCard-postHeading'>{post.heading}</h3>
-                    <p className='SectionCard-postPreamble'>{post.preamble}</p>
-                  </Link>
-                );
-              case 'page':
-                return (
-                  <Link
-                    key={Math.random()}
-                    className='SectionCard-post'
-                    to={`/${this.props.activeLanguage}/${this.props.type}/`}
-                    onClick={() => this.props.setIframeUrl({url: formatRelativeUrl(post.url)})}
-                  >
-                    { post.imgUrl &&
+                      }
+                      <h3 className='SectionCard-postHeading'>{post.heading}</h3>
+                      <p className='SectionCard-postPreamble'>{post.preamble}</p>
+                    </Link>
+                  );
+                case 'page':
+                  return (
+                    <Link
+                      key={Math.random()}
+                      className='SectionCard-post'
+                      to={`/${this.props.activeLanguage}/${this.props.type}/`}
+                      onClick={() => this.props.setIframeUrl({url: formatRelativeUrl(post.url)})}
+                    >
+                      { post.imgUrl &&
                       <img className='SectionCard-postImage' src={post.imgUrl} alt='' />
-                    }
-                    <h3 className='SectionCard-postHeading'>{post.heading}</h3>
-                    <p className='SectionCard-postPreamble'>{post.preamble}</p>
-                  </Link>
-                );
-              case 'event':
-                return (
-                  <Link
-                    key={Math.random()}
-                    className='SectionCard-post'
-                    to={post.href}
-                  >
-                  { post.imgUrl &&
+                      }
+                      <h3 className='SectionCard-postHeading'>{post.heading}</h3>
+                      <p className='SectionCard-postPreamble'>{post.preamble}</p>
+                    </Link>
+                  );
+                case 'event':
+                  return (
+                    <Link
+                      key={Math.random()}
+                      className='SectionCard-post'
+                      to={post.href}
+                    >
+                      { post.imgUrl &&
                     <img className='SectionCard-postImage' src={post.imgUrl} alt='' />
-                  }
-                  <h3 className='SectionCard-postHeading'>{post.heading}</h3>
-                  <p className='SectionCard-postPreamble'>{post.preamble}</p>
-                </Link>);
-              default:
-                return null;
-              }})}
+                      }
+                      <h3 className='SectionCard-postHeading'>{post.heading}</h3>
+                      <p className='SectionCard-postPreamble'>{post.preamble}</p>
+                    </Link>);
+                default:
+                  return null;
+                }
+              })}
             </div>
           </Scrollbars>
         </div>

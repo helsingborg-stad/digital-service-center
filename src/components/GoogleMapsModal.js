@@ -43,7 +43,7 @@ const GoogleMapsModal = ({
           cssClassName='GoogleMapsModal-button GoogleMapsModal-button--emphasized'
           text={translatables.navigate}
           style={{padding: '0.5rem 1rem', fontSize: '0.8125rem', background: '#c70d53'}}
-          />
+        />
 
         <RippleButton
           onClick={() => handleShowMoreInfo(eventData)}

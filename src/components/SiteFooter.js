@@ -3,7 +3,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Link from './Link';
 import './SiteFooter.css';
-
 const LeftArrow = ({...props}) => (
   <svg {...props} xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 314.069 314.069">
     <g>
@@ -14,17 +13,22 @@ const LeftArrow = ({...props}) => (
       </g>
     </g>
   </svg>
-)
+);
 
 const SiteFooter = ({children, color, backToStartPath, translatables}) => {
   return (
     <div className='SiteFooter' style={{background: color}}>
       <Link className='SiteFooter-back-to-start' to={backToStartPath}>
-        <LeftArrow style={{width: '25px', transform: 'translateY(-2px)', marginRight: '0.6rem', marginBottom: '-0.7em'}} />
+        <LeftArrow style={{
+          width: '25px',
+          transform: 'translateY(-2px)',
+          marginRight: '0.6rem',
+          marginBottom: '-0.7em'}}
+        />
         {translatables.backToStart}
       </Link>
       <span className='SiteFooterLink-wrapper'>
-      {children}
+        {children}
       </span>
     </div>
   );
@@ -35,6 +39,7 @@ SiteFooter.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
   ]),
+  backToStartPath: PropTypes.string,
   color: PropTypes.string,
   translatables: PropTypes.shape({
     backToStart: PropTypes.string.isRequired
@@ -47,7 +52,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-const SiteFooterConnected = connect(mapStateToProps, null)(SiteFooter)
+const SiteFooterConnected = connect(mapStateToProps, null)(SiteFooter);
 
 export { SiteFooterConnected as SiteFooter };
 
@@ -55,17 +60,24 @@ export const SiteFooterLink = ({link}) => {
   switch (link.type) {
   case 'iframe':
     return (
-    <Link className='SiteFooterLink' iframe={link}>
-      {link.name}
-    </Link>
+      <Link className='SiteFooterLink' iframe={link}>
+        {link.name}
+      </Link>
     );
   case 'page':
     return (
-    <Link className='SiteFooterLink' page={link}>
-      {link.name}
-    </Link>
+      <Link className='SiteFooterLink' page={link}>
+        {link.name}
+      </Link>
     );
   default:
     return null;
   }
+};
+
+SiteFooterLink.propTypes = {
+  link: PropTypes.shape({
+    name: PropTypes.string,
+    type: PropTypes.oneOf('iframe', 'page')
+  })
 };

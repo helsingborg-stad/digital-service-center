@@ -26,15 +26,15 @@ export class BottomBarLink extends Component {
     switch (link.type) {
     case 'iframe':
       return (
-      <Link className='BottomBarLink' iframe={this.props.link}>
-        {this.props.link.name}
-      </Link>
+        <Link className='BottomBarLink' iframe={this.props.link}>
+          {this.props.link.name}
+        </Link>
       );
     case 'page':
       return (
-      <Link className='BottomBarLink' page={this.props.link}>
-        {this.props.link.name}
-      </Link>
+        <Link className='BottomBarLink' page={this.props.link}>
+          {this.props.link.name}
+        </Link>
       );
     default:
       return null;

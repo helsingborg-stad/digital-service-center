@@ -1,56 +1,28 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import Lipping from './Lipping';
-import SiteHeader from './SiteHeader';
-import { SiteFooter, SiteFooterLink } from './SiteFooter';
-import VergicChatButton from './VergicChatButton';
-import { Event } from './EventShowcase';
+import Lipping from '../Lipping';
+import SiteHeader from '../SiteHeader';
+import { SiteFooter, SiteFooterLink } from '../SiteFooter';
+import VergicChatButton from '../VergicChatButton';
+import { Event } from '../EventShowcase';
 import Scrollbars from 'react-custom-scrollbars';
-import LandingPageLoading from './LandingPageLoading';
-import LandingPageError from './LandingPageError';
-import EventOverlay from './EventOverlay/EventOverlay';
+import LandingPageLoading from '../LandingPage/LandingPageLoading';
+import LandingPageError from '../LandingPage/LandingPageError';
+import EventOverlay from '../EventOverlay/EventOverlay';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import AsideMenu from './AsideMenu';
-import Calendar from './Calendar';
+import AsideMenu from '../AsideMenu';
+import Calendar from '../Calendar';
 import { connect } from 'react-redux';
-import { eventsFetchData } from '../actions/events';
-import EventsDateList from './EventsDateList.js';
+import { eventsFetchData } from '../../actions/events';
+import EventsDateList from '../EventsDateList.js';
 import './EventsPage.css';
-import LanguageFlags from './LanguageFlags';
-import Search from './Search';
-
-const getDistinctEventCategories = (events, excludedCategories) => {
-  const distinctCategories = events.reduce((acc, event) => {
-    if (event.type !== 'event') {
-      return acc;
-    }
-    event.categories.forEach(cat => {
-      if (!acc.some(c => c.id === cat.id) && !excludedCategories.includes(cat.id)) {
-        acc.push(cat);
-      }
-    });
-    return acc;
-  }, []);
-  return distinctCategories.sort((a, b) => a.name.localeCompare(b.name));
-};
-
-const getEventsForCategory = (events, categoryId) => {
-  return events.filter(event => (
-    event.categories.some(c => c.id === categoryId) && event.type === 'event'
-  ));
-};
-
-const getRelatedEvents = (events, mainEvent) => {
-  const relatedEvents = events.filter(event => {
-    return mainEvent.id !== event.id && event.categories.reduce((catArray, cat) => {
-      if (mainEvent.categories.find(c => c.id === cat.id)) {
-        catArray.push(cat);
-      }
-      return catArray;
-    }, []).length;
-  });
-  return relatedEvents;
-};
+import LanguageFlags from '../LanguageFlags';
+import Search from '../Search';
+import {
+  getDistinctEventCategories,
+  getEventsForCategory,
+  getRelatedEvents }
+  from './eventsPageHelpers.js';
 
 export class EventsPage extends Component {
   constructor(props) {
@@ -106,7 +78,7 @@ export class EventsPage extends Component {
     }
 
     const params = new window.URL(window.location.href).searchParams;
-    const categoryIds = params.get("category");
+    const categoryIds = params.get('category');
     if (categoryIds) {
       categoryIds.split(',').forEach(id => {
         this.setState({
@@ -118,7 +90,11 @@ export class EventsPage extends Component {
 
   render() {
     if (this.props.hasErrored) {
-      return <LandingPageError reloadPage={() => this.props.fetchData('/api/events', this.props.activeLanguage)} />;
+      return (
+        <LandingPageError
+          reloadPage={() => this.props.fetchData('/api/events', this.props.activeLanguage)}
+        />
+      );
     }
 
     const dataIsEmpty = !this.props.events || !Object.keys(this.props.events).length;
@@ -144,8 +120,8 @@ export class EventsPage extends Component {
         />
         <main>
           <div className='EventsPage-eventsWrapper'>
-              <Scrollbars style={{ width: 'calc(100% - 1.5rem)', marginRight: '-1.5rem' }}>
-                <div className='EventsPage-innerScrollWrapper'>
+            <Scrollbars style={{ width: 'calc(100% - 1.5rem)', marginRight: '-1.5rem' }}>
+              <div className='EventsPage-innerScrollWrapper'>
                 { getDistinctEventCategories(this.props.events, pageData.excludedCategoryIds)
                   .map(c => (
                     <div key={c.id}>
@@ -154,32 +130,36 @@ export class EventsPage extends Component {
                         dangerouslySetInnerHTML={{__html: c.name}}
                       />
                       <div className='EventsPage-eventWrapper'>
-                        <Scrollbars style={{ width: 'calc(100% - 1rem)', height: 'calc(100% - 1.6rem)' }}>
-                        { getEventsForCategory(this.props.events, c.id).map(event => (
-                          <Event
-                            key={event.id}
-                            {...event}
-                            onClick={this.changeOverlayEvent.bind(this)} />
+                        <Scrollbars
+                          style={{ width: 'calc(100% - 1rem)', height: 'calc(100% - 1.6rem)' }}>
+                          { getEventsForCategory(this.props.events, c.id).map(event => (
+                            <Event
+                              key={event.id}
+                              {...event}
+                              onClick={this.changeOverlayEvent.bind(this)} />
                           ))
-                        }
+                          }
                         </Scrollbars>
                       </div>
                     </div>
                   ))
                 }
-                </div>
-              </Scrollbars>
-            </div>
+              </div>
+            </Scrollbars>
+          </div>
           <SiteFooter color='#f4a428' backToStartPath={`/${this.props.activeLanguage}/`}>
             { pageData.bottomLinks.map((link) => (
               <SiteFooterLink key={link.href + link.name} link={link} />))
             }
-            <VergicChatButton className='SiteFooterLink' pageName={pageData.heading} color='#f4a428' />
+            <VergicChatButton
+              className='SiteFooterLink'
+              pageName={pageData.heading} color='#f4a428'
+            />
             <div className='Startpage-langWrapper'>
               <LanguageFlags activeLanguage={this.props.activeLanguage} />
             </div>
           </SiteFooter>
-         <ReactCSSTransitionGroup
+          <ReactCSSTransitionGroup
             transitionName="EventOverlay-transitionGroup"
             transitionEnterTimeout={300}
             transitionLeaveTimeout={300}
@@ -207,7 +187,9 @@ export class EventsPage extends Component {
             <Scrollbars
               ref='eventsDateListScroll'
               autoHeight
-              autoHeightMax={`100vh - ${this.props.isInPortraitMode ? '6.5rem' : '3.25rem'} - 4.6875rem - 400px - 2rem`}
+              autoHeightMax={`100vh - ${this.props.isInPortraitMode ?
+                '6.5rem' :
+                '3.25rem'} - 4.6875rem - 400px - 2rem`}
             >
               <EventsDateList
                 events={this.props.events}
@@ -226,8 +208,8 @@ EventsPage.propTypes = {
   bgColor: PropTypes.string,
   fetchData: PropTypes.func.isRequired,
   activeLanguage: PropTypes.string.isRequired,
-  events: PropTypes.any, // TODO
-  landingPages: PropTypes.any, // TODO
+  events: PropTypes.any,
+  landingPages: PropTypes.any,
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
   activeEvent: PropTypes.string,

@@ -10,38 +10,38 @@ const store = configureStore(initialStateForTests);
 it('renders without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
-  <Provider store={store}>
-    <Startpage
-      activeLanguage='sv'
-      fetchData={() => {}}
-      hasErrored={false}
-      isLoading={false}
-    />
-  </Provider>, div);
+    <Provider store={store}>
+      <Startpage
+        activeLanguage='sv'
+        fetchData={() => {}}
+        hasErrored={false}
+        isLoading={false}
+      />
+    </Provider>, div);
 });
 
 it('renders loading state without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
-  <Provider store={store}>
-    <Startpage
-      activeLanguage='sv'
-      fetchData={() => {}}
-      hasErrored={false}
-      isLoading={true}
-    />
-  </Provider>, div);
+    <Provider store={store}>
+      <Startpage
+        activeLanguage='sv'
+        fetchData={() => {}}
+        hasErrored={false}
+        isLoading={true}
+      />
+    </Provider>, div);
 });
 
 it('renders error state without crashing', () => {
   const div = document.createElement('div');
   ReactDOM.render(
-  <Provider store={store}>
-    <Startpage
-      activeLanguage='sv'
-      fetchData={() => {}}
-      hasErrored={true}
-      isLoading={false}
-    />
-  </Provider>, div);
+    <Provider store={store}>
+      <Startpage
+        activeLanguage='sv'
+        fetchData={() => {}}
+        hasErrored={true}
+        isLoading={false}
+      />
+    </Provider>, div);
 });

@@ -13,7 +13,7 @@ function triggerSelectedDates(calendar, selectedDates) {
 }
 
 const CalendarHeader = ({text}) => (
-   <div className="CalendarHeader">{text}</div>
+  <div className="CalendarHeader">{text}</div>
 );
 
 CalendarHeader.propTypes = {
@@ -21,7 +21,7 @@ CalendarHeader.propTypes = {
 };
 
 const CalendarButton = ({onClick, text}) => (
-  <button className="CalendarButton" onClick={onClick} >{text}</button>
+  <button className="CalendarButton" onClick={onClick}>{text}</button>
 );
 
 CalendarButton.propTypes = {
@@ -55,7 +55,6 @@ export class Calendar extends React.Component {
     default:
       this.handleResetDate();
       break;
-
     }
   }
 

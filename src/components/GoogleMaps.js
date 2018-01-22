@@ -22,40 +22,40 @@ Marker.defaultProps = {
 };
 
 const GoogleMaps = ({center, zoom, apiKey, lang, markers, visibleModals,
-                     handleToggleModalVisibility, handleShowMoreInfo}) => {
+  handleToggleModalVisibility, handleShowMoreInfo}) => {
   return (
-      <GoogleMap
-        defaultCenter={center}
-        defaultZoom={zoom}
-        bootstrapURLKeys={{key: apiKey, language: lang}}
-      >
-        { markers.map((marker) => {
-          return (
-            <Marker
-              onClick={() => handleToggleModalVisibility(marker.id)}
-              key={marker.id}
-              lat={marker.lat}
-              lng={marker.lng}
-              color={marker.activeColor}
-              name={marker.eventData.name}
-            />
-          );
-        }) }
-        { markers.map((marker) => {
-          return (
-            <GoogleMapsModal
-              lat={marker.lat}
-              lng={marker.lng}
-              id={marker.id + '-modal'}
-              key={marker.id + '-modal'}
-              visible={visibleModals.includes(marker.id)}
-              onCloseClick={() => handleToggleModalVisibility(marker.id)}
-              eventData={marker.eventData}
-              handleShowMoreInfo={handleShowMoreInfo}
-            />
-          );
-        }) }
-      </GoogleMap>
+    <GoogleMap
+      defaultCenter={center}
+      defaultZoom={zoom}
+      bootstrapURLKeys={{key: apiKey, language: lang}}
+    >
+      { markers.map((marker) => {
+        return (
+          <Marker
+            onClick={() => handleToggleModalVisibility(marker.id)}
+            key={marker.id}
+            lat={marker.lat}
+            lng={marker.lng}
+            color={marker.activeColor}
+            name={marker.eventData.name}
+          />
+        );
+      }) }
+      { markers.map((marker) => {
+        return (
+          <GoogleMapsModal
+            lat={marker.lat}
+            lng={marker.lng}
+            id={marker.id + '-modal'}
+            key={marker.id + '-modal'}
+            visible={visibleModals.includes(marker.id)}
+            onCloseClick={() => handleToggleModalVisibility(marker.id)}
+            eventData={marker.eventData}
+            handleShowMoreInfo={handleShowMoreInfo}
+          />
+        );
+      }) }
+    </GoogleMap>
   );
 };
 

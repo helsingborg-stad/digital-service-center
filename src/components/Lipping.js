@@ -5,12 +5,12 @@ export default class Lipping extends Component {
   render() {
     return (
       <div className='Lipping'>
-          <div />
-          <div />
-          <div />
-          <div />
-          <div />
-       </div>
+        <div />
+        <div />
+        <div />
+        <div />
+        <div />
+      </div>
     );
   }
 }

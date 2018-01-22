@@ -8,8 +8,8 @@ import { previousUrl } from './actions/previousUrl';
 
 import App from './components/App';
 import Startpage from './components/Startpage';
-import LandingPage from './components/LandingPage';
-import EventsPage from './components/EventsPage';
+import LandingPage from './components/LandingPage/LandingPage';
+import EventsPage from './components/EventsPage/EventsPage';
 
 const setLanguageAndRedirectIfNecessary = (nextState, replace, store, defaultLanguage) => {
   if (!nextState.params.lang) {
@@ -70,7 +70,9 @@ const Routes = (props = {}) => {
         <Route
           path='/:lang/events(/:event)'
           component={({params, location}) => (
-            <EventsPage activeEvent={params.event} selectedTimeSpan={location.query.selectedTimeSpan} />
+            <EventsPage
+              activeEvent={params.event}
+              selectedTimeSpan={location.query.selectedTimeSpan} />
           )} />
       </Route>
       <Route path='*'>

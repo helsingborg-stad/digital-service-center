@@ -57,28 +57,24 @@ export class VergicChatButton extends Component {
     });
   }
   render() {
-    if(isChatOpen({type: 'video'}) && isChatOpen({type: 'text'}) && this.shouldShowButton()) {
-      return <div className="VergicChatOptions">
+    if (isChatOpen({type: 'video'}) && isChatOpen({type: 'text'}) && this.shouldShowButton()) {
+      return (<div className="VergicChatOptions">
         <button onClick={this.toggleChatOptions.bind(this)} className={this.props.className}>{this.props.translatables.chatWithUs}</button>
         <ul {...this.props.color ? {style: {background: this.props.color, color: '#fff'}} : null} className={cn('VergicChatOptionsList', {'VergicChatOptionsList--visible': this.state.chatListIsVisible})}>
           <li><button {...this.props.color ? {style: {color: '#fff'}} : null} onClick={this.joinChatText.bind(this, this.props.pageName)}>Text</button></li>
           <li><button {...this.props.color ? {style: {color: '#fff'}} : null} onClick={this.joinChatVideo.bind(this, this.props.pageName)}>Video</button></li>
         </ul>
-      </div>;
-    }
-    else if(isChatOpen({type: 'text'}) && this.shouldShowButton()) {
-      return <button
+      </div>);
+    } else if (isChatOpen({type: 'text'}) && this.shouldShowButton()) {
+      return (<button
         className={this.props.className}
-        onClick={this.joinChatText.bind(this, this.props.pageName)}>{this.props.translatables.chatWithUs}</button>
-    }
-    else if(isChatOpen({type: 'video'}) && this.shouldShowButton()) {
-      return <button
+        onClick={this.joinChatText.bind(this, this.props.pageName)}>{this.props.translatables.chatWithUs}</button>);
+    } else if (isChatOpen({type: 'video'}) && this.shouldShowButton()) {
+      return (<button
         className={this.props.className}
-        onClick={this.joinChatVideo.bind(this, this.props.pageName)}>{this.props.translatables.chatWithUs}</button>
+        onClick={this.joinChatVideo.bind(this, this.props.pageName)}>{this.props.translatables.chatWithUs}</button>);
     }
-    else {
-      return null;
-    }
+    return null;
   }
 }
 
@@ -86,6 +82,7 @@ VergicChatButton.propTypes = {
   className: PropTypes.string,
   pageName: PropTypes.string,
   showChat: PropTypes.bool,
+  color: PropTypes.string,
   translatables: PropTypes.shape({
     chatWithUs: PropTypes.string.isRequired
   }).isRequired

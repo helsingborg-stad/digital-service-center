@@ -4,9 +4,9 @@ import classNames from 'classnames';
 import './AsideMenu.css';
 
 const AsideMenu = ({children, fullHeight}) => (
-<div className={classNames('AsideMenu', {'AsideMenu--fullHeight': fullHeight})}>
-  {children}
-</div>
+  <div className={classNames('AsideMenu', {'AsideMenu--fullHeight': fullHeight})}>
+    {children}
+  </div>
 );
 
 export default AsideMenu;

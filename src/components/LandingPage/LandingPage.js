@@ -1,84 +1,29 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import Lipping from './Lipping';
-import SiteHeader from './SiteHeader';
-import { SiteFooter, SiteFooterLink } from './SiteFooter';
-import VergicChatButton from './VergicChatButton';
-import { SideNavigation, SideNavigationLink } from './SideNavigation';
-import Search from './Search';
-import GoogleMaps from './GoogleMaps';
-import { EventShowcase, Event } from './EventShowcase';
-import EventOverlay from './EventOverlay/EventOverlay';
+import Lipping from '../Lipping';
+import SiteHeader from '../SiteHeader';
+import { SiteFooter, SiteFooterLink } from '../SiteFooter';
+import VergicChatButton from '../VergicChatButton';
+import { SideNavigation, SideNavigationLink } from '../SideNavigation';
+import Search from '../Search';
+import GoogleMaps from '../GoogleMaps';
+import { EventShowcase, Event } from '../EventShowcase';
+import EventOverlay from '../EventOverlay/EventOverlay';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import AsideMenu from './AsideMenu';
-import Calendar from './Calendar';
+import AsideMenu from '../AsideMenu';
+import Calendar from '../Calendar';
 import LandingPageLoading from './LandingPageLoading';
 import LandingPageError from './LandingPageError';
 import Scrollbars from 'react-custom-scrollbars';
-import EventsDateList from './EventsDateList.js';
+import EventsDateList from '../EventsDateList.js';
 import { connect } from 'react-redux';
-import { eventsFetchData } from '../actions/events';
-import { iframeUrl } from '../actions/iframeUrl';
-import LanguageFlags from './LanguageFlags';
-import formatRelativeUrl from '../util/formatRelativeUrl';
-
+import { eventsFetchData } from '../../actions/events';
+import { iframeUrl } from '../../actions/iframeUrl';
+import LanguageFlags from '../LanguageFlags';
+import formatRelativeUrl from '../../util/formatRelativeUrl';
+import { getRelatedEvents, selectedEventsWithCoordinates } from './landingPageHelpers.js';
 
 import './LandingPage.css';
-
-const getRelatedEvents = (events, mainEvent) => {
-  return events.filter(event => {
-    return mainEvent.id !== event.id && event.categories.reduce((catArray, cat) => {
-      if (mainEvent.categories.find(c => c.id === cat.id)) {
-        catArray.push(cat);
-      }
-      return catArray;
-    }, []).length;
-  });
-};
-
-const selectedEventsWithCoordinates = (events, activeCategories, eventCategories) => {
-  const getActiveColorForEvent = (event) => {
-    const firstActiveCat = event.categories.map(c => c.id).find(c => activeCategories.includes(c));
-    let foundCategory = eventCategories.find(c => c.id === firstActiveCat);
-
-    // Category not found, search in subcategories
-    if (!foundCategory) {
-      const foundSubCategories = eventCategories.filter(cat => {
-        return cat.subCategories && cat.subCategories.length;
-      }).map(cat => cat.subCategories)
-        .reduce((acc, cat) => acc.concat(cat), []);
-
-      foundSubCategories.forEach(item => {
-        if (item.id === firstActiveCat) {
-          foundCategory = item;
-          return;
-        }
-      });
-    }
-
-    return foundCategory ? foundCategory.activeColor : null;
-  };
-
-  const selectedEvents = !activeCategories.length
-    ? []
-    : events.filter(e => {
-      return e.categories.map(c => c.id).some(c => activeCategories.includes(c));
-    }).map(e => {
-      return Object.assign({}, e, { activeColor: getActiveColorForEvent(e) });
-    });
-
-  return selectedEvents.filter(e => e.location && e.location.latitude && e.location.longitude)
-    .reduce((acc, e) => {
-      acc.markers.push({
-        id: e.id,
-        lat: e.location.latitude,
-        lng: e.location.longitude,
-        eventData: e,
-        activeColor: e.activeColor
-      });
-      return acc;
-    }, { markers: [] });
-};
 
 export class LandingPage extends Component {
   constructor(props) {
@@ -174,7 +119,11 @@ export class LandingPage extends Component {
 
   render() {
     if (this.props.hasErrored) {
-      return <LandingPageError reloadPage={() => this.props.fetchData('/api/events', this.props.activeLanguage)} />;
+      return (
+        <LandingPageError
+          reloadPage={() => this.props.fetchData('/api/events', this.props.activeLanguage)}
+        />
+      );
     }
 
     const dataIsEmpty = !this.props.events || !Object.keys(this.props.events).length;
@@ -200,7 +149,7 @@ export class LandingPage extends Component {
 
         <SideNavigation>
           {pageData.menu !== null && pageData.menu.map(menu =>
-            <SideNavigationLink
+            (<SideNavigationLink
               id={menu.id || menu.menuId}
               key={menu.id || menu.menuId}
               name={menu.name}
@@ -213,20 +162,20 @@ export class LandingPage extends Component {
               subCategories={menu.subItems}
               customClasses={menu.customClasses}
               menuItem={menu}
-            />)
-
+            />))
           }
-          {pageData.menu === null && pageData.categories && !!pageData.categories.length && pageData.categories.map(cat =>
-            <SideNavigationLink
-              id={cat.id}
-              key={cat.id}
-              name={cat.name}
-              activeCategories={this.state.activeCategories}
-              activeColor={cat.activeColor}
-              handleClick={this.handleSideNavClick.bind(this)}
-              icon={cat.iconName}
-              subCategories={cat.subCategories}
-            />)
+          {pageData.menu === null && pageData.categories &&
+          !!pageData.categories.length && pageData.categories.map(cat =>
+              (<SideNavigationLink
+                id={cat.id}
+                key={cat.id}
+                name={cat.name}
+                activeCategories={this.state.activeCategories}
+                activeColor={cat.activeColor}
+                handleClick={this.handleSideNavClick.bind(this)}
+                icon={cat.iconName}
+                subCategories={cat.subCategories}
+              />))
           }
         </SideNavigation>
 
@@ -259,7 +208,10 @@ export class LandingPage extends Component {
                   <Event
                     key={index}
                     {...event}
-                    onClick={() => this.props.setIframeUrl({ url: formatRelativeUrl(event.url) })} />
+                    onClick={() => {
+                      this.props.setIframeUrl({ url: formatRelativeUrl(event.url) });
+                    }}
+                  />
                 );
               case 'event':
                 return (
@@ -278,7 +230,11 @@ export class LandingPage extends Component {
             {pageData.bottomLinks.map((link) => (
               <SiteFooterLink key={link.href + link.name} link={link} />))
             }
-            <VergicChatButton className='SiteFooterLink' pageName={pageData.heading} color={this.props.bgColor} />
+            <VergicChatButton
+              className='SiteFooterLink'
+              pageName={pageData.heading}
+              color={this.props.bgColor}
+            />
             <div className='Startpage-langWrapper'>
               <LanguageFlags activeLanguage={this.props.activeLanguage} />
             </div>
@@ -311,7 +267,8 @@ export class LandingPage extends Component {
             <Scrollbars
               ref='eventsDateListScroll'
               autoHeight
-              autoHeightMax={`${this.props.isInPortraitMode ? '90vh - 3.25rem' : '80vh'} - 3.25rem - 4.6875rem - 400px - 2rem`}
+              autoHeightMax={`${this.props.isInPortraitMode ?
+                '90vh - 3.25rem' : '80vh'} - 3.25rem - 4.6875rem - 400px - 2rem`}
             >
               <EventsDateList
                 events={this.props.events}
@@ -331,9 +288,9 @@ LandingPage.propTypes = {
   bgColor: PropTypes.string,
   fetchData: PropTypes.func.isRequired,
   activeLanguage: PropTypes.string.isRequired,
-  events: PropTypes.any, // TODO
+  events: PropTypes.any,
   categories: PropTypes.array,
-  landingPages: PropTypes.any, // TODO
+  landingPages: PropTypes.any,
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
   activeEvent: PropTypes.string,

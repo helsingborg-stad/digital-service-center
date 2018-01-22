@@ -91,7 +91,8 @@ Link.propTypes = {
     url: PropTypes.string
   }),
   page: PropTypes.shape({
-    content: PropTypes.string
+    content: PropTypes.string,
+    url: PropTypes.string
   }),
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),

@@ -33,9 +33,9 @@ export class Search extends Component {
     }
 
     const landingPagePages = [...this.props.landingPages.visitor.pages
-                                 .filter(p => p.type === 'iframe' || p.type === 'page'),
-                              ...this.props.landingPages.local.pages
-                                 .filter(p => p.type === 'iframe' || p.type === 'page')];
+      .filter(p => p.type === 'iframe' || p.type === 'page'),
+    ...this.props.landingPages.local.pages
+      .filter(p => p.type === 'iframe' || p.type === 'page')];
     this.setState({
       landingPagePages
     });
@@ -108,52 +108,57 @@ export class Search extends Component {
   }
   render() {
     return (
-    <div className='Search-wrapper'>
-      <ReactCSSTransitionGroup
-        transitionName="Search-wrapper-transitionGroup"
-        transitionEnterTimeout={1000}
-        transitionLeaveTimeout={1000}
-        transitionEnter={true}
-        transitionLeave={true}
-      >
-        { !this.state.searchInputOnTop ?
-        <div
-          key='searchInputOnBottom'
-          style={ this.props.inputWrapperStyle }
-          className='Search-inputWrapper'>
-            <SearchField
-              inline
-              autoFocus={false}
-              value={this.state.searchTerm || ''}
-              onSearchChange={(val) => this.handleSearchChange(val)}
-              handleSearchInputPosition={(val) => this.handleSearchInputPosition(val, this.props.events)}
-            />
-        </div>
-        :
-          <div
-            key='searchInputOnTop'
-            style={ this.props.inputWrapperStyle }
-            className='Search-inputWrapper--top'>
+      <div className='Search-wrapper'>
+        <ReactCSSTransitionGroup
+          transitionName="Search-wrapper-transitionGroup"
+          transitionEnterTimeout={1000}
+          transitionLeaveTimeout={1000}
+          transitionEnter={true}
+          transitionLeave={true}
+        >
+          { !this.state.searchInputOnTop ?
+            <div
+              key='searchInputOnBottom'
+              style={ this.props.inputWrapperStyle }
+              className='Search-inputWrapper'>
+              <SearchField
+                inline
+                autoFocus={false}
+                value={this.state.searchTerm || ''}
+                onSearchChange={(val) => this.handleSearchChange(val)}
+                handleSearchInputPosition={
+                  (val) => this.handleSearchInputPosition(val, this.props.events)
+                }
+              />
+            </div>
+            :
+            <div
+              key='searchInputOnTop'
+              style={ this.props.inputWrapperStyle }
+              className='Search-inputWrapper--top'>
               <SearchField
                 inline
                 autoFocus={true}
                 value={this.state.searchTerm || ''}
                 onSearchChange={(val) => this.handleSearchChange(val)}
               />
-          </div>
-        }
-      </ReactCSSTransitionGroup>
-      <SearchResultOverlay
-        eventsSearchResults={this.state.eventsSearchResults}
-        hbgSeSearchResults={(this.state.searchTerm && (this.state.searchTerm in this.props.hbgSearch)) ? this.props.hbgSearch[this.state.searchTerm] : []}
-        crmSearchResults={this.state.crmSearchResults}
-        changeOverlayEvent={this.changeOverlay.bind(this)}
-        handleHideSearchResult={this.handleHideSearchResult.bind(this)}
-        activeLanguage={this.props.activeLanguage}
-        searchInputOnTop={this.state.searchInputOnTop}
-        searchTerm={this.state.searchTerm}
-      />
-  </div>
+            </div>
+          }
+        </ReactCSSTransitionGroup>
+        <SearchResultOverlay
+          eventsSearchResults={this.state.eventsSearchResults}
+          hbgSeSearchResults={(this.state.searchTerm &&
+            (this.state.searchTerm in this.props.hbgSearch)) ?
+            this.props.hbgSearch[this.state.searchTerm] : []
+          }
+          crmSearchResults={this.state.crmSearchResults}
+          changeOverlayEvent={this.changeOverlay.bind(this)}
+          handleHideSearchResult={this.handleHideSearchResult.bind(this)}
+          activeLanguage={this.props.activeLanguage}
+          searchInputOnTop={this.state.searchInputOnTop}
+          searchTerm={this.state.searchTerm}
+        />
+      </div>
     );
   }
 }

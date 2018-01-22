@@ -13,7 +13,7 @@ const getOldestStartDate = (occasions) => {
 };
 
 const getDistinctEventOrderedByStartDate = ({events}) => {
-  return events.sort(function (event1, event2) {
+  return events.sort((event1, event2) => {
     const event1startDate = getOldestStartDate(event1.occasions);
     const event2startDate = getOldestStartDate(event2.occasions);
     return Moment(event1startDate).diff(Moment(event2startDate));

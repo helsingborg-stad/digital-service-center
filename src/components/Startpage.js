@@ -51,7 +51,9 @@ export class Startpage extends Component {
   render() {
     if (this.props.hasErrored) {
       return (
-       <StartpageError reloadPage={() => this.props.fetchData('/api/startpage', this.props.activeLanguage)} />
+        <StartpageError
+          reloadPage={() => this.props.fetchData('/api/startpage', this.props.activeLanguage)}
+        />
       );
     }
 
@@ -68,59 +70,64 @@ export class Startpage extends Component {
     );
 
     return (
-        <div className='Startpage'>
-          {this.props.events && !!this.props.events.length &&
+      <div className='Startpage'>
+        {this.props.events && !!this.props.events.length &&
           <Search
             events={this.props.events}
             pageType='Startpage'
-            inputWrapperStyle={{bottom: this.props.isInPortraitMode ? '10rem' : '6.5rem', transform: 'translateX(-50%)', left: '50%'}}
+            inputWrapperStyle={{bottom: this.props.isInPortraitMode ?
+              '10rem' : '6.5rem', transform: 'translateX(-50%)', left: '50%'}}
             activeLanguage={this.props.activeLanguage}
           />
-          }
-          <Lipping />
-          <MultimediaBackground backgroundUrl={this.props.data.backgroundUrl}>
-            <h1 className='Startpage-heading' onClick={() => window.location.reload()}>{this.props.data.heading}</h1>
-            <Row>
-              <Column>
-                <SectionCard
-                  type='visitor'
-                  section={this.props.data.visitorHeading}
-                  link={this.props.data.visitorHeadingLink}
-                  bgColor='#c90e52'
-                  tags={this.props.data.visitorTags}
-                  posts={this.props.data.visitorPosts} />
-              </Column>
-              <Column>
-                <SectionCard
-                  type='local'
-                  section={this.props.data.localHeading}
-                  link={this.props.data.localHeadingLink}
-                  bgColor='#eb6421'
-                  tags={this.props.data.localTags}
-                  posts={this.props.data.localPosts} />
-              </Column>
-              <Column>
-                <SectionCard
-                  type='events'
-                  section={this.props.data.eventsHeading}
-                  link={this.props.data.eventsHeadingLink}
-                  bgColor='#f4a428'
-                  tags={this.props.data.eventsTags}
-                  showTimeSpanButtons={true}
-                  posts={this.props.data.eventsPosts} />
-              </Column>
-            </Row>
-            <BottomBar>
-              { this.props.data.topLinks.map(link => (
-                <BottomBarLink key={link.href + link.name} link={link} />
-              ))}
-              <VergicChatButton className='BottomBarLink' />
-              <div className='Startpage-langWrapper'>
-                <LanguageFlags activeLanguage={this.props.activeLanguage} />
-              </div>
-            </BottomBar>
-          </MultimediaBackground>
-        </div>
+        }
+        <Lipping />
+        <MultimediaBackground backgroundUrl={this.props.data.backgroundUrl}>
+          <h1
+            className='Startpage-heading'
+            onClick={() => window.location.reload()}>
+            {this.props.data.heading}
+          </h1>
+          <Row>
+            <Column>
+              <SectionCard
+                type='visitor'
+                section={this.props.data.visitorHeading}
+                link={this.props.data.visitorHeadingLink}
+                bgColor='#c90e52'
+                tags={this.props.data.visitorTags}
+                posts={this.props.data.visitorPosts} />
+            </Column>
+            <Column>
+              <SectionCard
+                type='local'
+                section={this.props.data.localHeading}
+                link={this.props.data.localHeadingLink}
+                bgColor='#eb6421'
+                tags={this.props.data.localTags}
+                posts={this.props.data.localPosts} />
+            </Column>
+            <Column>
+              <SectionCard
+                type='events'
+                section={this.props.data.eventsHeading}
+                link={this.props.data.eventsHeadingLink}
+                bgColor='#f4a428'
+                tags={this.props.data.eventsTags}
+                showTimeSpanButtons={true}
+                posts={this.props.data.eventsPosts} />
+            </Column>
+          </Row>
+          <BottomBar>
+            { this.props.data.topLinks.map(link => (
+              <BottomBarLink key={link.href + link.name} link={link} />
+            ))}
+            <VergicChatButton className='BottomBarLink' />
+            <div className='Startpage-langWrapper'>
+              <LanguageFlags activeLanguage={this.props.activeLanguage} />
+            </div>
+          </BottomBar>
+        </MultimediaBackground>
+      </div>
     );
   }
 }
@@ -129,7 +136,7 @@ Startpage.propTypes = {
   fetchData: PropTypes.func.isRequired,
   fetchEventsData: PropTypes.func.isRequired,
   activeLanguage: PropTypes.string.isRequired,
-  events: PropTypes.any, // TODO
+  events: PropTypes.any,
   data: PropTypes.shape({
     backgroundUrl: PropTypes.string,
     heading: PropTypes.string,

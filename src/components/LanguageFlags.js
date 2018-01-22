@@ -15,15 +15,15 @@ const getLangLink = (activeLang, newLang) => {
 
 const LanguageFlags = ({activeLanguage, showFlags}) => {
   return showFlags ?
-  <div className='LanguageFlags'>
-    <Link to={getLangLink(activeLanguage, 'sv')} className='LanguageFlags__link'>
-      <SvFlag className='LanguageFlags__flag' />
-    </Link>
-    <Link to={getLangLink(activeLanguage, 'en')} className='LanguageFlags__link'>
-      <EnFlag className='LanguageFlags__flag' />
-    </Link>
-  </div>
-  : null;
+    <div className='LanguageFlags'>
+      <Link to={getLangLink(activeLanguage, 'sv')} className='LanguageFlags__link'>
+        <SvFlag className='LanguageFlags__flag' />
+      </Link>
+      <Link to={getLangLink(activeLanguage, 'en')} className='LanguageFlags__link'>
+        <EnFlag className='LanguageFlags__flag' />
+      </Link>
+    </div>
+    : null;
 };
 
 const mapStateToProps = (state) => {
