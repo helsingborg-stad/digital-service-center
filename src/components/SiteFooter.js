@@ -78,6 +78,6 @@ export const SiteFooterLink = ({link}) => {
 SiteFooterLink.propTypes = {
   link: PropTypes.shape({
     name: PropTypes.string,
-    type: PropTypes.oneOf('iframe', 'page')
+    type: PropTypes.oneOf(['iframe', 'page'])
   })
 };
