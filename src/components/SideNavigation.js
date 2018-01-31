@@ -23,7 +23,7 @@ const SideNavigationLink = ({id, activeCategories, activeColor, handleClick,
   name, subCategories, icon, type, menuItem, iframeUrl, customClasses}) => {
   const hasChildren = subCategories && subCategories.length && activeCategories.includes(id);
   const isActive = activeCategories.includes(id);
-  const haveCustomClasses = customClasses.length > 0 ? customClasses[0] : false;
+  const hasCustomClasses = customClasses && customClasses.length ? customClasses[0] : false;
   return (
     <li
       className={cn('SideNavigationLink',
@@ -35,12 +35,8 @@ const SideNavigationLink = ({id, activeCategories, activeColor, handleClick,
         handleClick({id, type, menuItem, iframeUrl});
       }}
     >
-      { haveCustomClasses &&
-        <FontAwesome
-          name={haveCustomClasses}
-        />
-      }
-      { icon && !haveCustomClasses &&
+      { hasCustomClasses && <FontAwesome name={hasCustomClasses} /> }
+      { icon && !hasCustomClasses &&
       <span className='SideNavigationLink__icon'>
         {Icons[`${icon}Icon`]({color: isActive ? '#fff' : '#c70d53'})}
       </span>
