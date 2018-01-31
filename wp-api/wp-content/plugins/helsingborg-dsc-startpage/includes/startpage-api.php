@@ -75,7 +75,7 @@ function post_mapping_helper($post, $type) {
       offsetTop => intval($iframeMeta['top_offset'] ?? 0),
       offsetLeft => intval($iframeMeta['left_offset'] ?? 0)
     ];
-    $thumbnail_url = get_the_post_thumbnail_url($page->ID);
+    $thumbnail_url = get_the_post_thumbnail_url($page->ID, [232, 148]);
     if ($thumbnail_url) {
       $response['imgUrl'] = $thumbnail_url;
     }
@@ -87,7 +87,7 @@ function post_mapping_helper($post, $type) {
       preamble => get_preamble($page->post_content),
       href     => get_link_language_prefix() . $type . '/' . $page->post_name,
     ];
-    $thumbnail_url = get_the_post_thumbnail_url($page->ID);
+    $thumbnail_url = get_the_post_thumbnail_url($page->ID, [232, 148]);
     if ($thumbnail_url) {
       $response['imgUrl'] = $thumbnail_url;
     }
@@ -104,7 +104,7 @@ function post_mapping_helper($post, $type) {
     else {
       $response['url'] = wp_make_link_relative(get_permalink($page)) . '?wordpress';
     }
-    $thumbnail_url = get_the_post_thumbnail_url($page->ID);
+    $thumbnail_url = get_the_post_thumbnail_url($page->ID, [232, 148]);
     if ($thumbnail_url) {
       $response['imgUrl'] = $thumbnail_url;
     }

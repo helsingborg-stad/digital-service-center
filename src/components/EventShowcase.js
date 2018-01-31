@@ -43,7 +43,7 @@ class Event extends Component {
         onClick={() => this.props.onClick(this.props)}
         onMouseUp={ this.handleClick.bind(this) }
       >
-        <img className='Event-img' src={this.props.imgUrl} alt='' />
+        <img className='Event-img' src={this.props.imgThumbnailUrl} alt='' />
         <span className='Event-title'>
           {!this.props.canCompare && this.props.occasions && !!this.props.occasions.length &&
             <span className='Event-date'>
@@ -96,6 +96,7 @@ Event.propTypes = {
   slug: PropTypes.string,
   name: PropTypes.string.isRequired,
   imgUrl: PropTypes.string,
+  imgThumbnailUrl: PropTypes.string,
   occasions: PropTypes.array,
   canCompare: PropTypes.bool,
   handleCompareEvent: PropTypes.func,

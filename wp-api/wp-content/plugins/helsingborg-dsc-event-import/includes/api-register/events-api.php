@@ -247,9 +247,13 @@ function get_imported_event_values($event) {
       $response['contactPhone'] = $organizer->contacts[0]->phone_number;
     }
 
-    $thumbnail_url = get_the_post_thumbnail_url($event->ID);
+    $img_url = get_the_post_thumbnail_url($event->ID);
+    if ($img_url) {
+      $response['imgUrl'] = $img_url;
+    }
+    $thumbnail_url = get_the_post_thumbnail_url($event->ID, [232, 148]);
     if ($thumbnail_url) {
-      $response['imgUrl'] = $thumbnail_url;
+      $response['imgThumbnailUrl'] = $thumbnail_url;
     }
     return $response;
 }
@@ -271,9 +275,13 @@ function get_editable_event_and_page_values($post) {
           offsetLeft => intval($iframeMeta['left_offset'] ?? 0)
         ];
 
-        $thumbnail_url = get_the_post_thumbnail_url($page->ID);
+        $img_url = get_the_post_thumbnail_url($page->ID);
+        if ($img_url) {
+          $response['imgUrl'] = $img_url;
+        }
+        $thumbnail_url = get_the_post_thumbnail_url($page->ID, [232, 148]);
         if ($thumbnail_url) {
-          $response['imgUrl'] = $thumbnail_url;
+          $response['imgThumbnailUrl'] = $thumbnail_url;
         }
 
         return $response;
@@ -294,9 +302,13 @@ function get_editable_event_and_page_values($post) {
           }, get_the_category($page->ID)),
         ];
 
-        $thumbnail_url = get_the_post_thumbnail_url($page->ID);
+        $img_url = get_the_post_thumbnail_url($page->ID);
+        if ($img_url) {
+          $response['imgUrl'] = $img_url;
+        }
+        $thumbnail_url = get_the_post_thumbnail_url($page->ID, [232, 148]);
         if ($thumbnail_url) {
-          $response['imgUrl'] = $thumbnail_url;
+          $response['imgThumbnailUrl'] = $thumbnail_url;
         }
 
         $booking_link = get_post_meta($page->ID, 'booking_link', true);
@@ -343,9 +355,13 @@ function get_editable_event_and_page_values($post) {
         } else {
         $response['url'] = wp_make_link_relative(get_permalink($page)) . '?wordpress';
         }
-        $thumbnail_url = get_the_post_thumbnail_url($page->ID);
+        $img_url = get_the_post_thumbnail_url($page->ID);
+        if ($img_url) {
+          $response['imgUrl'] = $img_url;
+        }
+        $thumbnail_url = get_the_post_thumbnail_url($page->ID, [232, 148]);
         if ($thumbnail_url) {
-          $response['imgUrl'] = $thumbnail_url;
+          $response['imgThumbnailUrl'] = $thumbnail_url;
         }
         return $response;
       }
@@ -387,9 +403,13 @@ function get_pages_for_visitor_local($section) {
           offsetLeft => intval($iframeMeta['left_offset'] ?? 0)
         ];
 
-        $thumbnail_url = get_the_post_thumbnail_url($page->ID);
+        $img_url = get_the_post_thumbnail_url($page->ID);
+        if ($img_url) {
+          $response['imgUrl'] = $img_url;
+        }
+        $thumbnail_url = get_the_post_thumbnail_url($page->ID, [232, 148]);
         if ($thumbnail_url) {
-          $response['imgUrl'] = $thumbnail_url;
+          $response['imgThumbnailUrl'] = $thumbnail_url;
         }
 
         return $response;
@@ -410,9 +430,13 @@ function get_pages_for_visitor_local($section) {
           }, get_the_category($page->ID)),
         ];
 
-        $thumbnail_url = get_the_post_thumbnail_url($page->ID);
+        $img_url = get_the_post_thumbnail_url($page->ID);
+        if ($img_url) {
+          $response['imgUrl'] = $img_url;
+        }
+        $thumbnail_url = get_the_post_thumbnail_url($page->ID, [232, 148]);
         if ($thumbnail_url) {
-          $response['imgUrl'] = $thumbnail_url;
+          $response['imgThumbnailUrl'] = $thumbnail_url;
         }
 
         $booking_link = get_post_meta($page->ID, 'booking_link', true);
@@ -462,9 +486,13 @@ function get_pages_for_visitor_local($section) {
         } else {
         $response['url'] = wp_make_link_relative(get_permalink($page)) . '?wordpress';
         }
-        $thumbnail_url = get_the_post_thumbnail_url($page->ID);
+        $img_url = get_the_post_thumbnail_url($page->ID);
+        if ($img_url) {
+          $response['imgUrl'] = $img_url;
+        }
+        $thumbnail_url = get_the_post_thumbnail_url($page->ID, [232, 148]);
         if ($thumbnail_url) {
-          $response['imgUrl'] = $thumbnail_url;
+          $response['imgThumbnailUrl'] = $thumbnail_url;
         }
 
         return $response;
@@ -694,9 +722,13 @@ function parse_imported_events($events) {
       $response['contactPhone'] = $organizer->contacts[0]->phone_number;
     }
 
-    $thumbnail_url = get_the_post_thumbnail_url($event->ID);
+    $img_url = get_the_post_thumbnail_url($event->ID);
+    if ($img_url) {
+      $response['imgUrl'] = $img_url;
+    }
+    $thumbnail_url = get_the_post_thumbnail_url($event->ID, [232, 148]);
     if ($thumbnail_url) {
-      $response['imgUrl'] = $thumbnail_url;
+      $response['imgThumbnailUrl'] = $thumbnail_url;
     }
     return $response;
   }, $events);
@@ -719,9 +751,13 @@ function parse_editable_events($events) {
       }, get_the_category($event->ID)),
     ];
 
-    $thumbnail_url = get_the_post_thumbnail_url($event->ID);
+    $img_url = get_the_post_thumbnail_url($event->ID);
+    if ($img_url) {
+      $response['imgUrl'] = $img_url;
+    }
+    $thumbnail_url = get_the_post_thumbnail_url($event->ID, [232, 148]);
     if ($thumbnail_url) {
-      $response['imgUrl'] = $thumbnail_url;
+      $response['imgThumbnailUrl'] = $thumbnail_url;
     }
 
     $booking_link = get_post_meta($event->ID, 'booking_link', true);
