@@ -26,7 +26,7 @@ export class VergicChatButton extends Component {
         subscribeToLeavingChat().then(() => setTimeout(() => window.location.reload(), 500));
         window.__vergicChatHasLeaveEventListener = true;
       }
-    }, 1000);
+    }, 4000);
   }
   shouldShowButton() {
     return this.props.showChat &&

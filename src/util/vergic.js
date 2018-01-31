@@ -50,7 +50,7 @@ export function joinVideoChat(pageName) {
 export function subscribeToLeavingChat() {
   return new Promise((res, rej) => {
     if (!window.vngage) {
-      rej(new Error('vngage not loaded in call to subscribeToLeavingChat'));
+      rej('vngage not loaded in call to subscribeToLeavingChat');
     }
     window.vngage.subscribe('queue:leave', (evt, banner) => {
       res(evt, banner);
