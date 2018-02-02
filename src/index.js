@@ -23,7 +23,7 @@ if (process.env.NODE_ENV === 'development') {
     request: (url, config) => {
       let newUrl = url;
       if (url.startsWith('/api/')) {
-        newUrl = 'http://helsingborg-dsc.local/wp-json/wp/v2/' + newUrl.slice('/api/'.length);
+        newUrl = 'http://helsingborg-dsc.test/wp-json/wp/v2/' + newUrl.slice('/api/'.length);
       }
       return [newUrl, config];
     }

@@ -13,7 +13,7 @@ fetchIntercept.register({
   request: (url, config) => {
     let newUrl = url;
     if (url.startsWith('/api/')) {
-      newUrl = 'http://helsingborg-dsc.local/wp-json/wp/v2/' + newUrl.slice('/api/'.length);
+      newUrl = 'http://helsingborg-dsc.test/wp-json/wp/v2/' + newUrl.slice('/api/'.length);
     }
     return [newUrl, config];
   }
@@ -57,7 +57,7 @@ staticFiles.forEach(file => {
 });
 
 app.get('/api/*', (req, res) => {
-  const url = `http://helsingborg-dsc.local/wp-json/wp/v2/${req.url.slice('/api/'.length)}`;
+  const url = `http://helsingborg-dsc.test/wp-json/wp/v2/${req.url.slice('/api/'.length)}`;
   fetch(url).then(response => response.json()).then(x => res.status(200).send(x));
 });
 
