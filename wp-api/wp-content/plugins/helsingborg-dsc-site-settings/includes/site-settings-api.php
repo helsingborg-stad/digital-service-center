@@ -40,8 +40,12 @@ function hdsc_get_translatables() {
     $translatables[$lang_code] = array_reduce(hdsc_translatables(), function($acc, $translatable) {
       $key = camelcasify($translatable[1]);
       $fallback = $translatable[0];
+      $ignore_fallback = $translatable[3];
+      if (!$ignore_fallback) {
+        
+      }
       $value = get_option('hdsc-translatable-' .$translatable[1], $fallback);
-      if (!strlen($value)) {
+      if (!strlen($value) && !$ignore_fallback) {
         $value = $fallback;
       }
       $acc[$key] = $value;

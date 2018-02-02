@@ -4,7 +4,7 @@ import Lipping from './Lipping';
 import MultimediaBackground from './MultimediaBackground';
 import BottomBar, { BottomBarLink } from './BottomBar';
 import SectionCard from './SectionCard';
-import Search from './Search';
+import Search from './Search/Search.js';
 import { connect } from 'react-redux';
 import { startpageFetchData } from '../actions/startpage';
 import { eventsFetchData } from '../actions/events';

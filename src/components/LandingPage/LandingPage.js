@@ -5,7 +5,7 @@ import SiteHeader from '../SiteHeader';
 import { SiteFooter, SiteFooterLink } from '../SiteFooter';
 import VergicChatButton from '../VergicChatButton';
 import { SideNavigation, SideNavigationLink } from '../SideNavigation';
-import Search from '../Search';
+import Search from '../Search/Search.js';
 import GoogleMaps from '../GoogleMaps';
 import { EventShowcase, Event } from '../EventShowcase';
 import EventOverlay from '../EventOverlay/EventOverlay';

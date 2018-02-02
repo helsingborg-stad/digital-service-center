@@ -13,6 +13,12 @@ function helsingborg_dsc_site_settings() {
 }
 
 function hdsc_translatables() {
+  /*
+  Argument 1: Fallback text
+  Argument 2: Key
+  Argument 3: Help text in admin (optional)
+  Argument 4: Ignore fallback value (optional)
+  */
   return [
     ['Sök', 'search'],
     ['Helsingborg Free Wifi', 'helsingborg-free-wifi'],
@@ -39,7 +45,8 @@ function hdsc_translatables() {
     ['Chatta med oss', 'chat-with-us'],
     ['Detta hittade vi', 'we-found-this'],
     ['Se och upplev', 'see-and-discover'],
-    ['Hittade inga matchande resultat för din sökning', 'no-results-found'],
+    ['Hittade inga matchande resultat för din sökning', 'no-results-found', 'Ange {link}min länktext{/link} någonstans i texten för att infoga hjälplänk'],
+    ['URL för hjälplänk till söktext', 'no-results-url', '', true],
     ['Fråga kontaktcenter', 'ask-customer-center'],
     ['Visa information', 'show-information']
   ];

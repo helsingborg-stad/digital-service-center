@@ -17,7 +17,7 @@ import { eventsFetchData } from '../../actions/events';
 import EventsDateList from '../EventsDateList.js';
 import './EventsPage.css';
 import LanguageFlags from '../LanguageFlags';
-import Search from '../Search';
+import Search from '../Search/Search.js';
 import {
   getDistinctEventCategories,
   getEventsForCategory,

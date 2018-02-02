@@ -48,7 +48,10 @@ class Link extends React.Component {
         <button
           className={classNames('Link', this.props.className)}
           style={{position: 'relative', overflow: 'hidden'}}
-          onClick={() => this.props.openIframe(this.props.iframe)}
+          onClick={() => {
+            this.props.onClick();
+            this.props.openIframe(this.props.iframe);
+          }}
           onMouseUp={ this.handleClick.bind(this) }
         >
           {this.props.children}

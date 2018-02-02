@@ -11,7 +11,10 @@ class IframeOverlayBackdrop extends Component {
 }
 
 IframeOverlayBackdrop.propTypes = {
-  children: PropTypes.element.isRequired
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
+  ]).isRequired
 };
 
 const IframeOverlay = ({url, maxWidth, maxHeight, offsetTop, offsetLeft, handleClose}) => {

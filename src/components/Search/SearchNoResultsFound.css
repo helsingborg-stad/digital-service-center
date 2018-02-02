@@ -1,0 +1,13 @@
+
+.SearchNoResultsFound {
+    position: absolute;
+    top: 50%;
+    text-align: center;
+    width: calc(100% - 4rem);
+    font-size: 1.125rem;
+    color: #555;
+}
+
+.SearchNoResultsFound__link {
+    color: #cb0050;
+}

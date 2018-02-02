@@ -74,10 +74,16 @@ function helsingborg_dsc_site_settings_menu_callback() {
         foreach(hdsc_translatables() as $translatable) {
           $translatable_name = $translatable[0];
           $option_name = 'hdsc-translatable-' . $translatable[1];
+          $help_text = $translatable[2];
           ?>
           <tr>
             <th><label for="<?php echo $option_name ?>"><?php echo $translatable_name ?></label></th>
-            <td><input id="<?php echo $option_name ?>" type="text" class="regular-text" name="<?php echo $option_name ?>" value="<?php echo get_option($option_name); ?>" /></td>
+            <td>
+              <input id="<?php echo $option_name ?>" type="text" class="regular-text" name="<?php echo $option_name ?>" value="<?php echo get_option($option_name); ?>" />
+              <?php if ($help_text) { ?>
+                <p class="description"><?php echo $help_text ?></p>
+              <?php } ?>
+            </td>
           </tr>
           <?php
         }

@@ -1,0 +1,71 @@
+.SearchResultOverlay-transitionGroup-enter .SearchResultOverlay,
+.SearchResultOverlay-transitionGroup-leave .SearchResultOverlay {
+  transform: translate(-50%, -50%) scale(0.7);
+  opacity: 0;
+  transition: transform 0.3s opacity 0.3s;
+}
+
+.SearchResultOverlay-transitionGroup-enter-active .SearchResultOverlay {
+  transform: translate(-50%, -50%), scale(1);
+  opacity: 1;
+}
+
+.SearchResultOverlay-transitionGroup-enter.SearchResultOverlayBackdrop,
+.SearchResultOverlay-transitionGroup-leave.SearchResultOverlayBackdrop {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.SearchResultOverlay-transitionGroup-enter-active.SearchResultOverlayBackdrop {
+  opacity: 1;
+}
+
+.SearchResultOverlayBackdrop {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.SearchResultOverlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 90vw;
+    max-height: calc( 100vh - 4.6875rem - 1.25rem - 3rem);
+    min-height: calc( 100vh - 20rem);
+    transform: translate(-50%, -50%);
+    border-radius: 3px;
+    padding: 2rem;
+    background: #fff;
+}
+
+.SearchResultOverlay-heading {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: #F7A503;
+    color: #fff;
+    text-align: center;
+    font-size: 1.625rem;
+    font-style: italic;
+    width: 100%;
+    display: block;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.SearchResultOverlay-typeWrapper {
+    display: flex;
+    height: 71vh;
+    padding-top: 2rem;
+}
+
+@media screen and (orientation: portrait) {
+    .SearchResultOverlay-typeWrapper {
+        height: 80vh;
+    }
+}

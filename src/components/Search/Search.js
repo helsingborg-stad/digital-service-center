@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import SearchField from './SearchField';
-import { searchFetchData } from '../actions/search';
-import { crmFetchData } from '../actions/crm';
+import { searchFetchData } from '../../actions/search';
+import { crmFetchData } from '../../actions/crm';
 import SearchResultOverlay from './SearchResultOverlay';
 import Sifter from 'sifter';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
