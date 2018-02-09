@@ -21,12 +21,12 @@ export function isChatOpen({ type }) {
   });
 }
 
-export function joinTextChat(pageName) {
-  if (!window.vngage || !window.vngage.join) {
+export function joinTextChat(pageName, global = window) {
+  if (!global.vngage || !global.vngage.join) {
     console.warn('vngage not loaded in call to joinTextChat');
     return;
   }
-  window.vngage.join('queue', {
+  global.vngage.join('queue', {
     groupId: TEXT_GROUP_ID,
     caseTypeId: CASE_TYPE_ID,
     bannerId: BANNER_ID,
@@ -35,12 +35,12 @@ export function joinTextChat(pageName) {
   });
 }
 
-export function joinVideoChat(pageName) {
-  if (!window.vngage || !window.vngage.join) {
+export function joinVideoChat(pageName, global = window) {
+  if (!global.vngage || !global.vngage.join) {
     console.warn('vngage not loaded in call to joinVideoChat');
     return;
   }
-  window.vngage.join('queue', {
+  global.vngage.join('queue', {
     groupId: VIDEO_GROUP_ID,
     caseTypeId: CASE_TYPE_ID,
     bannerId: BANNER_ID,
@@ -49,27 +49,27 @@ export function joinVideoChat(pageName) {
   });
 }
 
-export function subscribeToLeavingChat() {
+export function subscribeToLeavingChat(global = window) {
   return new Promise((res, rej) => {
-    if (!window.vngage || !window.vngage.subscribe) {
+    if (!global.vngage || !global.vngage.subscribe) {
       rej('vngage not loaded in call to subscribeToLeavingChat');
     }
-    window.vngage.subscribe('queue:leave', (evt, banner) => {
+    global.vngage.subscribe('queue:leave', (evt, banner) => {
       res(evt, banner);
     });
-    window.vngage.subscribe('conversation_closed', (evt, banner) => {
+    global.vngage.subscribe('conversation_closed', (evt, banner) => {
       res(evt, banner);
     });
   });
 }
 
-export function unsubscribeToLeavingChat() {
-  if (!window.vngage || !window.vngage.unsubscribe) {
+export function unsubscribeToLeavingChat(global = window) {
+  if (!global.vngage || !global.vngage.unsubscribe) {
     console.warn('vngage not loaded in call to unsubscribeToLeavingChat');
     return;
   }
-  window.vngage.unsubscribe('queue:leave');
-  window.vngage.unsubscribe('conversation_closed');
+  global.vngage.unsubscribe('queue:leave');
+  global.vngage.unsubscribe('conversation_closed');
 }
 
 /* eslint-enable no-console */
