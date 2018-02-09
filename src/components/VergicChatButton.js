@@ -18,9 +18,14 @@ export class VergicChatButton extends Component {
     };
   }
   componentWillMount() {
-    this.setState({
-      chatIsAvailable: isChatOpen({type: 'video'}) || isChatOpen({type: 'text'})
-    });
+    const isVideoChatOpen = isChatOpen({type: 'video'});
+    const isTextChatOpen = isChatOpen({type: 'text'});
+    Promise.all([isVideoChatOpen, isTextChatOpen])
+      .then(chatStatuses => {
+        this.setState({
+          chatIsAvailable: chatStatuses.includes(true)
+        });
+      });
     setTimeout(() => {
       if (typeof window !== 'undefined' && !window.__vergicChatHasLeaveEventListener) {
         subscribeToLeavingChat().then(() => setTimeout(() => window.location.reload(), 500));
