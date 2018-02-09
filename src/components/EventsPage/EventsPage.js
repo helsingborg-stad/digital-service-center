@@ -78,7 +78,7 @@ export class EventsPage extends Component {
     }
 
     const params = new window.URL(window.location.href).searchParams;
-    const categoryIds = params.get('category');
+    const categoryIds = params && params.get('category');
     if (categoryIds) {
       categoryIds.split(',').forEach(id => {
         this.setState({

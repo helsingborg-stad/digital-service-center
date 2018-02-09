@@ -14,6 +14,7 @@ it('renders without crashing', () => {
       <Startpage
         activeLanguage='sv'
         fetchData={() => {}}
+        fetchEventsData={() => {}}
         hasErrored={false}
         isLoading={false}
       />
@@ -27,6 +28,7 @@ it('renders loading state without crashing', () => {
       <Startpage
         activeLanguage='sv'
         fetchData={() => {}}
+        fetchEventsData={() => {}}
         hasErrored={false}
         isLoading={true}
       />
@@ -40,6 +42,7 @@ it('renders error state without crashing', () => {
       <Startpage
         activeLanguage='sv'
         fetchData={() => {}}
+        fetchEventsData={() => {}}
         hasErrored={true}
         isLoading={false}
       />

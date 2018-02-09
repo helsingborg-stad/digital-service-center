@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { EventsPage } from './EventsPage';
-import configureStore from '../store/configureStore';
-import initialStateForTests from '../store/initialStateForTests';
+import configureStore from '../../store/configureStore';
+import initialStateForTests from '../../store/initialStateForTests';
 
 const store = configureStore(initialStateForTests);
 
@@ -14,6 +14,7 @@ it('renders without crashing', () => {
       <EventsPage
         activeLanguage='sv'
         fetchData={() => {}}
+        fetchEventsData={() => {}}
         translatables={{}}
         hasErrored={false}
         isLoading={false}
@@ -29,6 +30,7 @@ it('renders loading state without crashing', () => {
       <EventsPage
         activeLanguage='sv'
         fetchData={() => {}}
+        fetchEventsData={() => {}}
         hasErrored={false}
         isLoading={true}
       />

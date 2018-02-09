@@ -5,7 +5,7 @@ import rootReducer from '../reducers';
 import { isInPortraitMode } from '../actions/isInPortraitMode';
 
 const portraitMediaQuery = typeof window !== 'undefined'
-  && window.matchMedia('(orientation: portrait)');
+  && window.matchMedia && window.matchMedia('(orientation: portrait)');
 
 export default function configureStore(initialState) {
   const store = createStore(
