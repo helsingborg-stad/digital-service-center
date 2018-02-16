@@ -18,11 +18,7 @@ import EventsDateList from '../EventsDateList.js';
 import './EventsPage.css';
 import LanguageFlags from '../LanguageFlags';
 import Search from '../Search/Search.js';
-import {
-  getDistinctEventCategories,
-  getEventsForCategory,
-  getRelatedEvents }
-  from './eventsPageHelpers.js';
+import {getDistinctEventCategories, getEventsForCategory } from './eventsPageHelpers.js';
 
 export class EventsPage extends Component {
   constructor(props) {
@@ -42,16 +38,11 @@ export class EventsPage extends Component {
   changeOverlayEvent(event) {
     const eventSlug = event ? event.slug : null;
     const eventToShow = this.props.events.find(e => e.slug === eventSlug);
-    const relatedEvents = (eventToShow && !this.props.isInPortraitMode) ? getRelatedEvents(
-      this.props.events,
-      eventToShow
-    ) : null;
 
     this.changeUrl(event ? event.slug : this.state.visibleOverlayEvent, event !== null);
 
     this.setState({
-      visibleOverlayEvent: eventToShow ? eventToShow.slug : null,
-      relatedEvents: relatedEvents
+      visibleOverlayEvent: eventToShow ? eventToShow.slug : null
     });
   }
 
@@ -171,7 +162,6 @@ export class EventsPage extends Component {
                 key='event-overlay'
                 event={this.props.events.find(e => e.slug === this.state.visibleOverlayEvent)}
                 handleClose={() => this.changeOverlayEvent(null)}
-                relatedEvents={this.state.relatedEvents}
                 changeOverlayEvent={this.changeOverlayEvent.bind(this)}
               />
             }

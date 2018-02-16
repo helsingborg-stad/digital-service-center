@@ -48,9 +48,6 @@
   border-radius: 3px;
   padding: 2rem;
 }
-.EventOverlay-wrapper--compareView .EventOverlay {
-  max-width: 600px;
-}
 .EventOverlay-imgWrapper {
   width: calc(100% + 4rem);
   height: 19.2rem;

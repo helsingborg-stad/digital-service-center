@@ -18,15 +18,3 @@ export const getEventsForCategory = (events, categoryId) => {
     event.categories.some(c => c.id === categoryId) && event.type === 'event'
   ));
 };
-
-export const getRelatedEvents = (events, mainEvent) => {
-  const relatedEvents = events.filter(event => {
-    return mainEvent.id !== event.id && event.categories.reduce((catArray, cat) => {
-      if (mainEvent.categories.find(c => c.id === cat.id)) {
-        catArray.push(cat);
-      }
-      return catArray;
-    }, []).length;
-  });
-  return relatedEvents;
-};

@@ -1,11 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { Ripple } from './react-ripple-effect';
 import './EventShowcase.css';
 import Moment from 'moment';
-import cn from 'classnames';
 
 export class EventShowcase extends Component {
   render() {
@@ -26,7 +24,7 @@ EventShowcase.propTypes = {
   ])
 };
 
-class Event extends Component {
+export class Event extends Component {
   constructor() {
     super();
     this.state = {
@@ -38,14 +36,14 @@ class Event extends Component {
     return (
       <span
         role='button'
-        className={cn('Event', {'Event--compare': this.props.canCompare})}
+        className='Event'
         style={{position: 'relative', overflow: 'hidden', cursor: 'pointer'}}
         onClick={() => this.props.onClick(this.props)}
         onMouseUp={ this.handleClick.bind(this) }
       >
         <img className='Event-img' src={this.props.imgThumbnailUrl} alt='' />
         <span className='Event-title'>
-          {!this.props.canCompare && this.props.occasions && !!this.props.occasions.length &&
+          { this.props.occasions && !!this.props.occasions.length &&
             <span className='Event-date'>
               {Moment(this.props.occasions.reduce((closestDate, occ) => {
                 if (!closestDate.occasions || closestDate.startDate >= occ.startDate) {
@@ -58,24 +56,6 @@ class Event extends Component {
           {this.props.name}
         </span>
         <Ripple cursorPos={ this.state.cursorPos } />
-        {this.props.canCompare &&
-        <div className='Event-compareWrapper'>
-          {this.props.canCompare && this.props.occasions && !!this.props.occasions.length &&
-              <span className='Event-date Event-date--compare'>
-                {Moment(this.props.occasions.reduce((closestDate, occ) => {
-                  if (!closestDate.occasions || closestDate.startDate >= occ.startDate) {
-                    return occ;
-                  }
-                  return closestDate;
-                }).startDate).format('YYYY-MM-DD')}
-              </span>
-          }
-          <button className='Event-compare' onClick={(e) => {
-            e.stopPropagation();
-            this.props.handleCompareEvent(this.props);
-          }}>{this.props.translatables.compare}</button>
-        </div>
-        }
       </span>
     );
   }
@@ -97,22 +77,5 @@ Event.propTypes = {
   name: PropTypes.string.isRequired,
   imgUrl: PropTypes.string,
   imgThumbnailUrl: PropTypes.string,
-  occasions: PropTypes.array,
-  canCompare: PropTypes.bool,
-  handleCompareEvent: PropTypes.func,
-  translatables: PropTypes.shape({
-    compare: PropTypes.string.isRequired
-  }).isRequired
-};
-
-const mapStateToProps = (state) => {
-  return {
-    translatables: state.siteSettings.translatables[state.activeLanguage]
-  };
-};
-
-const EventConnected = connect(mapStateToProps, null)(Event);
-
-export {
-  EventConnected as Event
+  occasions: PropTypes.array
 };

@@ -1,14 +1,3 @@
-export const getRelatedEvents = (events, mainEvent) => {
-  return events.filter(event => {
-    return mainEvent.id !== event.id && event.categories.reduce((catArray, cat) => {
-      if (mainEvent.categories.find(c => c.id === cat.id)) {
-        catArray.push(cat);
-      }
-      return catArray;
-    }, []).length;
-  });
-};
-
 export const selectedEventsWithCoordinates = (events, activeCategories, eventCategories) => {
   const getActiveColorForEvent = (event) => {
     const firstActiveCat = event.categories.map(c => c.id).find(c => activeCategories.includes(c));

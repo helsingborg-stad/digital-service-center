@@ -21,7 +21,7 @@ import { eventsFetchData } from '../../actions/events';
 import { iframeUrl } from '../../actions/iframeUrl';
 import LanguageFlags from '../LanguageFlags';
 import formatRelativeUrl from '../../util/formatRelativeUrl';
-import { getRelatedEvents, selectedEventsWithCoordinates } from './landingPageHelpers.js';
+import { selectedEventsWithCoordinates } from './landingPageHelpers.js';
 
 import './LandingPage.css';
 
@@ -52,15 +52,10 @@ export class LandingPage extends Component {
   changeOverlayEvent(event, showDirections = false) {
     const eventSlug = event ? event.slug : null;
     const eventToShow = this.props.events.find(e => e.slug === eventSlug);
-    const relatedEvents = (eventToShow && !this.props.isInPortraitMode) ? getRelatedEvents(
-      this.props.events,
-      eventToShow
-    ) : null;
 
     this.changeUrl(event ? event.slug : this.state.visibleOverlayEvent, event !== null);
     this.setState({
       visibleOverlayEvent: eventToShow ? eventToShow.slug : null,
-      relatedEvents: relatedEvents,
       showDirections: showDirections
     });
   }
@@ -251,7 +246,6 @@ export class LandingPage extends Component {
                 key='event-overlay'
                 event={this.props.events.find(e => e.slug === this.state.visibleOverlayEvent)}
                 handleClose={() => this.changeOverlayEvent(null)}
-                relatedEvents={this.state.relatedEvents}
                 changeOverlayEvent={this.changeOverlayEvent.bind(this)}
                 showDirections={this.state.showDirections}
               />
