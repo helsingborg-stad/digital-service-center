@@ -89,3 +89,10 @@
   padding: 0;
   margin-top: 0.75rem;
 }
+
+@media screen and (orientation: portrait) {
+  .SideNavigation {
+    top: auto;
+    bottom: 40vh;
+  }
+}
