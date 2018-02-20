@@ -13,10 +13,15 @@ export function isChatOpen({ type }) {
       return;
     }
     const intervalId = setInterval(() => {
+      // Check if window.vngage is loaded every 250 ms
       if (window.vngage && window.vngage.get) {
-        const groupId = type === 'video' ? VIDEO_GROUP_ID : TEXT_GROUP_ID;
-        res(window.vngage.get('queuestatus', groupId) === 'open');
+        // Once it's available, wait one second before checking queue status
+        // (due to potential racing condition if accessing the method immediately)
         clearInterval(intervalId);
+        setTimeout(() => {
+          const groupId = type === 'video' ? VIDEO_GROUP_ID : TEXT_GROUP_ID;
+          res(window.vngage.get('queuestatus', groupId) === 'open');
+        }, 1000);
       }
     }, 250);
   });

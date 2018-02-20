@@ -12,31 +12,29 @@ export class VergicChatButton extends Component {
   constructor() {
     super();
     this.state = {
-      chatIsAvailable: false,
+      textChatIsAvailable: false,
+      videoChatIsAvailable: false,
       chatIsInitiated: false,
       chatListIsVisible: false
     };
   }
-  componentWillMount() {
-    const isVideoChatOpen = isChatOpen({type: 'video'});
-    const isTextChatOpen = isChatOpen({type: 'text'});
-    Promise.all([isVideoChatOpen, isTextChatOpen])
-      .then(chatStatuses => {
-        this.setState({
-          chatIsAvailable: chatStatuses.includes(true)
-        });
+  componentDidMount() {
+    isChatOpen({type: 'text'}).then(isOpen => {
+      this.setState({
+        textChatIsAvailable: isOpen
       });
+    });
+    isChatOpen({type: 'video'}).then(isOpen => {
+      this.setState({
+        videoChatIsAvailable: isOpen
+      });
+    });
     setTimeout(() => {
       if (typeof window !== 'undefined' && !window.__vergicChatHasLeaveEventListener) {
         subscribeToLeavingChat().then(() => setTimeout(() => window.location.reload(), 500));
         window.__vergicChatHasLeaveEventListener = true;
       }
     }, 4000);
-  }
-  shouldShowButton() {
-    return this.props.showChat &&
-      (typeof window !== 'undefined' && !window.__isVergicChatOpen) &&
-      !this.state.chatIsInitiated && this.state.chatIsAvailable;
   }
   toggleChatOptions() {
     this.setState({
@@ -62,22 +60,46 @@ export class VergicChatButton extends Component {
     });
   }
   render() {
-    if (isChatOpen({type: 'video'}) && isChatOpen({type: 'text'}) && this.shouldShowButton()) {
-      return (<div className="VergicChatOptions">
-        <button onClick={this.toggleChatOptions.bind(this)} className={this.props.className}>{this.props.translatables.chatWithUs}</button>
-        <ul {...this.props.color ? {style: {background: this.props.color, color: '#fff'}} : null} className={cn('VergicChatOptionsList', {'VergicChatOptionsList--visible': this.state.chatListIsVisible})}>
-          <li><button {...this.props.color ? {style: {color: '#fff'}} : null} onClick={this.joinChatText.bind(this, this.props.pageName)}>Text</button></li>
-          <li><button {...this.props.color ? {style: {color: '#fff'}} : null} onClick={this.joinChatVideo.bind(this, this.props.pageName)}>Video</button></li>
+    if (!this.props.showChat) {
+      return null;
+    }
+    if (this.state.textChatIsAvailable && this.state.videoChatIsAvailable) {
+      const buttonStyle = this.props.color ? {style: {color: '#fff'}} : null;
+      return <div className="VergicChatOptions">
+        <button onClick={this.toggleChatOptions.bind(this)} className={this.props.className}>
+          {this.props.translatables.chatWithUs}
+        </button>
+        <ul
+          {...this.props.color ? {style: {background: this.props.color, color: '#fff'}} : null}
+          className={cn('VergicChatOptionsList',
+            {'VergicChatOptionsList--visible': this.state.chatListIsVisible})}
+        >
+          <li>
+            <button {...buttonStyle} onClick={this.joinChatText.bind(this, this.props.pageName)}>
+              Text
+            </button>
+          </li>
+          <li>
+            <button {...buttonStyle} onClick={this.joinChatVideo.bind(this, this.props.pageName)}>
+              Video
+            </button>
+          </li>
         </ul>
-      </div>);
-    } else if (isChatOpen({type: 'text'}) && this.shouldShowButton()) {
-      return (<button
+      </div>;
+    } else if (this.state.textChatIsAvailable) {
+      return <button
         className={this.props.className}
-        onClick={this.joinChatText.bind(this, this.props.pageName)}>{this.props.translatables.chatWithUs}</button>);
-    } else if (isChatOpen({type: 'video'}) && this.shouldShowButton()) {
-      return (<button
+        onClick={this.joinChatText.bind(this, this.props.pageName)}
+      >
+        {this.props.translatables.chatWithUs}
+      </button>;
+    } else if (this.state.videoChatIsAvailable) {
+      return <button
         className={this.props.className}
-        onClick={this.joinChatVideo.bind(this, this.props.pageName)}>{this.props.translatables.chatWithUs}</button>);
+        onClick={this.joinChatVideo.bind(this, this.props.pageName)}
+      >
+        {this.props.translatables.chatWithUs}
+      </button>;
     }
     return null;
   }
