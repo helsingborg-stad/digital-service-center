@@ -10,6 +10,7 @@ export function isChatOpen({ type }) {
   return new Promise(res => {
     if (typeof window === 'undefined') {
       res(false);
+      return;
     }
     const intervalId = setInterval(() => {
       if (window.vngage && window.vngage.get) {
