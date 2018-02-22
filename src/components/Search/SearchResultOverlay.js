@@ -44,7 +44,7 @@ const SearchResultOverlay =
       transitionEnter={true}
       transitionLeave={true}
     >
-      {(eventsSearchResults !== null && searchInputOnTop) ? (
+      {(searchInputOnTop) ? (
         <SearchResultOverlayBackdrop onClick={handleHideSearchResult}>
           <ReactCSSTransitionGroup
             transitionName="SearchResultOverlay-transitionGroup"
