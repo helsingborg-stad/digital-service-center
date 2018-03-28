@@ -21,7 +21,7 @@ function editable_event_post_type() {
         'description'   => 'Event',
         'public'        => true,
         'menu_position' => 5,
-        'supports'      => array( 'title', 'editor', 'revisions', 'thumbnail', 'custom_fields' ),
+        'supports'      => array( 'title', 'editor', 'revisions', 'thumbnail', 'custom_fields', 'page-attributes' ),
         'has_archive'   => true,
         'register_meta_box_cb' => 'add_place_and_contact_metaboxes',
         'show_in_rest'  => true

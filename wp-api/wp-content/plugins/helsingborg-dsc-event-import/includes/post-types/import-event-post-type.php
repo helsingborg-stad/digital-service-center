@@ -24,7 +24,7 @@ function imported_event_post_type() {
         'description'   => 'Event',
         'public'        => true,
         'menu_position' => 5,
-        'supports'      => array( 'title', 'editor', 'revisions', 'thumbnail', 'custom-fields' ),
+        'supports'      => array( 'title', 'editor', 'revisions', 'thumbnail', 'custom-fields', 'page-attributes' ),
         'has_archive'   => true,
         'taxonomies'    => array( 'category' ),
         'show_in_rest'  => true,

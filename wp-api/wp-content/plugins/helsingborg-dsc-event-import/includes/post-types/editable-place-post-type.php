@@ -24,7 +24,7 @@ function editable_place_post_type() {
         'description'   => 'Place',
         'public'        => true,
         'menu_position' => 5,
-        'supports'      => array( 'title', 'editor', 'revisions', 'thumbnail', 'custom-fields' ),
+        'supports'      => array( 'title', 'editor', 'revisions', 'thumbnail', 'custom-fields', 'page-attributes' ),
         'has_archive'   => true,
         'register_meta_box_cb' => 'add_place_metaboxes',
         'taxonomies'    => array( 'category' ),

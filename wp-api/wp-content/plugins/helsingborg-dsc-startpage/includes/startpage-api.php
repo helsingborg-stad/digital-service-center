@@ -73,7 +73,8 @@ function post_mapping_helper($post, $type) {
       width => intval($iframeMeta['width'] ?? 0),
       height => intval($iframeMeta['height'] ?? 0),
       offsetTop => intval($iframeMeta['top_offset'] ?? 0),
-      offsetLeft => intval($iframeMeta['left_offset'] ?? 0)
+      offsetLeft => intval($iframeMeta['left_offset'] ?? 0),
+      menuOrder => $page->menu_order
     ];
     $thumbnail_url = get_the_post_thumbnail_url($page->ID, [232, 148]);
     if ($thumbnail_url) {
@@ -86,6 +87,7 @@ function post_mapping_helper($post, $type) {
       heading  => html_entity_decode($page->post_title),
       preamble => get_preamble($page->post_content),
       href     => get_link_language_prefix() . $type . '/' . $page->post_name,
+      menuOrder => $page->menu_order
     ];
     $thumbnail_url = get_the_post_thumbnail_url($page->ID, [232, 148]);
     if ($thumbnail_url) {
@@ -96,7 +98,8 @@ function post_mapping_helper($post, $type) {
     $response = [
       type => 'page',
       heading  => html_entity_decode($page->post_title),
-      preamble => get_preamble($page->post_content)
+      preamble => get_preamble($page->post_content),
+      menuOrder => $page->menu_order
     ];
     if(strpos(wp_make_link_relative(get_permalink($page)), '?') !== false) {
       $response['url'] = wp_make_link_relative(get_permalink($page)) . '&wordpress';
@@ -135,6 +138,10 @@ function get_visitor_or_local_posts($type) {
     return post_mapping_helper($post, $type);
   }, $posts);
 
+  usort($filtered_posts, function ($a, $b) {
+    return $b['menuOrder'] <=> $a['menuOrder'];
+  });
+
   $post_urls = [];
   foreach($filtered_posts as $key => $value) {
     if( ($value['href'] && in_array($value['href'], $post_urls)) || ($value['url'] && in_array($value['url'], $post_urls)) ) {
@@ -146,7 +153,7 @@ function get_visitor_or_local_posts($type) {
     else if ($value['url']) {
       $post_urls[] = $value['url'];
     }
-    if(empty($value)) {
+    if (empty($value)) {
       unset($filtered_posts[$key]);
     }
   }
