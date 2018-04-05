@@ -18,7 +18,7 @@ import EventsDateList from '../EventsDateList.js';
 import './EventsPage.css';
 import LanguageFlags from '../LanguageFlags';
 import Search from '../Search/Search.js';
-import {getDistinctEventCategories, getEventsForCategory } from './eventsPageHelpers.js';
+import { getEventIdsGroupedByWeekNumber } from './eventsPageHelpers.js';
 
 export class EventsPage extends Component {
   constructor(props) {
@@ -93,6 +93,7 @@ export class EventsPage extends Component {
       return <LandingPageLoading bgColor='#f4a428' />;
     }
     const pageData = this.props.landingPages.events;
+    const eventsByWeekNumber = getEventIdsGroupedByWeekNumber(this.props.events);
 
     return (
       <div className='EventsPage'>
@@ -113,24 +114,18 @@ export class EventsPage extends Component {
           <div className='EventsPage-eventsWrapper'>
             <Scrollbars style={{ width: 'calc(100% - 1.5rem)', marginRight: '-1.5rem' }}>
               <div className='EventsPage-innerScrollWrapper'>
-                { getDistinctEventCategories(this.props.events, pageData.excludedCategoryIds)
-                  .map(c => (
-                    <div key={c.id}>
-                      <h2
-                        className='EventsPage-eventsHeading'
-                        dangerouslySetInnerHTML={{__html: c.name}}
-                      />
+                { Object.keys(eventsByWeekNumber)
+                  .map(week => (
+                    <div key={week}>
+                      <h2 className='EventsPage-eventsHeading'>Vecka {week}</h2>
                       <div className='EventsPage-eventWrapper'>
-                        <Scrollbars
-                          style={{ width: 'calc(100% - 1rem)', height: 'calc(100% - 1.6rem)' }}>
-                          { getEventsForCategory(this.props.events, c.id).map(event => (
-                            <Event
-                              key={event.id}
-                              {...event}
-                              onClick={this.changeOverlayEvent.bind(this)} />
-                          ))
-                          }
-                        </Scrollbars>
+                        { eventsByWeekNumber[week].map(eventId => (
+                          <Event
+                            key={eventId}
+                            {...this.props.events.find(e => e.id === eventId)}
+                            onClick={this.changeOverlayEvent.bind(this)} />
+                        ))
+                        }
                       </div>
                     </div>
                   ))
