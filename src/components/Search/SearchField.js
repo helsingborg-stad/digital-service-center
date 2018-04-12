@@ -2,11 +2,13 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import './SearchField.css';
 import classnames from 'classnames';
+import ReactDebounceInput from 'react-debounce-input';
 
 const SearchField = ({ inline, onSearchChange, handleSearchInputPosition, autoFocus, value}) => {
   return (
     <div className={classnames('SearchField', inline && 'SearchField--inline')}>
-      <input
+      <ReactDebounceInput
+        debounceTimeout={300}
         autoFocus={autoFocus}
         type='search'
         onChange={(ev) => onSearchChange(ev.target.value)}

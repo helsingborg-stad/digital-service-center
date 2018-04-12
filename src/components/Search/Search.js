@@ -47,7 +47,6 @@ export class Search extends Component {
   }
 
   handleSearchChange(searchTerm) {
-    // TODO: debounce
     this.props.fetchData(searchTerm);
 
     const eventsSifter = new Sifter(this.props.events);
