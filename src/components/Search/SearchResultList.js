@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import { truncate, getLinkTarget, stripHtml } from './searchHelpers';
 import Link from '../Link';
 import Scrollbars from 'react-custom-scrollbars';
+import { connect } from 'react-redux';
 
 import './SearchResultList.css';
 
 export const SearchResultList =
-  ({results, heading, activeLanguage, changeOverlayEvent, ItemComponent }) => {
+  ({results, heading, activeLanguage, changeOverlayEvent,
+    handleSetAddressDirections, ItemComponent }) => {
     return (
       <div className='SearchResultList-listWrapper'>
         <span className='SearchResultList-typeHeading'>
@@ -20,7 +22,8 @@ export const SearchResultList =
                 <ItemComponent
                   result={res}
                   activeLanguage={activeLanguage}
-                  changeOverlayEvent={changeOverlayEvent} />
+                  changeOverlayEvent={changeOverlayEvent}
+                  handleSetAddressDirections={handleSetAddressDirections} />
               </li>))
             }
           </ul>
@@ -34,6 +37,7 @@ SearchResultList.propTypes = {
   heading: PropTypes.string.isRequired,
   activeLanguage: PropTypes.string.isRequired,
   changeOverlayEvent: PropTypes.func.isRequired,
+  handleSetAddressDirections: PropTypes.func.isRequired,
   ItemComponent: PropTypes.func.isRequired
 };
 
@@ -92,3 +96,30 @@ export const SearchResultListHbgSeItem = ({result}) => (
 SearchResultListHbgSeItem.propTypes = {
   result: PropTypes.object.isRequired
 };
+
+const SearchResultListAddressUnconnected
+  = ({result, handleSetAddressDirections, takeMeThereText}) => (
+    <div key={result.address}>
+      <button
+        className='SearchResultList-addressButton'
+        onClick={() => handleSetAddressDirections(result)}
+      >
+        {result.address} <span>{takeMeThereText}</span>
+      </button>
+    </div>
+  );
+
+SearchResultListAddressUnconnected.propTypes = {
+  result: PropTypes.object.isRequired,
+  handleSetAddressDirections: PropTypes.func.isRequired,
+  takeMeThereText: PropTypes.string.isRequired
+};
+
+const mapStateToProps = (state) => {
+  return {
+    takeMeThereText: state.siteSettings.translatables[state.activeLanguage].takeMeThere
+  };
+};
+
+export const SearchResultListAddress =
+  connect(mapStateToProps, null)(SearchResultListAddressUnconnected);

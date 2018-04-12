@@ -1,7 +1,7 @@
 
-export function searchHasErrored(state = {}, action) {
+export function hbgSeSearchHasErrored(state = {}, action) {
   switch (action.type) {
-  case 'SEARCH_HAS_ERRORED':
+  case 'HBG_SE_SEARCH_HAS_ERRORED':
     return Object.assign({}, state, { [action.term]: action.hasErrored });
 
   default:
@@ -9,9 +9,9 @@ export function searchHasErrored(state = {}, action) {
   }
 }
 
-export function searchIsLoading(state = false, action) {
+export function hbgSeSearchIsLoading(state = false, action) {
   switch (action.type) {
-  case 'SEARCH_IS_LOADING':
+  case 'HBG_SE_SEARCH_IS_LOADING':
     return Object.assign({}, state, { [action.term]: action.isLoading });
 
   default:
@@ -19,9 +19,9 @@ export function searchIsLoading(state = false, action) {
   }
 }
 
-export function search(state = {}, action) {
+export function hbgSeSearch(state = {}, action) {
   switch (action.type) {
-  case 'SEARCH_FETCH_DATA_SUCCESS':
+  case 'HBG_SE_SEARCH_FETCH_DATA_SUCCESS':
     return Object.assign({}, state, { [action.term]: action.results });
 
   default:

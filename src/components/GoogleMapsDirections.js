@@ -47,7 +47,7 @@ export default class GoogleMapsDirections extends Component {
         });
       } else {
         // eslint-disable-next-line no-console
-        console.error(`error fetching directions ${result}`);
+        console.warn('error fetching directions', result, status);
       }
     });
   }

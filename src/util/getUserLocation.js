@@ -1,5 +1,7 @@
 export default function getUserLocation(useStaticLocation = true) {
   return new Promise(function (resolve) {
+    // TODO: If we remove static location, change hard-coded coordinates
+    // found in `SearchResultOverlay.js`
     if (useStaticLocation) {
       resolve({
         lat: 56.043832,

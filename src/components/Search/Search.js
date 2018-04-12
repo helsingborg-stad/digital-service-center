@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import SearchField from './SearchField';
-import { searchFetchData } from '../../actions/search';
+import { hbgSeSearchFetchData } from '../../actions/hbgSeSearch';
+import { addressSearchFetchData } from '../../actions/addressSearch';
 import { crmFetchData } from '../../actions/crm';
 import SearchResultOverlay from './SearchResultOverlay';
 import Sifter from 'sifter';
@@ -22,9 +23,13 @@ export class Search extends Component {
   }
 
   static fetchData({ store, term }) {
-    return store.dispatch(
-      searchFetchData('/api/hbg-se-search', term)
+    const hbgSeDispatch = store.dispatch(
+      hbgSeSearchFetchData(term)
     );
+    const addressDispatch = store.dispatch(
+      addressSearchFetchData(term)
+    );
+    return Promise.all([hbgSeDispatch, addressDispatch]);
   }
 
   componentWillMount() {
@@ -43,7 +48,7 @@ export class Search extends Component {
 
   handleSearchChange(searchTerm) {
     // TODO: debounce
-    this.props.fetchData('/api/hbg-se-search', searchTerm);
+    this.props.fetchData(searchTerm);
 
     const eventsSifter = new Sifter(this.props.events);
     const eventsSifterResult = eventsSifter.search(searchTerm, {
@@ -148,8 +153,12 @@ export class Search extends Component {
         <SearchResultOverlay
           eventsSearchResults={this.state.eventsSearchResults}
           hbgSeSearchResults={(this.state.searchTerm &&
-            (this.state.searchTerm in this.props.hbgSearch)) ?
-            this.props.hbgSearch[this.state.searchTerm] : []
+            (this.state.searchTerm in this.props.hbgSeSearch)) ?
+            this.props.hbgSeSearch[this.state.searchTerm] : []
+          }
+          addressSearchResults={(this.state.searchTerm &&
+            (this.state.searchTerm in this.props.addressSearch)) ?
+            this.props.addressSearch[this.state.searchTerm] : []
           }
           crmSearchResults={this.state.crmSearchResults}
           changeOverlayEvent={this.changeOverlay.bind(this)}
@@ -171,7 +180,8 @@ Search.propTypes = {
   inputWrapperStyle: PropTypes.object,
   activeLanguage: PropTypes.string,
   fetchData: PropTypes.func.isRequired,
-  hbgSearch: PropTypes.any,
+  hbgSeSearch: PropTypes.any,
+  addressSearch: PropTypes.any,
   fetchCrm: PropTypes.func
 };
 
@@ -179,7 +189,8 @@ Search.propTypes = {
 const mapStateToProps = (state) => {
   return {
     searchInputOnTop: state.searchInputOnTop,
-    hbgSearch: state.search,
+    hbgSeSearch: state.hbgSeSearch,
+    addressSearch: state.addressSearch,
     crm: state.crm,
     landingPages: state.landingPages[state.activeLanguage]
   };
@@ -187,7 +198,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: (url, term) => dispatch(searchFetchData(url, term)),
+    fetchData: (term) => {
+      dispatch(addressSearchFetchData(term));
+      dispatch(hbgSeSearchFetchData(term));
+    },
     fetchCrm: () => dispatch(crmFetchData('/api/temp-crm'))
   };
 };

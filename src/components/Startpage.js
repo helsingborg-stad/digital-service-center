@@ -8,7 +8,6 @@ import Search from './Search/Search.js';
 import { connect } from 'react-redux';
 import { startpageFetchData } from '../actions/startpage';
 import { eventsFetchData } from '../actions/events';
-import { searchFetchData } from '../actions/search';
 import LanguageFlags from './LanguageFlags';
 import StartpageLoading from './StartpageLoading.js';
 import StartpageError from './StartpageError.js';
@@ -26,12 +25,6 @@ export class Startpage extends Component {
   static fetchEventsData({ store }) {
     return store.dispatch(
       eventsFetchData('/api/events', store.getState().activeLanguage)
-    );
-  }
-
-  static fetchSearchResults({ store }) {
-    return store.dispatch(
-      searchFetchData('/api/search')
     );
   }
 
@@ -169,9 +162,6 @@ const mapStateToProps = (state) => {
       ? state.startpageHasErrored[state.activeLanguage] : false,
     isLoading: (state.activeLanguage in state.startpageIsLoading)
       ? state.startpageIsLoading[state.activeLanguage] : false,
-    searchResults: state.searchResults,
-    searchIsLoading: state.searchIsLoading,
-    searchHasErrored: state.searchHasErrored,
     shouldFetchEvents: !(state.activeLanguage in state.events),
     isInPortraitMode: state.isInPortraitMode
   };
@@ -180,8 +170,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchData: (url, lang) => dispatch(startpageFetchData(url, lang)),
-    fetchEventsData: (url, lang) => dispatch(eventsFetchData(url, lang)),
-    fetchSearchResults: (url) => dispatch(searchFetchData(url))
+    fetchEventsData: (url, lang) => dispatch(eventsFetchData(url, lang))
   };
 };
 

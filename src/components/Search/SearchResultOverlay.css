@@ -64,6 +64,25 @@
     padding-top: 2rem;
 }
 
+.SearchResultList-addressButton {
+  font-size: 1rem;
+  border: 0;
+  background: none;
+  font-weight: bold;
+}
+
+.SearchResultList-addressButton span {
+  display: inline-block;
+  font-size: 12px;
+  padding: 7px;
+  margin-left: 0.5rem;
+  margin-top: 0.5rem;
+  color: #fff;
+  background-color: #cb0050;
+  text-transform: uppercase;
+  transform: translateY(-1px);
+}
+
 @media screen and (orientation: portrait) {
     .SearchResultOverlay-typeWrapper {
         height: 80vh;

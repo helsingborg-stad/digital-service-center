@@ -48,7 +48,9 @@ function hdsc_translatables() {
     ['Hittade inga matchande resultat för din sökning', 'no-results-found', 'Ange {link}min länktext{/link} någonstans i texten för att infoga hjälplänk'],
     ['URL för hjälplänk till söktext', 'no-results-url', '', true],
     ['Fråga kontaktcenter', 'ask-customer-center'],
-    ['Visa information', 'show-information']
+    ['Visa information', 'show-information'],
+    ['Adresser', 'addresses'],
+    ['Tillbaka', 'go-back']
   ];
 }
 

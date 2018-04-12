@@ -6,7 +6,8 @@ import { events, eventsHasErrored, eventsAreLoading } from './events';
 import { landingPages } from './landingPages';
 import { iframeUrl } from './iframeUrl';
 import { siteSettings } from './siteSettings';
-import { search } from './search';
+import { hbgSeSearch } from './hbgSeSearch';
+import { addressSearch } from './addressSearch';
 import { previousUrl } from './previousUrl';
 import { crm } from './crm';
 import { isInPortraitMode } from './isInPortraitMode';
@@ -22,7 +23,8 @@ export default combineReducers({
   landingPages,
   iframeUrl,
   siteSettings,
-  search,
+  hbgSeSearch,
+  addressSearch,
   previousUrl,
   crm,
   isInPortraitMode,
