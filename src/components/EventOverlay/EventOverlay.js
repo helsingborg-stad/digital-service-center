@@ -8,12 +8,12 @@ import './EventOverlay.css';
 import ReactPlayer from 'react-player';
 import getUserLocation from '../../util/getUserLocation';
 import LoadingButton from '../LoadingButton.js';
-import OverlayCloser, { setOverlayCloserPosition } from '../OverlayCloser';
 import GoogleMapsDirections from '../GoogleMapsDirections';
 
-import EventOverlayBackdrop from './components/EventOverlayBackdrop';
 import EventOverlayReviews from './components/EventOverlayReviews';
 import EventOverlayRelatedInformation from './components/EventOverlayRelatedInformation';
+
+import Overlay from '../OverlayBackdrop';
 
 const handleNavigationClick = (destinationLat, destinationLng, callback) => {
   getUserLocation().then((location) => {
@@ -122,7 +122,6 @@ class EventOverlay extends Component {
   }
 }
 
-
 EventOverlay.propTypes = {
   event: PropTypes.object,
   handleShowDirections: PropTypes.func,
@@ -150,15 +149,8 @@ export default class extends Component {
     super(props);
     this.state = {
       showVideo: false,
-      videoUrl: props.event.youtubeUrl || props.event.vimeoUrl || null,
-      showConfirmClose: false
+      videoUrl: props.event.youtubeUrl || props.event.vimeoUrl || null
     };
-  }
-
-  onBackDropClick(e) {
-    this.setState({showConfirmClose: !this.state.showConfirmClose});
-    const closeConfirmEl = this.refs.closeconfirm.wrappedInstance.refs.wrapper;
-    setOverlayCloserPosition(e, closeConfirmEl);
   }
 
   static propTypes = {
@@ -168,11 +160,7 @@ export default class extends Component {
 
   render() {
     return (
-      <EventOverlayBackdrop onClick={this.onBackDropClick.bind(this)}>
-        <OverlayCloser ref='closeconfirm'
-          onCloseModal={this.props.handleClose} isHidden={!this.state.showConfirmClose}
-          onDismissClose={() => this.setState({showConfirmClose: false})}
-        />
+      <Overlay handleClose={this.props.handleClose}>
         { !this.state.showVideo
           ?
           <div className='EventOverlay-wrapper'>
@@ -192,7 +180,7 @@ export default class extends Component {
             <ReactPlayer className='EventOverlay-video' url={this.state.videoUrl} playing />
           </div>
         }
-      </EventOverlayBackdrop>
+      </Overlay>
     );
   }
 

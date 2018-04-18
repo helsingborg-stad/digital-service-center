@@ -9,7 +9,7 @@ import Search from '../Search/Search.js';
 import GoogleMaps from '../GoogleMaps';
 import { EventShowcase, Event } from '../EventShowcase';
 import EventOverlay from '../EventOverlay/EventOverlay';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import { OverlayTransitionWrapper } from '../OverlayBackdrop';
 import AsideMenu from '../AsideMenu';
 import Calendar from '../Calendar';
 import LandingPageLoading from './LandingPageLoading';
@@ -234,13 +234,7 @@ export class LandingPage extends Component {
               <LanguageFlags activeLanguage={this.props.activeLanguage} />
             </div>
           </SiteFooter>
-          <ReactCSSTransitionGroup
-            transitionName="EventOverlay-transitionGroup"
-            transitionEnterTimeout={300}
-            transitionLeaveTimeout={300}
-            transitionEnter={true}
-            transitionLeave={true}
-          >
+          <OverlayTransitionWrapper>
             {this.state.visibleOverlayEvent &&
               <EventOverlay
                 key='event-overlay'
@@ -250,7 +244,7 @@ export class LandingPage extends Component {
                 showDirections={this.state.showDirections}
               />
             }
-          </ReactCSSTransitionGroup>
+          </OverlayTransitionWrapper>
         </main>
         <aside>
           <AsideMenu>

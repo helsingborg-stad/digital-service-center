@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import IframeOverlay from './IframeOverlay';
+import { IframeOverlay, OverlayTransitionWrapper } from './OverlayBackdrop';
 import { connect } from 'react-redux';
 import { iframeUrl } from '../actions/iframeUrl';
 
@@ -30,18 +30,13 @@ const App = ({ children, location, iframe, closeIframe, previousUrl}) => (
         key: location.pathname
       })}
     </ReactCSSTransitionGroup>
-    <ReactCSSTransitionGroup
-      component='div'
-      transitionName='IframeOverlay-transitionGroup'
-      transitionEnterTimeout={300}
-      transitionLeaveTimeout={300}
-    >
+    <OverlayTransitionWrapper>
       { iframe &&
       <IframeOverlay
         url={iframe.url} maxWidth={iframe.width} maxHeight={iframe.height}
         offsetTop={iframe.offsetTop} offsetLeft={iframe.offsetLeft} handleClose={closeIframe} />
       }
-    </ReactCSSTransitionGroup>
+    </OverlayTransitionWrapper>
   </div>
 );
 

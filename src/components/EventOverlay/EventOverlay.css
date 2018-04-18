@@ -1,36 +1,4 @@
 
-.EventOverlay-transitionGroup-enter .EventOverlay-wrapper,
-.EventOverlay-transitionGroup-leave .EventOverlay-wrapper {
-  transform: translateX(-50%), scale(0.7);
-  opacity: 0;
-  transition: transform 0.3s, opacity 0.3s;
-}
-
-.EventOverlay-transitionGroup-enter-active .EventOverlay-wrapper {
-  transform: translateX(-50%), scale(1);
-  opacity: 1;
-}
-
-.EventOverlay-transitionGroup-enter.EventOverlayBackdrop,
-.EventOverlay-transitionGroup-leave.EventOverlayBackdrop {
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.EventOverlay-transitionGroup-enter-active.EventOverlayBackdrop {
-  opacity: 1;
-}
-
-.EventOverlayBackdrop {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 100;
-}
-
 .EventOverlay-wrapper {
   position: fixed;
   display: flex;

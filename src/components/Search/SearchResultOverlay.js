@@ -12,6 +12,7 @@ import {
 } from './SearchResultList';
 import GoogleMapsDirections from '../GoogleMapsDirections';
 import { SearchNoResultsFound } from './SearchNotResultsFound';
+import { AddressSearchOverlay } from '../OverlayBackdrop';
 
 const SearchResultOverlayBackdrop = ({children, onClick}) => (
   <div className='SearchResultOverlayBackdrop' onClick={() => onClick()}>
@@ -50,25 +51,21 @@ class SearchResultOverlay extends React.Component {
 
     if (this.state.addressDirections) {
       return (
-        <div className='EventOverlayBackdrop'>
-          <div className='EventOverlay-wrapper'>
-            <div className='EventOverlay'>
-              <GoogleMapsDirections
-                origin={{
-                  lat: 56.043832,
-                  lng: 12.6941808
-                }}
-                destination={{
-                  lat: this.state.addressDirections.lat,
-                  lng: this.state.addressDirections.lng
-                }}
-                handleClose={this.handleSetAddressDirections.bind(this, null)}
-                eventName={this.state.addressDirections.address}
-                showInformationText={translatables.goBack}
-              />
-            </div>
-          </div>
-        </div>
+        <AddressSearchOverlay handleClose={this.handleSetAddressDirections.bind(this, null)}>
+          <GoogleMapsDirections
+            origin={{
+              lat: 56.043832,
+              lng: 12.6941808
+            }}
+            destination={{
+              lat: this.state.addressDirections.lat,
+              lng: this.state.addressDirections.lng
+            }}
+            handleClose={this.handleSetAddressDirections.bind(this, null)}
+            eventName={this.state.addressDirections.address}
+            showInformationText={translatables.goBack}
+          />
+        </AddressSearchOverlay>
       );
     }
 

@@ -9,7 +9,7 @@ import Scrollbars from 'react-custom-scrollbars';
 import LandingPageLoading from '../LandingPage/LandingPageLoading';
 import LandingPageError from '../LandingPage/LandingPageError';
 import EventOverlay from '../EventOverlay/EventOverlay';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import { OverlayTransitionWrapper } from '../OverlayBackdrop';
 import AsideMenu from '../AsideMenu';
 import Calendar from '../Calendar';
 import { connect } from 'react-redux';
@@ -145,13 +145,7 @@ export class EventsPage extends Component {
               <LanguageFlags activeLanguage={this.props.activeLanguage} />
             </div>
           </SiteFooter>
-          <ReactCSSTransitionGroup
-            transitionName="EventOverlay-transitionGroup"
-            transitionEnterTimeout={300}
-            transitionLeaveTimeout={300}
-            transitionEnter={true}
-            transitionLeave={true}
-          >
+          <OverlayTransitionWrapper>
             { this.state.visibleOverlayEvent &&
               <EventOverlay
                 key='event-overlay'
@@ -160,7 +154,7 @@ export class EventsPage extends Component {
                 changeOverlayEvent={this.changeOverlayEvent.bind(this)}
               />
             }
-          </ReactCSSTransitionGroup>
+          </OverlayTransitionWrapper>
         </main>
         <aside>
           <AsideMenu fullHeight>
