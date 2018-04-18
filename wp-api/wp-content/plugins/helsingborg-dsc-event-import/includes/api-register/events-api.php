@@ -665,7 +665,7 @@ function get_short_content($post_content) {
     $post_content = substr($post_content, 0, strpos($post_content, '<!--more-->'));
     $post_content = preg_replace('/<p>/', '', $post_content);
   }
-  $decoded = html_entity_decode($post_content);
+  $decoded = trim(html_entity_decode($post_content));
   return strlen($decoded) > 100
     ? substr(html_entity_decode($post_content), 0, 100) . '...'
     : $decoded;
