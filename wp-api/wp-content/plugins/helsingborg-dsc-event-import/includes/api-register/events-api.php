@@ -18,6 +18,9 @@ function helsingborg_dsc_events_response() {
   $editable_events_parsed = parse_editable_events($editable_events);
   $google_places_parsed = parse_google_places();
   $all_events = array_merge((array)$imported_events_parsed, (array)$editable_events_parsed, (array)$google_places_parsed);
+  $all_events = array_values(array_filter($all_events, function($event) {
+    return $event['location']['city'] == 'Helsingborg';
+  }));
   $categories_to_show_on_map = array_reduce($all_events, function($acc, $event) {
     $cat_ids = array_map(function($cat) { return $cat['id']; }, $event['categories']);
     foreach ($cat_ids as $cat_id) {
@@ -227,6 +230,7 @@ function get_imported_event_values($event) {
         id => $post_meta->location->id,
         title => $post_meta->location->title,
         streetAddress => $post_meta->location->street_address,
+        city => $post_meta->location->city,
         postalCode => $post_meta->location->postal_code,
         latitude => floatval($post_meta->location->latitude),
         longitude => floatval($post_meta->location->longitude)
@@ -328,6 +332,7 @@ function get_editable_event_and_page_values($post) {
         $location = get_post_meta($page->ID, 'location', true);
         $response['location'] = [
           streetAddress => $location['street_address'],
+          city => $location['city'],
           postalCode => $location['postal_code'],
           latitude => floatval($location['latitude']),
           longitude => floatval($location['longitude'])
@@ -456,6 +461,7 @@ function get_pages_for_visitor_local($section) {
         $location = get_post_meta($page->ID, 'location', true);
         $response['location'] = [
           streetAddress => $location['street_address'],
+          city => $location['city'],
           postalCode => $location['postal_code'],
           latitude => floatval($location['latitude']),
           longitude => floatval($location['longitude'])
@@ -702,6 +708,7 @@ function parse_imported_events($events) {
         id => $post_meta->location->id,
         title => $post_meta->location->title,
         streetAddress => $post_meta->location->street_address,
+        city => $post_meta->location->city,
         postalCode => $post_meta->location->postal_code,
         latitude => floatval($post_meta->location->latitude),
         longitude => floatval($post_meta->location->longitude)
@@ -777,6 +784,7 @@ function parse_editable_events($events) {
     $location = get_post_meta($event->ID, 'location', true);
     $response['location'] = [
       streetAddress => isset($location['street_address']) ? $location['street_address'] : "",
+      city => isset($location['city']) ? $location['city'] : "",
       postalCode => isset($location['postal_code']) ? $location['postal_code'] : "",
       latitude => isset($location['latitude']) ? floatval($location['latitude']) : "",
       longitude => isset($location['longitude']) ? floatval($location['longitude']) : ""
