@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { Startpage } from './Startpage';
-import configureStore from '../store/configureStore';
-import initialStateForTests from '../store/initialStateForTests';
+import configureStore from '../../store/configureStore';
+import initialStateForTests from '../../store/initialStateForTests';
 
 const store = configureStore(initialStateForTests);
 
