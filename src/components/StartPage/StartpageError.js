@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import BottomBar from './BottomBar';
+import BottomBar from '../BottomBar';
 
 export default class StartpageError extends Component {
   render() {

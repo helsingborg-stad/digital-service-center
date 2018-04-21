@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import Lipping from './Lipping';
-import BottomBar from './BottomBar';
-import SectionCard from './SectionCard';
+import Lipping from '../Lipping';
+import BottomBar from '../BottomBar';
+import SectionCard from '../SectionCard';
 
 export default class StartpageLoading extends Component {
   render() {

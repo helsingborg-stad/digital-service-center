@@ -1,17 +1,17 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import Lipping from './Lipping';
-import MultimediaBackground from './MultimediaBackground';
-import BottomBar, { BottomBarLink } from './BottomBar';
-import SectionCard from './SectionCard';
-import Search from './Search/Search.js';
+import Lipping from '../Lipping';
+import MultimediaBackground from '../MultimediaBackground';
+import BottomBar, { BottomBarLink } from '../BottomBar';
+import SectionCard from '../SectionCard';
+import Search from '../Search/Search.js';
 import { connect } from 'react-redux';
-import { startpageFetchData } from '../actions/startpage';
-import { eventsFetchData } from '../actions/events';
-import LanguageFlags from './LanguageFlags';
+import { startpageFetchData } from '../../actions/startpage';
+import { eventsFetchData } from '../../actions/events';
+import LanguageFlags from '../LanguageFlags';
 import StartpageLoading from './StartpageLoading.js';
 import StartpageError from './StartpageError.js';
-import VergicChatButton from './VergicChatButton';
+import VergicChatButton from '../VergicChatButton';
 
 import './Startpage.css';
 

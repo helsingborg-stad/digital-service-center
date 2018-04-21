@@ -7,7 +7,7 @@ import { activeLanguage } from './actions/activeLanguage';
 import { previousUrl } from './actions/previousUrl';
 
 import App from './components/App';
-import Startpage from './components/Startpage';
+import Startpage from './components/StartPage/Startpage';
 import LandingPage from './components/LandingPage/LandingPage';
 import EventsPage from './components/EventsPage/EventsPage';
 
