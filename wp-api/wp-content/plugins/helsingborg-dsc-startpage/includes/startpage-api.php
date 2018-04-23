@@ -3,12 +3,14 @@
 namespace helsingborg_dsc_startpage;
 
 include('helpers/get-categories-for-posts.php');
+include('helpers/get-current-post-language.php');
 include('helpers/get-preamble.php');
 include('helpers/get-top-links.php');
 include('helpers/get-upcoming-events.php');
 include('helpers/get-visitor-or-local-posts.php');
 include('helpers/get-visitor-or-local-tags.php');
 include('helpers/get-link-language-prefix.php');
+
 
 // Helper function to map the posts to the correct format for the API response
 // TODO: make code more tidy and remove duplication in events-api's `get_pages_for_visitor_local`

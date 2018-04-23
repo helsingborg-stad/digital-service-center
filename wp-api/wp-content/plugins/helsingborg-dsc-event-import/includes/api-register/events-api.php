@@ -16,6 +16,20 @@ include('helpers/parse-editable-events.php');
 include('helpers/parse-google-places.php');
 include('helpers/parse-imported-events.php');
 
+if(!function_exists('get_post_id_original')) {
+  function get_post_id_original($post_id, $post_type) {
+    global $sitepress;
+    return function_exists('icl_object_id') ? icl_object_id($post_id, $post_type, true, $sitepress->get_default_language()) : $post_id;
+  }
+}
+
+if(!function_exists('get_post_id_translated')) {
+  function get_post_id_translated($post_id) {
+    return function_exists('icl_object_id') ? icl_object_id($post_id) : $post_id;
+  }
+}
+
+
 function events_response() {
   $response = [];
   $imported_events = get_posts([ post_type => 'imported_event', 'suppress_filters' => false, numberposts => -1, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
@@ -84,19 +98,6 @@ function events_response() {
   }
 
   return rest_ensure_response($response);
-}
-
-if(!function_exists('get_post_id_original')) {
-  function get_post_id_original($post_id, $post_type) {
-    global $sitepress;
-    return function_exists('icl_object_id') ? icl_object_id($post_id, $post_type, true, $sitepress->get_default_language()) : $post_id;
-  }
-}
-
-if(!function_exists('get_post_id_translated')) {
-  function get_post_id_translated($post_id) {
-    return function_exists('icl_object_id') ? icl_object_id($post_id) : $post_id;
-  }
 }
 
 function register_routes() {
