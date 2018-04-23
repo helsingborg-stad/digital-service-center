@@ -135,6 +135,7 @@ class SearchResultOverlay extends React.Component {
                       results={addressSearchResults}
                       heading={translatables.addresses}
                       activeLanguage={activeLanguage}
+                      changeOverlayEvent={changeOverlayEvent}
                       handleSetAddressDirections={this.handleSetAddressDirections.bind(this)}
                       ItemComponent={SearchResultListAddress} />
                     }
