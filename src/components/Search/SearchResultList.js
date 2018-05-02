@@ -37,7 +37,7 @@ SearchResultList.propTypes = {
   heading: PropTypes.string.isRequired,
   activeLanguage: PropTypes.string.isRequired,
   changeOverlayEvent: PropTypes.func.isRequired,
-  handleSetAddressDirections: PropTypes.func.isRequired,
+  handleSetAddressDirections: PropTypes.func,
   ItemComponent: PropTypes.func.isRequired
 };
 
