@@ -31,12 +31,11 @@
 }
 
 .SearchResultOverlay {
-    position: absolute;
-    top: 50%;
+  position: absolute;
     left: 50%;
     width: 90vw;
-    max-height: calc( 100vh - 4.6875rem - 1.25rem - 3rem);
-    min-height: calc( 100vh - 20rem);
+    bottom: 67px;
+    height: 673px;
     transform: translate(-50%, -50%);
     border-radius: 3px;
     padding: 2rem;
@@ -60,7 +59,7 @@
 
 .SearchResultOverlay-typeWrapper {
     display: flex;
-    height: 71vh;
+    height: 580px;
     padding-top: 2rem;
 }
 
@@ -84,7 +83,5 @@
 }
 
 @media screen and (orientation: portrait) {
-    .SearchResultOverlay-typeWrapper {
-        height: 80vh;
-    }
+
 }

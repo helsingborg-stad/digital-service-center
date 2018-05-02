@@ -106,8 +106,7 @@ export class EventsPage extends Component {
         <Search
           events={this.props.events}
           changeOverlayEvent={this.changeOverlayEvent.bind(this)}
-          pageType={pageData.pageName}
-          inputWrapperStyle={{bottom: this.props.isInPortraitMode ? '7.5rem' : '4.25rem'}}
+          pageType='Eventspage'
           activeLanguage={this.props.activeLanguage}
         />
         <main>

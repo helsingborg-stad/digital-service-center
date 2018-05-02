@@ -68,8 +68,6 @@ export class Startpage extends Component {
           <Search
             events={this.props.events}
             pageType='Startpage'
-            inputWrapperStyle={{bottom: this.props.isInPortraitMode ?
-              '10rem' : '6.5rem', transform: 'translateX(-50%)', left: '50%'}}
             activeLanguage={this.props.activeLanguage}
           />
         }

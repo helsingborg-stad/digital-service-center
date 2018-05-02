@@ -8,6 +8,7 @@ import SearchResultOverlay from './SearchResultOverlay';
 import Sifter from 'sifter';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { connect } from 'react-redux';
+import cn from 'classnames';
 import './Search.css';
 
 export class Search extends Component {
@@ -120,34 +121,18 @@ export class Search extends Component {
           transitionEnter={true}
           transitionLeave={true}
         >
-          { !this.state.searchInputOnTop ?
-            <div
-              key='searchInputOnBottom'
-              style={ this.props.inputWrapperStyle }
-              className='Search-inputWrapper'>
-              <SearchField
-                inline
-                autoFocus={false}
-                value={this.state.searchTerm || ''}
-                onSearchChange={(val) => this.handleSearchChange(val)}
-                handleSearchInputPosition={
-                  (val) => this.handleSearchInputPosition(val, this.props.events)
-                }
-              />
-            </div>
-            :
-            <div
-              key='searchInputOnTop'
-              style={ this.props.inputWrapperStyle }
-              className='Search-inputWrapper--top'>
-              <SearchField
-                inline
-                autoFocus={true}
-                value={this.state.searchTerm || ''}
-                onSearchChange={(val) => this.handleSearchChange(val)}
-              />
-            </div>
-          }
+          <div
+            className={cn('Search-inputWrapper', {'Search-inputWrapper--isActive': this.state.searchInputOnTop}, `Search-inputWrapper--${this.props.pageType}`)}>
+            <SearchField
+              inline
+              autoFocus={false}
+              value={this.state.searchTerm || ''}
+              onSearchChange={(val) => this.handleSearchChange(val)}
+              handleSearchInputPosition={
+                (val) => this.handleSearchInputPosition(val, this.props.events)
+              }
+            />
+          </div>
         </ReactCSSTransitionGroup>
         <SearchResultOverlay
           eventsSearchResults={this.state.eventsSearchResults}
@@ -176,7 +161,6 @@ Search.propTypes = {
   events: PropTypes.array,
   crm: PropTypes.array,
   landingPages: PropTypes.object,
-  inputWrapperStyle: PropTypes.object,
   activeLanguage: PropTypes.string,
   fetchData: PropTypes.func.isRequired,
   hbgSeSearch: PropTypes.any,

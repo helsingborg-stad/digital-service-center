@@ -21,17 +21,76 @@
 
 .Search-inputWrapper {
   position: absolute;
-  z-index: 9;
+  z-index: 101;
   left: calc(50% - 300px);
   bottom: calc(23vh + 1.4rem);
-  width: 350px
+  width: 350px;
+  transition: 0.25s ease-in-out bottom;
 }
 
-.Search-inputWrapper--top {
-  position: fixed;
-  top: 1rem;
-  left: calc(50% - 175px);
-  bottom: auto!important;
-  width: 350px;
-  z-index: 101;
+.Search-inputWrapper--Startpage {
+  bottom: 6.5rem;
+  transform: translateX(-50%);
+  left: 50%;
+}
+
+.Search-inputWrapper--Eventspage {
+  bottom: 4.25rem;
+  transform: translateX(-50%);
+  left: 50%;
+}
+
+.Search-inputWrapper--local {
+  bottom: 16rem;
+  transform: translateX(-50%);
+  left: 50%;
+}
+
+.Search-inputWrapper--visitor {
+  bottom: 16rem;
+  transform: translateX(-50%);
+  left: 50%;
+}
+
+.Search-inputWrapper.Search-inputWrapper--isActive {
+  bottom: 20.3rem;
+}
+
+.Search-inputWrapper--local.Search-inputWrapper--isActive {
+  bottom: 20.3rem;
+}
+
+.Search-inputWrapper--visitor.Search-inputWrapper--isActive {
+  bottom: 20.3rem;
+}
+
+@media (orientation: portrait) {
+  .Search-inputWrapper--Startpage {
+    bottom: 10rem;
+  }
+
+  .Search-inputWrapper--Eventspage {
+    bottom: 7.5rem;
+  }
+
+  .Search-inputWrapper--local {
+    bottom: 20.3rem;
+  }
+
+  .Search-inputWrapper--visitor {
+    bottom: 20.3rem;
+  }
+  
+  .Search-inputWrapper.Search-inputWrapper--isActive {
+    bottom: 20.3rem;
+  }
+
+  .Search-inputWrapper--local.Search-inputWrapper--isActive {
+    bottom: 20.3rem;
+  }
+
+  .Search-inputWrapper--visitor.Search-inputWrapper--isActive {
+    bottom: 20.3rem;
+  }
+
 }
