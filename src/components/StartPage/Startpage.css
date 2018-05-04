@@ -28,6 +28,7 @@
 @media screen and (orientation: portrait) {
   .Startpage-Row {
     margin: 0 calc(2% - 0.85rem) 0 2%;
+    margin-top: 57%;
   }
 
   .Startpage-Column {

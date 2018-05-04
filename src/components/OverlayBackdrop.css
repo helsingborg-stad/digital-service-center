@@ -78,3 +78,10 @@
   width: 12px;
   height: 12px;
 }
+
+@media (orientation: portrait) {
+  .OverlayIframe {
+    top: 47%;
+    height: 35%;
+  }
+}
