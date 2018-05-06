@@ -9,6 +9,7 @@ import ReactPlayer from 'react-player';
 import getUserLocation from '../../util/getUserLocation';
 import LoadingButton from '../LoadingButton.js';
 import GoogleMapsDirections from '../GoogleMapsDirections';
+import { translateData } from '../../actions/translate';
 
 import EventOverlayReviews from './components/EventOverlayReviews';
 import EventOverlayRelatedInformation from './components/EventOverlayRelatedInformation';
@@ -38,7 +39,8 @@ class EventOverlay extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      directions: null
+      directions: null,
+      showTranslatedContent: false
     };
   }
   componentDidMount() {
@@ -46,11 +48,16 @@ class EventOverlay extends Component {
       const { latitude, longitude } = this.props.event.location;
       handleNavigationClick(latitude, longitude, this.handleShowDirections.bind(this));
     }
+    this.props.translateText(this.props.event.content, this.props.event.id, 'sv', 'en');
   }
   handleShowDirections(directions) {
     this.setState({directions: directions});
   }
+  handleTranslateOnClick = () => {
+    this.setState({showTranslatedContent: !this.state.showTranslatedContent});
+  }
   render() {
+    const content = this.state.showTranslatedContent && this.props.translatedContent ? this.props.translatedContent : this.props.event.content;
     return (
       <div className='EventOverlay' onClick={ev => ev.stopPropagation()}>
         { this.state.directions &&
@@ -80,7 +87,7 @@ class EventOverlay extends Component {
             <span className='EventOverlay-content-scrollWrapper'>
               <span
                 className='EventOverlay-content'
-                dangerouslySetInnerHTML={{ __html: this.props.event.content.replace(/\r\n/g, '<br />') }}
+                dangerouslySetInnerHTML={{ __html: content.replace(/\r\n/g, '<br />')}}
               />
             </span>
           </div>
@@ -89,6 +96,14 @@ class EventOverlay extends Component {
             <EventOverlayReviews reviews={this.props.event.reviews} />
           }
         </Scrollbars>
+        {
+          <div>
+            <button className='EventOverlay-button' onClick={() => this.handleTranslateOnClick()}>
+              {!this.state.showTranslatedContent ? 'Translate' : 'Original'}
+            </button>
+            <span style={{fontSize: 12, fontStyle: 'italic' }}>By Google Translate</span>
+          </div>
+        }
       </div>
       <div style={{width: '37%', float: 'right'}}>
 
@@ -136,13 +151,27 @@ EventOverlay.propTypes = {
 };
 
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
+  const eventId = ownProps.event.id;
+  const translatedContent = (eventId in state.translation) && ('content' in state.translation[eventId])
+    ? state.translation[eventId].content : null;
+  const translationLoading = (eventId in state.translation)
+    ? state.translation[eventId].loading : false;
   return {
-    translatables: state.siteSettings.translatables[state.activeLanguage]
+    translatables: state.siteSettings.translatables[state.activeLanguage],
+    activeLanguage: state.activeLanguage,
+    translatedContent,
+    translationLoading
   };
 };
 
-const EventOverlayConnected = connect(mapStateToProps, null)(EventOverlay);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    translateText: (text, id, source, target, lang) => dispatch(translateData(text, id, source, target, lang))
+  };
+};
+
+const EventOverlayConnected = connect(mapStateToProps, mapDispatchToProps)(EventOverlay);
 
 export default class extends Component {
   constructor(props) {

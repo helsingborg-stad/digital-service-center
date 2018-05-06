@@ -11,6 +11,7 @@ import { addressSearch } from './addressSearch';
 import { previousUrl } from './previousUrl';
 import { crm } from './crm';
 import { isInPortraitMode } from './isInPortraitMode';
+import { translation } from './translate';
 
 export default combineReducers({
   activeLanguage,
@@ -28,5 +29,6 @@ export default combineReducers({
   previousUrl,
   crm,
   isInPortraitMode,
+  translation,
   routing: routerReducer
 });
