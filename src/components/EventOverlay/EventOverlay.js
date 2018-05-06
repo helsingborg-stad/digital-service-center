@@ -103,7 +103,7 @@ class EventOverlay extends Component {
             <EventOverlayReviews reviews={this.props.event.reviews} />
           }
         </Scrollbars>
-        {
+        {this.props.showTranslateButton &&
           <div>
             <LoadingButton
               onClick={this.handleTranslateOnClick}
@@ -169,6 +169,7 @@ const mapStateToProps = (state, ownProps) => {
     ? state.translation[eventId].loading : false;
   return {
     translatables: state.siteSettings.translatables[state.activeLanguage],
+    showTranslateButton: !state.siteSettings.languages.find(x => x.shortName === state.activeLanguage).isDefault,
     activeLanguage: state.activeLanguage,
     translatedContent,
     translationLoading
