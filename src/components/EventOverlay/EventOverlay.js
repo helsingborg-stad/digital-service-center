@@ -98,9 +98,12 @@ class EventOverlay extends Component {
         </Scrollbars>
         {
           <div>
-            <button className='EventOverlay-button' onClick={() => this.handleTranslateOnClick()}>
-              {!this.state.showTranslatedContent ? 'Translate' : 'Original'}
-            </button>
+            <LoadingButton
+              onClick={this.handleTranslateOnClick}
+              loading={this.state.showTranslatedContent && this.props.translationLoading}
+              cssClassName='EventOverlay-button'
+              text={!this.state.showTranslatedContent ? 'Translate' : 'Original'}
+            />
             <span style={{fontSize: 12, fontStyle: 'italic' }}>By Google Translate</span>
           </div>
         }

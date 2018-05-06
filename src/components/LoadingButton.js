@@ -7,16 +7,16 @@ export default class LoadingButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: props.text,
       loading: false
     };
   }
   render() {
+    const loadingPropExists = typeof this.props.loading !== 'undefined';
     return (
       <LaddaButton
         style={this.props.style}
         className={this.props.cssClassName}
-        loading={this.state.loading}
+        loading={loadingPropExists ? this.props.loading : this.state.loading}
         onClick={function () {
           this.setState({loading: !this.state.loading});
           this.props.onClick();
@@ -28,7 +28,7 @@ export default class LoadingButton extends React.Component {
         data-spinner-lines={this.props.spinnerLines}
         data-spinner-color={this.props.spinnerColor}
       >
-        {this.state.text}
+        {this.props.text}
       </LaddaButton>
     );
   }
