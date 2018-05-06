@@ -30,6 +30,7 @@
     "react-google-maps": "^9.4.3",
     "react-interval": "^2.0.2",
     "react-ladda": "^5.0.7",
+    "react-loading": "^2.0.2",
     "react-player": "^0.25.3",
     "react-redux": "^5.0.6",
     "react-router": "^3.0.2",

@@ -39,8 +39,22 @@
 }
 
 .EventOverlay-content-scrollWrapper {
+  position: relative;
   display: block;
   margin: 0 1rem 0 0;
+}
+
+.EventOverlay-spinner {
+  width: 100px;
+  height: 50px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 2rem;
+}
+
+.EventOverlay-spinner ~ .EventOverlay-content {
+  opacity: 0.6;
 }
 
 .EventOverlay-content {

@@ -10,6 +10,7 @@ import getUserLocation from '../../util/getUserLocation';
 import LoadingButton from '../LoadingButton.js';
 import GoogleMapsDirections from '../GoogleMapsDirections';
 import { translateData } from '../../actions/translate';
+import ReactLoading from 'react-loading';
 
 import EventOverlayReviews from './components/EventOverlayReviews';
 import EventOverlayRelatedInformation from './components/EventOverlayRelatedInformation';
@@ -58,6 +59,7 @@ class EventOverlay extends Component {
   }
   render() {
     const content = this.state.showTranslatedContent && this.props.translatedContent ? this.props.translatedContent : this.props.event.content;
+
     return (
       <div className='EventOverlay' onClick={ev => ev.stopPropagation()}>
         { this.state.directions &&
@@ -85,6 +87,11 @@ class EventOverlay extends Component {
           { this.props.event.content &&
           <div>
             <span className='EventOverlay-content-scrollWrapper'>
+
+              { (this.state.showTranslatedContent && this.props.translationLoading) &&
+              <div className='EventOverlay-spinner'>
+                <ReactLoading type='spin' color='#666' height={100} width={50} />
+              </div> }
               <span
                 className='EventOverlay-content'
                 dangerouslySetInnerHTML={{ __html: content.replace(/\r\n/g, '<br />')}}
