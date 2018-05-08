@@ -36,12 +36,13 @@ function events_response() {
   $editable_events = get_posts([ post_type => 'editable_event', 'suppress_filters' => false, numberposts => -1, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
 
   $imported_events_parsed = parse_imported_events($imported_events);
-  $editable_events_parsed = parse_editable_events($editable_events);
-  $google_places_parsed = parse_google_places();
-  $all_events = array_merge((array)$imported_events_parsed, (array)$editable_events_parsed, (array)$google_places_parsed);
-  $all_events = array_values(array_filter($all_events, function($event) {
+  $imported_events_parsed = array_values(array_filter($imported_events_parsed, function($event) {
     return $event['location']['city'] == 'Helsingborg';
   }));
+  $editable_events_parsed = parse_editable_events($editable_events);
+  $google_places_parsed = parse_google_places();
+
+  $all_events = array_merge((array)$imported_events_parsed, (array)$editable_events_parsed, (array)$google_places_parsed);
   $categories_to_show_on_map = array_reduce($all_events, function($acc, $event) {
     $cat_ids = array_map(function($cat) { return $cat['id']; }, $event['categories']);
     foreach ($cat_ids as $cat_id) {
