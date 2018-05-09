@@ -50,7 +50,7 @@ export class Event extends Component {
                   return occ;
                 }
                 return closestDate;
-              }).startDate).format('YYYY-MM-DD')}
+              }).startDate).format('YYYY-MM-DD HH:mm')}
             </span>
           }
           {this.props.name}
