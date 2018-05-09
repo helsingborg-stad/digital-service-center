@@ -22,24 +22,42 @@ export const getEventsForCategory = (events, categoryId) => {
 };
 
 export function getClosestEventDate(event) {
-  return Moment(event.occasions.reduce((closestDate, occ) => {
+  const date = Moment(event.occasions.reduce((closestDate, occ) => {
     if (!closestDate.occasions || closestDate.startDate >= occ.startDate) {
       return occ;
     }
     return closestDate;
-  }).startDate).week();
+  }).startDate);
+  return {
+    date: date.format('YYYY-MM-DD HH:mm'),
+    week: date.week()
+  };
+}
+
+function compareDates(a, b) {
+  if (a.date < b.date) {
+    return -1;
+  }
+  if (a.date > b.date) {
+    return 1;
+  }
+  return 0;
 }
 
 export const getEventIdsGroupedByWeekNumber = (events) => {
   const eventsHavingDates = events.filter(e => e.occasions && !!e.occasions.length);
   const eventsWithWeekNumber = eventsHavingDates.map(e => {
-    return { id: e.id, week: getClosestEventDate(e)};
+    return { id: e.id, date: getClosestEventDate(e)};
   });
-  return eventsWithWeekNumber.reduce((acc, event) => {
-    if (!acc[event.week]) {
-      acc[event.week] = [];
+  const eventsDict = eventsWithWeekNumber.reduce((acc, event) => {
+    if (!acc[event.date.week]) {
+      acc[event.date.week] = [];
     }
-    acc[event.week].push(event.id);
+    acc[event.date.week].push({id: event.id, date: event.date.date});
     return acc;
   }, {});
+  Object.keys(eventsDict).forEach(week => {
+    eventsDict[week] = eventsDict[week].sort(compareDates);
+  });
+  return eventsDict;
 };

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Lipping from '../Lipping';
 import SiteHeader from '../SiteHeader';
+import Moment from 'moment';
 import { SiteFooter, SiteFooterLink } from '../SiteFooter';
 import VergicChatButton from '../VergicChatButton';
 import { Event } from '../EventShowcase';
@@ -19,6 +20,7 @@ import './EventsPage.css';
 import LanguageFlags from '../LanguageFlags';
 import Search from '../Search/Search.js';
 import { getEventIdsGroupedByWeekNumber } from './eventsPageHelpers.js';
+
 
 export class EventsPage extends Component {
   constructor(props) {
@@ -116,12 +118,12 @@ export class EventsPage extends Component {
                 { Object.keys(eventsByWeekNumber)
                   .map(week => (
                     <div key={week}>
-                      <h2 className='EventsPage-eventsHeading'>Vecka {week}</h2>
+                      <h2 className='EventsPage-eventsHeading'>{this.props.activeLanguage === 'sv' ? 'Vecka' + week : Moment(eventsByWeekNumber[week][0].date).format('YY/MM/DD') + ' - ' + Moment(eventsByWeekNumber[week].slice(-1)[0].date).format('YY/MM/DD')}</h2>
                       <div className='EventsPage-eventWrapper'>
                         { eventsByWeekNumber[week].map(eventId => (
                           <Event
-                            key={eventId}
-                            {...this.props.events.find(e => e.id === eventId)}
+                            key={eventId.id}
+                            {...this.props.events.find(e => e.id === eventId.id)}
                             onClick={this.changeOverlayEvent.bind(this)} />
                         ))
                         }
