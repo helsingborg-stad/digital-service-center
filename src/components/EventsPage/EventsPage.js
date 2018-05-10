@@ -90,6 +90,10 @@ export class EventsPage extends Component {
       );
     }
 
+    const formatDate = (date) => {
+      return Moment(date).format('YY/MM/DD');
+    };
+
     const dataIsEmpty = !this.props.events || !Object.keys(this.props.events).length;
     if (this.props.isLoading || dataIsEmpty) {
       return <LandingPageLoading bgColor='#f4a428' />;
@@ -118,7 +122,14 @@ export class EventsPage extends Component {
                 { Object.keys(eventsByWeekNumber)
                   .map(week => (
                     <div key={week}>
-                      <h2 className='EventsPage-eventsHeading'>{this.props.activeLanguage === 'sv' ? 'Vecka' + week : Moment(eventsByWeekNumber[week][0].date).format('YY/MM/DD') + ' - ' + Moment(eventsByWeekNumber[week].slice(-1)[0].date).format('YY/MM/DD')}</h2>
+                      <h2 className='EventsPage-eventsHeading'>
+                        {
+                          this.props.activeLanguage === 'sv' ? 'Vecka ' + week :
+                            formatDate(eventsByWeekNumber[week][0].date)
+                            + ' - ' +
+                            formatDate(eventsByWeekNumber[week].slice(-1)[0].date)
+                        }
+                      </h2>
                       <div className='EventsPage-eventWrapper'>
                         { eventsByWeekNumber[week].map(eventId => (
                           <Event
