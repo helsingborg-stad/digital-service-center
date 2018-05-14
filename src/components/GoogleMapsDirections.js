@@ -52,6 +52,7 @@ export default class GoogleMapsDirections extends Component {
     });
   }
   render() {
+    console.log('eyo: ', this.props.handleClose);
     return (
       <div style={{ width: '100%', height: '100%', paddingTop: '2rem', paddingBottom: '2rem' }}>
         <div className='GoogleMapsDirections-eventName'>

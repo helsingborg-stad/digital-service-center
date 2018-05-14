@@ -1,0 +1,35 @@
+.SendToUnit-closeButton {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 2rem;
+    width: calc(100% - 5rem);
+    text-align: left;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #CB0050;
+    background-color: transparent;
+    border: none;
+    padding: 1rem 0.5rem;
+    cursor: pointer;
+    z-index: 1;
+    margin-left: 1rem;
+  }
+  .SendToUnit-closeButton:after {
+    content: '‹';
+    font-size: 2rem;
+    position: absolute;
+    top: 0;
+    line-height: 2.75rem;
+    left: -1rem;
+    display: block;
+  }
+  
+  .SendToUnit-closeButton:focus {
+    outline: none;
+  }
+  
+  .SendToUnit-closeButton > img {
+    width: 12px;
+    height: 12px;
+  }

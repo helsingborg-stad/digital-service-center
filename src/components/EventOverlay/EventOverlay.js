@@ -9,6 +9,7 @@ import ReactPlayer from 'react-player';
 import getUserLocation from '../../util/getUserLocation';
 import LoadingButton from '../LoadingButton.js';
 import GoogleMapsDirections from '../GoogleMapsDirections';
+import SendToUnit from '../SendToUnit';
 
 import EventOverlayReviews from './components/EventOverlayReviews';
 import EventOverlayRelatedInformation from './components/EventOverlayRelatedInformation';
@@ -38,7 +39,8 @@ class EventOverlay extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      directions: null
+      directions: null,
+      sendtounit: null
     };
   }
   componentDidMount() {
@@ -50,9 +52,19 @@ class EventOverlay extends Component {
   handleShowDirections(directions) {
     this.setState({directions: directions});
   }
+  handleSendToUnit(set) {
+    this.setState({sendtounit: set});
+  }
   render() {
     return (
       <div className='EventOverlay' onClick={ev => ev.stopPropagation()}>
+        { this.state.sendtounit &&
+        <SendToUnit
+          test='Testing'
+          handleClose={() => this.handleSendToUnit(false)}
+          showInformationText={this.props.translatables.showInformation}/>
+        }
+
         { this.state.directions &&
       <GoogleMapsDirections
         origin={this.state.directions.origin}
@@ -62,7 +74,7 @@ class EventOverlay extends Component {
         showInformationText={this.props.translatables.showInformation}
       />
         }
-        { !this.state.directions &&
+        { !this.state.directions && !this.state.sendtounit &&
     <div>
       { this.props.event.imgUrl &&
     <div className='EventOverlay-imgWrapper'>
@@ -108,6 +120,11 @@ class EventOverlay extends Component {
             text={this.props.translatables.takeMeThere}
           />
           }
+          <button
+            className='EventOverlay-button'
+            onClick={() => this.handleSendToUnit(true)}>
+          Skicka till enhet
+          </button>
           { this.props.event.bookingLink &&
         <Link iframe={{url: this.props.event.bookingLink}} className='EventOverlay-button'>
           {this.props.translatables.tickets}
@@ -167,6 +184,7 @@ export default class extends Component {
             <div style={{position: 'absolute', top: '-2.5rem', right: '0'}}>
               <CloseButton handleClose={this.props.handleClose} />
             </div>
+
             <EventOverlayConnected
               event={this.props.event}
               handleClose={this.props.handleClose}
