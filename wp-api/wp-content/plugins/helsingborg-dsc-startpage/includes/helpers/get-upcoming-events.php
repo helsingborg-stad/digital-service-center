@@ -15,7 +15,8 @@ function helsingborg_dsc_startpage_get_upcoming_events() {
     $is_today_or_later = !empty(array_filter($door_times, function($door_time) {
       return date('Y-m-d', strtotime($door_time['door_time'])) >= date('Y-m-d') || date('Y-m-d', strtotime($door_time['end_time'])) >= date('Y-m-d');
     }));
-    return $is_today_or_later;
+    $is_in_valid_city = isset($post_meta->location) && $post_meta->location->city == 'Helsingborg';
+    return $is_in_valid_city && $is_today_or_later;
   });
   $editable_posts = get_posts([ post_type => 'editable_event', 'suppress_filters' => false, numberposts => -1]);
   $editable_upcoming = array_filter($editable_posts, function($post) {
