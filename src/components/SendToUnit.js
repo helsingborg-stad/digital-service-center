@@ -7,30 +7,33 @@ import './SendToUnit.css';
 class SendToUnit extends Component {
   constructor(props) {
     super(props);
-    this.state = { };
+    this.state = {
+    };
   }
 
   onSumbitHandler = (event) => {
     event.preventDefault();
+    return;
   }
   render() {
-    const eventLink = 'http://www.visithelsingborg.se/event/' + this.props.slug;
+    const eventLink = 'http://www.visithelsingborg.se/event/' + this.props.slug + '?ref=hdsc';
     return (
       <div className='SendToUnit-wrapper'>
         <h1>Lorem Ipsum</h1>
         <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis quam ex. Donec ac justo eros. Pellentesque sed mi magna.</span>
-        <p>
+        <div className='SendToUnit-QR'>
           <QRCode
             value={eventLink}
-            renderAs='svg' />
+            renderAs='svg'
+            size='168' />
           <i>Scanna QR Kod</i>
-        </p>
-
+        </div>
         <form className='SendToUnit-form' onSubmit={this.onSumbitHandler}>
+          <p>Skicka länk till email: </p>
           <input type='email' name='sendtounit-email' placeholder='E-mail'/>
           <input type="submit" value="Skicka länk" />
         </form>
-        <span>{eventLink}</span>
+        {eventLink}
         <button className='GoogleMapsDirections-closeButton' onClick={this.props.handleClose}>
           {this.props.showInformationText}
         </button>

@@ -1,10 +1,10 @@
 .SendToUnit-wrapper {
   height: 100%;
   width: 100%;
-  padding: 1rem 0 2rem 0;
+  padding: 0 0 2rem 0;
 }
 
-.SendToUnit-wrapper p i {
+.SendToUnit-wrapper i {
   display: block;
   margin-top: 2px;
 }
@@ -46,16 +46,21 @@
 }
 
 .SendToUnit-form {
-  left: 13rem;
-  position: relative;
-  bottom: 8rem;
+  position: absolute;
+  top: 12rem;
+  right: 1rem;
+  width: 60%;
+}
+
+.SendToUnit-form p {
+  font-size: 1.1rem;
 }
 
 .SendToUnit-form input[type="email"] {
   transition: all 0.30s ease-in-out;
   outline: none;
   box-sizing: border-box;
-  width: 40%;
+  width: 64%;
   border: 1px solid #c90e52;
   padding: 2.7%;
   font-size: medium;
@@ -70,14 +75,18 @@
 
 .SendToUnit-form input[type="submit"],
 .SendToUnit-form input[type="button"]{
-    box-sizing: border-box;
-    padding: 3%;
-    background: #c90e52;
-    border: none;    
-    color: #fff;
-    margin-left: 0.5%;
+  box-sizing: border-box;
+  padding: 15px 20px 14px 20px;
+  background: #c90e52;
+  border: none;
+  color: #fff;
+  margin-left: 10px;
 }
 .SendToUnit-form input[type="submit"]:hover,
 .SendToUnit-form input[type="button"]:hover{
     background: #860b38;
+}
+
+.SendToUnit-QR {
+  padding: 10px 10px 10px 0px;
 }
