@@ -1,35 +1,83 @@
+.SendToUnit-wrapper {
+  height: 100%;
+  width: 100%;
+  padding: 1rem 0 2rem 0;
+}
+
+.SendToUnit-wrapper p i {
+  display: block;
+  margin-top: 2px;
+}
+
 .SendToUnit-closeButton {
-    position: absolute;
-    bottom: 0.5rem;
-    left: 2rem;
-    width: calc(100% - 5rem);
-    text-align: left;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    font-weight: bold;
-    color: #CB0050;
-    background-color: transparent;
-    border: none;
-    padding: 1rem 0.5rem;
-    cursor: pointer;
-    z-index: 1;
-    margin-left: 1rem;
-  }
-  .SendToUnit-closeButton:after {
-    content: '‹';
-    font-size: 2rem;
-    position: absolute;
-    top: 0;
-    line-height: 2.75rem;
-    left: -1rem;
-    display: block;
-  }
-  
-  .SendToUnit-closeButton:focus {
-    outline: none;
-  }
-  
-  .SendToUnit-closeButton > img {
-    width: 12px;
-    height: 12px;
-  }
+  position: absolute;
+  bottom: 0.5rem;
+  left: 2rem;
+  width: calc(100% - 5rem);
+  text-align: left;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #CB0050;
+  background-color: transparent;
+  border: none;
+  padding: 1rem 0.5rem;
+  cursor: pointer;
+  z-index: 1;
+  margin-left: 1rem;
+}
+.SendToUnit-closeButton:after {
+  content: '‹';
+  font-size: 2rem;
+  position: absolute;
+  top: 0;
+  line-height: 2.75rem;
+  left: -1rem;
+  display: block;
+}
+
+.SendToUnit-closeButton:focus {
+  outline: none;
+}
+
+.SendToUnit-closeButton > img {
+  width: 12px;
+  height: 12px;
+}
+
+.SendToUnit-form {
+  left: 13rem;
+  position: relative;
+  bottom: 8rem;
+}
+
+.SendToUnit-form input[type="email"] {
+  transition: all 0.30s ease-in-out;
+  outline: none;
+  box-sizing: border-box;
+  width: 40%;
+  border: 1px solid #c90e52;
+  padding: 2.7%;
+  font-size: medium;
+}
+
+.SendToUnit-form input[type="email"]:focus
+{
+    box-shadow: 0 0 5px #c90e52;
+    padding: 2.7%;
+    border: 1px solid #c90e52;
+}
+
+.SendToUnit-form input[type="submit"],
+.SendToUnit-form input[type="button"]{
+    box-sizing: border-box;
+    padding: 3%;
+    background: #c90e52;
+    border: none;    
+    color: #fff;
+    margin-left: 0.5%;
+}
+.SendToUnit-form input[type="submit"]:hover,
+.SendToUnit-form input[type="button"]:hover{
+    background: #860b38;
+}

@@ -60,7 +60,9 @@ class EventOverlay extends Component {
       <div className='EventOverlay' onClick={ev => ev.stopPropagation()}>
         { this.state.sendtounit &&
         <SendToUnit
-          test='Testing'
+          title={this.props.event.name}
+          slug={this.props.event.slug}
+          content={this.props.event.shortContent}
           handleClose={() => this.handleSendToUnit(false)}
           showInformationText={this.props.translatables.showInformation}/>
         }
