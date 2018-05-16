@@ -37,7 +37,8 @@ function parse_imported_events($events) {
           longitude => floatval($post_meta->location->longitude)
         ],
         youtubeUrl => $post_meta->youtube,
-        vimeoUrl => $post_meta->vimeo
+        vimeoUrl => $post_meta->vimeo,
+        lang => $post_meta->translations
       ];
   
       if ($post_meta->booking_link) {

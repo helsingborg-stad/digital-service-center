@@ -123,6 +123,11 @@ function update_event_featured_image($post_id, $event) {
 function insert_event_meta($post_id, $event){
   add_post_meta($post_id, 'imported_event_data', $event);
   add_post_meta($post_id, 'event_id', $event->id);
+  if(property_exists($event->translations, 'en')){
+    add_post_meta($post_id, 'event_lang', $event->translations);
+  }else{
+    add_post_meta($post_id, 'event_land', 'sv');
+  }
 }
 
 function update_event($event, $stored_event, $post_id) {
