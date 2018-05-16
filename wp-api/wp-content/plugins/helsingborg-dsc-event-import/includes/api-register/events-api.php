@@ -22,6 +22,7 @@ if(!function_exists('get_post_id_original')) {
     return function_exists('icl_object_id') ? icl_object_id($post_id, $post_type, true, $sitepress->get_default_language()) : $post_id;
   }
 }
+
 if(!function_exists('get_post_id_translated')) {
   function get_post_id_translated($post_id) {
     return function_exists('icl_object_id') ? icl_object_id($post_id) : $post_id;
@@ -30,29 +31,18 @@ if(!function_exists('get_post_id_translated')) {
 
 
 function events_response() {
-  global $sitepress;
-  $curr_lang = $sitepress->get_current_language();
-  $def_lang = $sitepress->get_default_language();
-
-
   $response = [];
-  $sitepress->switch_lang($curr_lang);
-    $import_curr_lang_events = get_posts([ post_type => 'imported_event', 'suppress_filters' => false, numberposts => -1]);
-  $sitepress->switch_lang($def_lang);
-    $import_def_lang_events = get_posts([ post_type => 'imported_event', 'suppress_filters' => false, numberposts => -1]);
-  $events = array_merge((array)$import_def_lang_events, (array)$import_def_lang_events);
-  $imported_events = array_map("unserialize", array_unique(array_map("serialize", $events)));
-  $editable_events = get_posts([ post_type => 'editable_event', 'suppress_filters' => false, numberposts => -1]);
-  
-  $imported_events_parsed = parse_imported_events($events);
-  $editable_events_parsed = parse_editable_events($editable_events);
-  $google_places_parsed = parse_google_places();
-  $all_events = array_merge((array)$imported_events_parsed, (array)$editable_events_parsed, (array)$google_places_parsed);
-  $all_events = $imported_events_parsed;
-  $all_events = array_values(array_filter($all_events, function($event) {
+  $imported_events = get_posts([ post_type => 'imported_event', 'suppress_filters' => false, numberposts => -1, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
+  $editable_events = get_posts([ post_type => 'editable_event', 'suppress_filters' => false, numberposts => -1, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
+
+  $imported_events_parsed = parse_imported_events($imported_events);
+  $imported_events_parsed = array_values(array_filter($imported_events_parsed, function($event) {
     return $event['location']['city'] == 'Helsingborg';
   }));
+  $editable_events_parsed = parse_editable_events($editable_events);
+  $google_places_parsed = parse_google_places();
 
+  $all_events = array_merge((array)$imported_events_parsed, (array)$editable_events_parsed, (array)$google_places_parsed);
   $categories_to_show_on_map = array_reduce($all_events, function($acc, $event) {
     $cat_ids = array_map(function($cat) { return $cat['id']; }, $event['categories']);
     foreach ($cat_ids as $cat_id) {
