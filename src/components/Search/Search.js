@@ -5,90 +5,42 @@ import { hbgSeSearchFetchData } from '../../actions/hbgSeSearch';
 import { addressSearchFetchData } from '../../actions/addressSearch';
 import { crmFetchData } from '../../actions/crm';
 import SearchResultOverlay from './SearchResultOverlay';
-import Sifter from 'sifter';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { connect } from 'react-redux';
 import cn from 'classnames';
 import './Search.css';
+import SearchHandler from './SearchHandler';
 
 export class Search extends Component {
-  constructor() {
+  constructor(props) {
     super();
+
+    const landingPagePages = [...props.landingPages.visitor.pages
+      .filter(p => p.type === 'iframe' || p.type === 'page'),
+    ...props.landingPages.local.pages
+      .filter(p => p.type === 'iframe' || p.type === 'page')];
+
+    const searchHandler = new SearchHandler({...props, landingPagePages});
+
     this.state = {
       eventsSearchResults: null,
       crmSearchResults: null,
       searchInputOnTop: false,
       searchTerm: null,
-      landingPagePages: null
+      landingPagePages: null,
+      searchHandler
     };
-  }
-
-  static fetchData({ store, term }) {
-    const hbgSeDispatch = store.dispatch(
-      hbgSeSearchFetchData(term)
-    );
-    const addressDispatch = store.dispatch(
-      addressSearchFetchData(term)
-    );
-    return Promise.all([hbgSeDispatch, addressDispatch]);
   }
 
   componentWillMount() {
     if (typeof window !== 'undefined') {
       this.props.fetchCrm();
     }
-
-    const landingPagePages = [...this.props.landingPages.visitor.pages
-      .filter(p => p.type === 'iframe' || p.type === 'page'),
-    ...this.props.landingPages.local.pages
-      .filter(p => p.type === 'iframe' || p.type === 'page')];
-    this.setState({
-      landingPagePages
-    });
   }
 
   handleSearchChange(searchTerm) {
-    this.props.fetchData(searchTerm);
-
-    const eventsSifter = new Sifter(this.props.events);
-    const eventsSifterResult = eventsSifter.search(searchTerm, {
-      fields: ['name', 'content'],
-      sort: [{field: 'name', direction: 'asc'}],
-      limit: 10
-    });
-
-    const resultEvents = this.props.events.filter((event, index) => {
-      return eventsSifterResult.items.some(item => item.id === index);
-    });
-
-    const landingPagePagesSifter = new Sifter(this.state.landingPagePages);
-    const landingPagePagesResult = landingPagePagesSifter.search(searchTerm, {
-      fields: ['name'],
-      sort: [{field: 'name', direction: 'asc'}],
-      limit: 10
-    });
-
-    const resultLandingPagePages = this.state.landingPagePages.filter((page, index) => {
-      return landingPagePagesResult.items.some(item => item.id === index);
-    });
-
-    const crmForCurrentLang = this.props.crm.filter(c => c.language === this.props.activeLanguage);
-    const crmSifter = new Sifter(crmForCurrentLang);
-    const crmSifterResult = crmSifter.search(searchTerm, {
-      fields: ['question', 'answer'],
-      sort: [{field: 'question', direction: 'asc'}],
-      limit: 10
-    });
-
-    const resultCrm = crmForCurrentLang.filter((crmEntry, index) => {
-      return crmSifterResult.items.some(item => item.id === index);
-    });
-
-    this.setState({
-      searchTerm,
-      eventsSearchResults: searchTerm ? [...resultEvents, ...resultLandingPagePages] : null,
-      crmSearchResults: searchTerm ? resultCrm : null
-    });
+    const searchResult = this.state.searchHandler.search(searchTerm);
+    this.setState(searchResult);
   }
 
   handleSearchInputPosition(searchTerm) {
@@ -107,10 +59,12 @@ export class Search extends Component {
       searchInputOnTop: false
     });
   }
+
   changeOverlay(event) {
     this.props.changeOverlayEvent(event);
     this.handleHideSearchResult();
   }
+
   render() {
     return (
       <div className='Search-wrapper'>
@@ -172,7 +126,6 @@ Search.propTypes = {
   addressSearch: PropTypes.any,
   fetchCrm: PropTypes.func
 };
-
 
 const mapStateToProps = (state) => {
   return {
