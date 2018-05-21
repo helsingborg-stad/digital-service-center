@@ -5,7 +5,7 @@
     width: calc(100% - 0.85rem);
     height: 3.75rem;
     text-align: center;
-    background: rgba(3, 3, 3, 0.7);
+    background: rgba(3, 3, 3, 0.75);
     padding-left: calc(5%);
     padding-right: calc(5% + 0.85rem);
 }
