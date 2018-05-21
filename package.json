@@ -11,14 +11,14 @@
     "ignore-styles": "^5.0.1",
     "import-export": "^1.0.1",
     "isomorphic-fetch": "^2.2.1",
-    "react-scripts": "1.0.17",
+    "react-scripts": "^1.0.17",
     "redux-devtools-extension": "^2.13.2"
   },
   "dependencies": {
     "classnames": "^2.2.5",
     "google-map-react": "^0.25.0",
     "moment": "^2.20.0",
-    "react": "^16.2.0",
+    "react": "^16.3.2",
     "react-addons-css-transition-group": "^15.6.2",
     "react-addons-shallow-compare": "^15.6.2",
     "react-custom-scrollbars": "^4.2.1",
