@@ -64,6 +64,10 @@ function helsingborg_dsc_site_settings_menu_callback() {
         <th><label for="sitesettingsform-show-flags">Visa språkväljare</label></th>
         <td><input id="sitesettingsform-show-flags" type="checkbox" class="regular-text" name="hdsc-site-setting-show-flags" <?php checked( 'on', get_option( 'hdsc-site-setting-show-flags' ) ); ?>  /></td>
       </tr>
+      <tr>
+        <th><label for="sitesettingsform-inverted-search-field">Använd vitt sökfält på Quickstart</label></th>
+        <td><input id="sitesettingsform-inverted-search-field" type="checkbox" class="regular-text" name="hdsc-site-setting-inverted-search-field" <?php checked( 'on', get_option( 'hdsc-site-setting-inverted-search-field' ) ); ?>  /></td>
+      </tr>
       </tbody></table>
 
       <div class="wrap"><h2>Translatables</h2></div>

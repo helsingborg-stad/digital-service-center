@@ -16,6 +16,7 @@ function helsingborg_dsc_site_settings_response() {
     idleTimeout => intval(get_option('hdsc-site-setting-idle-timeout', 0)),
     showChat => get_option('hdsc-site-setting-show-chat', null) == 'on',
     showFlags => get_option('hdsc-site-setting-show-flags', null) == 'on',
+    useInvertedSearchField => get_option('hdsc-site-setting-inverted-search-field', null) == 'on',
     languages => get_languages_in_use(),
     translatables => hdsc_get_translatables()
   ]);
@@ -42,7 +43,7 @@ function hdsc_get_translatables() {
       $fallback = $translatable[0];
       $ignore_fallback = $translatable[3];
       if (!$ignore_fallback) {
-        
+
       }
       $value = get_option('hdsc-translatable-' .$translatable[1], $fallback);
       if (!strlen($value) && !$ignore_fallback) {

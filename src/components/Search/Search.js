@@ -122,7 +122,12 @@ export class Search extends Component {
           transitionLeave={true}
         >
           <div
-            className={cn('Search-inputWrapper', {'Search-inputWrapper--isActive': this.state.searchInputOnTop}, `Search-inputWrapper--${this.props.pageType}`)}>
+            className={cn(
+              'Search-inputWrapper',
+              `Search-inputWrapper--${this.props.pageType}`,
+              {'Search-inputWrapper--isActive': this.state.searchInputOnTop},
+              {'Search-inputWrapper--inverted': this.props.invertSearchField
+                && this.props.pageType === 'Startpage'})}>
             <SearchField
               inline
               autoFocus={false}
@@ -175,7 +180,8 @@ const mapStateToProps = (state) => {
     hbgSeSearch: state.hbgSeSearch,
     addressSearch: state.addressSearch,
     crm: state.crm,
-    landingPages: state.landingPages[state.activeLanguage]
+    landingPages: state.landingPages[state.activeLanguage],
+    invertSearchField: state.siteSettings.useInvertedSearchField
   };
 };
 
