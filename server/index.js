@@ -84,8 +84,10 @@ app.get('*', (req, res, next) => {
           res.redirect(302, redirect.pathname + redirect.search);
         } else if (renderProps) {
           // Set `activeLanguage` store property based requested URL
-          let langFromUrl = req.params[0].replace(/\//g, '');
-          const validLanguages = ['sv', 'en']; // TODO: make dynamic
+          const langFromUrl = req.params[0]
+            && req.params[0].split('/').length > 1
+            && req.params[0].split('/')[1];
+          const validLanguages = ['sv', 'en'];
           if (!validLanguages.includes(langFromUrl)) {
             res.redirect(302, '/');
             next();
