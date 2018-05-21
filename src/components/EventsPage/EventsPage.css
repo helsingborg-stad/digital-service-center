@@ -90,7 +90,14 @@
 }
 
 @media screen and (orientation: portrait) {
+  .EventsPage-eventWrapper {
+    grid-template-columns: repeat(auto-fill, 212px);
+  }
   .EventsPage-eventsWrapper {
     height: calc(100vh - 11.1875rem);
+  }
+  .EventsPage-eventWrapper .Event {
+    width: 212px;
+    height: 135px;
   }
 }
