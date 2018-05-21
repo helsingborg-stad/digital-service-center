@@ -184,7 +184,7 @@ function fetch_google_places_based_on_selected_place_types() {
         if($radius == NULL) {
             $radius = '2000';
         }
-        return 'https://maps.googleapis.com/maps/api/place/radarsearch/json?location=' . $latitude . ',' . $longitude .'&radius=' . $radius . '&types=' . $place_type . '&sensor=false&key=' . get_option('hdsc-site-setting-google-maps-api-key');
+        return 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location='. $latitude .','. $longitude .'&radius='. $radius .'&type=' .$place_type .'&keyword=&key=' . get_option('hdsc-site-setting-google-maps-api-key');
     }
 
     $saved_google_places = get_option('saved_google_places', []);
