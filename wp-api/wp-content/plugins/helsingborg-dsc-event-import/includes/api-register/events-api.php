@@ -42,6 +42,20 @@ function events_response() {
   $editable_events_parsed = parse_editable_events($editable_events);
   $google_places_parsed = parse_google_places();
 
+  $editable_events_parsed = array_values(array_filter($editable_events_parsed, function($event){
+      $occasions = $event['occasions'][0];
+      if(!isset($occasions)){
+        return true;
+       }
+
+      //Check if date has passed
+      $end_date = strtotime(date('Y-m-d', $occasions['endDate']) ).' ';
+      $today = strtotime(date('Y-m-d'));
+
+      return $end_date > $today;
+
+  }));
+
   $all_events = array_merge((array)$imported_events_parsed, (array)$editable_events_parsed, (array)$google_places_parsed);
   $categories_to_show_on_map = array_reduce($all_events, function($acc, $event) {
     $cat_ids = array_map(function($cat) { return $cat['id']; }, $event['categories']);
