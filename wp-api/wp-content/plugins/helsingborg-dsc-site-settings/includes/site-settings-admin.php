@@ -12,6 +12,7 @@ add_action('admin_init', function() {
   register_setting( 'hdsc-site-settings', 'hdsc-site-setting-idle-timeout' );
   register_setting( 'hdsc-site-settings', 'hdsc-site-setting-show-chat' );
   register_setting( 'hdsc-site-settings', 'hdsc-site-setting-show-flags' );
+  register_setting( 'hdsc-site-settings', 'hdsc-site-setting-inverted-search-field' );
   foreach(hdsc_translatables() as $translatable) {
     $option_name = 'hdsc-translatable-' . $translatable[1];
     register_setting( 'hdsc-site-settings', $option_name );
