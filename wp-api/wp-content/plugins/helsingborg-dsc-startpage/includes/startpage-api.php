@@ -19,6 +19,7 @@ function post_mapping_helper($post, $type) {
   if(!isset($page)) {
     return;
   }
+  
   $iframeMeta = get_post_meta($page->ID, 'event_iframe', false)[0];
   if ($iframeMeta['active'] == 'on' && strlen($iframeMeta['src'])) {
     $response = [
@@ -37,7 +38,30 @@ function post_mapping_helper($post, $type) {
       $response['imgUrl'] = $thumbnail_url;
     }
     return $response;
-  } else if ($page->post_type == 'editable_event' || $page->post_type == 'imported_event') {
+  } else if ($page->post_type == 'imported_event') {
+
+    $should_translate = $_REQUEST['lang'] == 'en';
+
+    $translated_title = get_post_meta(get_post_id_original($page->ID, 'imported_event'), 'post_title_translated', true);
+    $translated_content = get_post_meta(get_post_id_original($page->ID, 'imported_event'), 'post_content_translated', true);
+
+    $title = $should_translate ? $translated_title : $page->post_title;
+    $content = $should_translate ? $translated_content : $page->post_content;
+
+    $response = [
+      type => 'event',
+      heading  => html_entity_decode($title),
+      preamble => get_preamble($content),
+      href     => get_link_language_prefix() . $type . '/' . $page->post_name,
+      menuOrder => $page->menu_order
+    ];
+    $thumbnail_url = get_the_post_thumbnail_url($page->ID, [232, 148]);
+    if ($thumbnail_url) {
+      $response['imgUrl'] = $thumbnail_url;
+    }
+    return $response;
+  } else if ($page->post_type == 'editable_event'){
+
     $response = [
       type => 'event',
       heading  => html_entity_decode($page->post_title),
