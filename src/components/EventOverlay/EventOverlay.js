@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import Scrollbars from 'react-custom-scrollbars';
 import Link from '../Link';
@@ -57,13 +57,14 @@ class EventOverlay extends Component {
     this.setState({showTranslatedContent: !this.state.showTranslatedContent});
   }
   render() {
-    const content = this.state.showTranslatedContent && this.props.translatedContent
-      ? this.props.translatedContent
-      : this.props.event.content;
-
     return (
       <div className='EventOverlay' onClick={ev => ev.stopPropagation()}>
-        { this.state.directions &&
+        { this.state.directions ? this.renderDirections() : this.renderContent() }
+      </div>
+    );
+  }
+  renderDirections() {
+    return (
       <GoogleMapsDirections
         origin={this.state.directions.origin}
         destination={this.state.directions.destination}
@@ -71,54 +72,84 @@ class EventOverlay extends Component {
         eventName={this.props.event.name}
         showInformationText={this.props.translatables.showInformation}
       />
-        }
-        { !this.state.directions &&
-    <div>
+    );
+  }
+  renderContent() {
+    return <div>
       { this.props.event.imgUrl &&
-    <div className='EventOverlay-imgWrapper'>
-      <img className='EventOverlay-img' src={this.props.event.imgUrl} alt={ this.props.event.name } />
-    </div>
+        <div className='EventOverlay-imgWrapper'>
+          <img
+            className='EventOverlay-img'
+            src={this.props.event.imgUrl}
+            alt={ this.props.event.name } />
+        </div>
       }
-      <h2 className='EventOverlay-heading'>{ this.props.event.name }</h2>
-      <div style={{width: '58%', marginRight: '5%', float: 'left'}}>
-        {!!this.props.event.rating &&
-           <h3 className='EventOverlay-ratingHeading'>{`Rating: ${this.props.event.rating}/5`}</h3>
-        }
-        <Scrollbars style={{ marginTop: '1rem', width: 'calc(100% + 1rem)' }} autoHeight autoHeightMax='80vh - 4.6875rem - 1.25rem - (550px)'>
-          { content &&
-          <div>
-            <span className='EventOverlay-content-scrollWrapper'>
 
-              { (this.state.showTranslatedContent && this.props.translationLoading) &&
-              <div className='EventOverlay-spinner'>
-                <ReactLoading type='spin' color='#666' height={100} width={50} />
-              </div> }
-              <span
-                className='EventOverlay-content'
-                dangerouslySetInnerHTML={{ __html: content.replace(/\r\n/g, '<br />')}}
-              />
-            </span>
-          </div>
-          }
-          { !!this.props.event.rating &&
-            <EventOverlayReviews reviews={this.props.event.reviews} />
-          }
-        </Scrollbars>
-        {this.props.showTranslateButton &&
-          <div>
-            <LoadingButton
-              onClick={this.handleTranslateOnClick}
-              loading={this.state.showTranslatedContent && this.props.translationLoading}
-              cssClassName='EventOverlay-button'
-              text={!this.state.showTranslatedContent ? 'Translate' : 'Original'}
-            />
-            <span style={{fontSize: 12, fontStyle: 'italic' }}>By Google Translate</span>
-          </div>
-        }
+      <h2 className='EventOverlay-heading'>{ this.props.event.name }</h2>
+
+      <div style={{width: '58%', marginRight: '5%', float: 'left'}}>
+        { this.renderLeftContent() }
       </div>
       <div style={{width: '37%', float: 'right'}}>
+        { this.renderRightContent() }
+      </div>
+    </div>;
+  }
+  renderTranslationButton() {
+    return <div>
+      <LoadingButton
+        onClick={this.handleTranslateOnClick}
+        loading={this.state.showTranslatedContent && this.props.translationLoading}
+        cssClassName='EventOverlay-button'
+        text={!this.state.showTranslatedContent ? 'Translate' : 'Original'}
+      />
+      <span style={{fontSize: 12, fontStyle: 'italic' }}>By Google Translate</span>
+    </div>;
+  }
+  renderLeftContent() {
+    const content = this.state.showTranslatedContent && this.props.translatedContent
+      ? this.props.translatedContent
+      : this.props.event.content;
 
-        <EventOverlayRelatedInformation event={this.props.event} translatables={this.props.translatables} />
+    return <Fragment>
+      {!!this.props.event.rating &&
+        <h3 className='EventOverlay-ratingHeading'>{`Rating: ${this.props.event.rating}/5`}</h3>
+      }
+      <Scrollbars
+        style={{ marginTop: '1rem', width: 'calc(100% + 1rem)' }}
+        autoHeight autoHeightMax='80vh - 4.6875rem - 1.25rem - (550px)'>
+        { content &&
+            <div>
+              <span className='EventOverlay-content-scrollWrapper'>
+
+                { (this.state.showTranslatedContent && this.props.translationLoading) &&
+                <div className='EventOverlay-spinner'>
+                  <ReactLoading type='spin' color='#666' height={100} width={50} />
+                </div> }
+                <span
+                  className='EventOverlay-content'
+                  dangerouslySetInnerHTML={{ __html: content.replace(/\r\n/g, '<br />')}}
+                />
+              </span>
+            </div>
+        }
+        { !!this.props.event.rating &&
+              <EventOverlayReviews reviews={this.props.event.reviews} />
+        }
+      </Scrollbars>
+      { this.renderTranslationButton() }
+    </Fragment>;
+  }
+  renderRightContent() {
+    const showTakeMeThereButton = this.props.event.location
+      && !!this.props.event.location.latitude
+      && !!this.props.event.location.longitude;
+
+    return (
+      <Fragment>
+        <EventOverlayRelatedInformation
+          event={this.props.event}
+          translatables={this.props.translatables} />
 
         <div className='EventOverlay-buttonWrapper'>
           { this.props.showVideoButton &&
@@ -126,10 +157,15 @@ class EventOverlay extends Component {
           Video
         </button>
           }
-          { this.props.event.location && !!this.props.event.location.latitude && !!this.props.event.location.longitude &&
+          { showTakeMeThereButton &&
           <LoadingButton
             onClick={() =>
-              handleNavigationClick(this.props.event.location.latitude, this.props.event.location.longitude, this.handleShowDirections.bind(this))}
+              handleNavigationClick(
+                this.props.event.location.latitude,
+                this.props.event.location.longitude,
+                this.handleShowDirections.bind(this)
+              )
+            }
             cssClassName='EventOverlay-button'
             text={this.props.translatables.takeMeThere}
           />
@@ -140,10 +176,7 @@ class EventOverlay extends Component {
         </Link>
           }
         </div>
-      </div>
-    </div>
-        }
-      </div>
+      </Fragment>
     );
   }
 }
@@ -164,21 +197,23 @@ EventOverlay.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const eventId = ownProps.event.id;
-  const translatedContent = (eventId in state.translation) && ('content' in state.translation[eventId])
+  const translatedContent = (eventId in state.translation)
+    && ('content' in state.translation[eventId])
     ? state.translation[eventId].content : null;
   const translationLoading = (eventId in state.translation)
     ? state.translation[eventId].loading : false;
   return {
     translatables: state.siteSettings.translatables[state.activeLanguage],
     translatedContent,
-    translationLoading,
-    showTranslateButton: true
+    translationLoading
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    translateText: (text, id, source, target, lang) => dispatch(translateData(text, id, source, target, lang))
+    translateText: (text, id, source, target, lang) => {
+      return dispatch(translateData(text, id, source, target, lang));
+    }
   };
 };
 
