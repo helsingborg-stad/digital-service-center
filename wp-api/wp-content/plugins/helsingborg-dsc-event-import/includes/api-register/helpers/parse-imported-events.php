@@ -6,6 +6,9 @@ namespace helsingborg_dsc_event_import;
 function parse_imported_events($events) {
     return array_map(function($event) {
       $post_meta = get_post_meta(get_post_id_original($event->ID, 'imported_event'), 'imported_event_data', true);
+      $translated_title = get_post_meta(get_post_id_original($event->ID, 'imported_event'), 'post_title_translated', true);
+      $translated_content = get_post_meta(get_post_id_original($event->ID, 'imported_event'), 'post_content_translated', true);
+
       $response = [
         id         => $event->ID,
         slug       => $event->post_name,
@@ -38,7 +41,9 @@ function parse_imported_events($events) {
         ],
         youtubeUrl => $post_meta->youtube,
         vimeoUrl => $post_meta->vimeo,
-        lang => $post_meta->translations
+        translatedTitle => $translated_title,
+        translatedContent => $translated_content
+        
       ];
   
       if ($post_meta->booking_link) {

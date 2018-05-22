@@ -15,6 +15,7 @@ include('helpers/parse-category-to-landing-page-format.php');
 include('helpers/parse-editable-events.php');
 include('helpers/parse-google-places.php');
 include('helpers/parse-imported-events.php');
+include('helpers/get-imported-event-posts.php');
 
 if(!function_exists('get_post_id_original')) {
   function get_post_id_original($post_id, $post_type) {
@@ -32,7 +33,8 @@ if(!function_exists('get_post_id_translated')) {
 
 function events_response() {
   $response = [];
-  $imported_events = get_posts([ post_type => 'imported_event', 'suppress_filters' => false, numberposts => -1, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
+
+  $imported_events = get_imported_event_posts();
   $editable_events = get_posts([ post_type => 'editable_event', 'suppress_filters' => false, numberposts => -1, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
 
   $imported_events_parsed = parse_imported_events($imported_events);
