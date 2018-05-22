@@ -6,16 +6,22 @@ namespace helsingborg_dsc_event_import;
 function parse_imported_events($events) {
     return array_map(function($event) {
       $post_meta = get_post_meta(get_post_id_original($event->ID, 'imported_event'), 'imported_event_data', true);
+
+      $should_translate = $_REQUEST['lang'] == 'en';
+
       $translated_title = get_post_meta(get_post_id_original($event->ID, 'imported_event'), 'post_title_translated', true);
       $translated_content = get_post_meta(get_post_id_original($event->ID, 'imported_event'), 'post_content_translated', true);
+
+      $title = $should_translate ? $translated_title : $event->post_title;
+      $content = $should_translate ? $translated_content : $event->post_content;
 
       $response = [
         id         => $event->ID,
         slug       => $event->post_name,
-        name       => html_entity_decode($event->post_title),
+        name       => html_entity_decode($title),
         type       => 'event',
-        content    => $event->post_content,
-        shortContent => get_short_content($event->post_content),
+        content    => $content,
+        shortContent => get_short_content($content),
         categories => array_map(function($category) {
           return [
             id   => $category->cat_ID,
@@ -41,15 +47,12 @@ function parse_imported_events($events) {
         ],
         youtubeUrl => $post_meta->youtube,
         vimeoUrl => $post_meta->vimeo,
-        translatedTitle => $translated_title,
-        translatedContent => $translated_content
-        
       ];
-  
+
       if ($post_meta->booking_link) {
         $response['bookingLink'] = $post_meta->booking_link;
       }
-  
+
       $organizer = $post_meta->organizers && $post_meta->organizers[0] ? $post_meta->organizers[0] : null;
       if ($organizer && $organizer->contacts && $organizer->contacts[0] && strlen($organizer->contacts[0]->email)) {
         $response['contactEmail'] = $organizer->contacts[0]->email;
@@ -57,7 +60,7 @@ function parse_imported_events($events) {
       if ($organizer && $organizer->contacts && $organizer->contacts[0] && strlen($organizer->contacts[0]->phone_number)) {
         $response['contactPhone'] = $organizer->contacts[0]->phone_number;
       }
-  
+
       $img_url = get_the_post_thumbnail_url($event->ID);
       if ($img_url) {
         $response['imgUrl'] = $img_url;
