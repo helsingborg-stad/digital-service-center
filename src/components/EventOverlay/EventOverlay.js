@@ -49,7 +49,7 @@ class EventOverlay extends Component {
       const { latitude, longitude } = this.props.event.location;
       handleNavigationClick(latitude, longitude, this.handleShowDirections.bind(this));
     }
-    this.props.translateText(this.props.event.content, this.props.event.id, 'sv', 'en');
+    //this.props.translateText(this.props.event.content, this.props.event.id, 'sv', 'en');
   }
   handleShowDirections(directions) {
     this.setState({directions: directions});
@@ -58,7 +58,7 @@ class EventOverlay extends Component {
     this.setState({showTranslatedContent: !this.state.showTranslatedContent});
   }
   render() {
-    const content = this.state.showTranslatedContent && this.props.translatedContent ? this.props.translatedContent : this.props.event.content;
+    const content = this.state.showTranslatedContent && this.props.translatedContent ? this.props.translatedContent : this.props.content;
 
     return (
       <div className='EventOverlay' onClick={ev => ev.stopPropagation()}>
@@ -78,7 +78,7 @@ class EventOverlay extends Component {
       <img className='EventOverlay-img' src={this.props.event.imgUrl} alt={ this.props.event.name } />
     </div>
       }
-      <h2 className='EventOverlay-heading'>{ this.props.event.name }</h2>
+      <h2 className='EventOverlay-heading'>{ this.props.title }</h2>
       <div style={{width: '58%', marginRight: '5%', float: 'left'}}>
         {!!this.props.event.rating &&
            <h3 className='EventOverlay-ratingHeading'>{`Rating: ${this.props.event.rating}/5`}</h3>
@@ -167,9 +167,12 @@ const mapStateToProps = (state, ownProps) => {
     ? state.translation[eventId].content : null;
   const translationLoading = (eventId in state.translation)
     ? state.translation[eventId].loading : false;
+  const isDefaultLang = state.siteSettings.languages.find(x => x.shortName === state.activeLanguage).isDefault;
   return {
     translatables: state.siteSettings.translatables[state.activeLanguage],
-    showTranslateButton: !state.siteSettings.languages.find(x => x.shortName === state.activeLanguage).isDefault,
+    showTranslateButton: !isDefaultLang,
+    content: isDefaultLang ? ownProps.event.content : ownProps.event.translatedContent,
+    title: isDefaultLang ? ownProps.event.name : ownProps.event.translatedTitle,
     activeLanguage: state.activeLanguage,
     translatedContent,
     translationLoading
