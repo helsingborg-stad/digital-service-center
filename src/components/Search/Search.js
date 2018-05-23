@@ -81,9 +81,11 @@ export class Search extends Component {
               `Search-inputWrapper--${this.props.pageType}`,
               {'Search-inputWrapper--isActive': this.state.searchInputOnTop},
               {'Search-inputWrapper--inverted': this.props.invertSearchField
-                && this.props.pageType === 'Startpage'})}>
+                && this.props.pageType === 'Startpage'},
+              {'Search-inputWrapper--eventpage': this.props.pageType === 'Eventspage'})}>
             <SearchField
               inline
+              pageType={this.props.pageType}
               autoFocus={false}
               value={this.state.searchTerm || ''}
               onSearchChange={(val) => this.handleSearchChange(val)}

@@ -15,10 +15,10 @@ export const getDistinctEventCategories = (events, excludedCategories) => {
   return distinctCategories.sort((a, b) => a.name.localeCompare(b.name));
 };
 
-export const getEventsForCategory = (events, categoryId) => {
-  return events.filter(event => (
-    event.categories.some(c => c.id === categoryId) && event.type === 'event'
-  ));
+const eventsWithRelevantCategories = (events, categories) => {
+  return categories.length
+    ? events.filter(e => e.categories.some(c => categories.includes(c.id)))
+    : events;
 };
 
 export function getClosestEventDate(event) {
@@ -44,11 +44,13 @@ function compareDates(a, b) {
   return 0;
 }
 
-export const getEventIdsGroupedByWeekNumber = (events) => {
+export const filterEventsForEventsPage = (events, activeCategories) => {
   const eventsHavingDates = events.filter(e => e.occasions && !!e.occasions.length);
-  const eventsWithWeekNumber = eventsHavingDates.map(e => {
+  const eventsWithActiveCat = eventsWithRelevantCategories(eventsHavingDates, activeCategories);
+  const eventsWithWeekNumber = eventsWithActiveCat.map(e => {
     return { id: e.id, date: getClosestEventDate(e)};
   });
+
   const eventsDict = eventsWithWeekNumber.reduce((acc, event) => {
     if (!acc[event.date.week]) {
       acc[event.date.week] = [];
@@ -56,8 +58,14 @@ export const getEventIdsGroupedByWeekNumber = (events) => {
     acc[event.date.week].push({id: event.id, date: event.date.date});
     return acc;
   }, {});
+
   Object.keys(eventsDict).forEach(week => {
     eventsDict[week] = eventsDict[week].sort(compareDates);
   });
-  return eventsDict;
+
+  return {
+    numEvents: eventsHavingDates.length,
+    numActiveEvents: eventsWithActiveCat.length,
+    eventsByWeekNumber: eventsDict
+  };
 };

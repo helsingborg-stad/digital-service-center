@@ -15,11 +15,11 @@ import AsideMenu from '../AsideMenu';
 import Calendar from '../Calendar';
 import { connect } from 'react-redux';
 import { eventsFetchData } from '../../actions/events';
-import EventsDateList from '../EventsDateList.js';
+import { SideNavigation, SideNavigationLink } from '../SideNavigation';
 import './EventsPage.css';
 import LanguageFlags from '../LanguageFlags';
 import Search from '../Search/Search.js';
-import { getEventIdsGroupedByWeekNumber } from './eventsPageHelpers.js';
+import { filterEventsForEventsPage } from './eventsPageHelpers.js';
 
 
 export class EventsPage extends Component {
@@ -27,7 +27,9 @@ export class EventsPage extends Component {
     super(props);
     this.state = {
       visibleOverlayEvent: props.activeEvent || null,
-      selectedDates: null
+      selectedDates: null,
+      menuCategories: null,
+      activeCategories: []
     };
   }
 
@@ -59,25 +61,22 @@ export class EventsPage extends Component {
     this.setState({
       selectedDates: selectedDates
     });
-    if (this.refs.eventsDateListScroll) {
-      this.refs.eventsDateListScroll.scrollToTop();
-    }
+  }
+
+
+  // eslint-disable-next-line no-shadow
+  handleSideNavClick({id}) {
+    const { activeCategories } = this.state;
+
+    this.setState(activeCategories.includes(id)
+      ? { activeCategories: activeCategories.filter(x => x !== id) }
+      : { activeCategories: activeCategories.concat(id) });
   }
 
   componentDidMount() {
     const dataIsEmpty = !this.props.events || !Object.keys(this.props.events).length;
     if (dataIsEmpty) {
       this.props.fetchData('/api/events', this.props.activeLanguage);
-    }
-
-    const params = new window.URL(window.location.href).searchParams;
-    const categoryIds = params && params.get('category');
-    if (categoryIds) {
-      categoryIds.split(',').forEach(id => {
-        this.setState({
-          activeCategories: this.state.activeCategories.concat(parseInt(id, 10))
-        });
-      });
     }
   }
 
@@ -99,7 +98,9 @@ export class EventsPage extends Component {
       return <LandingPageLoading bgColor='#f4a428' />;
     }
     const pageData = this.props.landingPages.events;
-    const eventsByWeekNumber = getEventIdsGroupedByWeekNumber(this.props.events);
+    const listCategories = this.props.landingPages.local;
+    const { eventsByWeekNumber, numEvents, numActiveEvents } =
+      filterEventsForEventsPage(this.props.events, this.state.activeCategories);
 
     return (
       <div className='EventsPage'>
@@ -108,12 +109,6 @@ export class EventsPage extends Component {
           heading={pageData.heading}
           bgColor='#f4a428'
           freeWifiLink={this.props.landingPages.shared.freeWifi}
-        />
-        <Search
-          events={this.props.events}
-          changeOverlayEvent={this.changeOverlayEvent.bind(this)}
-          pageType='Eventspage'
-          activeLanguage={this.props.activeLanguage}
         />
         <main>
           <div className='EventsPage-eventsWrapper'>
@@ -170,24 +165,36 @@ export class EventsPage extends Component {
         </main>
         <aside>
           <AsideMenu fullHeight>
+            <SideNavigation className='SideNavigation SideNavigation--eventsPage'>
+              {listCategories.categories &&
+              !!listCategories.categories.length && listCategories.categories.map(cat =>
+                  (<SideNavigationLink
+                    id={cat.id}
+                    key={cat.id}
+                    name={cat.name}
+                    activeCategories={this.state.activeCategories}
+                    activeColor={cat.activeColor}
+                    handleClick={this.handleSideNavClick.bind(this)}
+                    icon={cat.iconName}
+                    subCategories={cat.subCategories}
+                  />))
+              }
+            </SideNavigation>
             <Calendar
               themeCssClass='#f4a428'
               handleSelectedDates={this.handleSelectedDates.bind(this)}
               selectedTimeSpan={this.props.selectedTimeSpan}
             />
-            <Scrollbars
-              ref='eventsDateListScroll'
-              autoHeight
-              autoHeightMax={`100vh - ${this.props.isInPortraitMode ?
-                '6.5rem' :
-                '3.25rem'} - 4.6875rem - 400px - 2rem`}
-            >
-              <EventsDateList
-                events={this.props.events}
-                selectedDates={this.state.selectedDates}
-                handleOverlayEvent={this.changeOverlayEvent.bind(this)}
-              />
-            </Scrollbars>
+            <Search
+              events={this.props.events}
+              changeOverlayEvent={this.changeOverlayEvent.bind(this)}
+              pageType='Eventspage'
+              activeLanguage={this.props.activeLanguage}
+            />
+            <div className='EventsPage-eventCounter'>
+              Visar {numActiveEvents} av {numEvents} evenemang
+              <div style={{color: '#DE527C'}}>Rensa filter</div>
+            </div>
           </AsideMenu>
         </aside>
       </div>
@@ -204,8 +211,7 @@ EventsPage.propTypes = {
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
   activeEvent: PropTypes.string,
-  selectedTimeSpan: PropTypes.string,
-  isInPortraitMode: PropTypes.bool
+  selectedTimeSpan: PropTypes.string
 };
 
 const mapStateToProps = (state) => {
@@ -216,8 +222,7 @@ const mapStateToProps = (state) => {
     hasErrored: (state.activeLanguage in state.eventsHasErrored)
       ? state.eventsHasErrored[state.activeLanguage] : false,
     isLoading: (state.activeLanguage in state.eventsAreLoading)
-      ? state.eventsAreLoading[state.activeLanguage] : false,
-    isInPortraitMode: state.isInPortraitMode
+      ? state.eventsAreLoading[state.activeLanguage] : false
   };
 };
 

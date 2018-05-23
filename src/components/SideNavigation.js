@@ -8,8 +8,8 @@ import * as Icons from './icons/';
 
 import './SideNavigation.css';
 
-const SideNavigation = ({children}) => (
-  <ul className='SideNavigation'>{children}</ul>
+const SideNavigation = ({children, ...props}) => (
+  <ul className='SideNavigation' {...props}>{children}</ul>
 );
 
 SideNavigation.propTypes = {

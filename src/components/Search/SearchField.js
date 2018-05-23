@@ -4,7 +4,8 @@ import './SearchField.css';
 import classnames from 'classnames';
 import ReactDebounceInput from 'react-debounce-input';
 
-const SearchField = ({ inline, onSearchChange, handleSearchInputPosition, autoFocus, value}) => {
+const SearchField = ({inline, onSearchChange, handleSearchInputPosition,
+  autoFocus, value, pageType}) => {
   return (
     <div className={classnames('SearchField', inline && 'SearchField--inline')}>
       <ReactDebounceInput
@@ -15,7 +16,8 @@ const SearchField = ({ inline, onSearchChange, handleSearchInputPosition, autoFo
         onFocus={(ev) => handleSearchInputPosition(ev.target.value)}
         className={classnames(
           'SearchField-input',
-          inline && 'SearchField-input--inline'
+          inline && 'SearchField-input--inline',
+          {'SearchField-input--inline--eventpage': pageType === 'Eventspage'}
         )
         }
         value={value}

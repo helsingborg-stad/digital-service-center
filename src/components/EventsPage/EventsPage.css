@@ -55,6 +55,21 @@
   border-bottom: 1px solid #e3e3e3;
 }
 
+.EventsPage-eventCounter-wrapper {
+  position: absolute;
+}
+
+.EventsPage-eventCounter {
+  position: relative;
+    top: 31rem;
+    left: 1rem;
+}
+
+.SideNavigation--eventsPage {
+  position: static;
+  padding: 1.5rem;
+  width: 100%;
+}
 /*
  ** Animations
  */
