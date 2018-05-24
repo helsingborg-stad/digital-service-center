@@ -18,7 +18,7 @@ import { eventsFetchData } from '../../actions/events';
 import { SideNavigation, SideNavigationLink } from '../SideNavigation';
 import './EventsPage.css';
 import LanguageFlags from '../LanguageFlags';
-import Search from '../Search/Search.js';
+import SearchField from '../Search/SearchField.js';
 import { filterEventsForEventsPage } from './eventsPageHelpers.js';
 import FlipMove from 'react-flip-move';
 
@@ -70,10 +70,15 @@ export class EventsPage extends Component {
       : { activeCategories: activeCategories.concat(id) });
   }
 
+  handleSearchChange(searchTerm) {
+    this.setState({searchTerm});
+  }
+
   handleClearFilters() {
     this.setState({
       selectedDates: null,
-      activeCategories: []
+      activeCategories: [],
+      searchTerm: null
     });
   }
 
@@ -104,7 +109,12 @@ export class EventsPage extends Component {
     const pageData = this.props.landingPages.events;
     const listCategories = this.props.landingPages.local;
     const { eventsByWeekNumber, numEvents, numActiveEvents } =
-      filterEventsForEventsPage(this.props.events, this.state.activeCategories, this.state.selectedDates);
+      filterEventsForEventsPage(
+        this.props.events,
+        this.state.activeCategories,
+        this.state.selectedDates,
+        this.state.searchTerm
+      );
 
     return (
       <div className='EventsPage'>
@@ -192,11 +202,11 @@ export class EventsPage extends Component {
               selectedTimeSpan={this.props.selectedTimeSpan}
               resetDates={this.state.selectedDates === null}
             />
-            <Search
-              events={this.props.events}
-              changeOverlayEvent={this.changeOverlayEvent.bind(this)}
+            <SearchField
+              inline
               pageType='Eventspage'
-              activeLanguage={this.props.activeLanguage}
+              value={this.state.searchTerm || ''}
+              onSearchChange={this.handleSearchChange.bind(this)}
             />
             <div className='EventsPage-eventCounter'>
               Visar {numActiveEvents} av {numEvents} evenemang

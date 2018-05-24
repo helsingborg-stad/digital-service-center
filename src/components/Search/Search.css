@@ -34,14 +34,6 @@
   left: 50%;
 }
 
-
-.Search-inputWrapper--Eventspage {
-  width: 100%;
-  bottom: 3.25rem;
-  transform: translateX(-50%);
-  left: 50%;
-}
-
 .Search-inputWrapper--local {
   bottom: 16rem;
   transform: translateX(-50%);
@@ -69,10 +61,6 @@
 @media (orientation: portrait) {
   .Search-inputWrapper--Startpage {
     bottom: 8.5rem;
-  }
-
-  .Search-inputWrapper--Eventspage {
-    bottom: 7.5rem;
   }
 
   .Search-inputWrapper--local {

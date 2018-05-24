@@ -78,10 +78,8 @@
     padding-left: 4rem;
 }
 
-.SearchField-input--inline--eventpage {
-    height: 2.725rem;
-    font-size: 1.2625rem;
-    margin-left: 17px;
-    width: 90%;
+.SearchField--Eventspage {
+    margin: 0 1.5rem;
+    width: calc(100% - 3rem);
 }
 

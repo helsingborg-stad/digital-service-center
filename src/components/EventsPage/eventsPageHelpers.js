@@ -1,5 +1,6 @@
 import Moment from 'moment';
 import { getEventsBySelectedDates } from '../EventsDateList';
+import SearchHandler from '../Search/SearchHandler';
 
 export const getDistinctEventCategories = (events, excludedCategories) => {
   const distinctCategories = events.reduce((acc, event) => {
@@ -45,11 +46,25 @@ function compareDates(a, b) {
   return 0;
 }
 
-export const filterEventsForEventsPage = (events, activeCategories, selectedDates) => {
+const filterBySearchTerm = (events, term) =>{
+  if (!term) {
+    return events;
+  }
+
+  return new SearchHandler({
+    events,
+    fetchData: () => {},
+    landingPagePages: [],
+    crm: []
+  }).search(term).eventsSearchResults;
+};
+
+export const filterEventsForEventsPage = (events, activeCategories, selectedDates, searchTerm) => {
   const eventsHavingDates = events.filter(e => e.occasions && !!e.occasions.length);
   const eventsForSelectedDates = getEventsBySelectedDates(eventsHavingDates, selectedDates);
   const eventsWithCats = eventsWithRelevantCategories(eventsForSelectedDates, activeCategories);
-  const eventsWithWeekNumber = eventsWithCats.map(e => {
+  const eventsSearch = filterBySearchTerm(eventsWithCats, searchTerm);
+  const eventsWithWeekNumber = eventsSearch.map(e => {
     return { id: e.id, date: getClosestEventDate(e)};
   });
 
@@ -67,7 +82,7 @@ export const filterEventsForEventsPage = (events, activeCategories, selectedDate
 
   return {
     numEvents: eventsHavingDates.length,
-    numActiveEvents: eventsWithCats.length,
+    numActiveEvents: eventsSearch.length,
     eventsByWeekNumber: eventsDict
   };
 };
