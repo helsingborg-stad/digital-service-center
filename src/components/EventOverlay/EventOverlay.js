@@ -14,6 +14,7 @@ import ReactLoading from 'react-loading';
 
 import EventOverlayReviews from './components/EventOverlayReviews';
 import EventOverlayRelatedInformation from './components/EventOverlayRelatedInformation';
+import EventSelectLanguage from './components/EventSelectLanguage';
 
 import Overlay from '../OverlayBackdrop';
 
@@ -97,13 +98,17 @@ class EventOverlay extends Component {
   }
   renderTranslationButton() {
     return <div>
-      <LoadingButton
-        onClick={this.handleTranslateOnClick}
-        loading={this.state.showTranslatedContent && this.props.translationLoading}
-        cssClassName='EventOverlay-button'
-        text={!this.state.showTranslatedContent ? 'Translate' : 'Original'}
-      />
-      <span style={{fontSize: 12, fontStyle: 'italic' }}>By Google Translate</span>
+      <div className='EventSelectLanguage-Backdrop'></div>
+      <div style={{position: 'static'}}>
+        <EventSelectLanguage />
+        <LoadingButton
+          onClick={this.handleTranslateOnClick}
+          loading={this.state.showTranslatedContent && this.props.translationLoading}
+          cssClassName='EventOverlay-button'
+          text={!this.state.showTranslatedContent ? 'Translate' : 'Original'}
+        />
+        <span style={{fontSize: 12, fontStyle: 'italic' }}>By Google Translate</span>
+      </div>
     </div>;
   }
   renderLeftContent() {
