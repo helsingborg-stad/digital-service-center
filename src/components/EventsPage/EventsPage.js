@@ -20,6 +20,7 @@ import './EventsPage.css';
 import LanguageFlags from '../LanguageFlags';
 import Search from '../Search/Search.js';
 import { filterEventsForEventsPage } from './eventsPageHelpers.js';
+import FlipMove from 'react-flip-move';
 
 export class EventsPage extends Component {
   constructor(props) {
@@ -129,13 +130,15 @@ export class EventsPage extends Component {
                         }
                       </h2>
                       <div className='EventsPage-eventWrapper'>
-                        { eventsByWeekNumber[week].map(eventId => (
-                          <Event
-                            key={eventId.id}
-                            {...this.props.events.find(e => e.id === eventId.id)}
-                            onClick={this.changeOverlayEvent.bind(this)} />
-                        ))
-                        }
+                        <FlipMove typeName={null} staggerDurationBy={4} staggerDelayBy={2} >
+                          { eventsByWeekNumber[week].map(eventId => (
+                            <Event
+                              key={eventId.id}
+                              {...this.props.events.find(e => e.id === eventId.id)}
+                              onClick={this.changeOverlayEvent.bind(this)} />
+                          ))
+                          }
+                        </FlipMove>
                       </div>
                     </div>
                   ))

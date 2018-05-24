@@ -25,6 +25,7 @@
     "react-dates": "^10.1.1",
     "react-debounce-input": "^3.2.0",
     "react-dom": "^16.2.0",
+    "react-flip-move": "^3.0.2",
     "react-fontawesome": "^1.6.1",
     "react-ga": "^2.3.5",
     "react-google-maps": "^9.4.3",
