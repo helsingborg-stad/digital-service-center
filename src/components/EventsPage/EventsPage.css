@@ -60,6 +60,14 @@
   bottom: 1rem;
   left: 1.5rem;
   color: rgba(0, 0, 0, 0.75);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease-in-out;
+}
+
+.EventsPage-eventCounter--visible {
+  opacity: 1;
+  pointer-events: all;
 }
 
 .EventsPage-eventCounter__button {
@@ -73,6 +81,7 @@
 .SideNavigation--eventsPage {
   position: static;
   padding: 1.5rem;
+  padding-top: 5rem;
   width: 100%;
 }
 

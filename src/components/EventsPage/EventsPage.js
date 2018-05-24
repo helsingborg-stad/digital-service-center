@@ -21,6 +21,7 @@ import LanguageFlags from '../LanguageFlags';
 import SearchField from '../Search/SearchField.js';
 import { filterEventsForEventsPage } from './eventsPageHelpers.js';
 import FlipMove from 'react-flip-move';
+import cn from 'classnames';
 
 export class EventsPage extends Component {
   constructor(props) {
@@ -208,15 +209,14 @@ export class EventsPage extends Component {
               value={this.state.searchTerm || ''}
               onSearchChange={this.handleSearchChange.bind(this)}
             />
-            <div className='EventsPage-eventCounter'>
+            <div className={cn('EventsPage-eventCounter',
+              numEvents > numActiveEvents && 'EventsPage-eventCounter--visible')}>
               Visar {numActiveEvents} av {numEvents} evenemang
-              { numEvents > numActiveEvents &&
               <button
                 className='EventsPage-eventCounter__button'
                 onClick={this.handleClearFilters.bind(this)}>
                 Rensa filter
               </button>
-              }
             </div>
           </AsideMenu>
         </aside>
