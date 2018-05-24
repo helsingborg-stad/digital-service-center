@@ -20,7 +20,7 @@ const getDistinctEventOrderedByStartDate = ({events}) => {
   });
 };
 
-const getEventsBySelectedDates = (events, selectedDates) => {
+export const getEventsBySelectedDates = (events, selectedDates) => {
   let selectedEvents = events.slice(0).filter(
     event => event.type === 'event'
     && event.occasions
@@ -32,7 +32,7 @@ const getEventsBySelectedDates = (events, selectedDates) => {
   }
 
   return getDistinctEventOrderedByStartDate({events: selectedEvents.map(event => {
-    return Object.assign(event, { occasions: event.occasions
+    return Object.assign({...event}, { occasions: event.occasions
       .filter(occ => {
         if (!occ || !occ.startDate || !occ.endDate) {
           return false;

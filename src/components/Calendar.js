@@ -58,6 +58,12 @@ export class Calendar extends React.Component {
     }
   }
 
+  componentWillReceiveProps(props) {
+    if (props.resetDates && this.state.startDate !== null) {
+      this.handleResetDate();
+    }
+  }
+
   componentDidMount() {
     this.presetSelectedDate(this.props.selectedTimeSpan);
   }
@@ -184,7 +190,8 @@ Calendar.propTypes = {
     tomorrow: PropTypes.string.isRequired,
     weekend: PropTypes.string.isRequired,
     all: PropTypes.string.isRequired
-  }).isRequired
+  }).isRequired,
+  resetDates: PropTypes.bool
 };
 
 const mapStateToProps = (state) => {

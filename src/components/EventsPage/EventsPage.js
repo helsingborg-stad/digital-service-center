@@ -21,7 +21,6 @@ import LanguageFlags from '../LanguageFlags';
 import Search from '../Search/Search.js';
 import { filterEventsForEventsPage } from './eventsPageHelpers.js';
 
-
 export class EventsPage extends Component {
   constructor(props) {
     super(props);
@@ -58,11 +57,8 @@ export class EventsPage extends Component {
   }
 
   handleSelectedDates(selectedDates) {
-    this.setState({
-      selectedDates: selectedDates
-    });
+    this.setState({selectedDates});
   }
-
 
   // eslint-disable-next-line no-shadow
   handleSideNavClick({id}) {
@@ -71,6 +67,13 @@ export class EventsPage extends Component {
     this.setState(activeCategories.includes(id)
       ? { activeCategories: activeCategories.filter(x => x !== id) }
       : { activeCategories: activeCategories.concat(id) });
+  }
+
+  handleClearFilters() {
+    this.setState({
+      selectedDates: null,
+      activeCategories: []
+    });
   }
 
   componentDidMount() {
@@ -100,7 +103,7 @@ export class EventsPage extends Component {
     const pageData = this.props.landingPages.events;
     const listCategories = this.props.landingPages.local;
     const { eventsByWeekNumber, numEvents, numActiveEvents } =
-      filterEventsForEventsPage(this.props.events, this.state.activeCategories);
+      filterEventsForEventsPage(this.props.events, this.state.activeCategories, this.state.selectedDates);
 
     return (
       <div className='EventsPage'>
@@ -184,6 +187,7 @@ export class EventsPage extends Component {
               themeCssClass='#f4a428'
               handleSelectedDates={this.handleSelectedDates.bind(this)}
               selectedTimeSpan={this.props.selectedTimeSpan}
+              resetDates={this.state.selectedDates === null}
             />
             <Search
               events={this.props.events}
@@ -193,7 +197,13 @@ export class EventsPage extends Component {
             />
             <div className='EventsPage-eventCounter'>
               Visar {numActiveEvents} av {numEvents} evenemang
-              <div style={{color: '#DE527C'}}>Rensa filter</div>
+              { numEvents > numActiveEvents &&
+              <button
+                className='EventsPage-eventCounter__button'
+                onClick={this.handleClearFilters.bind(this)}>
+                Rensa filter
+              </button>
+              }
             </div>
           </AsideMenu>
         </aside>

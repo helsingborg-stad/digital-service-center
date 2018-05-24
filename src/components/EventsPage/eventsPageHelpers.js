@@ -1,4 +1,5 @@
 import Moment from 'moment';
+import { getEventsBySelectedDates } from '../EventsDateList';
 
 export const getDistinctEventCategories = (events, excludedCategories) => {
   const distinctCategories = events.reduce((acc, event) => {
@@ -17,7 +18,7 @@ export const getDistinctEventCategories = (events, excludedCategories) => {
 
 const eventsWithRelevantCategories = (events, categories) => {
   return categories.length
-    ? events.filter(e => e.categories.some(c => categories.includes(c.id)))
+    ? events.slice(0).filter(e => e.categories.some(c => categories.includes(c.id)))
     : events;
 };
 
@@ -44,10 +45,11 @@ function compareDates(a, b) {
   return 0;
 }
 
-export const filterEventsForEventsPage = (events, activeCategories) => {
+export const filterEventsForEventsPage = (events, activeCategories, selectedDates) => {
   const eventsHavingDates = events.filter(e => e.occasions && !!e.occasions.length);
-  const eventsWithActiveCat = eventsWithRelevantCategories(eventsHavingDates, activeCategories);
-  const eventsWithWeekNumber = eventsWithActiveCat.map(e => {
+  const eventsForSelectedDates = getEventsBySelectedDates(eventsHavingDates, selectedDates);
+  const eventsWithCats = eventsWithRelevantCategories(eventsForSelectedDates, activeCategories);
+  const eventsWithWeekNumber = eventsWithCats.map(e => {
     return { id: e.id, date: getClosestEventDate(e)};
   });
 
@@ -65,7 +67,7 @@ export const filterEventsForEventsPage = (events, activeCategories) => {
 
   return {
     numEvents: eventsHavingDates.length,
-    numActiveEvents: eventsWithActiveCat.length,
+    numActiveEvents: eventsWithCats.length,
     eventsByWeekNumber: eventsDict
   };
 };

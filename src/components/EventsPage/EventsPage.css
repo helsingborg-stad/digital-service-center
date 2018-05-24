@@ -55,14 +55,19 @@
   border-bottom: 1px solid #e3e3e3;
 }
 
-.EventsPage-eventCounter-wrapper {
+.EventsPage-eventCounter {
   position: absolute;
+  bottom: 1rem;
+  left: 1.5rem;
+  color: rgba(0, 0, 0, 0.75);
 }
 
-.EventsPage-eventCounter {
-  position: relative;
-    top: 31rem;
-    left: 1rem;
+.EventsPage-eventCounter__button {
+  color: #de527c;
+  font-size: 0.95rem;
+  border: 0;
+  background: 0;
+  padding: 0.5rem 0 0.5rem 0.5rem;
 }
 
 .SideNavigation--eventsPage {
@@ -70,6 +75,7 @@
   padding: 1.5rem;
   width: 100%;
 }
+
 /*
  ** Animations
  */
