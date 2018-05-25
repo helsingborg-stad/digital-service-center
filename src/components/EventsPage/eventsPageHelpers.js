@@ -17,10 +17,30 @@ export const getDistinctEventCategories = (events, excludedCategories) => {
   return distinctCategories.sort((a, b) => a.name.localeCompare(b.name));
 };
 
-const eventsWithRelevantCategories = (events, categories) => {
-  return categories.length
-    ? events.slice(0).filter(e => e.categories.some(c => categories.includes(c.id)))
+const eventsWithRelevantCategories = (events, activeCategories) => {
+  const matchesAllActiveCategories = (e) =>
+    activeCategories.every(actCat => e.importedCategories.includes(actCat));
+
+  const eventsForCats = activeCategories.length
+    ? events.slice(0).filter(matchesAllActiveCategories)
     : events;
+
+  const categoriesUnsorted = eventsForCats.reduce((cats, event) => {
+    event.importedCategories.forEach(cat => {
+      cats[cat] = 1 + (cats[cat] || 0);
+    });
+    return cats;
+  }, {});
+
+  const categories = {};
+  Object.keys(categoriesUnsorted).sort().forEach(key => {
+    categories[key] = categoriesUnsorted[key];
+  });
+
+  return {
+    eventsForCats,
+    categories
+  };
 };
 
 export function getClosestEventDate(event) {
@@ -62,9 +82,10 @@ const filterBySearchTerm = (events, term) =>{
 export const filterEventsForEventsPage = (events, activeCategories, selectedDates, searchTerm) => {
   const eventsHavingDates = events.filter(e => e.occasions && !!e.occasions.length);
   const eventsForSelectedDates = getEventsBySelectedDates(eventsHavingDates, selectedDates);
-  const eventsWithCats = eventsWithRelevantCategories(eventsForSelectedDates, activeCategories);
-  const eventsSearch = filterBySearchTerm(eventsWithCats, searchTerm);
-  const eventsWithWeekNumber = eventsSearch.map(e => {
+  const eventsSearch = filterBySearchTerm(eventsForSelectedDates, searchTerm);
+  const { eventsForCats, categories }
+    = eventsWithRelevantCategories(eventsSearch, activeCategories);
+  const eventsWithWeekNumber = eventsForCats.map(e => {
     return { id: e.id, date: getClosestEventDate(e)};
   });
 
@@ -82,7 +103,8 @@ export const filterEventsForEventsPage = (events, activeCategories, selectedDate
 
   return {
     numEvents: eventsHavingDates.length,
-    numActiveEvents: eventsSearch.length,
-    eventsByWeekNumber: eventsDict
+    numActiveEvents: eventsForCats.length,
+    eventsByWeekNumber: eventsDict,
+    categories
   };
 };

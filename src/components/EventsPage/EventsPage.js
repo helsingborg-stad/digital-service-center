@@ -12,10 +12,10 @@ import LandingPageError from '../LandingPage/LandingPageError';
 import EventOverlay from '../EventOverlay/EventOverlay';
 import { OverlayTransitionWrapper } from '../OverlayBackdrop';
 import AsideMenu from '../AsideMenu';
+import EventCategoryList from './components/EventCategoryList';
 import Calendar from '../Calendar';
 import { connect } from 'react-redux';
 import { eventsFetchData } from '../../actions/events';
-import { SideNavigation, SideNavigationLink } from '../SideNavigation';
 import './EventsPage.css';
 import LanguageFlags from '../LanguageFlags';
 import SearchField from '../Search/SearchField.js';
@@ -63,7 +63,7 @@ export class EventsPage extends Component {
   }
 
   // eslint-disable-next-line no-shadow
-  handleSideNavClick({id}) {
+  handleSideNavClick(id) {
     const { activeCategories } = this.state;
 
     this.setState(activeCategories.includes(id)
@@ -108,8 +108,7 @@ export class EventsPage extends Component {
       return <LandingPageLoading bgColor='#f4a428' />;
     }
     const pageData = this.props.landingPages.events;
-    const listCategories = this.props.landingPages.local;
-    const { eventsByWeekNumber, numEvents, numActiveEvents } =
+    const { eventsByWeekNumber, numEvents, numActiveEvents, categories } =
       filterEventsForEventsPage(
         this.props.events,
         this.state.activeCategories,
@@ -182,21 +181,11 @@ export class EventsPage extends Component {
         </main>
         <aside>
           <AsideMenu fullHeight>
-            <SideNavigation className='SideNavigation SideNavigation--eventsPage'>
-              {listCategories.categories &&
-              !!listCategories.categories.length && listCategories.categories.map(cat =>
-                  (<SideNavigationLink
-                    id={cat.id}
-                    key={cat.id}
-                    name={cat.name}
-                    activeCategories={this.state.activeCategories}
-                    activeColor={cat.activeColor}
-                    handleClick={this.handleSideNavClick.bind(this)}
-                    icon={cat.iconName}
-                    subCategories={cat.subCategories}
-                  />))
-              }
-            </SideNavigation>
+            <EventCategoryList
+              categories={categories}
+              activeCategories={this.state.activeCategories}
+              onClick={this.handleSideNavClick.bind(this)}
+            />
             <Calendar
               themeCssClass='#f4a428'
               handleSelectedDates={this.handleSelectedDates.bind(this)}
