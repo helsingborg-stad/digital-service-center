@@ -15,7 +15,7 @@ function parse_imported_events($events) {
       $title = $should_translate ? $translated_title : $event->post_title;
       $titleReverse = $should_translate ?  $event->post_title : $translated_title;
       $content = $should_translate ? $translated_content : $event->post_content;
-      $contentReverse = $should_translate ?  $translated_content : $event->post_content;
+      $contentReverse = $should_translate ?  $event->post_content : $translated_content;
 
       $response = [
         id         => $event->ID,
@@ -50,7 +50,7 @@ function parse_imported_events($events) {
         youtubeUrl => $post_meta->youtube,
         vimeoUrl => $post_meta->vimeo,
         translatedTitle => $titleReverse,
-        translatedContent => $translated_content
+        translatedContent => $contentReverse
       ];
 
       if ($post_meta->booking_link) {
