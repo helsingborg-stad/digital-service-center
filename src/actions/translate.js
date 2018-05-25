@@ -1,40 +1,42 @@
 
-export function translateHasErrored(bool, id) {
+export function translateHasErrored(bool, id, lang) {
   return {
     type: 'TRANSLATE_HAS_ERRORED',
     hasErrored: bool,
-    id
+    id: id,
+    lang: lang
   };
 }
 
-export function translationIsLoading(bool, id) {
+export function translationIsLoading(bool, id, lang) {
   return {
     type: 'TRANSLATE_IS_LOADING',
     isLoading: bool,
-    id
+    id: id,
+    lang: lang
   };
 }
 
-export function translateFetchTranslationSuccess(text, id) {
+export function translateFetchTranslationSuccess(text, id, lang) {
   return {
     type: 'TRANSLATE_FETCH_SUCCESS',
     translation: text,
-    id
+    id: id,
+    lang: lang
   };
 }
 
-export function translateData(text, id, source, target, lang) {
+export function translateData(text, id, source, target) {
   return (dispatch) => {
-    dispatch(translationIsLoading(true, id, lang));
-    dispatch(translateHasErrored(false, id, lang));
+    dispatch(translationIsLoading(true, id, target));
+    dispatch(translateHasErrored(false, id, target));
 
     const data = {
       q: text,
       source: source,
       target: target
     };
-    console.log(data);
-    return fetch('/api/translate', {
+    return fetch('https://translation.googleapis.com/language/translate/v2?key=AIzaSyD6nh_5HAPig0rLfpUT5x-JGu00wn_FvWQ', {
       method: 'post',
       headers: {
         Accept: 'application/json',
@@ -47,7 +49,7 @@ export function translateData(text, id, source, target, lang) {
           throw Error(response.statusText);
         }
 
-        dispatch(translationIsLoading(false, id, lang));
+        dispatch(translationIsLoading(false, id, target));
         return response;
       })
       .then((response) => response.json())
@@ -55,13 +57,13 @@ export function translateData(text, id, source, target, lang) {
         dispatch(translateFetchTranslationSuccess(
           resdata.data.translations[0].translatedText,
           id,
-          lang
+          target
         ));
       })
       .catch((e) => {
         // eslint-disable-next-line no-console
         console.warn('translateData error', e);
-        dispatch(translateHasErrored(true, lang));
+        dispatch(translateHasErrored(true, id, target));
       });
   };
 }

@@ -1,5 +1,5 @@
 import DEFlag from './de-flag';
-import DKFlag from './dk-flag';
+import DAFlag from './dk-flag';
 import ENFlag from './en-flag';
 import ESFlag from './es-flag';
 import FRFlag from './fr-flag';
@@ -10,7 +10,7 @@ import SVFlag from './sv-flag';
 
 export {
   DEFlag,
-  DKFlag,
+  DAFlag,
   ENFlag,
   ESFlag,
   FRFlag,

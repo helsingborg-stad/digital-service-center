@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import cn from 'classnames';
 
 import languages from '../../../util/languages';
@@ -7,20 +8,33 @@ import * as Flags from '../../icons-flags/index';
 
 import './EventSelectLanguage.css';
 
-const promotedLanguages = ['en', 'sv', 'dk', 'no', 'de', 'fr', 'nl', 'es', 'it'];
+const promotedLanguages = ['en', 'sv', 'da', 'no', 'de', 'fr', 'nl', 'es', 'it'];
 
 class EventSelectLanguage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedId: props.activeLanguage
+      selectedId: props.activeLanguage,
+      loading: false
     };
   }
 
   languageClickHandler = (event) => {
-    this.props.toggle(event.target.id);
+    if (event.target.id === 'en' || event.target.id === 'sv') {
+      this.props.onToggle(event.target.id);
+    } else {
+      this.props.onToggle(event.target.id);
+      this.props.onTranslate(this.props.content, this.props.eventId, this.props.activeLanguage, event.target.id);
+    }
+
     this.setState({
       selectedId: event.target.id
+    });
+  }
+
+  translationLoading = () => {
+    this.setState({
+      loading: true
     });
   }
 
@@ -55,5 +69,11 @@ class EventSelectLanguage extends Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    activeLanguage: state.activeLanguage,
+    translations: state.translation
+  };
+};
 
-export default EventSelectLanguage;
+export default connect(mapStateToProps)(EventSelectLanguage);
