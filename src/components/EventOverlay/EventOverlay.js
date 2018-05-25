@@ -42,7 +42,8 @@ class EventOverlay extends Component {
     super(props);
     this.state = {
       directions: null,
-      showTranslatedContent: false
+      showTranslatedContent: false,
+      langSwitch: props.activeLanguage
     };
   }
   componentDidMount() {
@@ -54,9 +55,18 @@ class EventOverlay extends Component {
   handleShowDirections(directions) {
     this.setState({directions: directions});
   }
-  handleTranslateOnClick = () => {
-    this.setState({showTranslatedContent: !this.state.showTranslatedContent});
+  handleLangSwitch = (lang) => {
+    this.setState({
+      langSwitch: lang,
+      showTranslatedContent: !this.state.showTranslatedContent
+    });
   }
+  handleTranslateOnClick = () => {
+    this.setState({
+      showTranslatedContent: !this.state.showTranslatedContent
+    });
+  }
+
   render() {
     return (
       <div className='EventOverlay' onClick={ev => ev.stopPropagation()}>
@@ -98,23 +108,30 @@ class EventOverlay extends Component {
   }
   renderTranslationButton() {
     return <div>
-      <div className='EventSelectLanguage-Backdrop'></div>
       <div style={{position: 'static'}}>
-        <EventSelectLanguage />
+        <EventSelectLanguage
+          toggle={this.handleLangSwitch}
+          isActive={this.state.showTranslatedContent}
+          activeLanguage={this.props.activeLanguage}/>
+
         <LoadingButton
           onClick={this.handleTranslateOnClick}
           loading={this.state.showTranslatedContent && this.props.translationLoading}
           cssClassName='EventOverlay-button'
-          text={!this.state.showTranslatedContent ? 'Translate' : 'Original'}
+          text='Translate'
         />
         <span style={{fontSize: 12, fontStyle: 'italic' }}>By Google Translate</span>
       </div>
     </div>;
   }
   renderLeftContent() {
+    const currContent = this.state.langSwitch === this.props.activeLanguage && !this.props.translatedContent
+      ? this.props.event.content
+      : this.props.event.translatedContent;
+
     const content = this.state.showTranslatedContent && this.props.translatedContent
       ? this.props.translatedContent
-      : this.props.event.content;
+      : currContent;
 
     return <Fragment>
       {!!this.props.event.rating &&
@@ -210,7 +227,8 @@ const mapStateToProps = (state, ownProps) => {
   return {
     translatables: state.siteSettings.translatables[state.activeLanguage],
     translatedContent,
-    translationLoading
+    translationLoading,
+    activeLanguage: state.activeLanguage
   };
 };
 

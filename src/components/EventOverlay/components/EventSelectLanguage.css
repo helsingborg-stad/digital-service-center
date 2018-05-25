@@ -40,10 +40,10 @@
 
 .EventSelectLanguage__flag {
   display: block;
-  width: 32px;
-  margin-left: 39px;
-  margin-bottom: 0.5rem;
-  margin-top: 0.25rem;
+  width: 43px;
+  border-radius: 4px;
+  background-size: cover;
+  margin-right: 0.5em;
 }
 
 .EventSelectLanguage-Backdrop {
@@ -55,4 +55,142 @@
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.2);
+}
+
+
+
+.EventDropUp h3{
+  margin:0;
+  font-weight:500;
+  font-size:1.5em;
+  margin-top:2em;
+  display: inline-block;
+}
+
+.EventDropUp {
+	position: absolute;
+	left: 0;
+	bottom: 142px;
+	height: 365px;
+	width: 340px;
+	perspective: 500px;
+  z-index: 8;
+}
+
+.EventDropUp ul::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: inset 0 -15px 10px 0 #fff;
+  z-index: 9;
+  pointer-events: none;
+}
+
+@media only screen and (min-width: 770px) {
+	.EventDropUp {
+		left: 0.6rem;
+	}
+}
+
+.EventDropUp__box {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 100%;
+	height: 100%;
+	border-radius: 8px;
+	background: #fff;
+	-webkit-box-shadow: 0 40px 84px rgba(0, 0, 0, 0.5);
+	box-shadow: 0 40px 84px rgba(0, 0, 0, 0.5);
+	-webkit-transform: rotateX(10deg);
+	transform: rotateX(10deg);
+	opacity: 0;
+	visibility: hidden;
+	-webkit-transform-origin: right bottom;
+	transform-origin: right bottom;
+	-webkit-transition: all 225ms ease-out;
+  transition: all 225ms ease-out;
+}
+
+.EventDropUp__box:hover {
+	-webkit-transition: all 300ms 225ms ease-out;
+  transition: all 300ms 225ms ease-out;
+}
+
+.EventDropUp__box.is-active {
+	opacity: 1;
+	visibility: visible;
+	-webkit-transform: rotateX(0deg);
+  transform: rotateX(0deg);
+}
+
+.EventDropUp__box ul {
+	height: calc(100% - 27px);
+	padding: 0;
+	overflow-y: scroll;
+	-webkit-overflow-scrolling: touch;
+}
+
+.EventLang--select {
+	display: block;
+	position: relative;
+	padding: 0.6em 0;
+	margin: 0 0.8em;
+	border: 1px solid transparent;
+	border-radius: 6px;
+	opacity: 0;
+	cursor: pointer;
+	-webkit-transform: translateY(10px);
+  transform: translateY(10px);
+  will-change: transform, opacity;
+  opacity: 1;
+  transform: translateY(0px);
+}
+
+.EventLang--select:after {
+	content: '';
+	position: absolute;
+	top: 15px;
+	right: 8px;
+	width: 28px;
+	height: 28px;
+	background-image: url(../../../media/check.svg);
+	background-repeat: no-repeat;
+	background-position: 94% center;
+	-webkit-transition: all 250ms ease-out;
+	transition: all 250ms ease-out;
+	-webkit-transform: translateX(6px);
+	transform: translateX(6px);
+	opacity: 0;
+}
+
+.EventLang--select h3 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding-left: 0.35rem;
+  transform: translateY(-9px);
+}
+
+.EventLang--select.is-active {
+  background-color: #f7f7f7;
+}
+
+@media only screen and (min-width: 770px) {
+	.EventLang--select {
+		padding: 0.6em 1em;
+	}
+	.EventLang--select.is-active:after {
+		opacity: 1;
+		-webkit-transform: translateX(0px);
+		transform: translateX(0px);
+	}
+}
+
+.EventLang--select__box {
+  display: inline-block;
+	align-items: center;
 }

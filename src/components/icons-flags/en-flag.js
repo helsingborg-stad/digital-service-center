@@ -4,35 +4,22 @@ import React from 'react';
 /* eslint-disable max-len */
 const EnFlag = ({className}) => {
   return (
-  <svg className={className} viewBox="0 0 223.6 130.4">
-    <defs>
-      <clipPath id="clip-path" transform="translate(-1136.4 -1334.5)">
-        <rect style={{fill: 'none'}} x="1136.4" y="1334.5" width="223.6" height="130.44"/>
-      </clipPath>
-    </defs>
-    <g>
-      <g>
-        <g>
-          <g style={{clipPath: 'url(#clip-path)'}}>
-            <rect style={{fill: '#fff'}} width="223.6" height="130.44"/>
-            <polygon style={{fill: '#bd0034'}} points="149.7 47.2 223.6 5.8 223.6 0 218.5 0 134.3 47.2 149.7 47.2"/>
-            <polygon style={{fill: '#bd0034'}} points="146.2 85.9 223.6 129.2 223.6 120.5 161.7 85.9 146.2 85.9"/>
-            <polygon style={{fill: '#bd0034'}} points="0 9.9 66.2 47.2 81.7 47.2 0 1.3 0 9.9"/>
-            <polygon style={{fill: '#bd0034'}} points="78.2 85.9 0 129.7 0 130.4 14.1 130.4 93.6 85.9 78.2 85.9"/>
-            <polygon style={{fill: '#1a237b'}} points="208.3 0 130 0 130 43.8 208.3 0"/>
-            <polygon style={{fill: '#1a237b'}} points="95.5 0 17.5 0 95.5 43.8 95.5 0"/>
-            <polygon style={{fill: '#1a237b'}} points="223.6 47.2 223.6 17.2 170.5 47.2 223.6 47.2"/>
-            <polygon style={{fill: '#1a237b'}} points="223.6 115.5 223.6 85.9 170.5 85.9 223.6 115.5"/>
-            <polygon style={{fill: '#1a237b'}} points="21.9 130.4 95.5 130.4 95.5 89.2 21.9 130.4"/>
-            <polygon style={{fill: '#1a237b'}} points="130 130.4 203.8 130.4 130 89.2 130 130.4"/>
-            <polygon style={{fill: '#1a237b'}} points="0 85.9 0 116.8 55 85.9 0 85.9"/>
-            <polygon style={{fill: '#1a237b'}} points="0 47.2 55 47.2 0 16.2 0 47.2"/>
-            <polygon style={{fill: '#bd0034'}} points="102.4 0 102.4 54.9 0 54.9 0 78.2 102.4 78.2 102.4 130.4 123.1 130.4 123.1 78.2 223.6 78.2 223.6 54.9 123.1 54.9 123.1 0 102.4 0"/>
-          </g>
+    <svg className={className} viewBox='0 0 640 480' width="43" height="30">
+      <defs>
+        <clipPath id="a">
+          <path fillOpacity=".7" d="M-85.3 0h682.6v512H-85.3z"/>
+        </clipPath>
+      </defs>
+      <g clipPath="url(#a)" transform="translate(80) scale(.94)">
+        <g strokeWidth="1pt">
+          <path fill="#006" d="M-256 0H768v512H-256z"/>
+          <path fill="#fff" d="M-256 0v57.2L653.5 512H768v-57.2L-141.5 0H-256zM768 0v57.2L-141.5 512H-256v-57.2L653.5 0H768z"/>
+          <path fill="#fff" d="M170.7 0v512h170.6V0H170.7zM-256 170.7v170.6H768V170.7H-256z"/>
+          <path fill="#c00" d="M-256 204.8v102.4H768V204.8H-256zM204.8 0v512h102.4V0H204.8zM-256 512L85.3 341.3h76.4L-179.7 512H-256zm0-512L85.3 170.7H9L-256 38.2V0zm606.4 170.7L691.7 0H768L426.7 170.7h-76.3zM768 512L426.7 341.3H503l265 132.5V512z"/>
         </g>
       </g>
-    </g>
-  </svg>
+    </svg>
+
   );
 };
 
