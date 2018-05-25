@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import EnFlag from './icons-flags/en-flag';
-import SvFlag from './icons-flags/sv-flag';
+import EnFlag from './icons-flags/en-front-flag';
+import SvFlag from './icons-flags/sv-front-flag';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
