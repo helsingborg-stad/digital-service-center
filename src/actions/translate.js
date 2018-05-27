@@ -33,7 +33,7 @@ export function translateData(text, id, source, target) {
 
     const data = {
       q: text,
-      source: source,
+      source: 'sv',
       target: target
     };
     return fetch('https://translation.googleapis.com/language/translate/v2?key=AIzaSyD6nh_5HAPig0rLfpUT5x-JGu00wn_FvWQ', {
