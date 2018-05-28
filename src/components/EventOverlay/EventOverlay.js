@@ -9,7 +9,7 @@ import ReactPlayer from 'react-player';
 import getUserLocation from '../../util/getUserLocation';
 import LoadingButton from '../LoadingButton.js';
 import GoogleMapsDirections from '../GoogleMapsDirections';
-import { translateData } from '../../actions/translate';
+import { translateData, translationIsLoading } from '../../actions/translate';
 import ReactLoading from 'react-loading';
 
 import EventOverlayReviews from './components/EventOverlayReviews';
@@ -51,18 +51,18 @@ class EventOverlay extends Component {
       const { latitude, longitude } = this.props.event.location;
       handleNavigationClick(latitude, longitude, this.handleShowDirections.bind(this));
     }
+
+    this.props.initiatetranslationLoading(false, this.props.event.id, 'sv');
   }
   handleShowDirections(directions) {
     this.setState({directions: directions});
   }
-  handleLangSwitch = (lang) => {
+  handleTranslateOnClick = (lang) => {
+    const whatLang = !lang
+      ? this.props.activeLanguage
+      : lang;
     this.setState({
-      langSwitch: lang,
-      showTranslatedContent: !this.state.showTranslatedContent
-    });
-  }
-  handleTranslateOnClick = () => {
-    this.setState({
+      langSwitch: whatLang,
       showTranslatedContent: !this.state.showTranslatedContent
     });
   }
@@ -70,6 +70,12 @@ class EventOverlay extends Component {
     return this.state.langSwitch === this.props.activeLanguage
       ? this.props.event.content
       : this.props.event.translatedContent;
+  }
+  titleForCurrentLanguage = () => {
+    const translatedTitle = this.props.pageType === 'LandingPage' ? this.props.event.name : this.props.event.translatedTitle;
+    return this.state.langSwitch === this.props.activeLanguage || !['sv', 'en'].includes(this.state.langSwitch)
+      ? this.props.event.name
+      : translatedTitle;
   }
   contentForTranslatedLanguage = () => {
     const needToFetchTranslation = !['sv', 'en'].includes(this.state.langSwitch);
@@ -112,7 +118,7 @@ class EventOverlay extends Component {
         </div>
       }
 
-      <h2 className='EventOverlay-heading'>{ this.props.event.name }</h2>
+      <h2 className='EventOverlay-heading'>{ this.titleForCurrentLanguage() }</h2>
 
       <div style={{width: '58%', marginRight: '5%', float: 'left'}}>
         { this.renderLeftContent() }
@@ -123,28 +129,34 @@ class EventOverlay extends Component {
     </div>;
   }
   renderTranslationButton() {
+    const content = this.props.activeLanguage === 'en'
+      ? this.props.event.translatedContent
+      : this.props.event.content;
     return <div>
       <div style={{position: 'static'}}>
         <EventSelectLanguage
-          content={this.props.event.content}
+          content={content}
           eventId={this.props.event.id}
-          onToggle={this.handleLangSwitch}
+          onToggle={this.handleTranslateOnClick}
           onTranslate={this.onTranslate}
           isActive={this.state.showTranslatedContent}
           activeLanguage={this.props.activeLanguage}/>
+        {!this.props.pageType === 'LandingPage' &&
+        <Fragment>
+          <button
+            onClick={() => this.handleTranslateOnClick()}
+            disabled={!this.state.showTranslatedContent && this.props.translationLoading}
+            className='EventOverlay-button'>Translate</button>
+          <span style={{fontSize: 12, fontStyle: 'italic' }}>By Google Translate</span>
+        </Fragment>
+        }
 
-        <LoadingButton
-          onClick={this.handleTranslateOnClick}
-          loading={this.state.showTranslatedContent && false}
-          cssClassName='EventOverlay-button'
-          text='Translate'
-        />
-        <span style={{fontSize: 12, fontStyle: 'italic' }}>By Google Translate</span>
       </div>
     </div>;
   }
   renderLeftContent() {
-    const content = this.contentForTranslatedLanguage();
+    const getContent = this.contentForTranslatedLanguage();
+    const content = getContent || '<p></p>';
 
     return <Fragment>
       {!!this.props.event.rating &&
@@ -154,20 +166,19 @@ class EventOverlay extends Component {
         style={{ marginTop: '1rem', width: 'calc(100% + 1rem)' }}
         autoHeight autoHeightMax='80vh - 4.6875rem - 1.25rem - (550px)'>
         { content &&
-            <div>
-              <span className='EventOverlay-content-scrollWrapper'>
-
-                { (this.state.showTranslatedContent && this.props.translationLoading) &&
-                <div className='EventOverlay-spinner'>
-                  <ReactLoading type='spin' color='#666' height={100} width={50} />
-                </div> }
-                <span
-                  className='EventOverlay-content'
-                  dangerouslySetInnerHTML={{ __html: content.replace(/\r\n/g, '<br />')}}
-                />
-              </span>
-            </div>
-        }
+          <div>
+            <span className='EventOverlay-content-scrollWrapper'>
+              { this.props.translationLoading &&
+              <div className='EventOverlay-spinner'>
+                <ReactLoading type='spin' color='#666' height={100} width={50} />
+              </div>
+              }
+              <span
+                className='EventOverlay-content'
+                dangerouslySetInnerHTML={{ __html: content.replace(/\r\n/g, '<br />')}}
+              />
+            </span>
+          </div>}
         { !!this.props.event.rating &&
               <EventOverlayReviews reviews={this.props.event.reviews} />
         }
@@ -231,18 +242,11 @@ EventOverlay.propTypes = {
 
 
 const mapStateToProps = (state, ownProps) => {
-  const eventId = ownProps.event.id;
-  const translatedContent = (eventId in state.translation)
-    && ('content' in state.translation[eventId])
-    ? state.translation[eventId].content : null;
-  const translationLoading = (eventId in state.translation)
-    ? state.translation[eventId].loading : false;
   return {
     translatables: state.siteSettings.translatables[state.activeLanguage],
-    translatedContent,
-    translationLoading,
     translations: state.translation,
-    activeLanguage: state.activeLanguage
+    activeLanguage: state.activeLanguage,
+    translationLoading: state.translation.loading
   };
 };
 
@@ -250,6 +254,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     translateText: (text, id, source, target) => {
       return dispatch(translateData(text, id, source, target));
+    },
+    initiatetranslationLoading: (boolean) => {
+      return dispatch(translationIsLoading(boolean));
     }
   };
 };
@@ -267,7 +274,8 @@ export default class extends Component {
 
   static propTypes = {
     event: PropTypes.object,
-    handleClose: PropTypes.func
+    handleClose: PropTypes.func,
+    pageType: PropTypes.string
   }
 
   render() {
@@ -280,8 +288,7 @@ export default class extends Component {
               <CloseButton handleClose={this.props.handleClose} />
             </div>
             <EventOverlayConnected
-              event={this.props.event}
-              handleClose={this.props.handleClose}
+              {...this.props}
               onVideoButtonClick={this.handlePlayVideo.bind(this, true)}
               showDirections={this.props.showDirections}
               showVideoButton={this.state.videoUrl} />

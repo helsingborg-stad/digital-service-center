@@ -172,6 +172,7 @@ export class EventsPage extends Component {
             { this.state.visibleOverlayEvent &&
               <EventOverlay
                 key='event-overlay'
+                pageType='Eventspage'
                 event={this.props.events.find(e => e.slug === this.state.visibleOverlayEvent)}
                 handleClose={() => this.changeOverlayEvent(null)}
                 changeOverlayEvent={this.changeOverlayEvent.bind(this)}

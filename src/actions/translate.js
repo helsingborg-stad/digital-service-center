@@ -63,6 +63,7 @@ export function translateData(text, id, source, target) {
       .catch((e) => {
         // eslint-disable-next-line no-console
         console.warn('translateData error', e);
+        dispatch(translationIsLoading(false, id, target));
         dispatch(translateHasErrored(true, id, target));
       });
   };

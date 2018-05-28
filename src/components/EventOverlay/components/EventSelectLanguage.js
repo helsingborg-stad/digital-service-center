@@ -14,46 +14,41 @@ class EventSelectLanguage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedId: props.activeLanguage,
-      loading: false
+      selectedId: props.activeLanguage
     };
   }
 
   languageClickHandler = (event) => {
-    if (event.target.id === 'en' || event.target.id === 'sv') {
-      this.props.onToggle(event.target.id);
-    } else {
-      this.props.onToggle(event.target.id);
-      this.props.onTranslate(this.props.content, this.props.eventId, this.props.activeLanguage, event.target.id);
-    }
-
     this.setState({
       selectedId: event.target.id
     });
-  }
 
-  translationLoading = () => {
-    this.setState({
-      loading: true
-    });
+    if (event.target.id === 'en' || event.target.id === 'sv') {
+      this.props.onToggle(event.target.id);
+    } else {
+      const { content, eventId, activeLanguage } = this.props;
+      this.props.onTranslate(content, eventId, activeLanguage, event.target.id);
+      this.props.onToggle(event.target.id);
+    }
   }
 
   render() {
-    const activeClasses = cn('EventDropUp__box',
-      {'is-active': this.props.isActive});
     return (
       <section className="EventDropUp">
-        <div className={activeClasses}>
+        <div className={cn('EventDropUp__box',
+          {'is-active': this.props.isActive && !this.props.translationLoading})}>
           <ul>
-            { promotedLanguages.map(l =>
+            {promotedLanguages.map(l =>
               <li
                 id={l}
                 key={l}
-                onClick={this.languageClickHandler.bind(this)}
+                onClick={this.languageClickHandler}
                 className={
                   cn('EventLang--select',
-                    {'is-active': this.state.selectedId === l}
-                  )}>
+                    {'is-active checkMark': this.state.selectedId === l && !this.props.translationLoading},
+                    {'is-active spinner': this.state.selectedId === l && this.props.translationLoading}
+                  )}
+                disabled={this.props.translationLoading}>
                 <div style={{pointerEvents: 'none'}}>
                   <div className="EventLang--select__box">
                     {Flags[`${l.toUpperCase()}Flag`]({className: 'EventSelectLanguage__flag'})}
@@ -72,7 +67,8 @@ class EventSelectLanguage extends Component {
 const mapStateToProps = (state) => {
   return {
     activeLanguage: state.activeLanguage,
-    translations: state.translation
+    translations: state.translation,
+    translationLoading: state.translation.loading
   };
 };
 

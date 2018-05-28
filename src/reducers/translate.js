@@ -12,12 +12,7 @@ export function translation(state = {}, action) {
     });
   case 'TRANSLATE_IS_LOADING':
     return Object.assign({}, state, {
-      [action.lang]: {
-        ...state[action.lang],
-        [action.id]: {
-          loading: action.isLoading
-        }
-      }
+      loading: action.isLoading
     });
   case 'TRANSLATE_FETCH_SUCCESS':
     return Object.assign({}, state, {

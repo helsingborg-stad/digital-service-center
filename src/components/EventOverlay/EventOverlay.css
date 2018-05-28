@@ -47,7 +47,7 @@
 .EventOverlay-spinner {
   width: 100px;
   height: 50px;
-  position: absolute;
+  position: inherit;
   left: 50%;
   transform: translateX(-50%);
   top: 2rem;
@@ -62,6 +62,10 @@
   display: block;
   margin-bottom: 1.5rem;
   color: #535353;
+}
+
+.EventOverlay-content > p:empty {
+  margin-bottom: 5.4rem;
 }
 
 .EventOverlay-content > p:first-of-type {
@@ -79,6 +83,12 @@
   text-transform: uppercase;
   padding: 0.8rem 1.25rem;
   margin-top: 1rem;
+  cursor: pointer;
+}
+
+.EventOverlay-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.8;
 }
 
 .EventOverlay-videoButton {

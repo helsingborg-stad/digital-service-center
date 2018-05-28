@@ -103,27 +103,21 @@
 	height: 100%;
 	border-radius: 8px;
 	background: #fff;
-	-webkit-box-shadow: 0 40px 84px rgba(0, 0, 0, 0.5);
 	box-shadow: 0 40px 84px rgba(0, 0, 0, 0.5);
-	-webkit-transform: rotateX(10deg);
 	transform: rotateX(10deg);
 	opacity: 0;
 	visibility: hidden;
-	-webkit-transform-origin: right bottom;
 	transform-origin: right bottom;
-	-webkit-transition: all 225ms ease-out;
   transition: all 225ms ease-out;
 }
 
 .EventDropUp__box:hover {
-	-webkit-transition: all 300ms 225ms ease-out;
   transition: all 300ms 225ms ease-out;
 }
 
 .EventDropUp__box.is-active {
 	opacity: 1;
 	visibility: visible;
-	-webkit-transform: rotateX(0deg);
   transform: rotateX(0deg);
 }
 
@@ -131,7 +125,6 @@
 	height: calc(100% - 27px);
 	padding: 0;
 	overflow-y: scroll;
-	-webkit-overflow-scrolling: touch;
 }
 
 .EventLang--select {
@@ -143,28 +136,27 @@
 	border-radius: 6px;
 	opacity: 0;
 	cursor: pointer;
-	-webkit-transform: translateY(10px);
   transform: translateY(10px);
   will-change: transform, opacity;
   opacity: 1;
   transform: translateY(0px);
 }
 
-.EventLang--select:after {
+.EventLang--select.checkMark {
 	content: '';
-	position: absolute;
-	top: 15px;
-	right: 8px;
-	width: 28px;
-	height: 28px;
 	background-image: url(../../../media/check.svg);
 	background-repeat: no-repeat;
 	background-position: 94% center;
-	-webkit-transition: all 250ms ease-out;
-	transition: all 250ms ease-out;
-	-webkit-transform: translateX(6px);
 	transform: translateX(6px);
 	opacity: 0;
+}
+
+.EventLang--select.spinner {
+	background-image: url(../../../media/loading.svg);
+	background-repeat: no-repeat;
+	background-position: 94% center;
+	transform: translateX(6px);
+	opacity: 0.6;
 }
 
 .EventLang--select h3 {
@@ -183,9 +175,12 @@
 	.EventLang--select {
 		padding: 0.6em 1em;
 	}
-	.EventLang--select.is-active:after {
+	.EventLang--select.is-active.checkMark {
 		opacity: 1;
-		-webkit-transform: translateX(0px);
+		transform: translateX(0px);
+  }
+	.EventLang--select.is-active.spinner {
+		opacity: 1;
 		transform: translateX(0px);
 	}
 }
