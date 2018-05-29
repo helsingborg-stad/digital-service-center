@@ -75,6 +75,7 @@
 	width: 340px;
 	perspective: 500px;
   z-index: 8;
+  visibility: hidden;
 }
 
 .EventDropUp ul::before {

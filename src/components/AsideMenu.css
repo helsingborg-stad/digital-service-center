@@ -23,11 +23,9 @@
     height: calc(100vh - 7.9875rem - 3.25rem);
   }
 
-  /* Flip Calendar and Calendar list when in portrait mode */
   .AsideMenu {
     display: flex;
     flex-flow: column;
-    flex-direction: column-reverse;
-    justify-content: space-between;
+    padding-top: 51.4rem;
   }
 }

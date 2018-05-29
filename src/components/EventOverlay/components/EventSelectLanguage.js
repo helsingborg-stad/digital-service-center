@@ -34,7 +34,7 @@ class EventSelectLanguage extends Component {
 
   render() {
     return (
-      <section className="EventDropUp">
+      <section className='EventDropUp'>
         <div className={cn('EventDropUp__box',
           {'is-active': this.props.isActive && !this.props.translationLoading})}>
           <ul>

@@ -43,6 +43,7 @@
 .EventCategoryList-scrollWrapper {
   margin-top: 1rem;
   padding-right: 1.5rem;
+  min-height: 300px;
 }
 
 .EventCategoryList-innerScrollWrapper {
