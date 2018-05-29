@@ -50,7 +50,11 @@ function hdsc_translatables() {
     ['Fråga kontaktcenter', 'ask-customer-center'],
     ['Visa information', 'show-information'],
     ['Adresser', 'addresses'],
-    ['Tillbaka', 'go-back']
+    ['Tillbaka', 'go-back'],
+    ['Översätt', 'translate-button'],
+    ['Av Google Translate', 'translated-by-google'],
+    ['Visar numActiveEvents av numEvents evenemang', 'number-of-events-showing', 'numActiveEvents och numEvents får ej ändras'],
+    ['Rensa filter', 'clear-filter']
   ];
 }
 

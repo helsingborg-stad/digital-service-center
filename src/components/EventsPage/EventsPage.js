@@ -115,6 +115,9 @@ export class EventsPage extends Component {
         this.state.selectedDates,
         this.state.searchTerm
       );
+    const eventCounterText = this.props.translatables.numberOfEventsShowing
+      .replace('numActiveEvents', numActiveEvents)
+      .replace('numEvents', numEvents);
 
     return (
       <div className='EventsPage'>
@@ -201,11 +204,11 @@ export class EventsPage extends Component {
             />
             <div className={cn('EventsPage-eventCounter',
               numEvents > numActiveEvents && 'EventsPage-eventCounter--visible')}>
-              Visar {numActiveEvents} av {numEvents} evenemang
+              {eventCounterText}
               <button
                 className='EventsPage-eventCounter__button'
                 onClick={this.handleClearFilters.bind(this)}>
-                Rensa filter
+                {this.props.translatables.clearFilter}
               </button>
             </div>
           </AsideMenu>
@@ -224,13 +227,18 @@ EventsPage.propTypes = {
   hasErrored: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
   activeEvent: PropTypes.string,
-  selectedTimeSpan: PropTypes.string
+  selectedTimeSpan: PropTypes.string,
+  translatables: PropTypes.shape({
+    numberOfEventsShowing: PropTypes.string,
+    clearFilter: PropTypes.string
+  })
 };
 
 const mapStateToProps = (state) => {
   return {
     events: state.events[state.activeLanguage],
     activeLanguage: state.activeLanguage,
+    translatables: state.siteSettings.translatables[state.activeLanguage],
     landingPages: state.landingPages[state.activeLanguage],
     hasErrored: (state.activeLanguage in state.eventsHasErrored)
       ? state.eventsHasErrored[state.activeLanguage] : false,

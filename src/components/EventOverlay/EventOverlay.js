@@ -147,8 +147,8 @@ class EventOverlay extends Component {
           <button
             onClick={() => this.handleTranslateOnClick()}
             disabled={!this.state.showTranslatedContent && this.props.translationLoading}
-            className='EventOverlay-button'>Translate</button>
-          <span style={{fontSize: 12, fontStyle: 'italic' }}>By Google Translate</span>
+            className='EventOverlay-button'>{this.props.translatables.translateButton}</button>
+          <span style={{fontSize: 12, fontStyle: 'italic' }}>{this.props.translatables.translatedByGoogle}</span>
         </div>
         }
 
@@ -237,12 +237,14 @@ EventOverlay.propTypes = {
     location: PropTypes.string.isRequired,
     contact: PropTypes.string.isRequired,
     takeMeThere: PropTypes.string.isRequired,
-    tickets: PropTypes.string.isRequired
+    tickets: PropTypes.string.isRequired,
+    translatedByGoogle: PropTypes.string.isRequired,
+    translateButton: PropTypes.string.isRequired
   }).isRequired
 };
 
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   return {
     translatables: state.siteSettings.translatables[state.activeLanguage],
     translations: state.translation,
