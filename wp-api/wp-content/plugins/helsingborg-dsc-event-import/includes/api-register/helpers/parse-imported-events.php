@@ -20,7 +20,7 @@ function parse_imported_events($events) {
       $response = [
         id         => $event->ID,
         slug       => $event->post_name,
-        name       => html_entity_decode($title),
+        name       => html_entity_decode(ucfirst($title)),
         type       => 'event',
         content    => $content,
         shortContent => get_short_content($content),
@@ -50,7 +50,7 @@ function parse_imported_events($events) {
         ],
         youtubeUrl => $post_meta->youtube,
         vimeoUrl => $post_meta->vimeo,
-        translatedTitle => $titleReverse,
+        translatedTitle => html_entity_decode(ucfirst($titleReverse)),
         translatedContent => $contentReverse
       ];
 
