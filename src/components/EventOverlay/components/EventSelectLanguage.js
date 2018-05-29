@@ -64,6 +64,14 @@ class EventSelectLanguage extends Component {
   }
 }
 
+EventSelectLanguage.propTypes = {
+  content: PropTypes.string.isRequired,
+  eventId: PropTypes.number.isRequired,
+  activeLanguage: PropTypes.string.isRequired,
+  onToggle: PropTypes.func.isRequired,
+  onTranslate: PropTypes.func.isRequired
+};
+
 const mapStateToProps = (state) => {
   return {
     activeLanguage: state.activeLanguage,
