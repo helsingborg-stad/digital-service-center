@@ -15,7 +15,7 @@ function create_and_update_events() {
   import_event_categories();
 
   $start_date = date('Y-m-d');
-  $end_date = date('Y-m-d', strtotime('+1 days', strtotime($start_date)));
+  $end_date = date('Y-m-d', strtotime('+3 days', strtotime($start_date)));
   $events = get_event_json($start_date, $end_date);
 
   $event_ids_to_keep = array_map(function ($event) { return (string)$event->id; }, $events);
@@ -36,7 +36,7 @@ function create_and_update_events() {
 
 
   foreach($events as $event) {
-    if(does_event_already_exist($event) && does_translate_event_meta_exist($event)){
+    if(does_event_already_exist($event)){
         $stored_event = get_stored_event($event);
         update_event($event, $stored_event, $stored_event->ID);
         update_translated_event_meta($event, $stored_event->ID);
@@ -125,9 +125,13 @@ function update_event_featured_image($post_id, $event) {
 function insert_event_meta($post_id, $event){
   add_post_meta($post_id, 'imported_event_data', $event);
   add_post_meta($post_id, 'event_id', $event->id);
-  add_post_meta($post_id, 'post_content_translated', translate_text($event->content->rendered));
-  //add_post_meta($post_id, 'post_title_translated', translate_text($event->title->rendered));
-  add_post_meta($post_id, 'post_title_translated', 'Lorem ipsum asto');
+
+  $add_content_meta = add_post_meta($post_id, 'post_content_translated', translate_text($event->content->rendered), true);
+  $add_title_meta = add_post_meta($post_id, 'post_title_translated', translate_text($event->title->rendered), true);
+  
+  if(!$add_content_meta && !$add_title_meta){
+    update_translated_event_meta($event, $post_id);
+  }
   
 }
 
@@ -135,10 +139,10 @@ function update_translated_event_meta($event, $post_id){
   $post_meta_content = get_post_meta($post_id, 'post_content_translated', true);
   $post_meta_title = get_post_meta($post_id, 'post_title_translated', true);
 
-  if($post_meta_content != $event->content->rendered && $post_meta_title != $event->title->rendered){
+  if($event->content->rendered != $post_meta_content ||
+  $event->title->rendered != $post_meta_title){
     update_post_meta($post_id, 'post_content_translated', translate_text($event->content->rendered));
-    //update_post_meta($post_id, 'post_content_translated', translate_text($event->title->rendered));
-    update_post_meta($post_id, 'post_content_translated', 'Lorem ipsum asto');
+    update_post_meta($post_id, 'post_title_translated', translate_text($event->title->rendered));
   }
 }
 
@@ -179,10 +183,6 @@ function does_event_already_exist($event) {
   return $event_query != null;
 }
 
-function does_translate_event_meta_exist($event){
-  return metadata_exists('post', $event->id, 'post_content_translated');
-}
-
 function get_stored_event($event) {
     $args = array(
     'post_type' => 'imported_event',
@@ -213,28 +213,25 @@ function import_event_categories() {
   }
 }
 
-function translate_text($text){
-  return 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget fermentum tellus, eget finibus velit. Integer fermentum, massa quis scelerisque pharetra, diam enim aliquet tortor, eu suscipit lectus elit vitae ex. Mauris sed risus eget elit placerat iaculis. Ut in lorem vel urna posuere sodales ac et lectus. Ut eget cursus leo. In hac habitasse platea dictumst. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque venenatis elit id purus porttitor euismod. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi lorem enim, imperdiet eu nunc id, gravida interdum dui. Maecenas suscipit eu tortor non porttitor. Vivamus sit amet nulla finibus, tempus ante in, sodales neque. Suspendisse ac nulla ante. Mauris id vestibulum orci. Vestibulum sed lorem libero. Curabitur venenatis dictum erat, non dignissim dui hendrerit aliquet.';
+function translate_text($text) {
+  $url = 'https://translation.googleapis.com/language/translate/v2?key=AIzaSyD6nh_5HAPig0rLfpUT5x-JGu00wn_FvWQ';
+
+  $arr = array(
+    'q' => $text,
+    'source' => 'sv',
+    'target' => 'en'
+  );
+  $data = json_encode($arr);
+
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_URL, $url);
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=UTF-8'));
+  curl_setopt($ch, CURLOPT_POST, 1);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  $response  = curl_exec($ch);
+  curl_close($ch);
+  $response = json_decode($response, true);
+
+  return $response['data']['translations'][0]['translatedText'];
 }
-// function translate_text($text) {
-//   $url = 'https://translation.googleapis.com/language/translate/v2?key=AIzaSyD6nh_5HAPig0rLfpUT5x-JGu00wn_FvWQ';
-
-//   $arr = array(
-//     'q' => $text,
-//     'source' => 'sv',
-//     'target' => 'en'
-//   );
-//   $data = json_encode($arr);
-
-//   $ch = curl_init();
-//   curl_setopt($ch, CURLOPT_URL, $url);
-//   curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-//   curl_setopt($ch, CURLOPT_POST, 1);
-//   curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-//   curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//   $response  = curl_exec($ch);
-//   curl_close($ch);
-//   $response = json_decode($response, true);
-
-//   return $response['data']['translations'][0]['translatedText'];
-// }
