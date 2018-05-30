@@ -145,8 +145,8 @@ class EventOverlay extends Component {
         { this.props.pageType === 'Eventspage' &&
         <div>
           <button
-            onClick={() => this.handleTranslateOnClick()}
-            disabled={!this.state.showTranslatedContent && this.props.translationLoading}
+            onClick={() => this.handleTranslateOnClick(this.state.langSwitch)}
+            disabled={this.state.showTranslatedContent && this.props.translationLoading}
             className='EventOverlay-button'>{this.props.translatables.translateButton}</button>
           <span style={{fontSize: 12, fontStyle: 'italic' }}>{this.props.translatables.translatedByGoogle}</span>
         </div>
