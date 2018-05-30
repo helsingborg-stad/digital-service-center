@@ -35,11 +35,15 @@ function parse_editable_events($events) {
       }
   
       $occasion = get_post_meta($event->ID, 'occasions', true);
-      $response['occasions'] = [[
-        startDate => str_replace('T', ' ', $occasion['start_date']),
-        endDate => str_replace('T', ' ', $occasion['end_date']),
-        doorTime => str_replace('T', ' ', $occasion['door_time'])
-      ]];
+      if(strlen($occasion['start_date']) && strlen($occasion['end_date'])){
+        $response['occasions'] = [[
+          startDate => str_replace('T', ' ', $occasion['start_date']),
+          endDate => str_replace('T', ' ', $occasion['end_date']),
+          doorTime => str_replace('T', ' ', $occasion['door_time'])
+        ]];
+      }else{
+        $response['occasion'] = [];
+      }
 
   
       $location = get_post_meta($event->ID, 'location', true);

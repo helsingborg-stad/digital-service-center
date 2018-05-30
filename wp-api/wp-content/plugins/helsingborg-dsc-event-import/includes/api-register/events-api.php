@@ -45,7 +45,7 @@ function events_response() {
   $google_places_parsed = parse_google_places();
   $editable_events_parsed = array_values(array_filter($editable_events_parsed, function($event){
       $occasions = $event['occasions'][0];
-      if(!isset($occasions)){
+      if(empty($occasions)){
         return true;
        }
       //Check if date has passed

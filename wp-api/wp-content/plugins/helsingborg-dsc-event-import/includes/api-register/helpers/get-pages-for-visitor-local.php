@@ -54,59 +54,16 @@ function get_pages_for_visitor_local($section) {
             id         => $page->ID,
             slug       => $page->post_name,
             name       => html_entity_decode($page->post_title),
-            type       => 'event',
-            content    => $page->post_content,
-            categories => array_map(function($category) {
-              return [
-                id   => $category->cat_ID,
-                name => $category->name,
-                slug => $category->slug
-              ];
-            }, get_the_category($page->ID)),
+            type       => 'event'
           ];
   
-          $img_url = get_the_post_thumbnail_url($page->ID);
-          if ($img_url) {
-            $response['imgUrl'] = $img_url;
-          }
           $thumbnail_url = get_the_post_thumbnail_url($page->ID, [232, 148]);
           if ($thumbnail_url) {
             $response['imgThumbnailUrl'] = $thumbnail_url;
           }
-  
-          $booking_link = get_post_meta($page->ID, 'booking_link', true);
-          if ($booking_link) {
-            $response['bookingLink'] = $booking_link;
-          }
-  
-          $occasion = get_post_meta($page->ID, 'occasions', true);
-          if (strlen($occasion['start_date']) && strlen($occasion['end_date']) && strlen($occasion['door_time'])) {
-            $response['occasions'] = [[
-              startDate => str_replace('T', ' ', $occasion['start_date']),
-              endDate => str_replace('T', ' ', $occasion['end_date']),
-              doorTime => str_replace('T', ' ', $occasion['door_time'])
-            ]];
-          }
-  
-          $location = get_post_meta($page->ID, 'location', true);
-          $response['location'] = [
-            streetAddress => $location['street_address'],
-            city => $location['city'],
-            postalCode => $location['postal_code'],
-            latitude => floatval($location['latitude']),
-            longitude => floatval($location['longitude'])
-          ];
-  
-          $youtubeUrl = get_post_meta($page->ID, 'youtube', true);
-          if ($youtubeUrl) {
-            $response['youtubeUrl'] = $youtubeUrl;
-          }
-  
-          $vimeoUrl = get_post_meta($page->ID, 'vimeo', true);
-          if ($vimeoUrl) {
-            $response['vimeoUrl'] = $vimeoUrl;
-          }
-  
+
+          $response['occasion'] = [];
+
           return $response;
         }
         else {
