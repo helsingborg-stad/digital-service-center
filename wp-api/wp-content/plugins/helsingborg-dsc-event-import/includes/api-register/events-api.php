@@ -35,7 +35,7 @@ function events_response() {
   $response = [];
 
   $imported_events = get_imported_event_posts();
-  $editable_events = get_posts([ post_type => 'editable_event', 'suppress_filters' => false, numberposts => -1, category => get_option('hdsc-startpage-setting-' . $type . '-category', '')]);
+  $editable_events = get_posts([ post_type => 'editable_event', 'suppress_filters' => false, numberposts => -1]);
 
   $imported_events_parsed = parse_imported_events($imported_events);
   $imported_events_parsed = array_values(array_filter($imported_events_parsed, function($event) {
@@ -43,21 +43,18 @@ function events_response() {
   }));
   $editable_events_parsed = parse_editable_events($editable_events);
   $google_places_parsed = parse_google_places();
-
   $editable_events_parsed = array_values(array_filter($editable_events_parsed, function($event){
       $occasions = $event['occasions'][0];
       if(!isset($occasions)){
         return true;
        }
-
       //Check if date has passed
-      $end_date = strtotime(date('Y-m-d', $occasions['endDate']) ).' ';
+      $end_date = strtotime(date('Y-m-d', strtotime($occasions['endDate'])) ).' ';
       $today = strtotime(date('Y-m-d'));
 
       return $end_date > $today;
 
   }));
-
   $all_events = array_merge((array)$imported_events_parsed, (array)$editable_events_parsed, (array)$google_places_parsed);
   $categories_to_show_on_map = array_reduce($all_events, function($acc, $event) {
     $cat_ids = array_map(function($cat) { return $cat['id']; }, $event['categories']);

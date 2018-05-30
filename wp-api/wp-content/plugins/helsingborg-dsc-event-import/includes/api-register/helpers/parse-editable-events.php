@@ -17,6 +17,7 @@ function parse_editable_events($events) {
             slug => $category->slug
           ];
         }, get_the_category($event->ID)),
+        importedCategories => [],
       ];
   
       $img_url = get_the_post_thumbnail_url($event->ID);
@@ -34,13 +35,12 @@ function parse_editable_events($events) {
       }
   
       $occasion = get_post_meta($event->ID, 'occasions', true);
-      if ((isset($occasion['start_date']) && strlen($occasion['start_date'])) && (isset($occasion['end_date']) && strlen($occasion['end_date'])) && (isset($occasion['door_time']) && strlen($occasion['door_time']))) {
-        $response['occasions'] = [[
-          startDate => str_replace('T', ' ', $occasion['start_date']),
-          endDate => str_replace('T', ' ', $occasion['end_date']),
-          doorTime => str_replace('T', ' ', $occasion['door_time'])
-        ]];
-      }
+      $response['occasions'] = [[
+        startDate => str_replace('T', ' ', $occasion['start_date']),
+        endDate => str_replace('T', ' ', $occasion['end_date']),
+        doorTime => str_replace('T', ' ', $occasion['door_time'])
+      ]];
+
   
       $location = get_post_meta($event->ID, 'location', true);
       $response['location'] = [
