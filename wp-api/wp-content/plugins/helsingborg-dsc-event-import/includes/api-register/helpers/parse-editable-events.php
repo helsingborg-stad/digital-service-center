@@ -4,6 +4,22 @@ namespace helsingborg_dsc_event_import;
 
 function parse_editable_events($events) {
     return array_map(function($event) {
+      //TODO: Make this cleaner
+      //Docs: https://wpml.org/documentation/support/wpml-coding-api/wpml-hooks-reference
+      $current_lang = apply_filters( 'wpml_current_language', NULL );
+      $isTranslated = apply_filters( 'wpml_element_has_translations', NULL, $event->ID, 'editable_event' );
+      $args = array('element_id' => $event->ID, 'element_type' => 'editable_event' );
+      $my_category_language_info = apply_filters( 'wpml_element_language_details', null, $args );
+      $get_translation = apply_filters( 'wpml_get_element_translations', NULL, $my_category_language_info->trid, 'editable_event' );
+      $translated_post = null;
+      foreach($get_translation as $key => $val) {
+        if($current_lang == 'sv' && $key == 'en'){
+          $translated_post = get_post($val->element_id);
+        } elseif ($current_lang == 'en' && $key == 'sv') {
+          $translated_post = get_post($val->element_id);
+        }
+      }
+
       $response = [
         id         => $event->ID,
         slug       => $event->post_name,
@@ -18,6 +34,8 @@ function parse_editable_events($events) {
           ];
         }, get_the_category($event->ID)),
         importedCategories => [],
+        translatedTitle => html_entity_decode($translated_post->post_title),
+        translatedContent => $translated_post->post_content
       ];
   
       $img_url = get_the_post_thumbnail_url($event->ID);
