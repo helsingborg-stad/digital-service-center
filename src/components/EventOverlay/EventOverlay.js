@@ -72,10 +72,9 @@ class EventOverlay extends Component {
       : this.props.event.translatedContent;
   }
   titleForCurrentLanguage = () => {
-    const translatedTitle = this.props.pageType === 'LandingPage' ? this.props.event.name : this.props.event.translatedTitle;
-    return this.state.langSwitch === this.props.activeLanguage || !['sv', 'en'].includes(this.state.langSwitch)
+    return this.state.langSwitch === this.props.activeLanguage
       ? this.props.event.name
-      : translatedTitle;
+      : this.props.event.translatedTitle;
   }
   contentForTranslatedLanguage = () => {
     const needToFetchTranslation = !['sv', 'en'].includes(this.state.langSwitch);
@@ -142,7 +141,6 @@ class EventOverlay extends Component {
           isActive={this.state.showTranslatedContent}
           activeLanguage={this.props.activeLanguage}/>
 
-        { this.props.pageType === 'Eventspage' &&
         <div>
           <button
             onClick={() => this.handleTranslateOnClick(this.state.langSwitch)}
@@ -150,7 +148,6 @@ class EventOverlay extends Component {
             className='EventOverlay-button'>{this.props.translatables.translateButton}</button>
           <span style={{fontSize: 12, fontStyle: 'italic' }}>{this.props.translatables.translatedByGoogle}</span>
         </div>
-        }
 
       </div>
     </div>;
