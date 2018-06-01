@@ -40,6 +40,8 @@
     "no-undef-init": "warn",
     "no-undefined": "error",
 
+    "react/prop-types": "warn",
+
     "indent": [1, 2], // this option sets a specific tab width for your code (off by default)
     "brace-style": 1, // enforce one true brace style (off by default)
     "camelcase": 1, // require camel case names
@@ -79,7 +81,7 @@
     "max-len": [2, 100, 2], // specify the maximum length of a line in your program (off by default)
     "max-params": [2, 5], // limits the number of parameters that can be used in the function declaration. (off by default)
     "no-plusplus": 2, // disallow use of unary operators, ++ and -- (off by default)
-    
+
     "no-var": "warn"
   }
 }
