@@ -26,6 +26,12 @@
   .AsideMenu {
     display: flex;
     flex-flow: column;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+  }
+
+  .AsideMenu-EventPage {
+    flex-direction: column;
     padding-top: 51.4rem;
   }
 }

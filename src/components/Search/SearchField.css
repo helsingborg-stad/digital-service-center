@@ -83,3 +83,8 @@
     width: calc(100% - 3rem);
 }
 
+@media screen and (orientation: portrait) {
+    .SearchField--Eventspage {
+        margin: 4rem 1.5rem;
+    }
+}

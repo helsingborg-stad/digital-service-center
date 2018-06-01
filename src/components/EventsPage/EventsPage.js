@@ -184,7 +184,7 @@ export class EventsPage extends Component {
           </OverlayTransitionWrapper>
         </main>
         <aside>
-          <AsideMenu fullHeight>
+          <AsideMenu page='Eventspage' fullHeight>
             <EventCategoryList
               categories={categories}
               activeCategories={this.state.activeCategories}

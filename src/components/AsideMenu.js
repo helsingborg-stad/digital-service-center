@@ -3,8 +3,10 @@ import React from 'react';
 import classNames from 'classnames';
 import './AsideMenu.css';
 
-const AsideMenu = ({children, fullHeight}) => (
-  <div className={classNames('AsideMenu', {'AsideMenu--fullHeight': fullHeight})}>
+const AsideMenu = ({children, fullHeight, page}) => (
+  <div className={classNames('AsideMenu',
+    {'AsideMenu-EventPage': page === 'Eventspage'},
+    {'AsideMenu--fullHeight': fullHeight})}>
     {children}
   </div>
 );
