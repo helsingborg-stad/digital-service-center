@@ -52,7 +52,7 @@ function events_response() {
       $end_date = strtotime(date('Y-m-d', strtotime($occasions['endDate'])) ).' ';
       $today = strtotime(date('Y-m-d'));
 
-      return $end_date > $today;
+      return $end_date >= $today;
 
   }));
   $all_events = array_merge((array)$imported_events_parsed, (array)$editable_events_parsed, (array)$google_places_parsed);

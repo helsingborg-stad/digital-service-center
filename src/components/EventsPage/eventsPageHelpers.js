@@ -50,9 +50,16 @@ export function getClosestEventDate(event) {
     }
     return closestDate;
   }).startDate);
+  const endDate = Moment(event.occasions.reduce((closestDate, occ) => {
+    if (!closestDate.occasions || closestDate.endDate >= occ.endDate) {
+      return occ;
+    }
+    return closestDate;
+  }).endDate);
+  const changeWeekIfLongEvent = endDate > Moment() && date < Moment() ? Moment().week() : date.week();
   return {
     date: date.format('YYYY-MM-DD HH:mm'),
-    week: date.week()
+    week: changeWeekIfLongEvent
   };
 }
 

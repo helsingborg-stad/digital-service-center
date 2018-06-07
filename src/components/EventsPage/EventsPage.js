@@ -115,10 +115,10 @@ export class EventsPage extends Component {
         this.state.selectedDates,
         this.state.searchTerm
       );
+
     const eventCounterText = this.props.translatables.numberOfEventsShowing
       .replace('numActiveEvents', numActiveEvents)
       .replace('numEvents', numEvents);
-
     return (
       <div className='EventsPage'>
         <Lipping />
@@ -132,6 +132,7 @@ export class EventsPage extends Component {
             <Scrollbars style={{ width: 'calc(100% - 1.5rem)', marginRight: '-1.5rem' }}>
               <div className='EventsPage-innerScrollWrapper'>
                 { Object.keys(eventsByWeekNumber)
+                  .filter(week => week >= Moment().week())
                   .map(week => (
                     <div key={week}>
                       <h2 className='EventsPage-eventsHeading'>
