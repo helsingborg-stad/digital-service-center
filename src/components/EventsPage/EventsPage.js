@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import Lipping from '../Lipping';
 import SiteHeader from '../SiteHeader';
 import Moment from 'moment';
+import 'moment/locale/en-gb';
+import 'moment/locale/sv';
 import { SiteFooter, SiteFooterLink } from '../SiteFooter';
 import VergicChatButton from '../VergicChatButton';
 import { Event } from '../EventShowcase';
@@ -90,7 +92,25 @@ export class EventsPage extends Component {
     }
   }
 
+  formatWeek = (week, thisWeek, date) => {
+    const nextWeek = thisWeek + 1;
+    if (week === thisWeek) {
+      return this.props.activeLanguage === 'sv'
+        ? 'Denna vecka'
+        : 'This week';
+    } else if (week === nextWeek) {
+      return this.props.activeLanguage === 'sv'
+        ? 'Nästa vecka'
+        : 'Next week';
+    }
+    return this.props.activeLanguage === 'sv'
+      ? 'Vecka ' + week
+      : Moment(date[0].date).startOf('isoWeek').format('MMM DD -')
+      + Moment(date.slice(-1)[0].date).endOf('isoWeek').format(' MMM DD');
+  };
+
   render() {
+    Moment.locale(this.props.activeLanguage);
     if (this.props.hasErrored) {
       return (
         <LandingPageError
@@ -98,10 +118,6 @@ export class EventsPage extends Component {
         />
       );
     }
-
-    const formatDate = (date) => {
-      return Moment(date).format('YY/MM/DD');
-    };
 
     const dataIsEmpty = !this.props.events || !Object.keys(this.props.events).length;
     if (this.props.isLoading || dataIsEmpty) {
@@ -115,10 +131,10 @@ export class EventsPage extends Component {
         this.state.selectedDates,
         this.state.searchTerm
       );
-
     const eventCounterText = this.props.translatables.numberOfEventsShowing
       .replace('numActiveEvents', numActiveEvents)
       .replace('numEvents', numEvents);
+
     return (
       <div className='EventsPage'>
         <Lipping />
@@ -136,12 +152,7 @@ export class EventsPage extends Component {
                   .map(week => (
                     <div key={week}>
                       <h2 className='EventsPage-eventsHeading'>
-                        {
-                          this.props.activeLanguage === 'sv' ? 'Vecka ' + week :
-                            formatDate(eventsByWeekNumber[week][0].date)
-                            + ' - ' +
-                            formatDate(eventsByWeekNumber[week].slice(-1)[0].date)
-                        }
+                        { this.formatWeek(parseInt(week, 10), Moment().week(), eventsByWeekNumber[week]) }
                       </h2>
                       <div className='EventsPage-eventWrapper'>
                         <FlipMove typeName={null} staggerDurationBy={4} staggerDelayBy={2} >
