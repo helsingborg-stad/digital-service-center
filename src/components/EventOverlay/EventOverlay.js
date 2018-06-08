@@ -122,7 +122,7 @@ class EventOverlay extends Component {
         </div>
       }
 
-      <h2 className='EventOverlay-heading'>{ this.titleForCurrentLanguage() }</h2>
+      <h2 className='EventOverlay-heading' dangerouslySetInnerHTML={ {__html: this.titleForCurrentLanguage()}}/>
 
       <div style={{width: '58%', marginRight: '5%', float: 'left'}}>
         { this.renderLeftContent() }

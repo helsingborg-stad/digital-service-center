@@ -53,7 +53,7 @@ export class Event extends Component {
               }).startDate).format('YYYY-MM-DD HH:mm')}
             </span>
           }
-          {this.props.name}
+          <span dangerouslySetInnerHTML={ {__html: this.props.name}} />
         </span>
         <Ripple cursorPos={ this.state.cursorPos } />
       </span>

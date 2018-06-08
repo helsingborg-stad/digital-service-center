@@ -69,9 +69,7 @@ EventSelectLanguage.propTypes = {
   eventId: PropTypes.number.isRequired,
   activeLanguage: PropTypes.string.isRequired,
   onToggle: PropTypes.func.isRequired,
-  onTranslate: PropTypes.func,
-  isActive: PropTypes.boolean,
-  translationLoading: PropTypes.boolean
+  onTranslate: PropTypes.func
 };
 
 const mapStateToProps = (state) => {

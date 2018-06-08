@@ -2,21 +2,6 @@ import Moment from 'moment';
 import { getEventsBySelectedDates } from '../EventsDateList';
 import SearchHandler from '../Search/SearchHandler';
 
-export const getDistinctEventCategories = (events, excludedCategories) => {
-  const distinctCategories = events.reduce((acc, event) => {
-    if (event.type !== 'event') {
-      return acc;
-    }
-    event.categories.forEach(cat => {
-      if (!acc.some(c => c.id === cat.id) && !excludedCategories.includes(cat.id)) {
-        acc.push(cat);
-      }
-    });
-    return acc;
-  }, []);
-  return distinctCategories.sort((a, b) => a.name.localeCompare(b.name));
-};
-
 const eventsWithRelevantCategories = (events, activeCategories) => {
   const matchesAllActiveCategories = (e) =>
     activeCategories.every(actCat => e.importedCategories.includes(actCat));
