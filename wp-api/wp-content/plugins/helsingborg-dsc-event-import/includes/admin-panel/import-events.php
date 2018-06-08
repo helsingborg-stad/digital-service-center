@@ -15,7 +15,7 @@ function create_and_update_events() {
   import_event_categories();
 
   $start_date = date('Y-m-d');
-  $end_date = date('Y-m-d', strtotime('+3 days', strtotime($start_date)));
+  $end_date = date('Y-m-d', strtotime('+1 month', strtotime($start_date)));
   $events = get_event_json($start_date, $end_date);
 
   $event_ids_to_keep = array_map(function ($event) { return (string)$event->id; }, $events);
@@ -39,7 +39,7 @@ function create_and_update_events() {
     if(does_event_already_exist($event)){
         $stored_event = get_stored_event($event);
         update_event($event, $stored_event, $stored_event->ID);
-        update_translated_event_meta($event, $stored_event->ID);
+        update_translated_event_meta($event, $stored_event, $stored_event->ID);
         insert_event_category($stored_event->ID, $event);
     } else {
       $post_id = insert_event_post_type($event);
@@ -126,23 +126,25 @@ function insert_event_meta($post_id, $event){
   add_post_meta($post_id, 'imported_event_data', $event);
   add_post_meta($post_id, 'event_id', $event->id);
 
-  $add_content_meta = add_post_meta($post_id, 'post_content_translated', translate_text($event->content->rendered), true);
-  $add_title_meta = add_post_meta($post_id, 'post_title_translated', translate_text($event->title->rendered), true);
-  
-  if(!$add_content_meta && !$add_title_meta){
-    update_translated_event_meta($event, $post_id);
-  }
-  
+  $translated_content = translate_text($event->content->rendered);
+  $translated_title = translate_text($event->title->rendered);
+
+  add_post_meta($post_id, 'post_content_translated', $translated_content, true);
+  add_post_meta($post_id, 'post_title_translated', $translated_title, true);  
 }
 
-function update_translated_event_meta($event, $post_id){
-  $post_meta_content = get_post_meta($post_id, 'post_content_translated', true);
+function update_translated_event_meta($event, $stored_event, $post_id){
   $post_meta_title = get_post_meta($post_id, 'post_title_translated', true);
+  $post_meta_content = get_post_meta($post_id, 'post_content_translated', true);
 
-  if($event->content->rendered != $post_meta_content ||
-  $event->title->rendered != $post_meta_title){
-    update_post_meta($post_id, 'post_content_translated', translate_text($event->content->rendered));
+  if($event->title->rendered != $stored_event->post_title 
+  || ($post_meta_title == null || $post_meta_title == '')){
     update_post_meta($post_id, 'post_title_translated', translate_text($event->title->rendered));
+  }
+  
+  if ($event->content->rendered != $stored_event->post_content 
+  || ($post_meta_content == null || $post_meta_content == '')) {
+    update_post_meta($post_id, 'post_content_translated', translate_text($event->content->rendered));
   }
 }
 
@@ -214,24 +216,33 @@ function import_event_categories() {
 }
 
 function translate_text($text) {
-  $url = 'https://translation.googleapis.com/language/translate/v2?key=AIzaSyD6nh_5HAPig0rLfpUT5x-JGu00wn_FvWQ';
+	$url = 'https://translation.googleapis.com/language/translate/v2?key=AIzaSyD6nh_5HAPig0rLfpUT5x-JGu00wn_FvWQ';
+  
+	$arr = array(
+	  'q' => $text,
+	  'source' => 'sv',
+	  'target' => 'en'
+	);
+	$data = json_encode($arr);
+  
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=UTF-8'));
+	curl_setopt($ch, CURLOPT_POST, 1);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_FAILONERROR, true);
+	$response  = curl_exec($ch);
+	$response = json_decode($response, true);
+  $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-  $arr = array(
-    'q' => $text,
-    'source' => 'sv',
-    'target' => 'en'
-  );
-  $data = json_encode($arr);
-
-  $ch = curl_init();
-  curl_setopt($ch, CURLOPT_URL, $url);
-  curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=UTF-8'));
-  curl_setopt($ch, CURLOPT_POST, 1);
-  curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-  $response  = curl_exec($ch);
+  if ($responseCode != 200) {
+    error_log('Translate error: ' . curl_error($ch));
+    curl_close($ch);
+    return '';
+  }
+  
   curl_close($ch);
-  $response = json_decode($response, true);
-
-  return $response['data']['translations'][0]['translatedText'];
-}
+	return $response['data']['translations'][0]['translatedText'];
+	
+  }

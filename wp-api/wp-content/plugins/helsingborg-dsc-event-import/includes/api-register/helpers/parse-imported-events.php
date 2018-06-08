@@ -50,7 +50,7 @@ function parse_imported_events($events) {
         ],
         youtubeUrl => $post_meta->youtube,
         vimeoUrl => $post_meta->vimeo,
-        translatedTitle => html_entity_decode(ucfirst($titleReverse)),
+        translatedTitle => ucfirst($titleReverse),
         translatedContent => $contentReverse
       ];
 
