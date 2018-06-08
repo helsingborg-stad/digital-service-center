@@ -11,6 +11,7 @@ import LoadingButton from '../LoadingButton.js';
 import GoogleMapsDirections from '../GoogleMapsDirections';
 import { translateData, translationIsLoading } from '../../actions/translate';
 import ReactLoading from 'react-loading';
+import ReactGA from 'react-ga';
 
 import EventOverlayReviews from './components/EventOverlayReviews';
 import EventOverlayRelatedInformation from './components/EventOverlayRelatedInformation';
@@ -84,6 +85,10 @@ class EventOverlay extends Component {
   }
 
   onTranslate = (content, id, activeLang, selectedLang) => {
+    ReactGA.event({
+      category: 'EventTranslation',
+      action: `Translated eventId: ${id} to ${selectedLang}`
+    });
     return this.props.translations[selectedLang] && this.props.translations[selectedLang][id]
       ? this.props.translations[selectedLang][id].content
       : this.props.translateText(content, id, activeLang, selectedLang);
@@ -237,7 +242,11 @@ EventOverlay.propTypes = {
     tickets: PropTypes.string.isRequired,
     translatedByGoogle: PropTypes.string.isRequired,
     translateButton: PropTypes.string.isRequired
-  }).isRequired
+  }).isRequired,
+  activeLanguage: PropTypes.string,
+  translateText: PropTypes.func,
+  translations: PropTypes.object
+
 };
 
 
