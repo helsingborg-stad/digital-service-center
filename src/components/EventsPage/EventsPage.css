@@ -30,6 +30,7 @@
 }
 
 .EventsPage-eventWrapper {
+  position: relative;
   display: grid;
   width: calc(100% - 1rem);
   grid-template-columns: repeat(auto-fill, 230px);
