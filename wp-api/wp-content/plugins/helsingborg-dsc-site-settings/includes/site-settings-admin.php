@@ -9,6 +9,7 @@ function helsingborg_dsc_site_settings_admin_menu() {
 add_action('admin_init', function() {
   register_setting( 'hdsc-site-settings', 'hdsc-site-setting-google-analytics' );
   register_setting( 'hdsc-site-settings', 'hdsc-site-setting-google-maps-api-key' );
+  register_setting( 'hdsc-site-settings', 'hdsc-site-setting-google-translate-api-key' );
   register_setting( 'hdsc-site-settings', 'hdsc-site-setting-idle-timeout' );
   register_setting( 'hdsc-site-settings', 'hdsc-site-setting-show-chat' );
   register_setting( 'hdsc-site-settings', 'hdsc-site-setting-show-flags' );
@@ -52,6 +53,10 @@ function helsingborg_dsc_site_settings_menu_callback() {
       <tr>
         <th><label for="sitesettingsform-google-maps-api-key">Google Maps API Key</label></th>
         <td><input id="sitesettingsform-google-maps-api-key" type="text" class="regular-text" name="hdsc-site-setting-google-maps-api-key" value="<?php echo get_option('hdsc-site-setting-google-maps-api-key'); ?>" /></td>
+      </tr>
+      <tr>
+        <th><label for="sitesettingsform-google-translate-api-key">Google Translate API Key</label></th>
+        <td><input id="sitesettingsform-google-translate-api-key" type="text" class="regular-text" name="hdsc-site-setting-google-translate-api-key" value="<?php echo get_option('hdsc-site-setting-google-translate-api-key'); ?>" /></td>
       </tr>
       <tr>
         <th><label for="sitesettingsform-idle-timeout">Inactive timeout (in seconds)</label></th>

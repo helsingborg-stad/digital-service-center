@@ -26,17 +26,16 @@ export function translateFetchTranslationSuccess(text, id, lang) {
   };
 }
 
-export function translateData(text, id, source, target) {
+export function translateData(text, id, source, target, key) {
   return (dispatch) => {
     dispatch(translationIsLoading(true, id, target));
     dispatch(translateHasErrored(false, id, target));
-
     const data = {
       q: text,
       source: 'sv',
       target: target
     };
-    return fetch('https://translation.googleapis.com/language/translate/v2?key=AIzaSyD6nh_5HAPig0rLfpUT5x-JGu00wn_FvWQ', {
+    return fetch('https://translation.googleapis.com/language/translate/v2?key=' + key, {
       method: 'post',
       headers: {
         Accept: 'application/json',

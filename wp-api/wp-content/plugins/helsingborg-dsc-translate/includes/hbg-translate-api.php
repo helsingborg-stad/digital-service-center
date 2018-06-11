@@ -15,7 +15,7 @@ function translate_response() {
 }
 
 function helsingborg_dsc_google_translate() {
-    $url = 'https://translation.googleapis.com/language/translate/v2?key=AIzaSyD6nh_5HAPig0rLfpUT5x-JGu00wn_FvWQ';
+    $url = 'https://translation.googleapis.com/language/translate/v2?key=' . get_option('hdsc-site-setting-google-translate-api-key');
 
     $data = json_decode(file_get_contents('php://input'));
     $json = json_encode($data);

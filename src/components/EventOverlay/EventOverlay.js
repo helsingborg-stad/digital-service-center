@@ -91,7 +91,7 @@ class EventOverlay extends Component {
     });
     return this.props.translations[selectedLang] && this.props.translations[selectedLang][id]
       ? this.props.translations[selectedLang][id].content
-      : this.props.translateText(content, id, activeLang, selectedLang);
+      : this.props.translateText(content, id, activeLang, selectedLang, this.props.googleTranslateApiKey);
   }
   render() {
     return (
@@ -255,14 +255,15 @@ const mapStateToProps = (state) => {
     translatables: state.siteSettings.translatables[state.activeLanguage],
     translations: state.translation,
     activeLanguage: state.activeLanguage,
-    translationLoading: state.translation.loading
+    translationLoading: state.translation.loading,
+    googleTranslateApiKey: state.siteSettings.googleTranslateApiKey
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    translateText: (text, id, source, target) => {
-      return dispatch(translateData(text, id, source, target));
+    translateText: (text, id, source, target, key) => {
+      return dispatch(translateData(text, id, source, target, key));
     },
     initiatetranslationLoading: (boolean) => {
       return dispatch(translationIsLoading(boolean));

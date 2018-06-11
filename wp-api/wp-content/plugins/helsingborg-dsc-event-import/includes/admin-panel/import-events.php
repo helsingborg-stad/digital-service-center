@@ -15,7 +15,7 @@ function create_and_update_events() {
   import_event_categories();
 
   $start_date = date('Y-m-d');
-  $end_date = date('Y-m-d', strtotime('+1 month', strtotime($start_date)));
+  $end_date = date('Y-m-d', strtotime('+3 months', strtotime($start_date)));
   $events = get_event_json($start_date, $end_date);
 
   $event_ids_to_keep = array_map(function ($event) { return (string)$event->id; }, $events);
@@ -216,7 +216,7 @@ function import_event_categories() {
 }
 
 function translate_text($text) {
-	$url = 'https://translation.googleapis.com/language/translate/v2?key=AIzaSyD6nh_5HAPig0rLfpUT5x-JGu00wn_FvWQ';
+	$url = 'https://translation.googleapis.com/language/translate/v2?key=' . get_option('hdsc-site-setting-google-translate-api-key');
   
 	$arr = array(
 	  'q' => $text,
