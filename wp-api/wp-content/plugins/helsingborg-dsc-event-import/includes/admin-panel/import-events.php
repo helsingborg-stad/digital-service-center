@@ -123,8 +123,8 @@ function update_event_featured_image($post_id, $event) {
 }
 
 function insert_event_meta($post_id, $event){
-  add_post_meta($post_id, 'imported_event_data', $event);
-  add_post_meta($post_id, 'event_id', $event->id);
+  add_post_meta($post_id, 'imported_event_data', $event, true);
+  add_post_meta($post_id, 'event_id', $event->id, true);
 
   $translated_content = translate_text($event->content->rendered);
   $translated_title = translate_text($event->title->rendered);
