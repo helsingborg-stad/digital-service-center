@@ -31,7 +31,11 @@ function create_and_update_events() {
   ]);
 
   foreach ($already_imported_events_to_remove as $event_to_remove) {
-    wp_trash_post($event_to_remove->ID);
+    wp_delete_post($event_to_remove->ID, true);
+    delete_post_meta($event_to_remove->ID, 'imported_event_data');
+    delete_post_meta($event_to_remove->ID, 'event_id');
+    delete_post_meta($event_to_remove->ID, 'post_content_translated');
+    delete_post_meta($event_to_remove->ID, 'post_title_translated');
   }
 
 
