@@ -35,7 +35,7 @@ function events_response() {
   $response = [];
 
   $imported_events = get_imported_event_posts();
-  $editable_events = get_posts([ post_type => 'editable_event', 'suppress_filters' => false, numberposts => -1]);
+  $editable_events = get_posts([ post_type => 'editable_event', 'suppress_filters' => false, 'post_status' => 'publish', numberposts => -1]);
 
   $imported_events_parsed = parse_imported_events($imported_events);
   $imported_events_parsed = array_values(array_filter($imported_events_parsed, function($event) {
