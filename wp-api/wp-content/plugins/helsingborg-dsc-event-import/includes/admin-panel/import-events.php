@@ -237,7 +237,7 @@ function translate_text($text) {
   $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
   if ($responseCode != 200) {
-    error_log('Translate error: ' . curl_error($ch));
+    error_log('Translate error: ' . curl_error($ch) . ' ' . $response['error']['message'] .' KEY: ' . get_option('hdsc-site-setting-google-translate-api-key'));
     curl_close($ch);
     return '';
   }

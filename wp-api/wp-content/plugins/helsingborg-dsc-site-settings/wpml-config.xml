@@ -27,5 +27,9 @@
 		<key name="hdsc-translatable-see-and-discover"/>
 		<key name="hdsc-translatable-no-results-found"/>
 		<key name="hdsc-translatable-ask-customer-center"/>
+		<key name="hdsc-translatable-translate-button"/>
+		<key name="hdsc-translatable-translated-by-google"/>
+		<key name="hdsc-translatable-number-of-events-showing"/>
+		<key name="hdsc-translatable-clear-filter"/>
 	</admin-texts>
 </wpml-config>
