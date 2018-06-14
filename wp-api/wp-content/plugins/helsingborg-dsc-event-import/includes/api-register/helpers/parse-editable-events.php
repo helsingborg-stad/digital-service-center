@@ -86,4 +86,4 @@ function parse_editable_events($events) {
       return $response;
     }, $events);
   }
-?>  
+?>
