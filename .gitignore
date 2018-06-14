@@ -34,6 +34,8 @@ Temporary Items
 logs
 *.log
 npm-debug.log*
+#lockfile
+package-lock.json
 
 # Runtime data
 pids
@@ -424,5 +426,11 @@ wp-api/wp-content/plugins/sitepress-multilingual-cms/
 wp-api/wp-content/plugins/wpml-string-translation/
 wp-api/wp-content/plugins/wpml-translation-management/
 
-# Elementor plugin
+# Plugins
 wp-api/wp-content/plugins/elementor/
+wp-api/wp-content/plugins/hello.php
+wp-api/wp-content/plugins/contact-form-7/*
+wp-api/wp-content/plugins/iframe/*
+wp-api/wp-content/plugins/*
+wp-api/wp-content/plugins/rest-api/*
+wp-api/wp-content/plugins/wp-api-multiple-posttype-master/*
