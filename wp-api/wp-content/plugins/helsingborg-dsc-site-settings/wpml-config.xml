@@ -31,5 +31,6 @@
 		<key name="hdsc-translatable-translated-by-google"/>
 		<key name="hdsc-translatable-number-of-events-showing"/>
 		<key name="hdsc-translatable-clear-filter"/>
+		<key name="hdsc-translatable-choose-categories"/>
 	</admin-texts>
 </wpml-config>

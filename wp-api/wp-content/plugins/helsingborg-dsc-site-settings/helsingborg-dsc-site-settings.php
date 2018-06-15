@@ -54,7 +54,8 @@ function hdsc_translatables() {
     ['Översätt', 'translate-button'],
     ['Av Google Translate', 'translated-by-google'],
     ['Visar numActiveEvents av numEvents evenemang', 'number-of-events-showing', 'numActiveEvents och numEvents får ej ändras'],
-    ['Rensa filter', 'clear-filter']
+    ['Rensa filter', 'clear-filter'],
+    ['Välj kategorier', 'choose-categories']
   ];
 }
 

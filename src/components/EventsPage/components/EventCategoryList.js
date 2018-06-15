@@ -4,9 +4,9 @@ import Scrollbars from 'react-custom-scrollbars';
 
 import './EventCategoryList.css';
 
-const EventCategoryList = ({categories, activeCategories, onClick}) => (
+const EventCategoryList = ({categories, activeCategories, onClick, title}) => (
   <Fragment>
-    <div className='EventCategoryListHeader'>Välj kategorier</div>
+    <div className='EventCategoryListHeader'>{title}</div>
 
     <div className='EventCategoryList-scrollWrapper'>
       <Scrollbars autoHeight autoHeightMax='300px'>

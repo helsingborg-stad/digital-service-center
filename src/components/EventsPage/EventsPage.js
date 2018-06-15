@@ -198,6 +198,7 @@ export class EventsPage extends Component {
         <aside>
           <AsideMenu page='Eventspage' fullHeight>
             <EventCategoryList
+              title={this.props.translatables.chooseCategories}
               categories={categories}
               activeCategories={this.state.activeCategories}
               onClick={this.handleSideNavClick.bind(this)}
