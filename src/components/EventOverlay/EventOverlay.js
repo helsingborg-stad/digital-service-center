@@ -73,9 +73,16 @@ class EventOverlay extends Component {
       : this.props.event.translatedContent;
   }
   titleForCurrentLanguage = () => {
-    return this.state.langSwitch === this.props.activeLanguage
-      ? this.props.event.name
-      : this.props.event.translatedTitle;
+    if (this.state.langSwitch === this.props.activeLanguage) {
+      return this.props.event.name;
+    }
+    if (this.state.langSwitch === 'en' && this.props.activeLanguage === 'sv') {
+      return this.props.event.translatedTitle;
+    }
+    if (this.state.langSwitch === 'sv' && this.props.activeLanguage === 'en') {
+      return this.props.event.translatedTitle;
+    }
+    return this.props.event.name;
   }
   contentForTranslatedLanguage = () => {
     const needToFetchTranslation = !['sv', 'en'].includes(this.state.langSwitch);
