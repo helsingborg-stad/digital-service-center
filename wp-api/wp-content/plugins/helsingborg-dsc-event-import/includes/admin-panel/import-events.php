@@ -47,9 +47,11 @@ function create_and_update_events() {
         update_event($event, $stored_event, $stored_event->ID);
         update_translated_event_meta($event, $stored_event, $stored_event->ID);
         insert_event_category($stored_event->ID, $event);
+        update_or_insert_categorys_translations($event);
     } else {
       $post_id = insert_event_post_type($event);
       insert_event_category($post_id, $event);
+      update_or_insert_categorys_translations($event);
       if($event->featured_media->source_url != null) {
         insert_event_featured_image($post_id, $event);
       }
@@ -57,6 +59,7 @@ function create_and_update_events() {
         insert_event_meta($post_id, $event);
       }
     }
+    update_or_insert_categorys_translations($event);
   }
 
   wp_redirect(admin_url('admin.php?page=helsingborg-dsc-event-import'));
@@ -189,6 +192,46 @@ function does_event_already_exist($event) {
   $event_query = get_posts($args);
 
   return $event_query != null;
+}
+
+function get_categorys($category){
+  global $wpdb;
+  $table_name = $wpdb->prefix . 'category_translations';
+  $query = $wpdb->get_results( "SELECT * FROM $table_name WHERE sv='$category'" );
+  return $query;
+}
+
+function get_categorys_translation($category){
+  global $wpdb;
+  $table_name = $wpdb->prefix . 'category_translations';
+  $query = $wpdb->get_results( "SELECT * FROM $table_name WHERE sv='$category'" );
+
+  return $query;
+}
+
+function update_or_insert_categorys_translations($event){
+  global $wpdb;
+  $table_name = $wpdb->prefix . 'category_translations';
+  if($event != null){
+      foreach ((array)$event->event_categories as $category) {
+          $does_category_exist = get_categorys($category);
+          $is_translated = get_categorys_translation($category);
+          if(!$does_category_exist){
+              $sql = $wpdb->prepare(
+                  "INSERT INTO `$table_name`     
+                     (`sv`, `en`) 
+               values (%s, %s)", array($category, translate_text($category)));
+              $wpdb->query($sql);
+          }
+          if($does_category_exist && ($is_translated[0]->en == '' || $is_translated[0]->en == null)){
+              $sql = $wpdb->prepare(
+                  "UPDATE `$table_name`
+                  SET `en` = '%s'
+                  WHERE `sv` = '%s'", array(translate_text($category), $category));
+              $wpdb->query($sql);
+          }
+      }
+  }
 }
 
 function get_stored_event($event) {

@@ -6,8 +6,19 @@ namespace helsingborg_dsc_event_import;
 function parse_imported_events($events) {
     return array_map(function($event) {
       $post_meta = get_post_meta(get_post_id_original($event->ID, 'imported_event'), 'imported_event_data', true);
-
       $should_translate = $_REQUEST['lang'] == 'en';
+      $lang = $_REQUEST['lang'] == 'en' ? 'en' : 'sv';
+      $categories = [];
+      if($post_meta->event_categories != null){
+        foreach ((array)$post_meta->event_categories as $event_category) {
+          global $wpdb;
+          $table_name = $wpdb->prefix . 'category_translations';
+          $included_cat = $wpdb->get_results( "SELECT * FROM `wp_category_translations` WHERE sv='$event_category'" );
+          if($included_cat[0]->sv == $event_category){
+            array_push($categories, $included_cat[0]->$lang);
+          }
+        }
+      }
 
       $translated_title = get_post_meta(get_post_id_original($event->ID, 'imported_event'), 'post_title_translated', true);
       $translated_content = get_post_meta(get_post_id_original($event->ID, 'imported_event'), 'post_content_translated', true);
@@ -31,7 +42,7 @@ function parse_imported_events($events) {
             slug => $category->slug
           ];
         }, get_the_category($event->ID)),
-        importedCategories => $post_meta->event_categories ?? [],
+        importedCategories => $categories,
         occasions => array_map(function($occasion) {
           return [
             startDate => $occasion->start_date,
