@@ -13,6 +13,7 @@ function parse_imported_events($events) {
         foreach ((array)$post_meta->event_categories as $event_category) {
           global $wpdb;
           $table_name = $wpdb->prefix . 'category_translations';
+          $event_category = htmlspecialchars_decode($event_category);
           $included_cat = $wpdb->get_results( "SELECT * FROM `wp_category_translations` WHERE sv='$event_category'" );
           if($included_cat[0]->sv == $event_category){
             array_push($categories, $included_cat[0]->$lang);

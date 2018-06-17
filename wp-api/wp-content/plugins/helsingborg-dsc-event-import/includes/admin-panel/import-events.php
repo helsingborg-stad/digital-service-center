@@ -194,10 +194,15 @@ function does_event_already_exist($event) {
   return $event_query != null;
 }
 
-function get_categorys($category){
+function get_categorys($category = null){
   global $wpdb;
   $table_name = $wpdb->prefix . 'category_translations';
-  $query = $wpdb->get_results( "SELECT * FROM $table_name WHERE sv='$category'" );
+  if($category == null){
+    $query = $wpdb->get_results( "SELECT * FROM $table_name",ARRAY_A);
+  }else{
+    $query = $wpdb->get_results( "SELECT * FROM $table_name WHERE sv='$category'" );
+  }
+  
   return $query;
 }
 
@@ -214,20 +219,20 @@ function update_or_insert_categorys_translations($event){
   $table_name = $wpdb->prefix . 'category_translations';
   if($event != null){
       foreach ((array)$event->event_categories as $category) {
-          $does_category_exist = get_categorys($category);
+          $does_category_exist = get_categorys_translation($category);
           $is_translated = get_categorys_translation($category);
           if(!$does_category_exist){
               $sql = $wpdb->prepare(
                   "INSERT INTO `$table_name`     
                      (`sv`, `en`) 
-               values (%s, %s)", array($category, translate_text($category)));
+               values (%s, %s)", array(htmlspecialchars_decode($category), translate_text(htmlspecialchars_decode($category))));
               $wpdb->query($sql);
           }
           if($does_category_exist && ($is_translated[0]->en == '' || $is_translated[0]->en == null)){
               $sql = $wpdb->prepare(
                   "UPDATE `$table_name`
                   SET `en` = '%s'
-                  WHERE `sv` = '%s'", array(translate_text($category), $category));
+                  WHERE `sv` = '%s'", array(translate_text(htmlspecialchars_decode($category)), htmlspecialchars_decode($category)));
               $wpdb->query($sql);
           }
       }
