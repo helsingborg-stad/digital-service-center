@@ -47,7 +47,7 @@ function parse_imported_events($events) {
             slug => $category->slug
           ];
         }, get_the_category($event->ID)),
-        importedCategories => $categories,
+        importedCategories => $categories ?? [],
         occasions => array_map(function($occasion) {
           return [
             startDate => $occasion->start_date,
