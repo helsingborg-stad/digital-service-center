@@ -11,18 +11,44 @@ function helsingborg_dsc_category_translations_callback(){
     
     $add_meta_nonce = wp_create_nonce( 'add_category_nonce' ); 
 ?>
-
+<style>
+table.form-table {
+  width: 50%;
+}
+.form-table td {
+  padding: 3px;
+}
+table.form-table thead {
+  background: #F1F1F1;
+  border-bottom: 2px solid #444444;
+}
+table.form-table thead th {
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+}
+.form-table input {
+    width: 100%;
+    height: 33px;
+}
+</style>
   <div class="wrap">
     <form action="<?php echo esc_url( admin_url('admin-post.php') ); ?>" method="post">
 
       <div class="wrap"><h2>Category Translations</h2></div>
-
       <?php if (isset($_GET['updated'])) { ?>
         <div class="notice notice-success is-dismissible">
 					<p><?php _e('Category(s) updated.', 'bbb'); ?></p>
 		</div>
       <?php } ?>
-      <table class="form-table"><tbody> 
+      <table class="form-table">
+      <thead>
+      <tr>
+          <th>Svenska</th>
+          <th>Engelska</th>
+      </tr> 
+      </thead>
+      <tbody>
       <?php
         foreach(get_categorys() as $category) {
           $cat_sv = $category['sv'];
