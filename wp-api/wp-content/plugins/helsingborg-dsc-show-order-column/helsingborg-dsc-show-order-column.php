@@ -18,6 +18,7 @@ function add_new_header_text_column($header_text_columns) {
   return $header_text_columns;
 }
 add_action("manage_edit-editable_event_sortable_columns", 'add_new_header_text_column');
+add_action("manage_edit-page_sortable_columns", 'add_new_header_text_column');
 
 // Show custom order column values
 function show_order_column($name){
@@ -33,6 +34,7 @@ function show_order_column($name){
    }
 }
 add_action('manage_editable_event_posts_custom_column','show_order_column');
+add_action('manage_page_posts_custom_column','show_order_column');
 
 // Make column sortable
 function order_column_register_sortable($columns){
@@ -40,5 +42,6 @@ function order_column_register_sortable($columns){
   return $columns;
 }
 add_filter('manage_editable_event_posts_columns','order_column_register_sortable');
+add_filter('manage_page_posts_columns','order_column_register_sortable');
 
 ?>
