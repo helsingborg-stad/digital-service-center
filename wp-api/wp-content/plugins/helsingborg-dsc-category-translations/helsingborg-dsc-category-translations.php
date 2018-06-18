@@ -13,5 +13,4 @@ function helsingborg_dsc_category_translations() {
 }
 
 include('includes/category-translations-admin.php');
-
 ?>
