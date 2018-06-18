@@ -7,18 +7,22 @@ function parse_imported_events($events) {
     return array_map(function($event) {
       $post_meta = get_post_meta(get_post_id_original($event->ID, 'imported_event'), 'imported_event_data', true);
       $should_translate = $_REQUEST['lang'] == 'en';
-      $lang = $_REQUEST['lang'] == 'en' ? 'en' : 'sv';
+      $lang = $should_translate ? 'en' : 'sv';
       $categories = [];
-      if($post_meta->event_categories != null){
-        foreach ((array)$post_meta->event_categories as $event_category) {
-          global $wpdb;
-          $table_name = $wpdb->prefix . 'category_translations';
-          $event_category = htmlspecialchars_decode($event_category);
-          $included_cat = $wpdb->get_results( "SELECT * FROM `wp_category_translations` WHERE sv='$event_category'" );
-          if($included_cat[0]->sv == $event_category){
-            array_push($categories, $included_cat[0]->$lang);
+      if($lang == 'en'){
+        if($post_meta->event_categories != null){
+          foreach ((array)$post_meta->event_categories as $event_category) {
+            global $wpdb;
+            $table_name = $wpdb->prefix . 'category_translations';
+            $event_category = htmlspecialchars_decode($event_category);
+            $included_cat = $wpdb->get_results( "SELECT * FROM `$table_name` WHERE sv='$event_category'" );
+            if($included_cat[0]->sv == $event_category){
+              array_push($categories, $included_cat[0]->en);
+            }
           }
         }
+      }else{
+        $categories = $post_meta->event_categories;
       }
 
       $translated_title = get_post_meta(get_post_id_original($event->ID, 'imported_event'), 'post_title_translated', true);
