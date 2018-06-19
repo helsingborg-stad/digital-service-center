@@ -35,7 +35,8 @@ function get_pages_for_visitor_local($section) {
             width => intval($iframeMeta['width'] ?? 0),
             height => intval($iframeMeta['height'] ?? 0),
             offsetTop => intval($iframeMeta['top_offset'] ?? 0),
-            offsetLeft => intval($iframeMeta['left_offset'] ?? 0)
+            offsetLeft => intval($iframeMeta['left_offset'] ?? 0),
+            menuOrder => $page->menu_order
           ];
   
           $img_url = get_the_post_thumbnail_url($page->ID);
@@ -54,7 +55,8 @@ function get_pages_for_visitor_local($section) {
             id         => $page->ID,
             slug       => $page->post_name,
             name       => html_entity_decode($page->post_title),
-            type       => 'event'
+            type       => 'event',
+            menuOrder => $page->menu_order
           ];
   
           $thumbnail_url = get_the_post_thumbnail_url($page->ID, [232, 148]);
@@ -69,7 +71,8 @@ function get_pages_for_visitor_local($section) {
         else {
           $response = [
             type => 'page',
-            name => $page->post_title
+            name => $page->post_title,
+            menuOrder => $page->menu_order
           ];
           if(strpos($response['url'], '__trashed') !== false) {
             return;
@@ -91,6 +94,10 @@ function get_pages_for_visitor_local($section) {
           return $response;
         }
       }, $posts);
+
+      usort($filtered_posts, function ($a, $b) {
+        return $b['menuOrder'] <=> $a['menuOrder'];
+      });    
   
     $post_urls = [];
     foreach($filtered_posts as $key => $value) {
