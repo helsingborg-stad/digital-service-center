@@ -20,14 +20,14 @@ function get_pages_for_visitor_local($section) {
     ];
   
     $posts = get_posts($args);
-  
     $filtered_posts = array_map(function($post) {
         $page = get_current_post_language($post->ID);
         if(!isset($page)) {
           return;
         }
+        $isPublished = $page->post_status == 'publish' ? true : false;
         $iframeMeta = get_post_meta($page->ID, 'event_iframe', false)[0];
-        if ($iframeMeta['active'] == 'on' && strlen($iframeMeta['src'])) {
+        if ($iframeMeta['active'] == 'on' && strlen($iframeMeta['src']) && $isPublished) {
           $response = [
             type => 'iframe',
             name => $page->post_title,
@@ -50,7 +50,7 @@ function get_pages_for_visitor_local($section) {
   
           return $response;
         }
-        else if($page->post_type == 'editable_event') {
+        else if($page->post_type == 'editable_event' && $isPublished) {
           $response = [
             id         => $page->ID,
             slug       => $page->post_name,
@@ -68,7 +68,7 @@ function get_pages_for_visitor_local($section) {
 
           return $response;
         }
-        else {
+        else if($page->post_type == 'page' && $isPublished){
           $response = [
             type => 'page',
             name => $page->post_title,
