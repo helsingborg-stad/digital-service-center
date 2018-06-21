@@ -11,27 +11,6 @@ function register_local_menu() {
 }
 add_action( 'init', 'register_local_menu' );
 
-require_once dirname( __FILE__ ) . '/Menu.php';
-
-$fields = array(
-    '_custom_icon' => array(
-        'label' => __( 'Icon ', 'domain' ),
-        'element' => 'select',
-        'sanitize_callback' => 'sanitize_text_field',
-        'options' => array(
-            '' => __( '', 'domain' ),
-            'Bed' => __( 'Bed', 'domain' ),
-            'Camera' => __( 'Camera', 'domain' ),
-            'Clock' => __( 'Clock', 'domain' ),
-            'Cocktail' => __( 'Cocktail', 'domain' ),
-            'Cutlery' => __( 'Cutlery', 'domain' ),
-            'Info' => __( 'Info', 'domain' ),
-            'Star' => __( 'Star', 'domain' )
-            ),
-        ),
-    );
-new \Lucymtc\Menu( $fields );
-
 add_action('rest_api_init', hdsc_menu_register_routes);
 
 function hdsc_menu_register_routes() {

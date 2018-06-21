@@ -42,46 +42,37 @@
 
 .SideNavigationLink--has-children ul li.SideNavigationLink {
   padding-right: 2rem;
-  padding-left: 2rem;
-  margin-left: -2rem;
-}
-
-.SideNavigationLink--has-children ul li.SideNavigationLink .SideNavigationLink__icon,
-.SideNavigationLink--has-children ul li.SideNavigationLink .fa {
-  font-size: 21px;
-  left: 0.15rem;
-}
-
-.SideNavigationLink--has-children ul li.SideNavigationLink .fa {
-  top: 0.8rem;
+  padding-left: 2.6rem;
+  margin-left: -1.9rem;
 }
 
 .SideNavigationLink--has-children ul li.SideNavigationLink .SideNavigationLink__icon {
-  top: 0.6rem;
+  left: 0.36rem;
 }
 
-.SideNavigationLink__icon,
-.fa {
+.SideNavigationLink__icon {
   display: block;
   position: absolute;
-  top: 0.6rem;
+  top: 0.4rem;
   left: 0.9rem;
   width: 1.625rem;
 }
 
-.SideNavigationLink:first-child .SideNavigationLink__icon,
-.SideNavigationLink:first-child .fa {
-  top: 1rem;
-}
-
-.SideNavigationLink .fa {
-  font-size: 23px;
+.SideNavigationLink:first-child .SideNavigationLink__icon {
+  top: 0.7rem;
 }
 
 .SideNavigationLink__icon svg {
   display: inline-block;
-  max-width: 1.4rem;
-  max-height: 1.4rem;
+  max-width: 1.8rem;
+  max-height: 1.8rem;
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+}
+
+.SideNavigationLink__icon svg.customIcon {
+  max-width: 1.2rem;
+  max-height: 1.2rem;
 }
 .SideNavigation ul {
   position: relative;

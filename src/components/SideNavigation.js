@@ -1,10 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import cn from 'classnames';
-import FontAwesome from 'react-fontawesome';
-import './font-awesome/font-awesome.min.css';
-
-import * as Icons from './icons/';
+import SideNavigationIcons from './SideNavigationIcons';
 
 import './SideNavigation.css';
 
@@ -20,10 +17,10 @@ SideNavigation.propTypes = {
 };
 
 const SideNavigationLink = ({id, activeCategories, activeColor, handleClick,
-  name, subCategories, icon, type, menuItem, iframeUrl, customClasses}) => {
+  name, subCategories, icon, type, menuItem, iframeUrl}) => {
   const hasChildren = subCategories && subCategories.length && activeCategories.includes(id);
   const isActive = activeCategories.includes(id);
-  const hasCustomClasses = customClasses && customClasses.length ? customClasses[0] : false;
+
   return (
     <li
       className={cn('SideNavigationLink',
@@ -35,17 +32,16 @@ const SideNavigationLink = ({id, activeCategories, activeColor, handleClick,
         handleClick({id, type, menuItem, iframeUrl});
       }}
     >
-      { hasCustomClasses && <FontAwesome name={hasCustomClasses} /> }
-      { icon && !hasCustomClasses &&
+      {icon &&
       <span className='SideNavigationLink__icon'>
-        {Icons[`${icon}Icon`]({color: isActive ? '#fff' : '#c70d53'})}
-      </span>
-      }
+        <SideNavigationIcons type={icon.type} icon={icon.icon} size={icon.font_size} isActive={isActive}/>
+      </span>}
       {name}
       {isActive && subCategories && !!subCategories.length &&
       <ul>
-        {subCategories.map(sub => (
-          <li
+        { subCategories.map(sub => {
+          const isActiveSub = activeCategories.includes(sub.id);
+          return (<li
             key={sub.id}
             className={cn('SideNavigationLink',
               {'SideNavigationLink--selected': activeCategories.includes(sub.id)}
@@ -57,19 +53,14 @@ const SideNavigationLink = ({id, activeCategories, activeColor, handleClick,
               handleClick({id: subId, type: subType, menuItem: sub, iframeUrl: subIframeUrl});
             }}
           >
-            { sub.customClasses.length > 0 &&
-              <FontAwesome
-                name={sub.customClasses[0]}
-              />
-            }
-            { sub.iconName !== '' && sub.customClasses.length <= 0 &&
+            { sub.iconName &&
             <span className='SideNavigationLink__icon'>
-              {Icons[`${sub.iconName}Icon`]({color: sub.isActive ? '#fff' : '#c70d53'})}
+              <SideNavigationIcons type={sub.iconName.type} icon={sub.iconName.icon} size={sub.iconName.font_size} isActive={isActiveSub}/>
             </span>
             }
             {sub.name}
-          </li>
-        ))}
+          </li>);
+        })}
       </ul>
       }
     </li>
@@ -84,10 +75,9 @@ SideNavigationLink.propTypes = {
   name: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   subCategories: PropTypes.arrayOf(PropTypes.object),
-  icon: PropTypes.string,
+  icon: PropTypes.any,
   menuItem: PropTypes.any,
-  iframeUrl: PropTypes.string,
-  customClasses: PropTypes.array
+  iframeUrl: PropTypes.string
 };
 
 export { SideNavigation, SideNavigationLink };

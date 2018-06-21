@@ -15,11 +15,7 @@ function get_landing_menu($menu_name){
         return;
       }
       $type = $menu_item->object;
-      $icon_name = get_post_meta($menu_item_id, '_custom_icon', true);
-      $custom_classes = [];
-      if($menu_item->classes[0] != null) {
-          $custom_classes = $menu_item->classes;
-      }
+      $icon_name = get_post_meta($menu_item_id, 'menu-icons', true);
       if($type == 'category') {
           return [
             menuId => $menu_item_id,
@@ -27,8 +23,7 @@ function get_landing_menu($menu_name){
             type => $type,
             name => $menu_item->title,
             iconName => $icon_name,
-            id => intval($menu_item->object_id),
-            customClasses => $custom_classes
+            id => intval($menu_item->object_id)
         ];
       }
       if($type == 'editable_event' || $type == 'page'){
@@ -37,7 +32,6 @@ function get_landing_menu($menu_name){
         $filtered_post['menuId'] = $menu_item_id;
         $filtered_post['menuParentId'] = $menu_item->menu_item_parent;
         $filtered_post['iconName'] = $icon_name;
-        $filtered_post['customClasses'] = $custom_classes;
         return $filtered_post;
       }
       if($type == 'imported_event') {
@@ -46,7 +40,6 @@ function get_landing_menu($menu_name){
         $filtered_post['menuId'] = $menu_item_id;
         $filtered_post['menuParentId'] = $menu_item->menu_item_parent;
         $filtered_post['iconName'] = $icon_name;
-        $filtered_post['customClasses'] = $custom_classes;
         return $filtered_post;
       }
       if($type == 'editable_place') {
@@ -59,7 +52,6 @@ function get_landing_menu($menu_name){
             type => 'googleQueryPlace',
             name => $menu_item->title,
             iconName => $icon_name,
-            customClasses => $custom_classes,
             iframeUrl => $post_meta[0]['iframe_url']
           ];
           if(ICL_LANGUAGE_CODE == 'en') {

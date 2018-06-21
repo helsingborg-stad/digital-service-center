@@ -155,7 +155,6 @@ export class LandingPage extends Component {
               iframeUrl={menu.iframeUrl}
               icon={menu.iconName}
               subCategories={menu.subItems}
-              customClasses={menu.customClasses}
               menuItem={menu}
             />))
           }
