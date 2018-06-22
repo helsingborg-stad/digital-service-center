@@ -124,7 +124,7 @@ export class EventsPage extends Component {
       return <LandingPageLoading bgColor='#f4a428' />;
     }
     const pageData = this.props.landingPages.events;
-    const { eventsByWeekNumber, numEvents, numActiveEvents, categories } =
+    const { eventsByWeekNumber, numEvents, numActiveEvents, categories, categoryIcons } =
       filterEventsForEventsPage(
         this.props.events,
         this.state.activeCategories,
@@ -200,6 +200,7 @@ export class EventsPage extends Component {
             <EventCategoryList
               title={this.props.translatables.chooseCategories}
               categories={categories}
+              categoryIcons={categoryIcons}
               activeCategories={this.state.activeCategories}
               onClick={this.handleSideNavClick.bind(this)}
             />

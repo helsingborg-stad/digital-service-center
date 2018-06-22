@@ -4,27 +4,31 @@ import SearchHandler from '../Search/SearchHandler';
 
 const eventsWithRelevantCategories = (events, activeCategories) => {
   const matchesAllActiveCategories = (e) =>
-    activeCategories.every(actCat => e.importedCategories.includes(actCat));
+    activeCategories.every(actCat => Object.keys(e.importedCategories).includes(actCat));
 
   const eventsForCats = activeCategories.length
     ? events.slice(0).filter(matchesAllActiveCategories)
     : events;
 
-  const categoriesUnsorted = eventsForCats.reduce((cats, event) => {
-    event.importedCategories.forEach(cat => {
-      cats[cat] = 1 + (cats[cat] || 0);
+  const categoriesAndIcons = eventsForCats.reduce((x, event) => {
+    Object.entries(event.importedCategories).forEach(([cat, icon]) => {
+      x.categories[cat] = 1 + (x.categories[cat] || 0);
+      x.icons[cat] = icon;
     });
-    return cats;
-  }, {});
+    return x;
+  }, { categories: {}, icons: {}});
+
+  const categoryIcons = categoriesAndIcons.icons;
 
   const categories = {};
-  Object.keys(categoriesUnsorted).sort().forEach(key => {
-    categories[key] = categoriesUnsorted[key];
+  Object.keys(categoriesAndIcons.categories).sort().forEach(key => {
+    categories[key] = categoriesAndIcons.categories[key];
   });
 
   return {
     eventsForCats,
-    categories
+    categories,
+    categoryIcons
   };
 };
 
@@ -75,7 +79,7 @@ export const filterEventsForEventsPage = (events, activeCategories, selectedDate
   const eventsHavingDates = events.filter(e => e.occasions && !!e.occasions.length);
   const eventsForSelectedDates = getEventsBySelectedDates(eventsHavingDates, selectedDates);
   const eventsSearch = filterBySearchTerm(eventsForSelectedDates, searchTerm);
-  const { eventsForCats, categories }
+  const { eventsForCats, categories, categoryIcons }
     = eventsWithRelevantCategories(eventsSearch, activeCategories);
   const eventsWithWeekNumber = eventsForCats.map(e => {
     return { id: e.id, date: getClosestEventDate(e)};
@@ -97,6 +101,7 @@ export const filterEventsForEventsPage = (events, activeCategories, selectedDate
     numEvents: eventsHavingDates.length,
     numActiveEvents: eventsForCats.length,
     eventsByWeekNumber: eventsDict,
-    categories
+    categories,
+    categoryIcons
   };
 };

@@ -9,7 +9,6 @@ function parse_imported_events($events) {
       $should_translate = $_REQUEST['lang'] == 'en';
       $lang = $should_translate ? 'en' : 'sv';
       $categories = [];
-      if($lang == 'en'){
         if($post_meta->event_categories != null){
           foreach ((array)$post_meta->event_categories as $event_category) {
             global $wpdb;
@@ -17,13 +16,10 @@ function parse_imported_events($events) {
             $event_category = htmlspecialchars_decode($event_category);
             $included_cat = $wpdb->get_results( "SELECT * FROM `$table_name` WHERE sv='$event_category'" );
             if($included_cat[0]->sv == $event_category){
-              array_push($categories, $included_cat[0]->en);
+              $categories[$included_cat[0]->$lang] = $included_cat[0]->icon;
             }
           }
         }
-      }else{
-        $categories = $post_meta->event_categories;
-      }
 
       $translated_title = get_post_meta(get_post_id_original($event->ID, 'imported_event'), 'post_title_translated', true);
       $translated_content = get_post_meta(get_post_id_original($event->ID, 'imported_event'), 'post_content_translated', true);

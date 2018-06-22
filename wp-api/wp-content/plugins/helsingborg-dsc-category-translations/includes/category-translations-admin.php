@@ -8,8 +8,8 @@ function helsingborg_dsc_category_translations_admin_menu() {
 
 function helsingborg_dsc_category_translations_callback(){
     if( current_user_can( 'edit_users' ) ) {
-    
-      $add_meta_nonce = wp_create_nonce( 'add_category_nonce' ); 
+
+      $add_meta_nonce = wp_create_nonce( 'add_category_nonce' );
   ?>
   <style>
   table.form-table {
@@ -46,17 +46,20 @@ function helsingborg_dsc_category_translations_callback(){
         <tr>
             <th>Svenska</th>
             <th>Engelska</th>
-        </tr> 
+            <th>FA Icon</th>
+        </tr>
         </thead>
         <tbody>
         <?php
           foreach(get_categorys() as $category) {
             $cat_sv = $category['sv'];
             $cat_en = $category['en'];
+            $cat_icon = $category['icon'];
             ?>
           <tr>
-          <td><input id="<?php echo $cat_sv; ?>" type="text" class="regular-text" name="no_inc" value="<?php echo $cat_sv; ?>" readonly/></td>
-          <td><input id="<?php echo $cat_en; ?>" type="text" class="regular-text" name="<?php echo $cat_sv; ?>" value="<?php echo $cat_en; ?>" /></td>
+          <td><input id="<?php echo $cat_sv; ?>" type="text" class="regular-text" name="categories[<?php echo $cat_sv; ?>]" value="<?php echo $cat_sv; ?>" readonly/></td>
+          <td><input id="<?php echo $cat_en; ?>" type="text" class="regular-text" name="categories[<?php echo $cat_sv; ?>][translation]" value="<?php echo $cat_en; ?>" /></td>
+          <td><input id="<?php echo $cat_icon; ?>" type="text" class="regular-text" name="categories[<?php echo $cat_sv; ?>][icon]" value="<?php echo $cat_icon; ?>" /><i class="<?php echo $cat_icon; ?>"></i></td>
           </tr>
             <?php
           }
@@ -71,23 +74,23 @@ function helsingborg_dsc_category_translations_callback(){
   }
 }
 
+
 function category_update_response() {
 	if( isset( $_POST['add_category_nonce'] ) && wp_verify_nonce( $_POST['add_category_nonce'], 'add_category_nonce') ) {
         global $wpdb;
         $table_name = $wpdb->prefix . 'category_translations';
-        foreach ($_POST as $key => $category) {
-            if($key != 'no_inc' && $key != 'action' && $key != 'add_category_nonce' && $key != 'submit'){
-                $category = sanitize_text_field($category);
-                $category = str_replace('\\', '', $category);
-                $key = str_replace('_', ' ', $key);
-                $table_name = $wpdb->prefix . 'category_translations';
-                $sql = $wpdb->prepare(
-                    "UPDATE `$table_name`
-                    SET `en` = '%s'
-                    WHERE `sv` = '%s'", array(htmlspecialchars_decode($category), htmlspecialchars_decode($key)));
-                $wpdb->query($sql);
-            }
-        }
+        foreach($_POST['categories'] as $key => $cat){
+          $key = str_replace('_', ' ', $key);
+          $translation = sanitize_text_field($_POST['categories'][$key]['translation']);
+          $translation = str_replace('\\', '', $translation);
+          $icon = sanitize_text_field($_POST['categories'][$key]['icon']);
+
+          $sql = $wpdb->prepare(
+              "UPDATE `$table_name`
+              SET `en` = '%s', `icon` = '%s'
+              WHERE `sv` = '%s'", array(htmlspecialchars_decode($translation), htmlspecialchars_decode($icon), htmlspecialchars_decode($key)));
+          $wpdb->query($sql);
+          }
         return wp_redirect(admin_url('admin.php?page=helsingborg-dsc-category-translations&updated'));
 		exit;
 	} else {

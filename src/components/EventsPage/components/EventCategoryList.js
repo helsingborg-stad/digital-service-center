@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react';
 import FlipMove from 'react-flip-move';
 import Scrollbars from 'react-custom-scrollbars';
+import SideNavigationIcons from '../../SideNavigationIcons';
 
 import './EventCategoryList.css';
 
-const EventCategoryList = ({categories, activeCategories, onClick, title}) => (
+const EventCategoryList = ({categories, categoryIcons, activeCategories, onClick, title}) => (
   <Fragment>
     <div className='EventCategoryListHeader'>{title}</div>
 
@@ -13,18 +14,23 @@ const EventCategoryList = ({categories, activeCategories, onClick, title}) => (
         <div className='EventCategoryList-innerScrollWrapper'>
           <FlipMove className='EventCategoryList' typeName={'ul'} duration={150}
             enterAnimation='accordionVertical' leaveAnimation='accordionVertical'>
-            { categories && Object.keys(categories).map(cat =>
-              <li
+            { categories && Object.keys(categories).map(cat => {
+              const isActive = activeCategories.includes(cat);
+              const icon = categoryIcons[cat];
+              const iconFormat = icon.split(' ');
+              return (<li
                 id={cat}
                 key={cat}
-                className={activeCategories.includes(cat) ? 'active' : ''}
+                className={isActive ? 'active' : ''}
                 onClick={(ev) => {
                   ev.stopPropagation();
                   onClick(cat);
                 }}>
+                <SideNavigationIcons type='fa fas fab' icon={iconFormat[1]} isActive={isActive}/>
                 <span dangerouslySetInnerHTML={{__html: cat}} />
                 <span className='EventCategoryList__count'>{`(${categories[cat]})`}</span>
-              </li>
+              </li>);
+            }
             )}
           </FlipMove>
         </div>

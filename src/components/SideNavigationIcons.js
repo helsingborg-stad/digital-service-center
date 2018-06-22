@@ -19,11 +19,13 @@ const SideNavigationIcons = ({type, icon, size, isActive}) => {
 
   const convertSize = size + 'rem';
   return icon in customIcons ?
-    Icons[`${customIcons[icon]}`]({className: 'customIcon', color: isActive ? '#fff' : '#c70d53'})
+    <span className='faIcon' style={{fontSize: convertSize}}>
+      {Icons[`${customIcons[icon]}`]({className: 'customIcon', color: isActive ? '#fff' : '#c70d53'})}
+    </span>
     :
-    <div style={{fontSize: convertSize}}>
+    <span className='faIcon' style={{fontSize: convertSize}}>
       <i className={type + ' ' + icon}></i>
-    </div>;
+    </span>;
 };
 
 SideNavigationIcons.propTypes = {
