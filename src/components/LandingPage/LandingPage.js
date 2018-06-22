@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import Lipping from '../Lipping';
 import SiteHeader from '../SiteHeader';
 import { SiteFooter, SiteFooterLink } from '../SiteFooter';
-import VergicChatButton from '../VergicChatButton';
 import { SideNavigation, SideNavigationLink } from '../SideNavigation';
 import Search from '../Search/Search.js';
 import GoogleMaps from '../GoogleMaps';
@@ -224,11 +223,6 @@ export class LandingPage extends Component {
             {pageData.bottomLinks.map((link) => (
               <SiteFooterLink key={link.href + link.name} link={link} />))
             }
-            <VergicChatButton
-              className='SiteFooterLink'
-              pageName={pageData.heading}
-              color={this.props.bgColor}
-            />
             <div className='Startpage-langWrapper'>
               <LanguageFlags activeLanguage={this.props.activeLanguage} />
             </div>

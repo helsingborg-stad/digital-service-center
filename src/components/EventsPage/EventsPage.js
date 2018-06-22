@@ -6,7 +6,6 @@ import Moment from 'moment';
 import 'moment/locale/en-gb';
 import 'moment/locale/sv';
 import { SiteFooter, SiteFooterLink } from '../SiteFooter';
-import VergicChatButton from '../VergicChatButton';
 import { Event } from '../EventShowcase';
 import Scrollbars from 'react-custom-scrollbars';
 import LandingPageLoading from '../LandingPage/LandingPageLoading';
@@ -175,10 +174,6 @@ export class EventsPage extends Component {
             { pageData.bottomLinks.map((link) => (
               <SiteFooterLink key={link.href + link.name} link={link} />))
             }
-            <VergicChatButton
-              className='SiteFooterLink'
-              pageName={pageData.heading} color='#f4a428'
-            />
             <div className='Startpage-langWrapper'>
               <LanguageFlags activeLanguage={this.props.activeLanguage} />
             </div>
