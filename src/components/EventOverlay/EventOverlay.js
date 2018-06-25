@@ -193,7 +193,8 @@ class EventOverlay extends Component {
               <EventOverlayReviews reviews={this.props.event.reviews} />
         }
       </Scrollbars>
-      { this.renderTranslationButton() }
+      { !this.props.event.rating &&
+        this.renderTranslationButton() }
     </Fragment>;
   }
   renderRightContent() {
