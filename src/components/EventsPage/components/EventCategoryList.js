@@ -26,7 +26,7 @@ const EventCategoryList = ({categories, categoryIcons, activeCategories, onClick
                   ev.stopPropagation();
                   onClick(cat);
                 }}>
-                <SideNavigationIcons type='fa fas fab' icon={iconFormat[1]} isActive={isActive}/>
+                <SideNavigationIcons type={iconFormat[0]} icon={iconFormat[1]} isActive={isActive} size='1.7'/>
                 <span dangerouslySetInnerHTML={{__html: cat}} />
                 <span className='EventCategoryList__count'>{`(${categories[cat]})`}</span>
               </li>);

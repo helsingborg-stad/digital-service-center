@@ -39,6 +39,12 @@
   margin-top: 5px;
 }
 
+.EventCategoryList li span.faIcon i {
+  position: absolute;
+  left: 1rem;
+  margin-top: 5px;
+}
+
 .EventCategoryList li.active span.faIcon {
   color: #fff;
 }

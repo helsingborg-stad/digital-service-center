@@ -12,7 +12,7 @@ function triggerSelectedDates(calendar, selectedDates) {
   }
 }
 
-const CalendarHeader = ({text}) => (
+const CalendarHeader = ({ text }) => (
   <div className="CalendarHeader">{text}</div>
 );
 
@@ -20,7 +20,7 @@ CalendarHeader.propTypes = {
   text: PropTypes.string.isRequired
 };
 
-const CalendarButton = ({onClick, text}) => (
+const CalendarButton = ({ onClick, text }) => (
   <button className="CalendarButton" onClick={onClick}>{text}</button>
 );
 
@@ -70,13 +70,13 @@ export class Calendar extends React.Component {
 
   handleSetDateToday() {
     const today = Moment();
-    this.setState({startDate: today, endDate: today });
-    triggerSelectedDates(this, {startDate: today, endDate: today});
+    this.setState({ startDate: today, endDate: today });
+    triggerSelectedDates(this, { startDate: today, endDate: today });
   }
   handleSetDateTomorrow() {
     const tomorrow = Moment().add(1, 'days');
-    this.setState({startDate: tomorrow, endDate: tomorrow });
-    triggerSelectedDates(this, {startDate: tomorrow, endDate: tomorrow});
+    this.setState({ startDate: tomorrow, endDate: tomorrow });
+    triggerSelectedDates(this, { startDate: tomorrow, endDate: tomorrow });
   }
   handleSetDateWeekend() {
     const day = Moment().day();
@@ -99,10 +99,10 @@ export class Calendar extends React.Component {
     }
 
     this.setState({ startDate, endDate });
-    triggerSelectedDates(this, {startDate, endDate});
+    triggerSelectedDates(this, { startDate, endDate });
   }
   handleResetDate() {
-    this.setState({startDate: null, endDate: null, focusedInput: 'startDate'});
+    this.setState({ startDate: null, endDate: null, focusedInput: 'startDate' });
     triggerSelectedDates(this, null);
   }
   onDatesChange({ startDate, endDate }) {
@@ -136,6 +136,11 @@ export class Calendar extends React.Component {
     return day.isBefore(Moment()) && !day.isSame(Moment(), 'days');
   }
   render() {
+    Moment.updateLocale(this.props.activeLanguage, {
+      week: {
+        dow: 4
+      }
+    });
     return (
       <div className={`Calendar Calendar--${this.props.themeCssClass}`}>
         <CalendarHeader
@@ -191,11 +196,13 @@ Calendar.propTypes = {
     weekend: PropTypes.string.isRequired,
     all: PropTypes.string.isRequired
   }).isRequired,
+  activeLanguage: PropTypes.string.isRequired,
   resetDates: PropTypes.bool
 };
 
 const mapStateToProps = (state) => {
   return {
+    activeLanguage: state.activeLanguage,
     translatables: state.siteSettings.translatables[state.activeLanguage]
   };
 };

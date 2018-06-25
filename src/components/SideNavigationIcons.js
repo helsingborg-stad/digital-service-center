@@ -3,7 +3,7 @@ import React from 'react';
 import * as Icons from './icons/';
 import './font-awesome/font-awesome.min.css';
 
-const SideNavigationIcons = ({type, icon, size, isActive}) => {
+const SideNavigationIcons = ({icon, size, isActive}) => {
   const customIcons = {
     'fa-bed': 'BedIcon',
     'fa-camera': 'CameraIcon',
@@ -19,12 +19,12 @@ const SideNavigationIcons = ({type, icon, size, isActive}) => {
 
   const convertSize = size + 'rem';
   return icon in customIcons ?
-    <span className='faIcon' style={{fontSize: convertSize}}>
+    <span className='faIcon'>
       {Icons[`${customIcons[icon]}`]({className: 'customIcon', color: isActive ? '#fff' : '#c70d53'})}
     </span>
     :
-    <span className='faIcon' style={{fontSize: convertSize}}>
-      <i className={type + ' ' + icon}></i>
+    <span className='faIcon'>
+      <i className={'fa fas fab ' + icon} style={{fontSize: convertSize}}></i>
     </span>;
 };
 
