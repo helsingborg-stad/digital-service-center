@@ -14,9 +14,7 @@ function create_and_update_events() {
 
   import_event_categories();
 
-  $start_date = date('Y-m-d');
-  $end_date = date('Y-m-d', strtotime('+3 months', strtotime($start_date)));
-  $events = get_event_json($start_date, $end_date);
+  $events = json_decode(file_get_contents('/var/www/html/events.json'));
 
   $event_ids_to_keep = array_map(function ($event) { return (string)$event->id; }, $events);
 
@@ -63,10 +61,6 @@ function create_and_update_events() {
   }
 
   wp_redirect(admin_url('admin.php?page=helsingborg-dsc-event-import'));
-}
-
-function get_event_json($start_date, $end_date) {
-  return json_decode(file_get_contents('https://api.helsingborg.se/event/json/wp/v2/event/time?start=' . $start_date . '&end=' . $end_date));
 }
 
 function insert_event_post_type($event) {
@@ -219,11 +213,11 @@ function update_or_insert_categorys_translations($event){
   $table_name = $wpdb->prefix . 'category_translations';
   if($event != null){
       foreach ((array)$event->event_categories as $category) {
-          $does_category_exist = get_categorys_translation($category);
-          $is_translated = get_categorys_translation($category);
+          $does_category_exist = get_categorys_translation(htmlspecialchars_decode($category));
+          $is_translated = get_categorys_translation(htmlspecialchars_decode($category));
           if(!$does_category_exist){
               $sql = $wpdb->prepare(
-                  "INSERT INTO `$table_name`     
+                  "INSERT INTO `$table_name`
                      (`sv`, `en`) 
                values (%s, %s)", array(htmlspecialchars_decode($category), translate_text(htmlspecialchars_decode($category))));
               $wpdb->query($sql);
