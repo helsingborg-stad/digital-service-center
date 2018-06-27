@@ -9,15 +9,9 @@ function register_scheduled_event_options() {
 }
 
 function activate_scheduled_event_import() {
-  $run_import = get_option('schedule_activated');
-    if ($run_import) {
-      $scheduled_recurrence = get_option('scheduled_recurrence');
-      wp_schedule_event(time(), $scheduled_recurrence, 'scheduled_event_import');
-    }
-    else {
-      $next_timestamp = wp_next_scheduled( 'scheduled_event_import' );
-      wp_unschedule_event( $next_timestamp, 'scheduled_event_import');
-    }
+  if(!wp_next_scheduled( 'scheduled_event_import' )){
+    wp_schedule_event(time(), 'twicedaily', 'scheduled_event_import'); 
+  }
 }
 
 add_action('scheduled_event_import', 'create_update_and_delete_outdated_events');
