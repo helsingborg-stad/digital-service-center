@@ -19,7 +19,7 @@ function create_and_update_events() {
   $events = getUrlContent('https://api.helsingborg.se/event/json/wp/v2/event/time?start=' . $start_date . '&end=' . $end_date);
 
   if($events == false){
-    return;
+    return wp_redirect(admin_url('admin.php?page=helsingborg-dsc-event-import&failed'));
   }
 
   $event_ids_to_keep = array_map(function ($event) { return (string)$event->id; }, $events);
