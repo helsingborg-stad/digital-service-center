@@ -14,7 +14,13 @@ function create_and_update_events() {
 
   import_event_categories();
 
-  $events = json_decode(file_get_contents('/var/www/html/events.json'));
+  $start_date = date('Y-m-d');
+  $end_date = date('Y-m-d', strtotime('+3 months', strtotime($start_date)));
+  $events = getUrlContent('https://api.helsingborg.se/event/json/wp/v2/event/time?start=' . $start_date . '&end=' . $end_date);
+
+  if($events == false){
+    return;
+  }
 
   $event_ids_to_keep = array_map(function ($event) { return (string)$event->id; }, $events);
 
@@ -61,6 +67,24 @@ function create_and_update_events() {
   }
 
   wp_redirect(admin_url('admin.php?page=helsingborg-dsc-event-import'));
+}
+
+function getUrlContent($url){
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_URL, $url);
+  curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)');
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
+  curl_setopt($ch, CURLOPT_TIMEOUT, 700);
+  $data = curl_exec($ch);
+  $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  curl_close($ch);
+  if($httpcode>=200 && $httpcode<300){
+      return json_decode($data);
+  }else{
+      error_log('Event download failed: ' . $httpcode);
+      return false;
+  }
 }
 
 function insert_event_post_type($event) {
@@ -215,14 +239,14 @@ function update_or_insert_categorys_translations($event){
       foreach ((array)$event->event_categories as $category) {
           $does_category_exist = get_categorys_translation(htmlspecialchars_decode($category));
           $is_translated = get_categorys_translation(htmlspecialchars_decode($category));
-          if(count($does_category_exist)> 0){
+          if(empty($does_category_exist)){
               $sql = $wpdb->prepare(
                   "INSERT INTO `$table_name`
                      (`sv`, `en`) 
                values (%s, %s)", array(htmlspecialchars_decode($category), translate_text(htmlspecialchars_decode($category))));
               $wpdb->query($sql);
           }
-          if($does_category_exist && ($is_translated[0]->en == '' || $is_translated[0]->en == null)){
+          if(!empty($does_category_exist) && ($is_translated[0]->en == '' || $is_translated[0]->en == null)){
               $sql = $wpdb->prepare(
                   "UPDATE `$table_name`
                   SET `en` = '%s'
