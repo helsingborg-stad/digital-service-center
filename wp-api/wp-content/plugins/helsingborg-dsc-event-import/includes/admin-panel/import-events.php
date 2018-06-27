@@ -215,7 +215,7 @@ function update_or_insert_categorys_translations($event){
       foreach ((array)$event->event_categories as $category) {
           $does_category_exist = get_categorys_translation(htmlspecialchars_decode($category));
           $is_translated = get_categorys_translation(htmlspecialchars_decode($category));
-          if(!$does_category_exist){
+          if(count($does_category_exist)> 0){
               $sql = $wpdb->prepare(
                   "INSERT INTO `$table_name`
                      (`sv`, `en`) 

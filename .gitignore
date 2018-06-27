@@ -435,3 +435,4 @@ wp-api/wp-content/plugins/*
 wp-api/wp-content/plugins/rest-api/*
 wp-api/wp-content/plugins/wp-api-multiple-posttype-master/*
 package-lock.json
+wp-api/wp-content/uploads/events.json
