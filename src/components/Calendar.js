@@ -136,11 +136,6 @@ export class Calendar extends React.Component {
     return day.isBefore(Moment()) && !day.isSame(Moment(), 'days');
   }
   render() {
-    Moment.updateLocale(this.props.activeLanguage, {
-      week: {
-        dow: 4
-      }
-    });
     return (
       <div className={`Calendar Calendar--${this.props.themeCssClass}`}>
         <CalendarHeader
