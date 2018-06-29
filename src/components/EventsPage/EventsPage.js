@@ -13,6 +13,7 @@ import LandingPageError from '../LandingPage/LandingPageError';
 import EventOverlay from '../EventOverlay/EventOverlay';
 import { OverlayTransitionWrapper } from '../OverlayBackdrop';
 import AsideMenu from '../AsideMenu';
+import VergicChatButton from '../VergicChatButton';
 import EventCategoryList from './components/EventCategoryList';
 import Calendar from '../Calendar';
 import { connect } from 'react-redux';
@@ -174,6 +175,7 @@ export class EventsPage extends Component {
             { pageData.bottomLinks.map((link) => (
               <SiteFooterLink key={link.href + link.name} link={link} />))
             }
+            <VergicChatButton pageName={pageData.heading} color='#f4a428' />
             <div className='Startpage-langWrapper'>
               <LanguageFlags activeLanguage={this.props.activeLanguage} />
             </div>

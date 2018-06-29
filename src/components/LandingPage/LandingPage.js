@@ -13,6 +13,7 @@ import AsideMenu from '../AsideMenu';
 import Calendar from '../Calendar';
 import LandingPageLoading from './LandingPageLoading';
 import LandingPageError from './LandingPageError';
+import VergicChatButton from '../VergicChatButton';
 import Scrollbars from 'react-custom-scrollbars';
 import EventsDateList from '../EventsDateList.js';
 import { connect } from 'react-redux';
@@ -223,6 +224,7 @@ export class LandingPage extends Component {
             {pageData.bottomLinks.map((link) => (
               <SiteFooterLink key={link.href + link.name} link={link} />))
             }
+            <VergicChatButton pageName={pageData.heading} color={this.props.bgColor} />
             <div className='Startpage-langWrapper'>
               <LanguageFlags activeLanguage={this.props.activeLanguage} />
             </div>

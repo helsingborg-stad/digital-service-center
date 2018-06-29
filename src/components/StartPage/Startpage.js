@@ -10,6 +10,7 @@ import { startpageFetchData } from '../../actions/startpage';
 import { eventsFetchData } from '../../actions/events';
 import LanguageFlags from '../LanguageFlags';
 import StartpageLoading from './StartpageLoading.js';
+import VergicChatButton from '../VergicChatButton';
 import StartpageError from './StartpageError.js';
 
 import './Startpage.css';
@@ -111,6 +112,7 @@ export class Startpage extends Component {
             { this.props.data.topLinks.map(link => (
               <BottomBarLink key={link.href + link.name} link={link} />
             ))}
+            <VergicChatButton pageName='Startpage' />
             <div className='Startpage-langWrapper'>
               <LanguageFlags activeLanguage={this.props.activeLanguage} />
             </div>
