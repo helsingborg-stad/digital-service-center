@@ -2,7 +2,7 @@
   list-style: none;
   padding: 0;
   max-height: 300px;
-  overflow: hidden;
+  overflow: scroll;
   left: 0.6rem;
 }
 
