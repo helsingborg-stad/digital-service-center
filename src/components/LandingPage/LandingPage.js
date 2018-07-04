@@ -247,6 +247,7 @@ export class LandingPage extends Component {
             <Calendar
               themeCssClass={this.props.type}
               handleSelectedDates={this.handleSelectedDates.bind(this)}
+              locale={this.props.activeLanguage}
             />
             <Scrollbars
               ref='eventsDateListScroll'

@@ -3,8 +3,6 @@ import React, { Component } from 'react';
 import Lipping from '../Lipping';
 import SiteHeader from '../SiteHeader';
 import Moment from 'moment';
-import 'moment/locale/en-gb';
-import 'moment/locale/sv';
 import { SiteFooter, SiteFooterLink } from '../SiteFooter';
 import { Event } from '../EventShowcase';
 import Scrollbars from 'react-custom-scrollbars';
@@ -110,7 +108,6 @@ export class EventsPage extends Component {
   };
 
   render() {
-    Moment.locale(this.props.activeLanguage);
     if (this.props.hasErrored) {
       return (
         <LandingPageError
@@ -202,10 +199,10 @@ export class EventsPage extends Component {
               onClick={this.handleSideNavClick.bind(this)}
             />
             <Calendar
-              themeCssClass='#f4a428'
               handleSelectedDates={this.handleSelectedDates.bind(this)}
               selectedTimeSpan={this.props.selectedTimeSpan}
               resetDates={this.state.selectedDates === null}
+              locale={this.props.activeLanguage}
             />
             <SearchField
               inline

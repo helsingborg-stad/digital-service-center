@@ -63,24 +63,46 @@
 }
 
 .Calendar .DayPicker.DayPicker--horizontal .DayPicker__week-headers .DayPicker__week-header ul li:first-child small::after {
-  content: 'S';
-}
-.Calendar .DayPicker.DayPicker--horizontal .DayPicker__week-headers .DayPicker__week-header ul li:nth-child(2) small::after {
   content: 'M';
 }
-.Calendar .DayPicker.DayPicker--horizontal .DayPicker__week-headers .DayPicker__week-header ul li:nth-child(3) small::after {
+.Calendar .DayPicker.DayPicker--horizontal .DayPicker__week-headers .DayPicker__week-header ul li:nth-child(2) small::after {
   content: 'T';
 }
-.Calendar .DayPicker.DayPicker--horizontal .DayPicker__week-headers .DayPicker__week-header ul li:nth-child(4) small::after {
+.Calendar .DayPicker.DayPicker--horizontal .DayPicker__week-headers .DayPicker__week-header ul li:nth-child(3) small::after {
   content: 'W';
 }
-.Calendar .DayPicker.DayPicker--horizontal .DayPicker__week-headers .DayPicker__week-header ul li:nth-child(5) small::after {
+.Calendar .DayPicker.DayPicker--horizontal .DayPicker__week-headers .DayPicker__week-header ul li:nth-child(4) small::after {
   content: 'T';
 }
-.Calendar .DayPicker.DayPicker--horizontal .DayPicker__week-headers .DayPicker__week-header ul li:nth-child(6) small::after {
+.Calendar .DayPicker.DayPicker--horizontal .DayPicker__week-headers .DayPicker__week-header ul li:nth-child(5) small::after {
   content: 'F';
 }
+.Calendar .DayPicker.DayPicker--horizontal .DayPicker__week-headers .DayPicker__week-header ul li:nth-child(6) small::after {
+  content: 'S';
+}
 .Calendar .DayPicker.DayPicker--horizontal .DayPicker__week-headers .DayPicker__week-header ul li:nth-child(7) small::after {
+  content: 'S';
+}
+
+.Calendar--lang-en .DayPicker.DayPicker--horizontal .DayPicker__week-headers .DayPicker__week-header ul li:first-child small::after {
+  content: 'S';
+}
+.Calendar--lang-en .DayPicker.DayPicker--horizontal .DayPicker__week-headers .DayPicker__week-header ul li:nth-child(2) small::after {
+  content: 'M';
+}
+.Calendar--lang-en .DayPicker.DayPicker--horizontal .DayPicker__week-headers .DayPicker__week-header ul li:nth-child(3) small::after {
+  content: 'T';
+}
+.Calendar--lang-en .DayPicker.DayPicker--horizontal .DayPicker__week-headers .DayPicker__week-header ul li:nth-child(4) small::after {
+  content: 'W';
+}
+.Calendar--lang-en .DayPicker.DayPicker--horizontal .DayPicker__week-headers .DayPicker__week-header ul li:nth-child(5) small::after {
+  content: 'T';
+}
+.Calendar--lang-en .DayPicker.DayPicker--horizontal .DayPicker__week-headers .DayPicker__week-header ul li:nth-child(6) small::after {
+  content: 'F';
+}
+.Calendar--lang-en .DayPicker.DayPicker--horizontal .DayPicker__week-headers .DayPicker__week-header ul li:nth-child(7) small::after {
   content: 'S';
 }
 

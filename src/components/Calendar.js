@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { DayPickerRangeController } from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
 import Moment from 'moment';
+import 'moment/locale/en-gb';
+import 'moment/locale/sv';
 import './Calendar.css';
 
 function triggerSelectedDates(calendar, selectedDates) {
@@ -136,8 +138,10 @@ export class Calendar extends React.Component {
     return day.isBefore(Moment()) && !day.isSame(Moment(), 'days');
   }
   render() {
+    const { themeCssClass, locale } = this.props;
+    Moment.locale(locale);
     return (
-      <div className={`Calendar Calendar--${this.props.themeCssClass}`}>
+      <div className={`Calendar Calendar--${themeCssClass} Calendar--lang-${locale}`}>
         <CalendarHeader
           text={this.props.translatables.selectDates}
         />
