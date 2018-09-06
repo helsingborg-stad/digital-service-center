@@ -29,6 +29,7 @@
     "react-fontawesome": "^1.6.1",
     "react-ga": "^2.3.5",
     "react-google-maps": "^9.4.3",
+    "react-hotjar": "^1.0.11",
     "react-interval": "^2.0.2",
     "react-ladda": "^5.0.7",
     "react-loading": "^2.0.2",

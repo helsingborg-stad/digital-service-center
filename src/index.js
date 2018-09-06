@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import ReactGA from 'react-ga';
+import { hotjar } from 'react-hotjar';
 import InactivityMonitor from './util/inactivityMonitor';
 import './index.css';
 
@@ -46,6 +47,8 @@ function startApp(store) {
   if (analyticsId) {
     ReactGA.initialize(analyticsId);
   }
+
+  hotjar.initialize(1004512, 6);
 
   const logPageView = analyticsId ?
     () => {
