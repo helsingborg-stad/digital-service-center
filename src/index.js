@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import ReactGA from 'react-ga';
 import InactivityMonitor from './util/inactivityMonitor';
+import * as serviceWorker from './serviceWorker';
 import './index.css';
 
 import configureStore from './store/configureStore';
@@ -85,3 +86,5 @@ if (initialState.siteSettings) {
       startApp(store);
     });
 }
+
+serviceWorker.register();
