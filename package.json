@@ -3,28 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
-    "babel-core": "^6.23.1",
-    "babel-preset-react-app": "^2.2.0",
     "es6-promise": "^4.0.5",
     "express": "^4.14.1",
-    "fetch-intercept": "^2.2.3",
-    "ignore-styles": "^5.0.1",
-    "import-export": "^1.0.1",
     "isomorphic-fetch": "^2.2.1",
-    "react-scripts": "^1.0.17",
+    "react-scripts": "^2.1.1",
     "redux-devtools-extension": "^2.13.2"
   },
   "dependencies": {
     "classnames": "^2.2.5",
+    "fetch-intercept": "^2.3.1",
     "google-map-react": "^0.25.0",
     "moment": "^2.20.0",
-    "react": "^16.3.2",
+    "react": "^16.6.0",
     "react-addons-css-transition-group": "^15.6.2",
     "react-addons-shallow-compare": "^15.6.2",
     "react-custom-scrollbars": "^4.2.1",
     "react-dates": "^10.1.1",
     "react-debounce-input": "^3.2.0",
-    "react-dom": "^16.2.0",
+    "react-dom": "^16.6.0",
     "react-flip-move": "^3.0.2",
     "react-fontawesome": "^1.6.1",
     "react-ga": "^2.3.5",
@@ -47,5 +43,11 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
