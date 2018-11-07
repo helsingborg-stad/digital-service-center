@@ -1,20 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import ReactGA from 'react-ga';
 import { hotjar } from 'react-hotjar';
 import InactivityMonitor from './util/inactivityMonitor';
+import FetchSiteSettings from './components/FetchSiteSettings';
 import * as serviceWorker from './serviceWorker';
 import './index.css';
 
 import configureStore from './store/configureStore';
 import Routes from './routes';
-
-// eslint-disable-next-line no-underscore-dangle
-const initialState = window.__REDUX_STATE__ || {};
-
-// eslint-disable-next-line no-underscore-dangle
-delete window.__REDUX_STATE__;
 
 // Replace all calls to /api/ to the WordPress back-end,
 // when in development mode (this won't get included when building,
@@ -32,7 +28,7 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
-function startApp(store) {
+function startApp(store, persistor) {
   const timeoutLength = store.getState().siteSettings && store.getState().siteSettings.idleTimeout;
   if (window && process.env.NODE_ENV !== 'development' && timeoutLength) {
     // eslint-disable-next-line no-new
@@ -59,7 +55,14 @@ function startApp(store) {
 
   ReactDOM.render(
     <Provider store={store}>
-      <Routes store={store} onUpdate={logPageView} />
+      <PersistGate loading={null} persistor={persistor}>
+        <FetchSiteSettings
+          store={store}
+          render={() => (
+            <Routes store={store} onUpdate={logPageView} />
+          )}
+        />
+      </PersistGate>
     </Provider>,
     document.getElementById('root')
   );
@@ -78,16 +81,7 @@ function startApp(store) {
   }
 }
 
-if (initialState.siteSettings) {
-  const store = configureStore(initialState);
-  startApp(store);
-} else {
-  fetch('/api/site-settings')
-    .then(res => res.json())
-    .then(res => {
-      const store = configureStore(Object.assign({}, initialState, {siteSettings: res}));
-      startApp(store);
-    });
-}
+const { store, persistor } = configureStore();
+startApp(store, persistor);
 
 serviceWorker.register();
