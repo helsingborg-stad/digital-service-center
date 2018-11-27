@@ -16,10 +16,19 @@ function create_and_update_events() {
 
   $start_date = date('Y-m-d');
   $end_date = date('Y-m-d', strtotime('+3 months', strtotime($start_date)));
-  $events = getUrlContent('https://api.helsingborg.se/event/json/wp/v2/event/time?start=' . $start_date . '&end=' . $end_date);
+  $events = Array();
 
-  if($events == false){
-    return wp_redirect(admin_url('admin.php?page=helsingborg-dsc-event-import&failed'));
+  /* 15 loops, redirect if something goes wrong, break if 404(no more content) s*/
+  for ($i = 0; $i < 15 ; $i++) {
+      $data = getUrlContent('https://api.helsingborg.se/event/json/wp/v2/event/time?start=' . $start_date . '&end=' . $end_date . '&page='.$i.'&per_page=100');
+      if ($data == false) {
+        return wp_redirect(admin_url('admin.php?page=helsingborg-dsc-event-import&failed'));
+      }
+      if($data != 404){
+        $events = array_merge($events, $data);
+      } else {
+        break 1;
+      }
   }
 
   $event_ids_to_keep = array_map(function ($event) { return (string)$event->id; }, $events);
@@ -77,10 +86,18 @@ function getUrlContent($url){
   curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
   curl_setopt($ch, CURLOPT_TIMEOUT, 700);
   $data = curl_exec($ch);
+
   $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  if(curl_exec($ch) === false){
+    echo 'Curl error: '.curl_error($ch);
+    return false;
+  }
   curl_close($ch);
-  if($httpcode>=200 && $httpcode<300){
-      return json_decode($data);
+  if($httpcode == 200){
+    return json_decode($data);
+  }elseif ($httpcode == 404) {
+      error_log('End of pages ' . $httpcode);
+      return 404;
   }else{
       error_log('Event download failed: ' . $httpcode);
       return false;
@@ -157,19 +174,19 @@ function insert_event_meta($post_id, $event){
   $translated_title = translate_text($event->title->rendered);
 
   add_post_meta($post_id, 'post_content_translated', $translated_content, true);
-  add_post_meta($post_id, 'post_title_translated', $translated_title, true);  
+  add_post_meta($post_id, 'post_title_translated', $translated_title, true);
 }
 
 function update_translated_event_meta($event, $stored_event, $post_id){
   $post_meta_title = get_post_meta($post_id, 'post_title_translated', true);
   $post_meta_content = get_post_meta($post_id, 'post_content_translated', true);
 
-  if($event->title->rendered != $stored_event->post_title 
+  if($event->title->rendered != $stored_event->post_title
   || ($post_meta_title == null || $post_meta_title == '')){
     update_post_meta($post_id, 'post_title_translated', translate_text($event->title->rendered));
   }
-  
-  if ($event->content->rendered != $stored_event->post_content 
+
+  if ($event->content->rendered != $stored_event->post_content
   || ($post_meta_content == null || $post_meta_content == '')) {
     update_post_meta($post_id, 'post_content_translated', translate_text($event->content->rendered));
   }
@@ -220,7 +237,7 @@ function get_categorys($category = null){
   }else{
     $query = $wpdb->get_results( "SELECT * FROM $table_name WHERE sv='$category'" );
   }
-  
+
   return $query;
 }
 
@@ -242,7 +259,7 @@ function update_or_insert_categorys_translations($event){
           if(empty($does_category_exist)){
               $sql = $wpdb->prepare(
                   "INSERT INTO `$table_name`
-                     (`sv`, `en`) 
+                     (`sv`, `en`)
                values (%s, %s)", array(htmlspecialchars_decode($category), translate_text(htmlspecialchars_decode($category))));
               $wpdb->query($sql);
           }
@@ -269,7 +286,7 @@ function get_stored_event($event) {
   );
   $event_query = get_posts($args);
 
-  return $event_query[0]; 
+  return $event_query[0];
 }
 
 function get_event_category_json(){
@@ -289,14 +306,14 @@ function import_event_categories() {
 
 function translate_text($text) {
 	$url = 'https://translation.googleapis.com/language/translate/v2?key=' . get_option('hdsc-site-setting-google-translate-api-key');
-  
+
 	$arr = array(
 	  'q' => $text,
 	  'source' => 'sv',
 	  'target' => 'en'
 	);
 	$data = json_encode($arr);
-  
+
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=UTF-8'));
@@ -313,8 +330,8 @@ function translate_text($text) {
     curl_close($ch);
     return '';
   }
-  
+
   curl_close($ch);
 	return $response['data']['translations'][0]['translatedText'];
-	
+
   }
