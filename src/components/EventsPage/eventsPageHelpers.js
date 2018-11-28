@@ -79,7 +79,8 @@ const calcSortOrder = (eventsDict) => {
   const nextYearWeeks = [];
   const weeks = [];
   Object.keys(eventsDict).forEach(week => {
-    if (Moment(eventsDict[week][0].date).year() > Moment().year()) {
+    const eventDate = eventsDict[week][eventsDict[week].length - 1].date;
+    if (Moment(eventDate).year() > Moment().year()) {
       nextYearWeeks.push(week);
     } else {
       weeks.push(week);
