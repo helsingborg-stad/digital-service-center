@@ -75,9 +75,27 @@ const filterBySearchTerm = (events, term) =>{
   }).search(term).eventsSearchResults;
 };
 
+const calcSortOrder = (eventsDict) => {
+  const nextYearWeeks = [];
+  const weeks = [];
+  Object.keys(eventsDict).forEach(week => {
+    if (Moment(eventsDict[week][0].date).year() > Moment().year()) {
+      nextYearWeeks.push(week);
+    } else {
+      weeks.push(week);
+    }
+  });
+
+  return weeks.concat(nextYearWeeks);
+};
+
 export const filterEventsForEventsPage = (events, activeCategories, selectedDates, searchTerm) => {
-  const eventsHavingDates = events.filter(e => e.occasions && !!e.occasions.length);
-  const eventsForSelectedDates = getEventsBySelectedDates(eventsHavingDates, selectedDates);
+  const activeEvents = events.filter(e =>
+    e.occasions &&
+    !!e.occasions.length &&
+    e.occasions.some(o => Moment(o.startDate) > Moment() || Moment(o.endDate) > Moment())
+  );
+  const eventsForSelectedDates = getEventsBySelectedDates(activeEvents, selectedDates);
   const eventsSearch = filterBySearchTerm(eventsForSelectedDates, searchTerm);
   const { eventsForCats, categories, categoryIcons }
     = eventsWithRelevantCategories(eventsSearch, activeCategories);
@@ -98,10 +116,11 @@ export const filterEventsForEventsPage = (events, activeCategories, selectedDate
   });
 
   return {
-    numEvents: eventsHavingDates.length,
+    numEvents: activeEvents.length,
     numActiveEvents: eventsForCats.length,
     eventsByWeekNumber: eventsDict,
     categories,
-    categoryIcons
+    categoryIcons,
+    weeksSortOrder: calcSortOrder(eventsDict)
   };
 };

@@ -121,7 +121,8 @@ export class EventsPage extends Component {
       return <LandingPageLoading bgColor='#f4a428' />;
     }
     const pageData = this.props.landingPages.events;
-    const { eventsByWeekNumber, numEvents, numActiveEvents, categories, categoryIcons } =
+    const { eventsByWeekNumber, numEvents, numActiveEvents,
+      categories, categoryIcons, weeksSortOrder } =
       filterEventsForEventsPage(
         this.props.events,
         this.state.activeCategories,
@@ -144,26 +145,24 @@ export class EventsPage extends Component {
           <div className='EventsPage-eventsWrapper'>
             <Scrollbars style={{ width: 'calc(100% - 1.5rem)', marginRight: '-1.5rem' }}>
               <div className='EventsPage-innerScrollWrapper'>
-                { Object.keys(eventsByWeekNumber)
-                  .filter(week => week >= Moment().week())
-                  .map(week => (
-                    <div key={week}>
-                      <h2 className='EventsPage-eventsHeading'>
-                        { this.formatWeek(parseInt(week, 10), Moment().week(), eventsByWeekNumber[week]) }
-                      </h2>
-                      <div className='EventsPage-eventWrapper'>
-                        <FlipMove typeName={null} staggerDurationBy={4} staggerDelayBy={2} >
-                          { eventsByWeekNumber[week].map(eventId => (
-                            <Event
-                              key={eventId.id}
-                              {...this.props.events.find(e => e.id === eventId.id)}
-                              onClick={this.changeOverlayEvent.bind(this)} />
-                          ))
-                          }
-                        </FlipMove>
-                      </div>
+                { weeksSortOrder.map(week => (
+                  <div key={week}>
+                    <h2 className='EventsPage-eventsHeading'>
+                      { this.formatWeek(parseInt(week, 10), Moment().week(), eventsByWeekNumber[week]) }
+                    </h2>
+                    <div className='EventsPage-eventWrapper'>
+                      <FlipMove typeName={null} staggerDurationBy={4} staggerDelayBy={2} >
+                        { eventsByWeekNumber[week].map(eventId => (
+                          <Event
+                            key={eventId.id}
+                            {...this.props.events.find(e => e.id === eventId.id)}
+                            onClick={this.changeOverlayEvent.bind(this)} />
+                        ))
+                        }
+                      </FlipMove>
                     </div>
-                  ))
+                  </div>
+                ))
                 }
               </div>
             </Scrollbars>
