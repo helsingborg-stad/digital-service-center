@@ -4,18 +4,10 @@ import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from '../reducers';
-import { isInPortraitMode } from '../actions/isInPortraitMode';
-
-const portraitMediaQuery = typeof window !== 'undefined'
-  && window.matchMedia && window.matchMedia('(orientation: portrait)');
-
-const persistConfig = {
-  key: 'hdsc',
-  storage
-};
+import portraitModeDispatcher from './portaitModeDispatcher';
 
 export default function configureStore() {
-  const persistedReducer = persistReducer(persistConfig, rootReducer);
+  const persistedReducer = persistReducer({key: 'hdsc', storage}, rootReducer);
 
   const store = createStore(
     persistedReducer,
@@ -25,13 +17,7 @@ export default function configureStore() {
     )
   );
 
-  if (portraitMediaQuery) {
-    store.dispatch(isInPortraitMode(portraitMediaQuery.matches));
-
-    portraitMediaQuery.addListener((query) => {
-      store.dispatch(isInPortraitMode(query.matches));
-    });
-  }
+  portraitModeDispatcher(store);
 
   const persistor = persistStore(store);
 
