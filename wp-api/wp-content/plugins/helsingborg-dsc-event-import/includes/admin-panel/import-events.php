@@ -64,7 +64,7 @@ function create_and_update_events() {
     }
     update_or_insert_categorys_translations($event);
   }
-
+  //This might not work
   do_action('events_imported');
   wp_redirect(admin_url('admin.php?page=helsingborg-dsc-event-import'));
 }
