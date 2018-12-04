@@ -13,7 +13,6 @@ function manually_create_and_update_events() {
 function create_and_update_events() {
 
   import_event_categories();
-
   $start_date = date('Y-m-d');
   $end_date = date('Y-m-d', strtotime('+3 months', strtotime($start_date)));
   $events = getUrlContent('https://api.helsingborg.se/event/json/wp/v2/event/time?start=' . $start_date . '&end=' . $end_date);
@@ -66,6 +65,7 @@ function create_and_update_events() {
     update_or_insert_categorys_translations($event);
   }
 
+  do_action('events_imported');
   wp_redirect(admin_url('admin.php?page=helsingborg-dsc-event-import'));
 }
 
@@ -157,19 +157,19 @@ function insert_event_meta($post_id, $event){
   $translated_title = translate_text($event->title->rendered);
 
   add_post_meta($post_id, 'post_content_translated', $translated_content, true);
-  add_post_meta($post_id, 'post_title_translated', $translated_title, true);  
+  add_post_meta($post_id, 'post_title_translated', $translated_title, true);
 }
 
 function update_translated_event_meta($event, $stored_event, $post_id){
   $post_meta_title = get_post_meta($post_id, 'post_title_translated', true);
   $post_meta_content = get_post_meta($post_id, 'post_content_translated', true);
 
-  if($event->title->rendered != $stored_event->post_title 
+  if($event->title->rendered != $stored_event->post_title
   || ($post_meta_title == null || $post_meta_title == '')){
     update_post_meta($post_id, 'post_title_translated', translate_text($event->title->rendered));
   }
-  
-  if ($event->content->rendered != $stored_event->post_content 
+
+  if ($event->content->rendered != $stored_event->post_content
   || ($post_meta_content == null || $post_meta_content == '')) {
     update_post_meta($post_id, 'post_content_translated', translate_text($event->content->rendered));
   }
@@ -220,7 +220,7 @@ function get_categorys($category = null){
   }else{
     $query = $wpdb->get_results( "SELECT * FROM $table_name WHERE sv='$category'" );
   }
-  
+
   return $query;
 }
 
@@ -242,7 +242,7 @@ function update_or_insert_categorys_translations($event){
           if(empty($does_category_exist)){
               $sql = $wpdb->prepare(
                   "INSERT INTO `$table_name`
-                     (`sv`, `en`) 
+                     (`sv`, `en`)
                values (%s, %s)", array(htmlspecialchars_decode($category), translate_text(htmlspecialchars_decode($category))));
               $wpdb->query($sql);
           }
@@ -269,7 +269,7 @@ function get_stored_event($event) {
   );
   $event_query = get_posts($args);
 
-  return $event_query[0]; 
+  return $event_query[0];
 }
 
 function get_event_category_json(){
@@ -289,14 +289,14 @@ function import_event_categories() {
 
 function translate_text($text) {
 	$url = 'https://translation.googleapis.com/language/translate/v2?key=' . get_option('hdsc-site-setting-google-translate-api-key');
-  
+
 	$arr = array(
 	  'q' => $text,
 	  'source' => 'sv',
 	  'target' => 'en'
 	);
 	$data = json_encode($arr);
-  
+
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=UTF-8'));
@@ -313,8 +313,8 @@ function translate_text($text) {
     curl_close($ch);
     return '';
   }
-  
+
   curl_close($ch);
 	return $response['data']['translations'][0]['translatedText'];
-	
+
   }
