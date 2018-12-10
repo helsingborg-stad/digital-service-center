@@ -21,6 +21,8 @@ add_action('admin_init', function() {
 });
 
 function helsingborg_dsc_site_settings_menu_callback() {
+  $current_user = wp_get_current_user();
+  $is_logged_in = is_user_logged_in();
 ?>
   <style>
     .form-table select {
@@ -42,6 +44,7 @@ function helsingborg_dsc_site_settings_menu_callback() {
       <?php if (isset($_GET['settings-updated'])) { ?>
         <div id="message" class="updated">
         <p><strong><?php _e('Settings saved.') ?></strong></p>
+        <?php do_action('site_settings_updated', $is_logged_in, $current_user); ?>
         </div>
       <?php } ?>
 

@@ -8,7 +8,6 @@ import portraitModeDispatcher from './portaitModeDispatcher';
 
 export default function configureStore() {
   const persistedReducer = persistReducer({key: 'hdsc', storage}, rootReducer);
-
   const store = createStore(
     persistedReducer,
     {},

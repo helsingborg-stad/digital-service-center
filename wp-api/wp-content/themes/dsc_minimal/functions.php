@@ -1,4 +1,18 @@
 <?php
+if (!function_exists('write_log')) {
+
+  function write_log($log) {
+      if (true === WP_DEBUG) {
+          if (is_array($log) || is_object($log)) {
+              error_log(print_r($log, true));
+          } else {
+              error_log($log);
+          }
+      }
+  }
+
+}
+
 // $test = wp_get_nav_menu_object(27);
 // var_dump($test);
 function register_visitor_menu() {
@@ -31,3 +45,27 @@ function menu_callback(){
     }
     return wp_get_nav_menu_items( $locations['header-menu']) ?? [];
 }
+
+// Simple funtion to start with
+function send_webhook($user_logged_in, $user) {
+  if($user_logged_in){
+    write_log( "HOOK: $user->user_login just updated" );
+  }
+  remove_action('site_settings_updated', 'send_webhook', 10, 2);
+  remove_action('startpage_settings_updated', 'send_webhook', 10, 2);
+  remove_action('landing_page_updated', 'send_webhook', 10, 2);
+  remove_action('events_imported', 'send_webhook');
+}
+
+function send_webhook_post($post_id, $post){
+  if(get_post_type( $post_id ) == 'editable_event'){
+    write_log( "HOOK: The post {$post_id} was edited by someone" );
+  }
+  remove_action('save_post', 'send_webhook_post', 10, 2);
+}
+
+add_action('site_settings_updated', 'send_webhook', 10, 2);
+add_action('startpage_settings_updated', 'send_webhook', 10, 2);
+add_action('landing_page_updated', 'send_webhook', 10, 2);
+add_action('events_imported', 'send_webhook');
+add_action('save_post', 'send_webhook_post', 10, 2);

@@ -37,6 +37,8 @@ function hdsc_landing_get_selectable_links_for_option($option) {
 }
 
 function hdsc_landing_menu_callback() {
+  $current_user = wp_get_current_user();
+  $is_logged_in = is_user_logged_in();
 ?>
   <style>
     .form-table select {
@@ -55,6 +57,7 @@ function hdsc_landing_menu_callback() {
       <?php if (isset($_GET['settings-updated'])) { ?>
         <div id="message" class="updated">
         <p><strong><?php _e('Settings saved.') ?></strong></p>
+        <?php do_action('landing_page_updated', $is_logged_in, $current_user); ?>
         </div>
       <?php } ?>
       <div class="wrap"><h3>Visitor</h3></div>

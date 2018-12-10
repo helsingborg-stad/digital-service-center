@@ -13,7 +13,6 @@ function manually_create_and_update_events() {
 function create_and_update_events() {
 
   import_event_categories();
-
   $start_date = date('Y-m-d');
   $end_date = date('Y-m-d', strtotime('+3 months', strtotime($start_date)));
   $events = Array();
@@ -74,7 +73,8 @@ function create_and_update_events() {
     }
     update_or_insert_categorys_translations($event);
   }
-
+  //This might not work
+  do_action('events_imported');
   wp_redirect(admin_url('admin.php?page=helsingborg-dsc-event-import'));
 }
 
