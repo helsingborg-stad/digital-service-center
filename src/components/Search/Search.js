@@ -33,7 +33,7 @@ export class Search extends Component {
   }
 
   componentWillMount() {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && !this.props.crm && !!this.props.crm.length) {
       this.props.fetchCrm();
     }
   }
