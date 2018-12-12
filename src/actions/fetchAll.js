@@ -8,6 +8,8 @@ export async function fetchAll(store) {
     return;
   }
 
+  setNewCacheTimestamp();
+
   const res = await fetch('/api/site-settings');
   const siteSettings = await res.json();
   store.dispatch(siteSettingsDispatch(siteSettings));
@@ -20,8 +22,6 @@ export async function fetchAll(store) {
   });
 
   store.dispatch(crmFetchData('/api/temp-crm'));
-
-  setNewCacheTimestamp();
 }
 
 function cacheIsStale() {
