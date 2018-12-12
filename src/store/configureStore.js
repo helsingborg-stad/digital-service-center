@@ -5,6 +5,7 @@ import storage from 'redux-persist/lib/storage';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from '../reducers';
 import portraitModeDispatcher from './portaitModeDispatcher';
+import { fetchAll } from '../actions/fetchAll';
 
 export default function configureStore() {
   const persistedReducer = persistReducer({key: 'hdsc', storage}, rootReducer);
@@ -19,6 +20,10 @@ export default function configureStore() {
   portraitModeDispatcher(store);
 
   const persistor = persistStore(store);
+
+  store.subscribe(() => {
+    fetchAll(store);
+  });
 
   return { store, persistor };
 }
