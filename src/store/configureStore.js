@@ -7,8 +7,15 @@ import rootReducer from '../reducers';
 import portraitModeDispatcher from './portaitModeDispatcher';
 import { fetchAll } from '../actions/fetchAll';
 
+const persistConfig = {
+  key: 'hdsc',
+  blacklist: ['hbgSeSearch', 'iframeUrl', 'addressSearch',
+    'previousUrl', 'isInPortraitMode', 'translation', 'routing'],
+  storage
+};
+
 export default function configureStore() {
-  const persistedReducer = persistReducer({key: 'hdsc', storage}, rootReducer);
+  const persistedReducer = persistReducer(persistConfig, rootReducer);
   const store = createStore(
     persistedReducer,
     {},
