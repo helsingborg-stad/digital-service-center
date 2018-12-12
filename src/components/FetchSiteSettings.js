@@ -8,6 +8,14 @@ export default class FetchSiteSettings extends Component {
     super();
     const { siteSettings } = props.store.getState();
     const siteSettingsExists = !!siteSettings && Object.keys(siteSettings).length;
+    if (!siteSettingsExists) {
+      fetch('/api/site-settings')
+        .then(res => res.json())
+        .then(res => {
+          this.props.store.dispatch(siteSettingsDispatch(res));
+          this.setState({ loading: false });
+        });
+    }
     this.state = {
       loading: !siteSettingsExists
     };
@@ -17,15 +25,6 @@ export default class FetchSiteSettings extends Component {
     return this.state.loading
       ? null
       : this.props.render();
-  }
-
-  componentDidMount() {
-    fetch('/api/site-settings')
-      .then(res => res.json())
-      .then(res => {
-        this.props.store.dispatch(siteSettingsDispatch(res));
-        this.setState({ loading: false });
-      });
   }
 
   static propTypes = {
