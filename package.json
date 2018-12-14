@@ -3,11 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "cra-append-sw": "^2.6.0",
     "es6-promise": "^4.0.5",
     "express": "^4.14.1",
     "isomorphic-fetch": "^2.2.1",
     "react-scripts": "^2.1.1",
-    "redux-devtools-extension": "^2.13.2"
+    "redux-devtools-extension": "^2.13.2",
+    "socket.io": "^2.2.0"
   },
   "dependencies": {
     "classnames": "^2.2.5",
@@ -37,11 +39,12 @@
     "redux-persist": "^5.10.0",
     "redux-thunk": "^2.2.0",
     "sifter": "^0.5.3",
+    "socket.io-client": "^2.2.0",
     "whatwg-fetch": "^2.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && cra-append-sw -s ./src/custom-sw.js",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },

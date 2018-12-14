@@ -8,6 +8,8 @@ const path = require('path');
 const fs = require('fs');
 const express = require('express');
 
+const registerSocket = require('./registerSocket');
+
 const app = express();
 app.server = http.createServer(app);
 app.use(express.static('../build'));
@@ -43,6 +45,8 @@ app.get('*', (req, res, next) => {
     }
   });
 });
+
+registerSocket(app);
 
 // eslint-disable-next-line no-process-env
 app.server.listen(process.env.PORT || 8080);

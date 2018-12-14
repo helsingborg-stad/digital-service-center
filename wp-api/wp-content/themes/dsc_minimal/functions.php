@@ -49,7 +49,7 @@ function menu_callback(){
 // Simple funtion to start with
 function send_webhook($user_logged_in, $user) {
   if($user_logged_in){
-    write_log( "HOOK: $user->user_login just updated" );
+    wp_remote_post('http://localhost:8080/triggerSocket');
   }
   remove_action('site_settings_updated', 'send_webhook', 10, 2);
   remove_action('startpage_settings_updated', 'send_webhook', 10, 2);
@@ -59,7 +59,7 @@ function send_webhook($user_logged_in, $user) {
 
 function send_webhook_post($post_id, $post){
   if(get_post_type( $post_id ) == 'editable_event'){
-    write_log( "HOOK: The post {$post_id} was edited by someone" );
+    wp_remote_post('http://localhost:8080/triggerSocket');
   }
   remove_action('save_post', 'send_webhook_post', 10, 2);
 }

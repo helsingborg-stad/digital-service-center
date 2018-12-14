@@ -6,10 +6,12 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from '../reducers';
 import portraitModeDispatcher from './portaitModeDispatcher';
 import { fetchAll } from '../actions/fetchAll';
+import subscribeToSocket from './subscribeToSocket';
 
 const persistConfig = {
   key: 'hdsc',
-  blacklist: ['hbgSeSearch', 'iframeUrl', 'addressSearch',
+  blacklist: ['startpageHasErrored', 'startpageIsLoading', 'eventsHasErrored', 'eventsAreLoading',
+    'hbgSeSearch', 'iframeUrl', 'addressSearch',
     'previousUrl', 'isInPortraitMode', 'translation', 'routing'],
   storage
 };
@@ -31,6 +33,8 @@ export default function configureStore() {
   store.subscribe(() => {
     fetchAll(store);
   });
+
+  subscribeToSocket(store);
 
   return { store, persistor };
 }

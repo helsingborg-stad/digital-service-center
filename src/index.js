@@ -84,4 +84,8 @@ function startApp(store, persistor) {
 const { store, persistor } = configureStore();
 startApp(store, persistor);
 
-serviceWorker.register();
+serviceWorker.register({
+  onUpdate: () => {
+    window.location.reload(true);
+  }
+});
