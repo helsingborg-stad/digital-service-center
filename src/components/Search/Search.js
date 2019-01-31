@@ -15,26 +15,39 @@ export class Search extends Component {
   constructor(props) {
     super();
 
-    const landingPagePages = [...props.landingPages.visitor.pages
-      .filter(p => p.type === 'iframe' || p.type === 'page'),
-    ...props.landingPages.local.pages
-      .filter(p => p.type === 'iframe' || p.type === 'page')];
-
-    const searchHandler = new SearchHandler({...props, landingPagePages});
-
     this.state = {
       eventsSearchResults: null,
       crmSearchResults: null,
       searchInputOnTop: false,
       searchTerm: null,
-      landingPagePages: null,
-      searchHandler
+      landingPagePages: null
     };
+
+    if (props.crm && props.crm.length) {
+      this.initSearchHandler(props);
+    }
   }
 
   componentWillMount() {
     if (typeof window !== 'undefined') {
       this.props.fetchCrm();
+    }
+  }
+
+  initSearchHandler(props) {
+    const landingPagePages = [...props.landingPages.visitor.pages
+      .filter(p => p.type === 'iframe' || p.type === 'page'),
+    ...props.landingPages.local.pages
+      .filter(p => p.type === 'iframe' || p.type === 'page')];
+
+    const searchHandler = new SearchHandler({ ...props, landingPagePages });
+
+    this.setState({ searchHandler });
+  }
+
+  componentDidUpdate() {
+    if (!this.state.searchHandler && this.props.crm && this.props.crm.length) {
+      this.initSearchHandler(this.props);
     }
   }
 
@@ -66,6 +79,9 @@ export class Search extends Component {
   }
 
   render() {
+    if (!this.state.searchHandler) {
+      return null;
+    }
     return (
       <div className='Search-wrapper'>
         <ReactCSSTransitionGroup
@@ -79,9 +95,11 @@ export class Search extends Component {
             className={cn(
               'Search-inputWrapper',
               `Search-inputWrapper--${this.props.pageType}`,
-              {'Search-inputWrapper--isActive': this.state.searchInputOnTop},
-              {'Search-inputWrapper--inverted': this.props.invertSearchField
-                && this.props.pageType === 'Startpage'})}>
+              { 'Search-inputWrapper--isActive': this.state.searchInputOnTop },
+              {
+                'Search-inputWrapper--inverted': this.props.invertSearchField
+                  && this.props.pageType === 'Startpage'
+              })}>
             <SearchField
               inline
               pageType={this.props.pageType}
