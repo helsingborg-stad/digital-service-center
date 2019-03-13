@@ -4,8 +4,9 @@ namespace helsingborg_dsc_event_import;
 
 //use new get_imported_event_values
 function parse_imported_events($events) {
-    return array_map(function($event) {
+  return array_map(function($event) {
       $post_meta = get_post_meta(get_post_id_original($event->ID, 'imported_event'), 'imported_event_data', true);
+
       $should_translate = $_REQUEST['lang'] == 'en';
       $lang = $should_translate ? 'en' : 'sv';
       $categories = [];
@@ -86,6 +87,7 @@ function parse_imported_events($events) {
       if ($thumbnail_url) {
         $response['imgThumbnailUrl'] = $thumbnail_url;
       }
+
       return $response;
     }, $events);
   }

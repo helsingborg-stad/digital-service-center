@@ -18,8 +18,8 @@ function create_and_update_events() {
   $end_date = date('Y-m-d', strtotime('+3 months', strtotime($start_date)));
   $events = Array();
 
-  /* 15 loops, redirect if something goes wrong, break if 404(no more content) s*/
-  for ($i = 0; $i < 15 ; $i++) {
+  /* 25 loops, redirect if something goes wrong, break if 404(no more content) s*/
+  for ($i = 0; $i < 25 ; $i++) {
       $data = getUrlContent('https://api.helsingborg.se/event/json/wp/v2/event/time?start=' . $start_date . '&end=' . $end_date . '&page='.$i.'&per_page=100');
       if ($data == false) {
         return wp_redirect(admin_url('admin.php?page=helsingborg-dsc-event-import&failed'));
@@ -305,8 +305,13 @@ function import_event_categories() {
 }
 
 function translate_text($text) {
-	$url = 'https://translation.googleapis.com/language/translate/v2?key=' . get_option('hdsc-site-setting-google-translate-api-key');
+  $api_key = get_option('hdsc-site-setting-google-translate-api-key');
+	$url = 'https://translation.googleapis.com/language/translate/v2?key=' . $api_key;
 
+  if($api_key == '') {
+    error_log('No translation because translate apikey is empty');
+    return;
+  }
 	$arr = array(
 	  'q' => $text,
 	  'source' => 'sv',
