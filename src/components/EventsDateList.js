@@ -37,8 +37,14 @@ export const getEventsBySelectedDates = (events, selectedDates) => {
         if (!occ || !occ.startDate || !occ.endDate) {
           return false;
         }
-        return selectedDates.startDate.isSameOrBefore(occ.startDate, 'days')
-            && selectedDates.endDate.isSameOrAfter(occ.endDate, 'days');
+        const startDate = selectedDates.startDate.startOf('day');
+        const endDate = selectedDates.endDate.endOf('day');
+
+        if (selectedDates.startDate.isBetween(occ.startDate, occ.endDate)) {
+          return selectedDates.startDate.isBetween(occ.startDate, occ.endDate);
+        }
+        return startDate.isSameOrBefore(occ.startDate, 'days')
+        && endDate.isSameOrAfter(occ.endDate, 'days');
       })
     });
   }).filter(event => event.occasions.length)});
